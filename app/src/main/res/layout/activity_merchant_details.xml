@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.journaldev.appointment.AddResourceActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_biz_details"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#EEEEEE"
+        android:elevation="4dp"
+        android:textAlignment="center"
+        app:elevation="4dp"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:title="Add Business Details"
+        app:titleTextColor="#000000" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <EditText
+
+            android:inputType="text"
+            android:imeOptions="actionNext"
+            android:id="@+id/et_biz_name"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#EEEEEE"
+            android:paddingStart="10dp"
+            android:layout_marginTop="5dp"
+            android:hint="Business Name" />
+
+        <EditText
+            android:inputType="textEmailAddress"
+            android:imeOptions="actionNext"
+            android:id="@+id/et_biz_email"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#EEEEEE"
+            android:paddingStart="10dp"
+            android:layout_marginTop="20dp"
+            android:hint="Business Email" />
+
+        <EditText
+            android:inputType="phone"
+            android:imeOptions="actionDone"
+            android:id="@+id/et_biz_mob"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#EEEEEE"
+            android:paddingStart="10dp"
+            android:layout_marginTop="20dp"
+            android:hint="Business Mobile" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="Select your service" />
+
+        <TextView
+            android:visibility="gone"
+            android:layout_marginStart="10dp"
+            android:id="@+id/tv_service"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:hint="Saloon/Barber shop"
+            android:textColor="#000"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:background="#EEEEEE"
+            >
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/spinner_services"
+                />
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/button_biz_continue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:hint="CONTINUE" />
+    </LinearLayout>
+
+</LinearLayout>

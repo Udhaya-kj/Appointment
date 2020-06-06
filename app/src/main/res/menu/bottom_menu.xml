@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/bottom_calender"
+        android:enabled="true"
+        android:icon="@drawable/calendar"
+        android:title="CALENDER"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/bottom_customer"
+        android:enabled="true"
+        android:icon="@drawable/customer"
+        android:title="CUSTOMERS"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/bottom_settings"
+        android:enabled="true"
+        android:icon="@drawable/settings"
+        android:title="SETTINGS"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/bottom_logout"
+        android:enabled="true"
+        android:icon="@drawable/logout"
+        android:title="LOGOUT"
+        app:showAsAction="ifRoom" />
+</menu>
