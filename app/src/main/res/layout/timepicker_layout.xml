@@ -2,37 +2,37 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <TextView
+        android:id="@+id/text_alert_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Select Service Duration"
         android:gravity="center"
+        android:text="Select Service Duration"
         android:textColor="#4DBDF1"
-        android:textSize="17sp"
+        android:textSize="17sp" />
 
-        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginTop="20dp"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_marginEnd="10dp"
+            android:gravity="center"
             android:text="HH" />
 
         <TextView
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_marginStart="10dp"
+            android:gravity="center"
             android:text="MM" />
     </LinearLayout>
 
@@ -41,17 +41,15 @@
         android:id="@+id/StartTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:timePickerMode="spinner"
-        />
+        android:timePickerMode="spinner" />
 
     <Button
         android:id="@+id/button_picker_ok"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:text="Done"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:textColor="#FFFFFF"
         android:background="#21AE18"
-        />
+        android:text="Done"
+        android:textColor="#FFFFFF" />
 </LinearLayout>

@@ -4,14 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.corals.appointment.R;
 
@@ -27,6 +30,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
     Button btn_yes_sday_p, btn_yes_mnday_p, btn_yes_tsday_p, btn_yes_wedday_p, btn_yes_trsday_p, btn_yes_fdday_p, btn_yes_strday_p;
     boolean isActiveSunday_p = true, isActiveMonday_p = true, isActiveTuesday_p = true, isActiveWednesday_p = true, isActiveThursday_p = true, isActiveFriday_p = true, isActiveSaturday_p = true;
     TextView text_start_time, text_end_time;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +62,30 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         arrayList_weekdays.add("Saturday");
         ArrayAdapter arrayAdapter_weekdays = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, arrayList_weekdays);
         spinner_weekdays.setAdapter(arrayAdapter_weekdays);
+        spinner_weekdays.setPrompt("Select weekday");
+
+
+        radioButton_biz_hrs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (radioButton_biz_hrs.isChecked()) {
+                    radioButton_biz_hrs.setChecked(true);
+                    radioButton_custom_time.setChecked(false);
+                    layout_custom_time.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        radioButton_custom_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (radioButton_custom_time.isChecked()) {
+                    radioButton_biz_hrs.setChecked(false);
+                    radioButton_custom_time.setChecked(true);
+                    layout_custom_time.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         spinner_weekdays.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -74,14 +102,14 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         text_start_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // get_start_time();
+                // get_start_time();
             }
         });
 
         text_end_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // get_end_time();
+                // get_end_time();
             }
         });
 
@@ -93,12 +121,14 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     btn_yes_sday_p.setBackgroundColor(getResources().getColor(R.color.dark_grey));
                     btn_yes_sday_p.setTextColor(getResources().getColor(R.color.black));
                     isActiveSunday_p = false;
-                    arrayList_weekdays.remove(0);
+                    arrayList_weekdays.add(0, "");
+                    Log.d("Weekdayslist--->", "onClick: " + arrayList_weekdays);
                 } else {
                     btn_yes_sday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
                     btn_yes_sday_p.setTextColor(getResources().getColor(R.color.white));
                     isActiveSunday_p = true;
-                    arrayList_weekdays.add(0,"Sunday");
+                    arrayList_weekdays.add(0, "Sunday");
+                    Log.d("Weekdayslist--->", "onClick: " + arrayList_weekdays);
                 }
             }
         });
@@ -112,12 +142,14 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     btn_yes_mnday_p.setBackgroundColor(getResources().getColor(R.color.dark_grey));
                     btn_yes_mnday_p.setTextColor(getResources().getColor(R.color.black));
                     isActiveMonday_p = false;
-                    arrayList_weekdays.remove(1);
+                    arrayList_weekdays.add(1, "");
+                    Log.d("Weekdayslist--->", "onClick: " + arrayList_weekdays);
                 } else {
                     btn_yes_mnday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
                     btn_yes_mnday_p.setTextColor(getResources().getColor(R.color.white));
                     isActiveMonday_p = true;
-                    arrayList_weekdays.add(1,"Monday");
+                    arrayList_weekdays.add(1, "Monday");
+                    Log.d("Weekdayslist--->", "onClick: " + arrayList_weekdays);
                 }
             }
         });
@@ -132,12 +164,14 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     btn_yes_tsday_p.setBackgroundColor(getResources().getColor(R.color.dark_grey));
                     btn_yes_tsday_p.setTextColor(getResources().getColor(R.color.black));
                     isActiveTuesday_p = false;
-                    arrayList_weekdays.remove(2);
+                    arrayList_weekdays.add(2, "");
+                    Log.d("Weekdayslist--->", "onClick: " + arrayList_weekdays);
                 } else {
                     btn_yes_tsday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
                     btn_yes_tsday_p.setTextColor(getResources().getColor(R.color.white));
                     isActiveTuesday_p = true;
-                    arrayList_weekdays.add(2,"Tuesday");
+                    arrayList_weekdays.add(2, "Tuesday");
+                    Log.d("Weekdayslist--->", "onClick: " + arrayList_weekdays);
                 }
             }
         });
@@ -152,12 +186,14 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     btn_yes_wedday_p.setBackgroundColor(getResources().getColor(R.color.dark_grey));
                     btn_yes_wedday_p.setTextColor(getResources().getColor(R.color.black));
                     isActiveWednesday_p = false;
-                    arrayList_weekdays.remove(3);
+                    arrayList_weekdays.add(3, "");
+                    Log.d("Weekdayslist--->", "onClick: " + arrayList_weekdays);
                 } else {
                     btn_yes_wedday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
                     btn_yes_wedday_p.setTextColor(getResources().getColor(R.color.white));
                     isActiveWednesday_p = true;
-                    arrayList_weekdays.add(3,"Wednesday");
+                    arrayList_weekdays.add(3, "Wednesday");
+                    Log.d("Weekdayslist--->", "onClick: " + arrayList_weekdays);
                 }
 
             }
@@ -174,12 +210,14 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     btn_yes_trsday_p.setBackgroundColor(getResources().getColor(R.color.dark_grey));
                     btn_yes_trsday_p.setTextColor(getResources().getColor(R.color.black));
                     isActiveThursday_p = false;
-                    arrayList_weekdays.remove(4);
+                    arrayList_weekdays.add(4, "");
+                    Log.d("Weekdayslist--->", "onClick: " + arrayList_weekdays);
                 } else {
                     btn_yes_trsday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
                     btn_yes_trsday_p.setTextColor(getResources().getColor(R.color.white));
                     isActiveThursday_p = true;
-                    arrayList_weekdays.add(4,"Thursday");
+                    arrayList_weekdays.add(4, "Thursday");
+                    Log.d("Weekdayslist--->", "onClick: " + arrayList_weekdays);
                 }
 
             }
@@ -196,12 +234,14 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     btn_yes_fdday_p.setBackgroundColor(getResources().getColor(R.color.dark_grey));
                     btn_yes_fdday_p.setTextColor(getResources().getColor(R.color.black));
                     isActiveFriday_p = false;
-                    arrayList_weekdays.remove(5);
+                    arrayList_weekdays.add(5, "");
+                    Log.d("Weekdayslist--->", "onClick: " + arrayList_weekdays);
                 } else {
                     btn_yes_fdday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
                     btn_yes_fdday_p.setTextColor(getResources().getColor(R.color.white));
                     isActiveFriday_p = true;
-                    arrayList_weekdays.add(5,"Friday");
+                    arrayList_weekdays.add(5, "Friday");
+                    Log.d("Weekdayslist--->", "onClick: " + arrayList_weekdays);
                 }
 
             }
@@ -218,12 +258,14 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     btn_yes_strday_p.setBackgroundColor(getResources().getColor(R.color.dark_grey));
                     btn_yes_strday_p.setTextColor(getResources().getColor(R.color.black));
                     isActiveSaturday_p = false;
-                    arrayList_weekdays.remove(6);
+                    arrayList_weekdays.add(6, "");
+                    Log.d("Weekdayslist--->", "onClick: " + arrayList_weekdays);
                 } else {
                     btn_yes_strday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
                     btn_yes_strday_p.setTextColor(getResources().getColor(R.color.white));
                     isActiveSaturday_p = true;
-                    arrayList_weekdays.add(6,"Saturday");
+                    arrayList_weekdays.add(6, "Saturday");
+                    Log.d("Weekdayslist--->", "onClick: " + arrayList_weekdays);
                 }
             }
         });

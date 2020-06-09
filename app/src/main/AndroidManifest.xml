@@ -7,8 +7,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.AddServiceAvailTimeActivity"></activity>
-        <activity android:name=".Activity.TimePickerActivity"></activity>
+        <activity android:name=".Activity.SerUnavailAskTimeActivity"></activity>
+        <activity android:name=".Activity.ServiceUnavailCalendarActivity" />
+        <activity android:name=".Activity.ServiceUnavailbleActivity" />
+        <activity android:name=".Activity.AddServiceAvailTimeActivity" />
+        <activity android:name=".Activity.TimePickerActivity" />
         <activity android:name=".Activity.ViewCustomerApptActivity" />
         <activity android:name=".Activity.ViewApptServiceActivity" />
         <activity android:name=".Activity.CalendarViewActivity" />

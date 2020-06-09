@@ -333,7 +333,11 @@ public class AddServiceActivity extends AppCompatActivity {
         button_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = et_res_name.getText().toString();
+
+                Intent in = new Intent(AddServiceActivity.this, AddServiceAvailTimeActivity.class);
+                startActivity(in);
+                finish();
+           /*     String name = et_res_name.getText().toString();
                 String duration = tv_res_dur.getText().toString();
                 if (name.length() > 0) {
                     if (hour == 0 && minute != 0) {
@@ -424,7 +428,7 @@ public class AddServiceActivity extends AppCompatActivity {
                 } else {
                     et_res_name.setError("Enter service name");
                     et_res_name.requestFocus();
-                }
+                }*/
 
 
             }
