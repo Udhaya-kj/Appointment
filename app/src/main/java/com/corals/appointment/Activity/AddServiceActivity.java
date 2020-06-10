@@ -44,13 +44,14 @@ public class AddServiceActivity extends AppCompatActivity {
     public String pageId = "", position = "";
 
     TextView text_service_op_time, text_service_cl_time;
-    TextView text_sunday_add1_1, text_sunday_add1_2,text_sunday_add2_1, text_sunday_add2_2,text_sunday_add3_1, text_sunday_add3_2,text_monday_add1_1, text_monday_add1_2,text_monday_add2_1, text_monday_add2_2,text_monday_add3_1, text_monday_add3_2,
-            text_tuesday_add1_1, text_tuesday_add1_2,text_tuesday_add2_1, text_tuesday_add2_2,text_tuesday_add3_1, text_tuesday_add3_2,text_wednesday_add1_1, text_wednesday_add1_2,text_wednesday_add2_1, text_wednesday_add2_2,text_wednesday_add3_1, text_wednesday_add3_2,
-            text_thursday_add1_1, text_thursday_add1_2,text_thursday_add2_1, text_thursday_add2_2,text_thursday_add3_1, text_thursday_add3_2,text_friday_add1_1, text_friday_add1_2,text_friday_add2_1, text_friday_add2_2,text_friday_add3_1, text_friday_add3_2,text_saturday_add1_1, text_saturday_add1_2,text_saturday_add2_1, text_saturday_add2_2,text_saturday_add3_1, text_saturday_add3_2;;
+    TextView text_sunday_add1_1, text_sunday_add1_2, text_sunday_add2_1, text_sunday_add2_2, text_sunday_add3_1, text_sunday_add3_2, text_monday_add1_1, text_monday_add1_2, text_monday_add2_1, text_monday_add2_2, text_monday_add3_1, text_monday_add3_2,
+            text_tuesday_add1_1, text_tuesday_add1_2, text_tuesday_add2_1, text_tuesday_add2_2, text_tuesday_add3_1, text_tuesday_add3_2, text_wednesday_add1_1, text_wednesday_add1_2, text_wednesday_add2_1, text_wednesday_add2_2, text_wednesday_add3_1, text_wednesday_add3_2,
+            text_thursday_add1_1, text_thursday_add1_2, text_thursday_add2_1, text_thursday_add2_2, text_thursday_add3_1, text_thursday_add3_2, text_friday_add1_1, text_friday_add1_2, text_friday_add2_1, text_friday_add2_2, text_friday_add3_1, text_friday_add3_2, text_saturday_add1_1, text_saturday_add1_2, text_saturday_add2_1, text_saturday_add2_2, text_saturday_add3_1, text_saturday_add3_2;
+    ;
     private int mYear, mMonth, mDay, mHour, mMinute, mSeconds;
-    private String sunday_add1_1, sunday_add1_2,sunday_add2_1, sunday_add2_2,sunday_add3_1, sunday_add3_2,monday_add1_1, monday_add1_2,monday_add2_1, monday_add2_2,monday_add3_1, monday_add3_2,
-            tuesday_add1_1, tuesday_add1_2,tuesday_add2_1, tuesday_add2_2,tuesday_add3_1, tuesday_add3_2,wednesday_add1_1, wednesday_add1_2,wednesday_add2_1, wednesday_add2_2,wednesday_add3_1, wednesday_add3_2,
-            thursday_add1_1, thursday_add1_2,thursday_add2_1, thursday_add2_2,thursday_add3_1, thursday_add3_2,friday_add1_1, friday_add1_2,friday_add2_1, friday_add2_2,friday_add3_1, friday_add3_2,saturday_add1_1, saturday_add1_2,saturday_add2_1, saturday_add2_2,saturday_add3_1, saturday_add3_2;
+    private String sunday_add1_1, sunday_add1_2, sunday_add2_1, sunday_add2_2, sunday_add3_1, sunday_add3_2, monday_add1_1, monday_add1_2, monday_add2_1, monday_add2_2, monday_add3_1, monday_add3_2,
+            tuesday_add1_1, tuesday_add1_2, tuesday_add2_1, tuesday_add2_2, tuesday_add3_1, tuesday_add3_2, wednesday_add1_1, wednesday_add1_2, wednesday_add2_1, wednesday_add2_2, wednesday_add3_1, wednesday_add3_2,
+            thursday_add1_1, thursday_add1_2, thursday_add2_1, thursday_add2_2, thursday_add3_1, thursday_add3_2, friday_add1_1, friday_add1_2, friday_add2_1, friday_add2_2, friday_add3_1, friday_add3_2, saturday_add1_1, saturday_add1_2, saturday_add2_1, saturday_add2_2, saturday_add3_1, saturday_add3_2;
     private SharedPreferences sharedpreferences_service_data;
     public static final String MyPREFERENCES_SERVICE_DATA = "MyPREFERENCES_SERVICE_DATA";
     public static final String SER_NAME = "SER_NAME";
@@ -153,7 +154,6 @@ public class AddServiceActivity extends AppCompatActivity {
         text_saturday_add2_2 = findViewById(R.id.text_saturday_add2_2);
         text_saturday_add3_1 = findViewById(R.id.text_saturday_add3_1);
         text_saturday_add3_2 = findViewById(R.id.text_saturday_add3_2);
-
 
 
         service_name_list = new ArrayList<>();
@@ -333,102 +333,46 @@ public class AddServiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent in = new Intent(AddServiceActivity.this, AddServiceAvailTimeActivity.class);
-                in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(in);
-
-           /*     String name = et_res_name.getText().toString();
+                String name = et_res_name.getText().toString();
                 String duration = tv_res_dur.getText().toString();
                 if (name.length() > 0) {
-                    if (hour == 0 && minute != 0) {
-
-
-                        String nameList = sharedpreferences_services.getString(SERVICE_NAME, "");
-                        String mobList = sharedpreferences_services.getString(SERVICE_DURATION, "");
-                        if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
-                            service_name_list = new Gson().fromJson(nameList, new TypeToken<ArrayList<String>>() {
-                            }.getType());
-                            service_dur_list = new Gson().fromJson(mobList, new TypeToken<ArrayList<String>>() {
-                            }.getType());
-                        }
-                        if (!TextUtils.isEmpty(pageId) && pageId.equals("3")) {
-                            service_name_list.add(name);
-                            service_dur_list.add(duration);
-                            String nameList1 = new Gson().toJson(service_name_list);
-                            String mobList1 = new Gson().toJson(service_dur_list);
-                            SharedPreferences.Editor editor = sharedpreferences_services.edit();
-                            editor.putString(SERVICE_NAME, nameList1);
-                            editor.putString(SERVICE_DURATION, mobList1);
-                            editor.commit();
-
-                            Intent in = new Intent(AddServiceActivity.this, SetupServiceActivity_Bottom.class);
+                    if(pageId.equals("3")) {
+                        if (hour == 0 && minute != 0) {
+                            Intent in = new Intent(AddServiceActivity.this, AddServiceAvailTimeActivity.class);
+                            in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            in.putExtra("ser_name", name);
+                            in.putExtra("ser_dur", duration);
+                            in.putExtra("page_id", pageId);
+                            in.putExtra("position", position);
                             startActivity(in);
-                            finish();
 
-                        } else if (!TextUtils.isEmpty(pageId) && pageId.equals("03")) {
-                            service_name_list.set(Integer.parseInt(position), name);
-                            service_dur_list.set(Integer.parseInt(position), duration);
-                            String nameList1 = new Gson().toJson(service_name_list);
-                            String mobList1 = new Gson().toJson(service_dur_list);
-                            SharedPreferences.Editor editor = sharedpreferences_services.edit();
-                            editor.putString(SERVICE_NAME, nameList1);
-                            editor.putString(SERVICE_DURATION, mobList1);
-                            editor.commit();
+                        } else if ((hour != 0 && minute == 0) || (hour != 0 && minute != 0)) {
 
-                            Intent in = new Intent(AddServiceActivity.this, SetupServiceActivity_Bottom.class);
+                            Intent in = new Intent(AddServiceActivity.this, AddServiceAvailTimeActivity.class);
+                            in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            in.putExtra("ser_name", name);
+                            in.putExtra("ser_dur", duration);
+                            in.putExtra("page_id", pageId);
+                            in.putExtra("position", position);
                             startActivity(in);
-                            finish();
+                        } else {
+                            Toast.makeText(AddServiceActivity.this, "Service duration is required", Toast.LENGTH_LONG).show();
                         }
-
-                    } else if ((hour != 0 && minute == 0) || (hour != 0 && minute != 0)) {
-
-                        String nameList = sharedpreferences_services.getString(SERVICE_NAME, "");
-                        String mobList = sharedpreferences_services.getString(SERVICE_DURATION, "");
-                        if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
-                            service_name_list = new Gson().fromJson(nameList, new TypeToken<ArrayList<String>>() {
-                            }.getType());
-                            service_dur_list = new Gson().fromJson(mobList, new TypeToken<ArrayList<String>>() {
-                            }.getType());
-                        }
-                        if (!TextUtils.isEmpty(pageId) && pageId.equals("3")) {
-                            service_name_list.add(name);
-                            service_dur_list.add(duration);
-                            String nameList1 = new Gson().toJson(service_name_list);
-                            String mobList1 = new Gson().toJson(service_dur_list);
-                            SharedPreferences.Editor editor = sharedpreferences_services.edit();
-                            editor.putString(SERVICE_NAME, nameList1);
-                            editor.putString(SERVICE_DURATION, mobList1);
-                            editor.commit();
-
-                            Intent in = new Intent(AddServiceActivity.this, SetupServiceActivity_Bottom.class);
-                            startActivity(in);
-                            finish();
-
-                        } else if (!TextUtils.isEmpty(pageId) && pageId.equals("03")) {
-                            service_name_list.set(Integer.parseInt(position), name);
-                            service_dur_list.set(Integer.parseInt(position), duration);
-                            String nameList1 = new Gson().toJson(service_name_list);
-                            String mobList1 = new Gson().toJson(service_dur_list);
-                            SharedPreferences.Editor editor = sharedpreferences_services.edit();
-                            editor.putString(SERVICE_NAME, nameList1);
-                            editor.putString(SERVICE_DURATION, mobList1);
-                            editor.commit();
-
-                            Intent in = new Intent(AddServiceActivity.this, SetupServiceActivity_Bottom.class);
-                            startActivity(in);
-                            finish();
-                        }
-                    } else {
-                        Toast.makeText(AddServiceActivity.this, "Service duration is required", Toast.LENGTH_LONG).show();
-                        //tv_res_dur.setError("Select service duration");
-                       // tv_res_dur.requestFocus();
                     }
-
+                    else {
+                        Intent in = new Intent(AddServiceActivity.this, AddServiceAvailTimeActivity.class);
+                        in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        in.putExtra("ser_name", name);
+                        in.putExtra("ser_dur", duration);
+                        in.putExtra("page_id", pageId);
+                        in.putExtra("position", position);
+                        startActivity(in);
+                    }
 
                 } else {
                     et_res_name.setError("Enter service name");
                     et_res_name.requestFocus();
-                }*/
+                }
 
 
             }
@@ -558,7 +502,6 @@ public class AddServiceActivity extends AppCompatActivity {
         });
 
 
-
 //monday
         text_monday_add1_1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -601,7 +544,6 @@ public class AddServiceActivity extends AppCompatActivity {
                 get_monday_add3_2();
             }
         });
-
 
 
         //tuesday
@@ -736,8 +678,7 @@ public class AddServiceActivity extends AppCompatActivity {
         });
 
 
-
-   //friday
+        //friday
         text_friday_add1_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -781,7 +722,7 @@ public class AddServiceActivity extends AppCompatActivity {
         });
 
 
-   //saturday
+        //saturday
         text_saturday_add1_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1550,7 +1491,7 @@ public class AddServiceActivity extends AppCompatActivity {
     }
 
 
-   public void get_tuesday_add2_1() {
+    public void get_tuesday_add2_1() {
         // Get Current Time*
         final Calendar c = Calendar.getInstance();
         mHour = c.get(Calendar.HOUR_OF_DAY);
@@ -1589,7 +1530,7 @@ public class AddServiceActivity extends AppCompatActivity {
     }
 
 
-   public void get_tuesday_add2_2() {
+    public void get_tuesday_add2_2() {
         // Get Current Time*
         final Calendar c = Calendar.getInstance();
         mHour = c.get(Calendar.HOUR_OF_DAY);
@@ -1700,7 +1641,6 @@ public class AddServiceActivity extends AppCompatActivity {
                 }, mHour, mMinute, false);
         timePickerDialog.show();
     }
-
 
 
     public void get_wednesday_add1_1() {
@@ -1926,7 +1866,7 @@ public class AddServiceActivity extends AppCompatActivity {
     }
 
 
-   public void get_thursday_add1_1() {
+    public void get_thursday_add1_1() {
         // Get Current Time*
         final Calendar c = Calendar.getInstance();
         mHour = c.get(Calendar.HOUR_OF_DAY);
@@ -1964,7 +1904,7 @@ public class AddServiceActivity extends AppCompatActivity {
     }
 
 
-  public void get_thursday_add1_2() {
+    public void get_thursday_add1_2() {
         // Get Current Time*
         final Calendar c = Calendar.getInstance();
         mHour = c.get(Calendar.HOUR_OF_DAY);
@@ -2002,7 +1942,7 @@ public class AddServiceActivity extends AppCompatActivity {
     }
 
 
-  public void get_thursday_add2_1() {
+    public void get_thursday_add2_1() {
         // Get Current Time*
         final Calendar c = Calendar.getInstance();
         mHour = c.get(Calendar.HOUR_OF_DAY);
@@ -2040,7 +1980,7 @@ public class AddServiceActivity extends AppCompatActivity {
     }
 
 
- public void get_thursday_add2_2() {
+    public void get_thursday_add2_2() {
         // Get Current Time*
         final Calendar c = Calendar.getInstance();
         mHour = c.get(Calendar.HOUR_OF_DAY);
@@ -2078,7 +2018,7 @@ public class AddServiceActivity extends AppCompatActivity {
     }
 
 
- public void get_thursday_add3_1() {
+    public void get_thursday_add3_1() {
         // Get Current Time*
         final Calendar c = Calendar.getInstance();
         mHour = c.get(Calendar.HOUR_OF_DAY);
@@ -2227,7 +2167,6 @@ public class AddServiceActivity extends AppCompatActivity {
                 }, mHour, mMinute, false);
         timePickerDialog.show();
     }
-
 
 
     public void get_friday_add2_1() {
@@ -2528,7 +2467,7 @@ public class AddServiceActivity extends AppCompatActivity {
     }
 
 
- public void get_saturday_add3_1() {
+    public void get_saturday_add3_1() {
         // Get Current Time*
         final Calendar c = Calendar.getInstance();
         mHour = c.get(Calendar.HOUR_OF_DAY);
@@ -2566,7 +2505,7 @@ public class AddServiceActivity extends AppCompatActivity {
     }
 
 
- public void get_saturday_add3_2() {
+    public void get_saturday_add3_2() {
         // Get Current Time*
         final Calendar c = Calendar.getInstance();
         mHour = c.get(Calendar.HOUR_OF_DAY);

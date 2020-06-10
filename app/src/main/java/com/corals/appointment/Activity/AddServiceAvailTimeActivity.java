@@ -8,10 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +33,8 @@ import android.widget.Toast;
 
 import com.corals.appointment.Adapters.ServiceAvailCustomTimeAdapter;
 import com.corals.appointment.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -53,6 +58,12 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
     StringBuilder weekdays = new StringBuilder("yyyyyyy");
     int hour = 0, minute = 0;
 
+    private SharedPreferences sharedpreferences_services;
+    public static final String MyPREFERENCES_SERVICES = "MyPrefs_Services";
+    public static final String SERVICE_NAME = "service_name";
+    public static final String SERVICE_DURATION = "service_duration";
+    private ArrayList<String> service_name_list, service_dur_list;
+    String ser_name,ser_dur,page_id,position;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +81,14 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
             }
         });
 
+        if(getIntent().getExtras()!=null){
+            ser_name=getIntent().getStringExtra("ser_name");
+            ser_dur=getIntent().getStringExtra("ser_dur");
+            page_id=getIntent().getStringExtra("page_id");
+            position=getIntent().getStringExtra("position");
+            Log.d("AddSer--->", "onCreate: "+ser_name+","+ser_dur+","+page_id+","+position);
+        }
+        sharedpreferences_services = getSharedPreferences(MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
         textView_invalid_time = findViewById(R.id.text_invalid_time);
         radioButton_biz_hrs = findViewById(R.id.rb_biz_hours);
         radioButton_custom_time = findViewById(R.id.rb_custom_time);
@@ -100,7 +119,8 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         list_fri = new ArrayList<>();
         list_sat = new ArrayList<>();
 
-
+        service_name_list = new ArrayList<>();
+        service_dur_list = new ArrayList<>();
         getWeekDays("yyyyyyy");
        /* ArrayAdapter arrayAdapter_weekdays = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, arrayList_weekdays);
         spinner_weekdays.setAdapter(arrayAdapter_weekdays);
@@ -613,8 +633,44 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            startActivity(new Intent(AddServiceAvailTimeActivity.this, DashboardActivity.class));
-                            finish();
+
+                            String nameList = sharedpreferences_services.getString(SERVICE_NAME, "");
+                            String mobList = sharedpreferences_services.getString(SERVICE_DURATION, "");
+                            if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
+                                service_name_list = new Gson().fromJson(nameList, new TypeToken<ArrayList<String>>() {
+                                }.getType());
+                                service_dur_list = new Gson().fromJson(mobList, new TypeToken<ArrayList<String>>() {
+                                }.getType());
+                            }
+                            if (!TextUtils.isEmpty(page_id) && page_id.equals("3")) {
+                                service_name_list.add(ser_name);
+                                service_dur_list.add(ser_dur);
+                                String nameList1 = new Gson().toJson(service_name_list);
+                                String mobList1 = new Gson().toJson(service_dur_list);
+                                SharedPreferences.Editor editor = sharedpreferences_services.edit();
+                                editor.putString(SERVICE_NAME, nameList1);
+                                editor.putString(SERVICE_DURATION, mobList1);
+                                editor.commit();
+
+                                Intent in = new Intent(AddServiceAvailTimeActivity.this, SetupServiceActivity_Bottom.class);
+                                in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(in);
+
+                            } else if (!TextUtils.isEmpty(page_id) && page_id.equals("03")) {
+                                service_name_list.set(Integer.parseInt(position), ser_name);
+                                service_dur_list.set(Integer.parseInt(position), ser_dur);
+                                String nameList1 = new Gson().toJson(service_name_list);
+                                String mobList1 = new Gson().toJson(service_dur_list);
+                                SharedPreferences.Editor editor = sharedpreferences_services.edit();
+                                editor.putString(SERVICE_NAME, nameList1);
+                                editor.putString(SERVICE_DURATION, mobList1);
+                                editor.commit();
+
+                                Intent in = new Intent(AddServiceAvailTimeActivity.this, SetupServiceActivity_Bottom.class);
+                                in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(in);
+                            }
+
                         }
                     }, 2000);
                 } else {

@@ -33,72 +33,69 @@
                     android:orientation="vertical"
                     android:padding="15dp">
 
-                    <LinearLayout
+                    <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="65dp"
-                        android:layout_marginTop="10dp"
-                        android:background="#EEEEEE"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:orientation="vertical"
-                        android:padding="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="25dp"
-                            android:gravity="center_vertical"
-                            android:text="Service Name"
-                            android:textStyle="bold" />
+                        android:text="Service Name"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="0dp"
+                        android:textStyle="bold" />
 
                         <EditText
+                            android:layout_marginTop="10dp"
                             android:id="@+id/et_res_name"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:background="#EEEEEE"
                             android:gravity="center_vertical"
-                            android:hint="Enter service Name"
+                            android:hint="Enter service name"
                             android:imeOptions="actionNext"
                             android:inputType="text"
                             android:paddingStart="10dp" />
-                    </LinearLayout>
 
-
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="Service Duration"
+                        android:paddingStart="5dp"
+                        android:layout_marginTop="30dp"
+                        android:paddingEnd="0dp"
+                        android:textStyle="bold" />
                     <TextView
                         android:id="@+id/et_res_dur"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
                         android:background="#EEEEEE"
                         android:gravity="center_vertical"
-                        android:hint="Service Duration"
+                        android:hint="Select service duration"
                         android:paddingStart="10dp"
                         android:textSize="17sp" />
 
-                    <LinearLayout
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:background="#EEEEEE"
                         android:gravity="center_vertical"
-                        android:orientation="vertical"
-                        android:padding="8dp">
+                        android:text="Service Description"
+                        android:paddingStart="5dp"
+                        android:layout_marginTop="30dp"
+                        android:paddingEnd="0dp"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="25dp"
-                            android:gravity="center_vertical"
-                            android:text="Service Description"
-                            android:textStyle="bold" />
 
                         <EditText
                             android:id="@+id/et_service_description"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:minHeight="40dp"
+                            android:layout_marginTop="10dp"
                             android:maxLines="10"
                             android:background="#EEEEEE"
                             android:hint="Enter service description"
                             android:paddingStart="10dp" />
-                    </LinearLayout>
+
 
 
                     <LinearLayout

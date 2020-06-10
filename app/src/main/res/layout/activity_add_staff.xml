@@ -35,22 +35,14 @@
                 android:orientation="vertical">
 
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="65dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="#EEEEEE"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:padding="8dp">
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="25dp"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
+                        android:layout_marginTop="10dp"
                         android:text="Staff Name"
+                        android:paddingStart="10dp"
                         android:textStyle="bold" />
 
                     <EditText
@@ -58,37 +50,30 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginEnd="0dp"
                         android:background="#EEEEEE"
                         android:hint="Enter Staff Name"
                         android:imeOptions="actionNext"
                         android:inputType="text"
                         android:paddingStart="10dp" />
-                </LinearLayout>
 
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="65dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="#EEEEEE"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:padding="8dp">
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="25dp"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
+                        android:layout_marginTop="20dp"
                         android:text="Mobile"
+                        android:paddingStart="10dp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/et_staff_mob"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="0dp"
                         android:background="#EEEEEE"
@@ -96,9 +81,6 @@
                         android:imeOptions="actionDone"
                         android:inputType="number"
                         android:paddingStart="10dp" />
-                </LinearLayout>
-
-
 
 
                 <TextView
@@ -108,7 +90,7 @@
                     android:paddingStart="10dp"
                     android:textStyle="bold"
                     android:text="Select Services"
-                    android:textSize="17sp" />
+                />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerview_select_services"
@@ -126,7 +108,7 @@
                     android:paddingStart="10dp"
                     android:textStyle="bold"
                     android:text="Select Staff Working Hours"
-                    android:textSize="17sp" />
+                  />
 
 
                 <LinearLayout
@@ -190,7 +172,7 @@
                     android:paddingStart="10dp"
                     android:textStyle="bold"
                     android:text="Select Staff Active Days"
-                    android:textSize="17sp" />
+                     />
 
 
                 <LinearLayout
