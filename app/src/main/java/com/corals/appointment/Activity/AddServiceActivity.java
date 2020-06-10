@@ -185,7 +185,6 @@ public class AddServiceActivity extends AppCompatActivity {
         tv_res_dur.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AddServiceActivity.this, "Time...", Toast.LENGTH_SHORT).show();
                 timepicker_dialog();
             }
         });
@@ -335,8 +334,9 @@ public class AddServiceActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent in = new Intent(AddServiceActivity.this, AddServiceAvailTimeActivity.class);
+                in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(in);
-                finish();
+
            /*     String name = et_res_name.getText().toString();
                 String duration = tv_res_dur.getText().toString();
                 if (name.length() > 0) {
