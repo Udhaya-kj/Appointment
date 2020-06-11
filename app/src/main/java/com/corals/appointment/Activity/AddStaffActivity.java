@@ -1,15 +1,19 @@
 package com.corals.appointment.Activity;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
@@ -54,6 +58,7 @@ public class AddStaffActivity extends AppCompatActivity {
     boolean isActiveSunday_p = true, isActiveMonday_p = true, isActiveTuesday_p = true, isActiveWednesday_p = true, isActiveThursday_p = true, isActiveFriday_p = true, isActiveSaturday_p = true;
     TextView text_staff_in_time, text_staff_out_time;
     private String staff_in_time, staff_out_time;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,6 +147,27 @@ public class AddStaffActivity extends AppCompatActivity {
         if (service_name_list.size() != 0) {
             MapServiceResourceRecyclerAdapter mapServiceResourceRecyclerAdapter = new MapServiceResourceRecyclerAdapter(AddStaffActivity.this, service_name_list);
             recyclerView_services.setAdapter(mapServiceResourceRecyclerAdapter);
+        } else {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AddStaffActivity.this);
+            alertDialogBuilder.setMessage("Set up services before adding staff");
+            alertDialogBuilder.setCancelable(false);
+            alertDialogBuilder.setPositiveButton("OK",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            arg0.dismiss();
+                            Intent in = new Intent(AddStaffActivity.this, AddServiceActivity.class);
+                            in.putExtra("page_id","3");
+                            startActivity(in);
+                            finish();
+
+                        }
+                    });
+
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+
         }
 
         btn_yes_sday_p.setOnClickListener(new View.OnClickListener() {
@@ -274,8 +300,6 @@ public class AddStaffActivity extends AppCompatActivity {
         });
 
 
-
-
         button_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -307,9 +331,9 @@ public class AddStaffActivity extends AppCompatActivity {
                                 Intent in = new Intent(AddStaffActivity.this, StaffActivity_Bottom.class);
                                 startActivity(in);
                                 finish();
-                            } else  if (pageId.equals("03")) {
-                                staff_name_list.set(Integer.parseInt(position),name);
-                                staff_mob_list.set(Integer.parseInt(position),mob);
+                            } else if (pageId.equals("03")) {
+                                staff_name_list.set(Integer.parseInt(position), name);
+                                staff_mob_list.set(Integer.parseInt(position), mob);
 
                                 String nameList1 = new Gson().toJson(staff_name_list);
                                 String mobList1 = new Gson().toJson(staff_mob_list);
@@ -1095,9 +1119,9 @@ public class AddStaffActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-            Intent in = new Intent(AddStaffActivity.this, StaffActivity_Bottom.class);
-            startActivity(in);
-            finish();
+        Intent in = new Intent(AddStaffActivity.this, StaffActivity_Bottom.class);
+        startActivity(in);
+        finish();
 
     }
 }

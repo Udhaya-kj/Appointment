@@ -48,7 +48,7 @@ public class CalendarViewActivity extends AppCompatActivity {
         System.out.println("Current time => " + c.getTime());
         final SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         calendar_date = df.format(c.getTime());
-
+        calendarView. setMinDate(System. currentTimeMillis() - 1000);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
@@ -73,5 +73,6 @@ public class CalendarViewActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+
     }
 }

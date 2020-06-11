@@ -27,7 +27,7 @@ public class ViewApptServiceActivity extends AppCompatActivity {
     ImageView imageView_back, imageView_next;
     TextView textView_date;
     Calendar c;
-    String formattedDate;
+    String formattedDate,service;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +46,7 @@ public class ViewApptServiceActivity extends AppCompatActivity {
         });
 
         if (getIntent().getExtras() != null) {
-            String service = getIntent().getStringExtra("service");
+            service = getIntent().getStringExtra("service");
             toolbar.setTitle(service);
         }
         //Appt Slots
@@ -87,17 +87,18 @@ public class ViewApptServiceActivity extends AppCompatActivity {
         imageView_next = findViewById(R.id.image_appt_next);
         textView_date = findViewById(R.id.text_appt_date);
         recyclerView = findViewById(R.id.recyclerview_view_appts);
-        LinearLayoutManager lm = new LinearLayoutManager(ViewApptServiceActivity.this);
-        recyclerView.setLayoutManager(lm);
-
-        ApptServiceSlotsAdapter apptServiceSlotsAdapter = new ApptServiceSlotsAdapter(ViewApptServiceActivity.this, arrayList_slot_time, arrayList_slot_cus_name, arrayList_slot_cus_mob, arrayList_available);
-        recyclerView.setAdapter(apptServiceSlotsAdapter);
 
         c = Calendar.getInstance();
         System.out.println("Current time => " + c.getTime());
         final SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         formattedDate = df.format(c.getTime());
         textView_date.setText(formattedDate);
+
+        LinearLayoutManager lm = new LinearLayoutManager(ViewApptServiceActivity.this);
+        recyclerView.setLayoutManager(lm);
+
+        ApptServiceSlotsAdapter apptServiceSlotsAdapter = new ApptServiceSlotsAdapter(ViewApptServiceActivity.this, arrayList_slot_time, arrayList_slot_cus_name, arrayList_slot_cus_mob, arrayList_available);
+        recyclerView.setAdapter(apptServiceSlotsAdapter);
 
         imageView_back.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -633,7 +633,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-
+                            pd.dismiss();
                             String nameList = sharedpreferences_services.getString(SERVICE_NAME, "");
                             String mobList = sharedpreferences_services.getString(SERVICE_DURATION, "");
                             if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
@@ -655,7 +655,6 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                 Intent in = new Intent(AddServiceAvailTimeActivity.this, SetupServiceActivity_Bottom.class);
                                 in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(in);
-
                             } else if (!TextUtils.isEmpty(page_id) && page_id.equals("03")) {
                                 service_name_list.set(Integer.parseInt(position), ser_name);
                                 service_dur_list.set(Integer.parseInt(position), ser_dur);

@@ -42,7 +42,6 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="8"
-            android:text="Appointments for 02-06-2020"
             android:gravity="center"
             android:textStyle="bold"
             android:textSize="17sp"

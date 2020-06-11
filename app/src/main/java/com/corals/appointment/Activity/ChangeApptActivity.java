@@ -1,5 +1,6 @@
 package com.corals.appointment.Activity;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -102,10 +103,31 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
             }.getType());
         }
 
-        if (service_name_list.size() != 0) {
+        if (service_name_list !=null && !service_name_list.isEmpty()) {
             ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, service_name_list);
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner_services.setAdapter(arrayAdapter);
+        }
+        else {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ChangeApptActivity.this);
+            alertDialogBuilder.setMessage("Set up service before change appointment");
+            alertDialogBuilder.setCancelable(false);
+            alertDialogBuilder.setPositiveButton("OK",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            arg0.dismiss();
+                            Intent in = new Intent(ChangeApptActivity.this, AddServiceActivity.class);
+                            in.putExtra("page_id","3");
+                            startActivity(in);
+                            finish();
+
+                        }
+                    });
+
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         }
         String nameList_staff = sharedpreferences_staffs.getString(AddStaffActivity.NAME, "");
         String mobList_staff = sharedpreferences_staffs.getString(AddStaffActivity.MOBILE, "");
@@ -116,10 +138,31 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
             }.getType());
         }
 
-        if (staff_name_list.size() != 0) {
+        //Log.d("staff_name_list--->", "onCreate: "+staff_name_list.size());
+        if (staff_name_list !=null && !staff_name_list.isEmpty()) {
             ArrayAdapter arrayAdapter_staff = new ArrayAdapter(this, android.R.layout.simple_spinner_item, staff_name_list);
             arrayAdapter_staff.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner_staffs.setAdapter(arrayAdapter_staff);
+        }
+        else {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ChangeApptActivity.this);
+            alertDialogBuilder.setMessage("Set up staff before change appointment");
+            alertDialogBuilder.setCancelable(false);
+            alertDialogBuilder.setPositiveButton("OK",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            arg0.dismiss();
+                            Intent in = new Intent(ChangeApptActivity.this, AppointmentActivity.class);
+                            startActivity(in);
+                            finish();
+
+                        }
+                    });
+
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         }
 
         list_time_slot.add("9 am - 9.15 am");

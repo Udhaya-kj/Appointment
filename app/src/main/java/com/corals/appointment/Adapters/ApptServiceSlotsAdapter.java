@@ -40,16 +40,15 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
     @Override
     public void onBindViewHolder(final ApptServiceSlotsAdapter.MyViewHolder holder, final int position) {
 
-       // holder.textView_cus_name.setText(arrayList_cus_name.get(position));
+        // holder.textView_cus_name.setText(arrayList_cus_name.get(position));
         holder.textView_ser_time.setText(arrayList_time.get(position));
-       // holder.textView_cus_mob.setText(arrayList_cus_mob.get(position));
+        // holder.textView_cus_mob.setText(arrayList_cus_mob.get(position));
 
         if (arrayList_available.get(position).equals("0")) {
             holder.linearLayout_color.setBackgroundResource(R.drawable.left_round_corners_blue);
             holder.imageView_avail.setBackgroundResource(R.drawable.tick);
             holder.imageView_avail.setEnabled(false);
-        }
-        else {
+        } else {
             holder.linearLayout_color.setBackgroundResource(R.drawable.left_round_corners_green);
             holder.imageView_avail.setBackgroundResource(R.drawable.add_green);
             holder.imageView_avail.setEnabled(true);
@@ -58,8 +57,8 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
         holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomSheetDialog bd=new BottomSheetDialog(context);
-                ViewSlotCustomersBottomDialog viewSlotCustomersBottomDialog = new ViewSlotCustomersBottomDialog(context,arrayList_cus_name,arrayList_cus_mob,bd);
+                BottomSheetDialog bd = new BottomSheetDialog(context);
+                ViewSlotCustomersBottomDialog viewSlotCustomersBottomDialog = new ViewSlotCustomersBottomDialog(context,arrayList_time.get(position), arrayList_cus_name, arrayList_cus_mob, bd);
                 viewSlotCustomersBottomDialog.showBottomSheetDialog();
 
             /*    Intent i = new Intent(context, ApptSlotDetailsActivity.class);
@@ -77,7 +76,7 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
                 //Toast.makeText(context, "Make Appointment", Toast.LENGTH_SHORT).show();
                 Intent in = new Intent(context, CustomersMakeApptActivity.class);
                 context.startActivity(in);
-                ((Activity)context).finish();
+                ((Activity) context).finish();
             }
         });
 
@@ -92,7 +91,7 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView textView_cus_name, textView_ser_time, textView_cus_mob;
-        LinearLayout linearLayout_bg,linearLayout_color;
+        LinearLayout linearLayout_bg, linearLayout_color;
         ImageView imageView_avail;
 
         public MyViewHolder(View itemView) {

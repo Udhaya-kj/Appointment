@@ -3,6 +3,7 @@ package com.corals.appointment.Dialogs;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,9 +18,10 @@ public class ViewSlotCustomersBottomDialog {
     private Context mCtx;
     private BottomSheetDialog bottomSheetDialog;
     ArrayList<String> arrayList_name, arrayList_mob;
-
-    public ViewSlotCustomersBottomDialog(Context mCtx, ArrayList<String> arrayList_name,ArrayList<String> arrayList_mob,BottomSheetDialog bottomSheetDialog) {
+    String time;
+    public ViewSlotCustomersBottomDialog(Context mCtx,String time, ArrayList<String> arrayList_name,ArrayList<String> arrayList_mob,BottomSheetDialog bottomSheetDialog) {
         this.mCtx = mCtx;
+        this.time = time;
         this.arrayList_name = arrayList_name;
         this.arrayList_mob = arrayList_mob;
         this.bottomSheetDialog = bottomSheetDialog  ;
@@ -34,6 +36,8 @@ public class ViewSlotCustomersBottomDialog {
         bottomSheetDialog.setContentView(sheetView);
         ((View) sheetView.getParent()).setBackgroundColor(mCtx.getResources().getColor(android.R.color.transparent));
 
+        TextView textView_time = sheetView.findViewById(R.id.text_bottom_appn_time);
+        textView_time.setText(time);
         RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerview_bottomsheet_dialog);
         LinearLayoutManager lm = new LinearLayoutManager(mCtx);
         recyclerView.setLayoutManager(lm);

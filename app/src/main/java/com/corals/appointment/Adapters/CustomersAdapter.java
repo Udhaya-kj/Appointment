@@ -6,13 +6,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,19 +69,29 @@ public class CustomersAdapter extends BaseAdapter implements Filterable {
         Button button_edit = (Button) rowView.findViewById(R.id.button_edit_customer);
         Button button_delete = (Button) rowView.findViewById(R.id.button_delete_customer);
         Button button_view = (Button) rowView.findViewById(R.id.button_view_customer);
+        final ImageView imageView = (ImageView) rowView.findViewById(R.id.image_menu_popup);
         text_cus_name.setText(mDisplayedValues.get(position).name);
         text_cus_mob.setText(mDisplayedValues.get(position).mobile);
 
-       /* linearLayout.setOnClickListener(new View.OnClickListener() {
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(context, ApptConfirmActivity.class);
-                i.putExtra("cus_name", (arrayList.get(position)));
-                i.putExtra("cus_mob", (arrayList1.get(position)));
-                context.startActivity(i);
-                ((Activity) context).finish();
+                //Creating the instance of PopupMenu
+                PopupMenu popup = new PopupMenu(context, imageView);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater().inflate(R.menu.poupup_menu, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(context,"You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+
+                popup.show();//showing popup menu
             }
-        });*/
+        });
 
         button_view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,11 +167,12 @@ public class CustomersAdapter extends BaseAdapter implements Filterable {
 
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
-
-
-
             }
         });
+
+
+
+
         return rowView;
 
     }

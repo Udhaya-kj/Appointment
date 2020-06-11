@@ -62,8 +62,10 @@ public class CustomerBottomSheetDialog implements View.OnClickListener {
             mCtx.startActivity(in);
         } else if (v.getId() == R.id.layout_make_appt) {
             //Toast.makeText(mCtx, "Make Appointment", Toast.LENGTH_SHORT).show();
-            mCtx.startActivity(new Intent(((Activity) mCtx), CalendarViewActivity.class));
-            ((Activity) mCtx).finish();
+            Intent in = new Intent(((Activity) mCtx), CalendarViewActivity.class);
+            in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mCtx.startActivity(in);
+
         }
     }
 
