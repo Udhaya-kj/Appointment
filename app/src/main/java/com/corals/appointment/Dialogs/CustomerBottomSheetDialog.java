@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.corals.appointment.Activity.CalendarViewActivity;
@@ -16,9 +17,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 public class CustomerBottomSheetDialog implements View.OnClickListener {
     private Context mCtx;
     private BottomSheetDialog bottomSheetDialog;
+    String name, mob;
 
-    public CustomerBottomSheetDialog(Context mCtx) {
+    public CustomerBottomSheetDialog(Context mCtx, String name, String mob) {
         this.mCtx = mCtx;
+        this.name = name;
+        this.mob = mob;
         setUpDialog();
     }
 
@@ -33,6 +37,12 @@ public class CustomerBottomSheetDialog implements View.OnClickListener {
         LinearLayout layout_call = sheetView.findViewById(R.id.layout_call);
         LinearLayout layout_view_appt = sheetView.findViewById(R.id.layout_view_appt);
         LinearLayout layout_make_appt = sheetView.findViewById(R.id.layout_make_appt);
+        TextView textView_name = sheetView.findViewById(R.id.tv_cus_alert_name);
+        TextView textView_mob = sheetView.findViewById(R.id.tv_cus_alert_mob);
+        TextView textView_email = sheetView.findViewById(R.id.tv_cus_alert_email);
+
+        textView_name.setText(name);
+        textView_mob.setText(mob);
 
         layout_call.setOnClickListener(this);
         layout_view_appt.setOnClickListener(this);
@@ -59,11 +69,13 @@ public class CustomerBottomSheetDialog implements View.OnClickListener {
             // Toast.makeText(mCtx, "View Appointment", Toast.LENGTH_SHORT).show();
             Intent in = new Intent(((Activity) mCtx), ViewCustomerApptActivity.class);
             in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            in.putExtra("cus_name",name);
             mCtx.startActivity(in);
         } else if (v.getId() == R.id.layout_make_appt) {
             //Toast.makeText(mCtx, "Make Appointment", Toast.LENGTH_SHORT).show();
             Intent in = new Intent(((Activity) mCtx), CalendarViewActivity.class);
             in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            in.putExtra("cus_name",name);
             mCtx.startActivity(in);
 
         }

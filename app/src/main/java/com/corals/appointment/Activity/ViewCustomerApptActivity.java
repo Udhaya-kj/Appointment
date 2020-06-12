@@ -28,7 +28,7 @@ public class ViewCustomerApptActivity extends AppCompatActivity {
     ImageView imageView_back, imageView_next;
     TextView textView_date;
     Calendar c;
-    String formattedDate;
+    String formattedDate,cus_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +48,8 @@ public class ViewCustomerApptActivity extends AppCompatActivity {
         });
 
         if (getIntent().getExtras() != null) {
-            String service = getIntent().getStringExtra("service");
-            toolbar.setTitle(service);
+            cus_name = getIntent().getStringExtra("cus_name");
+            toolbar.setTitle(cus_name+"'s Appointments");
         }
         //Appt Slots
         arrayList_slot_time = new ArrayList<>();

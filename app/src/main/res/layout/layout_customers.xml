@@ -2,149 +2,64 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_row_customer"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="60dp"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:padding="10dp"
+    android:background="@drawable/layout_bg_white"
     android:weightSum="10">
 
     <ImageView
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
         android:layout_weight="1.5"
         android:padding="8dp"
-        android:src="@drawable/customer" />
-
+        android:src="@drawable/customers" />
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="10dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="15dp"
         android:layout_marginEnd="0dp"
         android:layout_weight="7"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="2">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/text_cus_name"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:weightSum="1">
-
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.2"
-                    android:padding="8dp"
-                    android:src="@drawable/user"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/text_cus_name"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:text="Jayanth"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:orientation="horizontal"
-                android:weightSum="1">
-
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.2"
-                    android:padding="8dp"
-                    android:src="@drawable/phone"
-                    android:visibility="gone" />
-
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="start|bottom"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="Jayanth"
+            android:textSize="17sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/text_cus_mob"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:gravity="center_vertical"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="start|center"
             android:singleLine="true"
             android:text="9999999999" />
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:weightSum="3">
-
-            <Button
-                android:id="@+id/button_view_customer"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="0.65"
-                android:background="@null"
-                android:gravity="center"
-                android:text="View"
-                android:textColor="#4DBDF1"
-                android:textSize="13sp" />
-
-            <Button
-                android:id="@+id/button_edit_customer"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="0.65"
-                android:background="@null"
-                android:gravity="center"
-                android:text="Edit"
-                android:textColor="#4DBDF1"
-                android:textSize="13sp" />
-
-            <Button
-                android:id="@+id/button_delete_customer"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="0.65"
-                android:background="@null"
-                android:gravity="center"
-                android:text="Delete"
-                android:textColor="#4DBDF1"
-                android:textSize="13sp" />
-        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:layout_weight="1.5">
+        android:layout_height="60dp"
+        android:layout_weight="1.5"
+        >
 
         <ImageView
+            android:padding="18dp"
             android:id="@+id/image_menu_popup"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="20dp"
             android:src="@drawable/menu" />
 
     </LinearLayout>

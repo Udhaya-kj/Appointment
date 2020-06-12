@@ -26,7 +26,7 @@
         <LinearLayout
             android:id="@+id/layout_new_cust"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:background="#FFF">
 
             <ImageView
@@ -88,10 +88,10 @@
         <ListView
             android:id="@+id/listview_customers"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:divider="#DDDDDD"
-            android:dividerHeight="1dp" />
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:divider="@null"
+            android:dividerHeight="8dp" />
 
         <Button
             android:id="@+id/button_staff_continue"

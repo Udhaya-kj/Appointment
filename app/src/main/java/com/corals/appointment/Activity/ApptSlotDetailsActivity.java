@@ -19,7 +19,7 @@ import com.corals.appointment.R;
 
 public class ApptSlotDetailsActivity extends AppCompatActivity {
 
-    TextView textView_name, textView_mob, textView_ser_name, textView_staff, textView_booking_date;
+    TextView textView_name, textView_mob, textView_ser_name, textView_staff, textView_booking_date,textView_booking_time;
     LinearLayout layout_call, layout_remainder, layout_cancel_appt, layout_change_appt;
 
     @Override
@@ -44,6 +44,7 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
         textView_ser_name = findViewById(R.id.tv_appt_det_ser_name);
         textView_staff = findViewById(R.id.tv_appt_det_staff_name);
         textView_booking_date = findViewById(R.id.tv_appt_det_booking_date);
+        textView_booking_time = findViewById(R.id.tv_appt_det_booking_time);
 
         layout_call = findViewById(R.id.layout_call);
         layout_remainder = findViewById(R.id.layout_sent_reminder);
@@ -114,6 +115,10 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent in = new Intent(ApptSlotDetailsActivity.this, ChangeApptActivity.class);
                 in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                in.putExtra("service",textView_ser_name.getText().toString().trim());
+                in.putExtra("staff",textView_staff.getText().toString().trim());
+                in.putExtra("appt_date",textView_booking_date.getText().toString().trim());
+                in.putExtra("appt_time",textView_booking_time.getText().toString().trim());
                 startActivity(in);
 
             }
@@ -122,9 +127,10 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
         if (getIntent().getExtras() != null) {
             String name = getIntent().getStringExtra("name");
             String mob = getIntent().getStringExtra("mob");
-
+            String time = getIntent().getStringExtra("time");
             textView_name.setText(name);
             textView_mob.setText(mob);
+            textView_booking_time.setText(time);
         }
 
     }

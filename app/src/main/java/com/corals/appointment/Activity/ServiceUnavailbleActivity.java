@@ -54,8 +54,6 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
 
         if (getIntent().getExtras() != null) {
             task = getIntent().getStringExtra("task");
-
-
             if (task.equals("2")) {
                 toolbar.setTitle("Staff Leave");
             }

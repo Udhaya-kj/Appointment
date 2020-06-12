@@ -42,7 +42,7 @@ public class ViewSlotCustomersBottomDialog {
         LinearLayoutManager lm = new LinearLayoutManager(mCtx);
         recyclerView.setLayoutManager(lm);
 
-        Slot_Cus_BottomSheet_RecyclerAdapter adapter=new Slot_Cus_BottomSheet_RecyclerAdapter(mCtx,arrayList_name,arrayList_mob,bottomSheetDialog);
+        Slot_Cus_BottomSheet_RecyclerAdapter adapter=new Slot_Cus_BottomSheet_RecyclerAdapter(mCtx,arrayList_name,arrayList_mob,time,bottomSheetDialog);
         recyclerView.setAdapter(adapter);
     }
 

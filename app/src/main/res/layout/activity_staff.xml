@@ -28,7 +28,7 @@
                 android:id="@+id/layout_add_staff"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.1"
+                android:layout_weight="0.08"
                 android:background="#FFF">
 
                 <ImageView
@@ -58,7 +58,7 @@
                 android:id="@+id/listview_staffs"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.8"
+                android:layout_weight="0.82"
                 android:layout_margin="10dp"
                 android:layout_marginTop="10dp"
                 android:divider="#DDDDDD"

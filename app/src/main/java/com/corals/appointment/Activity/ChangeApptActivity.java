@@ -89,6 +89,13 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
         editText_comment = findViewById(R.id.et_comment);
         button_changes_appt = findViewById(R.id.button_apply_appt_changes);
 
+
+        if(getIntent().getExtras()!=null){
+            String service=getIntent().getStringExtra("service");
+            String staff=getIntent().getStringExtra("staff");
+            String appt_date=getIntent().getStringExtra("appt_date");
+            String appt_time=getIntent().getStringExtra("appt_time");
+        }
         GridLayoutManager li = new GridLayoutManager(this, 2);
         //recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(li);

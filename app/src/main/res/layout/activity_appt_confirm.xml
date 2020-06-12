@@ -11,13 +11,13 @@
         android:id="@+id/toolbar_appt_confirm"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#4DBDF1"
+        android:background="@color/app_blue"
         android:elevation="4dp"
         android:textAlignment="center"
         app:elevation="4dp"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:title="Confirm Appointment"
-        app:titleTextColor="#FFFFFF" />
+        app:title="Appointment"
+        app:titleTextColor="@color/white" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginTop="10dp"
-                android:background="#FFF"
+                android:background="@color/white"
                 android:paddingStart="20dp">
 
                 <ImageView
@@ -162,7 +162,7 @@
                         android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="10dp"
-                        android:src="@drawable/customer" />
+                        android:src="@drawable/customers" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -200,6 +200,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.1"
-            android:text="Done"></Button>
+            android:text="Book Appointment"></Button>
     </LinearLayout>
 </LinearLayout>

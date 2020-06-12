@@ -21,9 +21,10 @@ import java.util.Calendar;
 public class CalendarViewActivity extends AppCompatActivity {
 
     CalendarView calendarView;
-    String calendar_date;
-    TextView  textView_cal_next;
+    String calendar_date, cus_name;
+    TextView textView_cal_next;
     Calendar c;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +42,11 @@ public class CalendarViewActivity extends AppCompatActivity {
             }
         });
 
+        if (getIntent().getExtras() != null) {
+            cus_name = getIntent().getStringExtra("cus_name");
+            toolbar.setTitle(cus_name);
+        }
+
         calendarView = findViewById(R.id.calendarView);
         textView_cal_next = findViewById(R.id.text_calendar_next);
 
@@ -48,7 +54,7 @@ public class CalendarViewActivity extends AppCompatActivity {
         System.out.println("Current time => " + c.getTime());
         final SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         calendar_date = df.format(c.getTime());
-        calendarView. setMinDate(System. currentTimeMillis() - 1000);
+        calendarView.setMinDate(System.currentTimeMillis() - 1000);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
@@ -59,7 +65,7 @@ public class CalendarViewActivity extends AppCompatActivity {
         textView_cal_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("calendar_date--->", "onClick: "+calendar_date);
+                Log.d("calendar_date--->", "onClick: " + calendar_date);
                 Intent i = new Intent(CalendarViewActivity.this, CalendarServicesActivity.class);
                 i.putExtra("page_id", "2");
                 i.putExtra("date", calendar_date);

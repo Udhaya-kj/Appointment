@@ -22,14 +22,15 @@ import java.util.ArrayList;
 public class Slot_Cus_BottomSheet_RecyclerAdapter extends RecyclerView.Adapter<Slot_Cus_BottomSheet_RecyclerAdapter.MyViewHolder> {
     ArrayList<String> arrayList1, arrayList2, arrayList_val;
     Context context;
-    String res;
+    String time;
     private BottomSheetDialog bottomSheetDialog;
 
-    public Slot_Cus_BottomSheet_RecyclerAdapter(Context context, ArrayList<String> arrayList1, ArrayList<String> arrayList2,BottomSheetDialog bottomSheetDialog) {
+    public Slot_Cus_BottomSheet_RecyclerAdapter(Context context, ArrayList<String> arrayList1, ArrayList<String> arrayList2,String time,BottomSheetDialog bottomSheetDialog) {
 
         this.context = context;
         this.arrayList1 = arrayList1;
         this.arrayList2 = arrayList2;
+        this.time = time;
         this.bottomSheetDialog = bottomSheetDialog;
 
     }
@@ -71,6 +72,7 @@ public class Slot_Cus_BottomSheet_RecyclerAdapter extends RecyclerView.Adapter<S
                 Intent i = new Intent(context, ApptSlotDetailsActivity.class);
                 i.putExtra("name",arrayList1.get(position));
                 i.putExtra("mob", arrayList2.get(position));
+                i.putExtra("time", time);
                 context.startActivity(i);
                 ((Activity) context).finish();
             }
