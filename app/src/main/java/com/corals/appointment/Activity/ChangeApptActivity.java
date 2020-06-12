@@ -50,6 +50,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
     int Year, Month, Day, Hour, Minute;
     Calendar calendar;
     RecyclerView recyclerView;
+    TextView textView_ser, textView_staff, textView_date, textView_time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,16 +90,25 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
         editText_comment = findViewById(R.id.et_comment);
         button_changes_appt = findViewById(R.id.button_apply_appt_changes);
 
+        textView_ser = findViewById(R.id.text_service);
+        textView_staff = findViewById(R.id.text_staff);
+        textView_date = findViewById(R.id.text_appn_dt);
+        textView_time = findViewById(R.id.text_appn_time);
 
-        if(getIntent().getExtras()!=null){
-            String service=getIntent().getStringExtra("service");
-            String staff=getIntent().getStringExtra("staff");
-            String appt_date=getIntent().getStringExtra("appt_date");
-            String appt_time=getIntent().getStringExtra("appt_time");
+        if (getIntent().getExtras() != null) {
+            String service = getIntent().getStringExtra("service");
+            String staff = getIntent().getStringExtra("staff");
+            String appt_date = getIntent().getStringExtra("appt_date");
+            String appt_time = getIntent().getStringExtra("appt_time");
+            textView_ser.setText(service);
+            textView_staff.setText(staff);
+            textView_date.setText(appt_date);
+            textView_time.setText(appt_time);
         }
         GridLayoutManager li = new GridLayoutManager(this, 2);
         //recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(li);
+        recyclerView.setFocusable(false);
         sharedpreferences_services = getSharedPreferences(AddServiceActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
         sharedpreferences_staffs = getSharedPreferences(AddStaffActivity.MyPREFERENCES_STAFFS, Context.MODE_PRIVATE);
         String nameList = sharedpreferences_services.getString(AddServiceActivity.SERVICE_NAME, "");
@@ -110,12 +120,11 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
             }.getType());
         }
 
-        if (service_name_list !=null && !service_name_list.isEmpty()) {
+        if (service_name_list != null && !service_name_list.isEmpty()) {
             ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, service_name_list);
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner_services.setAdapter(arrayAdapter);
-        }
-        else {
+        } else {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ChangeApptActivity.this);
             alertDialogBuilder.setMessage("Set up service before change appointment");
             alertDialogBuilder.setCancelable(false);
@@ -125,7 +134,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
                         public void onClick(DialogInterface arg0, int arg1) {
                             arg0.dismiss();
                             Intent in = new Intent(ChangeApptActivity.this, AddServiceActivity.class);
-                            in.putExtra("page_id","3");
+                            in.putExtra("page_id", "3");
                             startActivity(in);
                             finish();
 
@@ -146,12 +155,11 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
         }
 
         //Log.d("staff_name_list--->", "onCreate: "+staff_name_list.size());
-        if (staff_name_list !=null && !staff_name_list.isEmpty()) {
+        if (staff_name_list != null && !staff_name_list.isEmpty()) {
             ArrayAdapter arrayAdapter_staff = new ArrayAdapter(this, android.R.layout.simple_spinner_item, staff_name_list);
             arrayAdapter_staff.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner_staffs.setAdapter(arrayAdapter_staff);
-        }
-        else {
+        } else {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ChangeApptActivity.this);
             alertDialogBuilder.setMessage("Set up staff before change appointment");
             alertDialogBuilder.setCancelable(false);
@@ -172,20 +180,21 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
             alertDialog.show();
         }
 
-        list_time_slot.add("9 am - 9.15 am");
-        list_time_slot.add("9.15 am - 9.30 am");
-        list_time_slot.add("9.30 am - 9.45 am");
-        list_time_slot.add("9.45 am - 10 am");
-        list_time_slot.add("10 am - 10.15 am");
-        list_time_slot.add("10.15 am - 10.30 am");
-        list_time_slot.add("10.30 am - 10.45 am");
-        list_time_slot.add("10.45 am - 11 am");
-        list_time_slot.add("11.15 am - 11.30 am");
-        list_time_slot.add("11.30 am - 11.45 am");
+        list_time_slot.add("08:00 am - 08:30 am");
+        list_time_slot.add("12:00 pm - 12:30 pm");
+        list_time_slot.add("02:30 pm - 02:45 pm");
+        list_time_slot.add("06:00 pm - 06:30 pm");
+        list_time_slot.add("06:30 pm - 07:00 pm");
+        list_time_slot.add("07:00 pm - 07:30 pm");
+        list_time_slot.add("07:30 pm - 08:00 pm");
+        list_time_slot.add("08:00 pm - 08:30 pm");
+        list_time_slot.add("08:30 pm - 09:00 pm");
+        list_time_slot.add("09:00 pm - 09:30 pm");
 
-        ChangeApptSlotRecycleAdapter changeApptSlotGridviewAdapter = new ChangeApptSlotRecycleAdapter(ChangeApptActivity.this, list_time_slot);
+        ChangeApptSlotRecycleAdapter changeApptSlotGridviewAdapter = new ChangeApptSlotRecycleAdapter(ChangeApptActivity.this, list_time_slot,textView_time.getText().toString().trim());
         recyclerView.setAdapter(changeApptSlotGridviewAdapter);
 
+        changeApptSlotGridviewAdapter.notifyDataSetChanged();
         imageView_calendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -26,6 +26,7 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants"
             android:scrollbars="vertical">
 
             <LinearLayout
@@ -34,10 +35,109 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layout_bg_white"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_weight="4"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="0.5"
+                            android:gravity="center"
+                            android:padding="12dp"
+                            android:src="@drawable/order" />
+
+                        <TextView
+                            android:id="@+id/text_service"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="1.2"
+                            android:gravity="center|start"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:text="Hair Cut"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="0.5"
+                            android:gravity="center"
+                            android:padding="12dp"
+                            android:src="@drawable/customer" />
+
+                        <TextView
+                            android:id="@+id/text_staff"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="1.8"
+                            android:gravity="center|start"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:text="Rahul"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        >
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="0.5"
+                            android:gravity="center"
+                            android:padding="12dp"
+                            android:src="@drawable/calendar" />
+
+                        <TextView
+                            android:id="@+id/text_appn_dt"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="1.2"
+                            android:gravity="center|start"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:text="20-07-2020"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="0.5"
+                            android:gravity="center"
+                            android:padding="12dp"
+                            android:src="@drawable/clock" />
+
+                        <TextView
+                            android:id="@+id/text_appn_time"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="1.8"
+                            android:gravity="center|start"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:text="11 am-11.30 am"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="20dp"
                     android:text="Select Service" />
 
                 <LinearLayout
@@ -64,12 +164,12 @@
                     android:weightSum="1">
 
                     <LinearLayout
-                        android:padding="8dp"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.8"
                         android:gravity="center_vertical"
                         android:orientation="vertical"
+                        android:padding="8dp"
                         android:weightSum="1">
 
                         <TextView
@@ -119,7 +219,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_weight="0.2"
-                        android:padding="16dp"
+                        android:padding="20dp"
                         android:src="@drawable/calendar"
                         android:tint="#4DBDF1" />
                 </LinearLayout>

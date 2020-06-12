@@ -1,11 +1,13 @@
 package com.corals.appointment.Adapters;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,11 +20,14 @@ import java.util.ArrayList;
 public class ChangeApptSlotRecycleAdapter extends RecyclerView.Adapter<ChangeApptSlotRecycleAdapter.MyViewHolder> {
     ArrayList<String> arrayList1;
     Activity context;
-    String res;
+    String time;
+    int index = -1;
 
-    public ChangeApptSlotRecycleAdapter(Activity context, ArrayList<String> arrayList1) {
+
+    public ChangeApptSlotRecycleAdapter(Activity context, ArrayList<String> arrayList1, String time) {
         this.context = context;
         this.arrayList1 = arrayList1;
+        this.time = time;
 
     }
 
@@ -35,14 +40,33 @@ public class ChangeApptSlotRecycleAdapter extends RecyclerView.Adapter<ChangeApp
 
     @Override
     public void onBindViewHolder(final ChangeApptSlotRecycleAdapter.MyViewHolder holder, final int position) {
-
+        boolean isSlotChecked = false;
         holder.textView_slot.setText(arrayList1.get(position));
         holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                index = position;
+                notifyDataSetChanged();
                 ChangeApptActivity.textView_appt_slot.setText(arrayList1.get(position));
             }
         });
+
+
+        if (index == position) {
+            if (!isSlotChecked) {
+                holder.linearLayout_bg.setBackgroundResource(R.drawable.corner_change_appt_slot_blue);
+            } else {
+                holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
+            }
+            isSlotChecked = true;
+        } else {
+            holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
+        }
+
+        if (arrayList1.get(position).equals(time)) {
+            holder.linearLayout_bg.setBackgroundResource(R.drawable.corner_change_appt_slot_green);
+        }
 
     }
 
