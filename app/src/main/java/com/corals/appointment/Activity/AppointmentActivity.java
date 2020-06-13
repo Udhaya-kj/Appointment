@@ -179,25 +179,12 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
                         }
                     }
 
-           /*     String a = "A", b = "b", c = "C";
-
-                //Disable all SUNDAYS and SATURDAYS between Min and Max Dates
-                for (Calendar loopdate = min_date_c; min_date_c.before(max_date_c); min_date_c.add(Calendar.DATE, 1), loopdate = min_date_c) {
-                    int dayOfWeek = loopdate.get(Calendar.DAY_OF_WEEK);
-                    if (dayOfWeek == Calendar.SUNDAY || dayOfWeek == Calendar.MONDAY || (a.equals("A") ? dayOfWeek == Calendar.TUESDAY : dayOfWeek==0)) {
-                        Calendar[] disabledDays = new Calendar[1];
-                        disabledDays[0] = loopdate;
-                        datePickerDialog.setDisabledDays(disabledDays);
-                    }
-                }*/
-
-
                     datePickerDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
 
                         @Override
                         public void onCancel(DialogInterface dialogInterface) {
 
-                            Toast.makeText(AppointmentActivity.this, "Datepicker Canceled", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(AppointmentActivity.this, "Datepicker Canceled", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -239,27 +226,16 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         String date = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
-        //Toast.makeText(AppointmentActivity.this, date, Toast.LENGTH_LONG).show();
-
         Intent i = new Intent(AppointmentActivity.this, CalendarServicesActivity.class);
         i.putExtra("page_id", "1");
         i.putExtra("date", date);
         startActivity(i);
         finish();
-
-        //TextView text_datepicker = (TextView) findViewById(R.id.text_datepicker);
-        // text_datepicker.setText(date);
-   /*     Intent i = new Intent(AppointmentActivity.this, TimeSlotsActivity.class);
-        i.putExtra("resource", res);
-        i.putExtra("date", date);
-        startActivity(i);
-        finish();*/
     }
 
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
         String time = "Time: " + hourOfDay + ":" + minute + ":" + second;
-        //Toast.makeText(MaterialDatePickerActivity.this, time, Toast.LENGTH_LONG).show();
         TextView text_timepicker = (TextView) findViewById(R.id.text_timepicker);
         text_timepicker.setText(time);
     }
@@ -323,7 +299,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
                         @Override
                         public void onCancel(DialogInterface dialogInterface) {
 
-                            Toast.makeText(AppointmentActivity.this, "Datepicker Canceled", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(AppointmentActivity.this, "Datepicker Canceled", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -337,5 +313,20 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_calendar);
+
+        if (service_name_list.size()!=0) {
+            item.setEnabled(true);
+            item.getIcon().setAlpha(255);
+        } else {
+            // disabled
+            item.setEnabled(false);
+            item.getIcon().setAlpha(130);
+        }
+        return true;
     }
 }

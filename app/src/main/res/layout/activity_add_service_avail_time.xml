@@ -61,7 +61,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:orientation="vertical"
-                        android:visibility="gone">
+                        android:visibility="visible">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -278,10 +278,11 @@
 
                             <Button
                                 android:id="@+id/button_add_time"
-                                android:layout_width="200dp"
+                                android:layout_width="150dp"
                                 android:layout_height="35dp"
                                 android:layout_gravity="center_horizontal"
                                 android:layout_marginTop="15dp"
+                                android:layout_marginBottom="15dp"
                                 android:background="#4DBDF1"
                                 android:text="ADD"
                                 android:textColor="@color/white" />

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -63,7 +64,8 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
     public static final String SERVICE_NAME = "service_name";
     public static final String SERVICE_DURATION = "service_duration";
     private ArrayList<String> service_name_list, service_dur_list;
-    String ser_name,ser_dur,page_id,position;
+    String ser_name, ser_dur, page_id, position;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,12 +83,12 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
             }
         });
 
-        if(getIntent().getExtras()!=null){
-            ser_name=getIntent().getStringExtra("ser_name");
-            ser_dur=getIntent().getStringExtra("ser_dur");
-            page_id=getIntent().getStringExtra("page_id");
-            position=getIntent().getStringExtra("position");
-            Log.d("AddSer--->", "onCreate: "+ser_name+","+ser_dur+","+page_id+","+position);
+        if (getIntent().getExtras() != null) {
+            ser_name = getIntent().getStringExtra("ser_name");
+            ser_dur = getIntent().getStringExtra("ser_dur");
+            page_id = getIntent().getStringExtra("page_id");
+            position = getIntent().getStringExtra("position");
+            Log.d("AddSer--->", "onCreate: " + ser_name + "," + ser_dur + "," + page_id + "," + position);
         }
         sharedpreferences_services = getSharedPreferences(MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
         textView_invalid_time = findViewById(R.id.text_invalid_time);
@@ -414,7 +416,8 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     recyclerView.setAdapter(timeAdapter);
                                     timeAdapter.notifyDataSetChanged();
                                 } else {
-                                    getAnimation("Time already taken. Try with different time");                                }
+                                    getDialog("Unavailability time cannot overlap");
+                                }
 
                             } else {
                                 list_sun.add(s_time + " - " + e_time);
@@ -424,7 +427,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                 timeAdapter.notifyDataSetChanged();
                             }
                         } else {
-                            Toast.makeText(AddServiceAvailTimeActivity.this, "You have reached the limit!", Toast.LENGTH_SHORT).show();
+                            getDialog("You have reached the limit for sunday");
                         }
                     } else if (weekday.equals("Monday")) {
                         if (list_mon.size() <= 1) {
@@ -443,7 +446,8 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     recyclerView.setAdapter(timeAdapter);
                                     timeAdapter.notifyDataSetChanged();
                                 } else {
-                                    getAnimation("Time already taken. Try with different time");                                }
+                                    getDialog("Unavailability time cannot overlap");
+                                }
 
                             } else {
                                 recyclerView.setVisibility(View.VISIBLE);
@@ -455,7 +459,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
 
                         } else {
-                            Toast.makeText(AddServiceAvailTimeActivity.this, "You have reached the limit!", Toast.LENGTH_SHORT).show();
+                            getDialog("You have reached the limit for monday");
                         }
                     } else if (weekday.equals("Tuesday")) {
                         if (list_tue.size() <= 1) {
@@ -473,7 +477,8 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     recyclerView.setAdapter(timeAdapter);
                                     timeAdapter.notifyDataSetChanged();
                                 } else {
-                                    getAnimation("Time already taken. Try with different time");                                }
+                                    getDialog("Unavailability time cannot overlap");
+                                }
 
                             } else {
                                 recyclerView.setVisibility(View.VISIBLE);
@@ -485,7 +490,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
 
                         } else {
-                            Toast.makeText(AddServiceAvailTimeActivity.this, "You have reached the limit!", Toast.LENGTH_SHORT).show();
+                            getDialog("You have reached the limit for tuesday");
                         }
                     } else if (weekday.equals("Wednesday")) {
                         if (list_wed.size() <= 1) {
@@ -503,7 +508,8 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     recyclerView.setAdapter(timeAdapter);
                                     timeAdapter.notifyDataSetChanged();
                                 } else {
-                                    getAnimation("Time already taken. Try with different time");                                }
+                                    getDialog("Unavailability time cannot overlap");
+                                }
 
                             } else {
                                 recyclerView.setVisibility(View.VISIBLE);
@@ -515,7 +521,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
 
                         } else {
-                            Toast.makeText(AddServiceAvailTimeActivity.this, "You have reached the limit!", Toast.LENGTH_SHORT).show();
+                            getDialog("You have reached the limit for wednesday");
                         }
                     } else if (weekday.equals("Thursday")) {
                         if (list_thu.size() <= 1) {
@@ -533,7 +539,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     recyclerView.setAdapter(timeAdapter);
                                     timeAdapter.notifyDataSetChanged();
                                 } else {
-                                    getAnimation("Time already taken. Try with different time");
+                                    getDialog("Unavailability time cannot overlap");
                                 }
 
                             } else {
@@ -546,7 +552,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
 
                         } else {
-                            Toast.makeText(AddServiceAvailTimeActivity.this, "You have reached the limit!", Toast.LENGTH_SHORT).show();
+                            getDialog("You have reached the limit for thursday");
                         }
                     } else if (weekday.equals("Friday")) {
                         if (list_fri.size() <= 1) {
@@ -565,7 +571,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     recyclerView.setAdapter(timeAdapter);
                                     timeAdapter.notifyDataSetChanged();
                                 } else {
-                                    getAnimation("Time already taken. Try with different time");
+                                    getDialog("Unavailability time cannot overlap");
                                 }
 
                             } else {
@@ -577,7 +583,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                             }
 
                         } else {
-                            Toast.makeText(AddServiceAvailTimeActivity.this, "You have reached the limit!", Toast.LENGTH_SHORT).show();
+                            getDialog("You have reached the limit for friday");
                         }
                     } else if (weekday.equals("Saturday")) {
                         if (list_sat.size() <= 1) {
@@ -595,7 +601,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     recyclerView.setAdapter(timeAdapter);
                                     timeAdapter.notifyDataSetChanged();
                                 } else {
-                                    getAnimation("Time already taken. Try with different time");
+                                    getDialog("Unavailability time cannot overlap");
                                 }
 
                             } else {
@@ -608,7 +614,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
 
                         } else {
-                            Toast.makeText(AddServiceAvailTimeActivity.this, "You have reached the limit!", Toast.LENGTH_SHORT).show();
+                            getDialog("You have reached the limit for saturday");
                         }
                     }
 
@@ -616,8 +622,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
 
                 } else {
-
-                    getAnimation("Invalid Time");
+                    getDialog("Invalid Time");
                 }
             }
         });
@@ -950,6 +955,24 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                 textView_invalid_time.clearAnimation();
             }
         }, 2000);
+
+    }
+
+    private void getDialog(String msg) {
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AddServiceAvailTimeActivity.this);
+        alertDialogBuilder.setMessage(msg);
+        alertDialogBuilder.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        arg0.dismiss();
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
 
     }
 }

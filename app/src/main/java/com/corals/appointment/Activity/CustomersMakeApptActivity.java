@@ -32,10 +32,11 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
     private ArrayList<String> cus_name_list, cus_mob_list;
     private SharedPreferences sharedpreferences_customers;
     CustomersAdapter_MakeAppt customersAdapter_makeAppt;
-    Button button_continue;
     LinearLayout linearLayout_add_customer;
     EditText editText_search;
+    String pageId;
     private ArrayList<CustomersModel> mCustomersArrayList = new ArrayList<CustomersModel>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,14 +57,17 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
         linearLayout_add_customer = findViewById(R.id.layout_new_cust);
         cus_name_list = new ArrayList<>();
         cus_mob_list = new ArrayList<>();
-        listView_customers=findViewById(R.id.listview_customers);
+        listView_customers = findViewById(R.id.listview_customers);
         editText_search = findViewById(R.id.et_search_customer);
 
+        if (getIntent().getExtras() != null) {
+            pageId = getIntent().getStringExtra("page_id");
+        }
         linearLayout_add_customer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(CustomersMakeApptActivity.this, CreateCustomerActivity.class);
-                i.putExtra("page_id","02");
+                i.putExtra("page_id", "02");
                 startActivity(i);
                 finish();
             }
@@ -72,7 +76,7 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
 
         String nameList = sharedpreferences_customers.getString(CreateCustomerActivity.CUSTOMER_NAME, "");
         String mobList = sharedpreferences_customers.getString(CreateCustomerActivity.CUSTOMER_MOBILE, "");
-        if(!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
+        if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
             cus_name_list = new Gson().fromJson(nameList, new TypeToken<ArrayList<String>>() {
             }.getType());
             cus_mob_list = new Gson().fromJson(mobList, new TypeToken<ArrayList<String>>() {
@@ -83,9 +87,9 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
             mCustomersArrayList.add(new CustomersModel(cus_name_list.get(y), cus_mob_list.get(y), ""));
         }
 
-        Log.d("listsize---->", "onCreate: "+cus_name_list+","+cus_mob_list);
-        if(cus_name_list.size()!=0 && cus_mob_list.size()!=0){
-            customersAdapter_makeAppt=new CustomersAdapter_MakeAppt(CustomersMakeApptActivity.this,mCustomersArrayList);
+        Log.d("listsize---->", "onCreate: " + cus_name_list + "," + cus_mob_list);
+        if (cus_name_list.size() != 0 && cus_mob_list.size() != 0) {
+            customersAdapter_makeAppt = new CustomersAdapter_MakeAppt(CustomersMakeApptActivity.this, mCustomersArrayList);
             listView_customers.setAdapter(customersAdapter_makeAppt);
 
         }
@@ -107,39 +111,21 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
             }
         });
 
-   /*     linearLayout1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name=tv_n1.getText().toString();
-                String mob=tv_m1.getText().toString();
-                Intent i = new Intent(CustomersActivity.this, ApptConfirmActivity.class);
-                i.putExtra("cus_name",name);
-                i.putExtra("cus_mob",mob);
-                startActivity(i);
-                finish();
-            }
-        });
-        linearLayout2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name=tv_n2.getText().toString();
-                String mob=tv_m2.getText().toString();
-                Intent i = new Intent(CustomersActivity.this, ApptConfirmActivity.class);
-                i.putExtra("cus_name",name);
-                i.putExtra("cus_mob",mob);
-                startActivity(i);
-                finish();
-            }
-        });*/
-
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i = new Intent(CustomersMakeApptActivity.this, TimeSlotsActivity.class);
-        startActivity(i);
-        finish();
+
+        if (!TextUtils.isEmpty(pageId) && pageId.equals("1")) {
+            Intent i = new Intent(CustomersMakeApptActivity.this, TimeSlotsActivity.class);
+            startActivity(i);
+            finish();
+        } else if (!TextUtils.isEmpty(pageId) && pageId.equals("2")) {
+            Intent i = new Intent(CustomersMakeApptActivity.this, ViewApptServiceActivity.class);
+            startActivity(i);
+            finish();
+        }
     }
 
 }

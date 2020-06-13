@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_appt_confirm"
@@ -16,7 +15,7 @@
         android:textAlignment="center"
         app:elevation="4dp"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:title="Appointment"
+        app:title="@string/book_appt"
         app:titleTextColor="@color/white" />
 
     <LinearLayout
@@ -28,7 +27,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.9"
+            android:layout_weight="0.92"
             android:orientation="vertical">
 
 
@@ -193,13 +192,13 @@
         </LinearLayout>
 
         <Button
-            android:background="#21AE18"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF"
             android:id="@+id/button_appt_done"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.1"
-            android:text="Book Appointment"></Button>
+            android:layout_margin="8dp"
+            android:layout_weight="0.08"
+            android:background="@color/button_green"
+            android:text="@string/book_appt"
+            android:textColor="@color/white"></Button>
     </LinearLayout>
 </LinearLayout>

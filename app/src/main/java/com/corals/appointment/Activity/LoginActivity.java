@@ -25,7 +25,7 @@ import java.util.ArrayList;
 public class LoginActivity extends AppCompatActivity {
 
     EditText editText_id,editText_password;
-    Button button_login;
+    TextView button_login;
     TextView textView;
 
     private SharedPreferences sharedpreferences_services;
@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Log.d("listsize---->", "onCreate: " + service_name_list.size() + "," + service_dur_list.size()+","+ staff_name_list.size() + "," + staff_mob_list.size());
 
-        textView.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + "Sign up here" + "</u>  </font>"));
+        textView.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + "Sign up" + "</u>  </font>"));
 
     /*    textView.setOnClickListener(new View.OnClickListener() {
             @Override

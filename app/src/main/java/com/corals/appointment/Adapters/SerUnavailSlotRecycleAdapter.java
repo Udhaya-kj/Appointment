@@ -69,7 +69,7 @@ public class SerUnavailSlotRecycleAdapter extends RecyclerView.Adapter<SerUnavai
                 } else if (code.equals("2")) {
                     if (holder.textView_response.getVisibility() == View.GONE) {
                         if(arrayList2.get(position).equals("1")){
-                            getSlotUnavailDialog("Appointment already available on this slot. Staff cannot absent on slot slot");
+                            getSlotUnavailDialog("Appointment already available on this slot. Staff cannot absent on this time");
                         }
                         else {
                             holder.linearLayout_bg.setBackgroundResource(R.drawable.corner_change_appt_slot_green);

@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,7 +42,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
     ImageView imageView_calendar;
     EditText editText_comment;
     Button button_changes_appt;
-    public static TextView textView_appt_date, textView_appt_slot;
+    public static TextView textView_appt_date;
     private SharedPreferences sharedpreferences_services, sharedpreferences_staffs;
     private ArrayList<String> service_name_list, service_dur_list;
     private ArrayList<String> staff_name_list, staff_mob_list;
@@ -51,6 +52,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
     Calendar calendar;
     RecyclerView recyclerView;
     TextView textView_ser, textView_staff, textView_date, textView_time;
+    LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +88,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
         spinner_staffs = findViewById(R.id.spinner_staff);
         imageView_calendar = findViewById(R.id.image_calendar);
         textView_appt_date = findViewById(R.id.tv_appt_date);
-        textView_appt_slot = findViewById(R.id.tv_appt_slot);
+        linearLayout = findViewById(R.id.layout_change_date);
         editText_comment = findViewById(R.id.et_comment);
         button_changes_appt = findViewById(R.id.button_apply_appt_changes);
 
@@ -104,6 +106,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
             textView_staff.setText(staff);
             textView_date.setText(appt_date);
             textView_time.setText(appt_time);
+            textView_appt_date.setText(appt_date);
         }
         GridLayoutManager li = new GridLayoutManager(this, 2);
         //recyclerView.setHasFixedSize(true);
@@ -191,11 +194,11 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
         list_time_slot.add("08:30 pm - 09:00 pm");
         list_time_slot.add("09:00 pm - 09:30 pm");
 
-        ChangeApptSlotRecycleAdapter changeApptSlotGridviewAdapter = new ChangeApptSlotRecycleAdapter(ChangeApptActivity.this, list_time_slot,textView_time.getText().toString().trim());
+        ChangeApptSlotRecycleAdapter changeApptSlotGridviewAdapter = new ChangeApptSlotRecycleAdapter(ChangeApptActivity.this, list_time_slot, textView_time.getText().toString().trim());
         recyclerView.setAdapter(changeApptSlotGridviewAdapter);
 
         changeApptSlotGridviewAdapter.notifyDataSetChanged();
-        imageView_calendar.setOnClickListener(new View.OnClickListener() {
+        linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String weekdays = "yyyyyyy";
@@ -238,7 +241,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
                         @Override
                         public void onCancel(DialogInterface dialogInterface) {
 
-                            Toast.makeText(ChangeApptActivity.this, "Datepicker Canceled", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(ChangeApptActivity.this, "Datepicker Canceled", Toast.LENGTH_SHORT).show();
                         }
                     });
 

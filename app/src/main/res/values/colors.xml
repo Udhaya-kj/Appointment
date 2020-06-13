@@ -11,4 +11,5 @@
     <color name="dark_grey">#DDDDDD</color>
     <color name="black">#000000</color>
     <color name="red"> #FC3B20</color>
+    <color name="light_grey">#EEEEEE</color>
 </resources>

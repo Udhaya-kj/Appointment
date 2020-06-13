@@ -15,8 +15,8 @@
         android:textAlignment="center"
         app:elevation="4dp"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:title="Create New Customer"
-        app:titleTextColor="#FFFFFF" />
+        app:title="Add New Customer"
+        app:titleTextColor="@color/white" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.9"
+            android:layout_weight="0.92"
             android:orientation="vertical"
             android:padding="15dp">
 
@@ -37,15 +37,15 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:paddingStart="10dp"
-                android:text="Name"
+                android:text="@string/name"
                 android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/et_cus_name"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="45dp"
                 android:layout_marginTop="10dp"
-                android:background="#EEEEEE"
+                android:background="@drawable/layout_bg_grey"
                 android:hint="Enter customer name"
                 android:imeOptions="actionNext"
                 android:inputType="text"
@@ -55,18 +55,18 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:gravity="center_vertical"
-                android:hint="Mobile"
+                android:hint="@string/mobile"
                 android:paddingStart="10dp"
                 android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/et_cus_mob"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="45dp"
                 android:layout_marginTop="10dp"
-                android:background="#EEEEEE"
+                android:background="@drawable/layout_bg_grey"
                 android:hint="Enter customer mobile"
                 android:imeOptions="actionNext"
                 android:inputType="phone"
@@ -76,18 +76,18 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:gravity="center_vertical"
-                android:hint="Email"
+                android:hint="@string/email"
                 android:paddingStart="10dp"
                 android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/et_cus_email"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="45dp"
                 android:layout_marginTop="10dp"
-                android:background="#EEEEEE"
+                android:background="@drawable/layout_bg_grey"
                 android:hint="Enter customer email"
                 android:imeOptions="actionDone"
                 android:inputType="textEmailAddress"
@@ -98,11 +98,11 @@
             android:id="@+id/button_create_customer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.1"
-            android:background="#21AE18"
-            android:hint="CREATE"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF" />
+            android:layout_margin="8dp"
+            android:layout_weight="0.08"
+            android:background="@color/button_green"
+            android:text="CREATE CUSTOMER"
+            android:textColor="@color/white" />
     </LinearLayout>
 
 </LinearLayout>

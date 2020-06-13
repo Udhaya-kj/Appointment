@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -356,7 +357,7 @@ public class AddServiceActivity extends AppCompatActivity {
                             in.putExtra("position", position);
                             startActivity(in);
                         } else {
-                            Toast.makeText(AddServiceActivity.this, "Service duration is required", Toast.LENGTH_LONG).show();
+                            getDialog("Select valid service duration");
                         }
                     }
                     else {
@@ -2542,5 +2543,21 @@ public class AddServiceActivity extends AppCompatActivity {
         timePickerDialog.show();
     }
 
+    private void getDialog(String msg) {
 
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AddServiceActivity.this);
+        alertDialogBuilder.setMessage(msg);
+        alertDialogBuilder.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        arg0.dismiss();
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
+
+    }
 }

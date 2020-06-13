@@ -15,8 +15,8 @@
         android:textAlignment="center"
         app:elevation="4dp"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:title="Add Staff"
-        app:titleTextColor="#FFFFFF" />
+        app:title="Add New Staff"
+        app:titleTextColor="@color/white" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,55 +32,53 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
+                android:padding="15dp"
                 android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="10dp"
+                    android:text="@string/name"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/et_staff_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/layout_bg_grey"
+                    android:hint="Enter staff name"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:paddingStart="10dp" />
 
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:layout_marginTop="10dp"
-                        android:text="Staff Name"
-                        android:paddingStart="10dp"
-                        android:textStyle="bold" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="10dp"
+                    android:text="@string/mobile"
+                    android:textStyle="bold" />
 
-                    <EditText
-                        android:id="@+id/et_staff_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="0dp"
-                        android:background="#EEEEEE"
-                        android:hint="Enter Staff Name"
-                        android:imeOptions="actionNext"
-                        android:inputType="text"
-                        android:paddingStart="10dp" />
-
-
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:layout_marginTop="20dp"
-                        android:text="Mobile"
-                        android:paddingStart="10dp"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/et_staff_mob"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="0dp"
-                        android:background="#EEEEEE"
-                        android:hint="Enter Mobile"
-                        android:imeOptions="actionDone"
-                        android:inputType="number"
-                        android:paddingStart="10dp" />
+                <EditText
+                    android:id="@+id/et_staff_mob"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/layout_bg_grey"
+                    android:hint="Enter staff mobile"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:paddingStart="10dp" />
 
 
                 <TextView
@@ -88,9 +86,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:paddingStart="10dp"
-                    android:textStyle="bold"
                     android:text="Select Services"
-                />
+                    android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerview_select_services"
@@ -106,9 +103,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:paddingStart="10dp"
-                    android:textStyle="bold"
                     android:text="Select Staff Working Hours"
-                  />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
 
                 <LinearLayout
@@ -116,6 +113,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:orientation="horizontal"
+                    android:visibility="gone"
                     android:weightSum="1">
 
                     <LinearLayout
@@ -170,9 +168,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:paddingStart="10dp"
-                    android:textStyle="bold"
                     android:text="Select Staff Active Days"
-                     />
+                    android:textStyle="bold" />
 
 
                 <LinearLayout
@@ -811,14 +808,12 @@
                 <Button
                     android:id="@+id/button_add_staff_continue"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_marginStart="10dp"
+                    android:layout_height="50dp"
                     android:layout_marginTop="50dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="#21AE18"
-                    android:hint="CREATE STAFF"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#FFFFFF" />
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/button_green"
+                    android:text="CREATE STAFF"
+                    android:textColor="@color/white" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </LinearLayout>

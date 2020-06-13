@@ -79,6 +79,7 @@ public class RecyclerAdapter_TimeSlots extends RecyclerView.Adapter<RecyclerAdap
                 if (String.valueOf(arrayList2.get(position)).equals("1")) {
 
                     Intent in = new Intent(context, CustomersMakeApptActivity.class);
+                    in.putExtra("page_id","1");
                     context.startActivity(in);
                     ((Activity) context).finish();
 

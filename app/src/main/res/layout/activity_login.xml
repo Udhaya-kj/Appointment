@@ -1,90 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="15dp"
-    >
+    android:padding="20dp">
 
 
     <ImageView
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:src="@drawable/logo"
-        />
+        android:src="@drawable/logo" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginTop="20dp"
+        android:gravity="center"
         android:text="Corals Appointment"
-        android:textStyle="bold|italic"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:textStyle="bold|italic" />
 
     <EditText
-        android:singleLine="true"
-        android:inputType="textEmailAddress"
-        android:imeOptions="actionNext"
-        android:background="#EEEEEE"
+        android:id="@+id/edit_userid"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="25dp"
+        android:background="@drawable/capsule_field_bg"
         android:gravity="center"
-        android:id="@+id/edit_userid"
-        android:hint="Email"/>
+        android:hint="Email"
+        android:imeOptions="actionNext"
+        android:inputType="textEmailAddress"
+        android:singleLine="true" />
 
     <EditText
-        android:singleLine="true"
-        android:inputType="textPassword"
-        android:imeOptions="actionDone"
-        android:background="#EEEEEE"
+        android:id="@+id/edit_password"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
+        android:background="@drawable/capsule_field_bg"
         android:gravity="center"
-        android:id="@+id/edit_password"
-        android:hint="Password"/>
+        android:hint="Password"
+        android:imeOptions="actionDone"
+        android:inputType="textPassword"
+        android:singleLine="true" />
 
-    <Button
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="Login"
-        android:background="#FF5733"
-        android:backgroundTint="#FF5733"
-        android:textColor="#FFFFFF"
+        android:layout_gravity="end"
+        android:layout_marginTop="15dp"
+        android:text="Forgot Password?" />
+
+    <TextView
+
         android:id="@+id/button_login"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/capsule_button_bg"
+        android:text="LOGIN"
+        android:gravity="center"
+        android:textColor="@color/white" />
 
     <LinearLayout
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="5dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:gravity="center"
-        >
+        android:orientation="horizontal"
+        android:visibility="visible">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Don't have an account?"
             android:gravity="center_horizontal"
-            android:textSize="18sp"
-            />
+            android:text="New user?"
+             />
+
         <TextView
             android:id="@+id/tv_signup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sign Up here"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
             android:gravity="center_horizontal"
-            android:textSize="18sp"
-            />
-    </LinearLayout>
 
+            android:textColor="@color/app_blue"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 
 </LinearLayout>

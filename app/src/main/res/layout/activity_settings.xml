@@ -43,7 +43,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.1"
                     android:clickable="false"
-                    android:padding="10dp"
+                    android:padding="8dp"
                     android:src="@drawable/order" />
 
                 <TextView
@@ -84,7 +84,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.1"
                     android:clickable="false"
-                    android:padding="10dp"
+                    android:padding="8dp"
                     android:src="@drawable/user" />
 
                 <TextView

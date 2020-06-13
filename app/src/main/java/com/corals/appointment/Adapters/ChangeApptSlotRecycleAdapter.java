@@ -40,7 +40,7 @@ public class ChangeApptSlotRecycleAdapter extends RecyclerView.Adapter<ChangeApp
 
     @Override
     public void onBindViewHolder(final ChangeApptSlotRecycleAdapter.MyViewHolder holder, final int position) {
-        boolean isSlotChecked = false;
+
         holder.textView_slot.setText(arrayList1.get(position));
         holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,18 +48,13 @@ public class ChangeApptSlotRecycleAdapter extends RecyclerView.Adapter<ChangeApp
 
                 index = position;
                 notifyDataSetChanged();
-                ChangeApptActivity.textView_appt_slot.setText(arrayList1.get(position));
             }
         });
 
 
         if (index == position) {
-            if (!isSlotChecked) {
-                holder.linearLayout_bg.setBackgroundResource(R.drawable.corner_change_appt_slot_blue);
-            } else {
-                holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
-            }
-            isSlotChecked = true;
+            holder.linearLayout_bg.setBackgroundResource(R.drawable.corner_change_appt_slot_blue);
+
         } else {
             holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
         }
