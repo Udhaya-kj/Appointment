@@ -38,7 +38,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="40dp"
             android:orientation="horizontal"
             android:weightSum="1">
 
@@ -133,7 +133,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_weight="0.5"
-                android:background="@color/app_blue"
+                android:background="@color/red"
                 android:minWidth="150dp"
                 android:text="Don't ask again"
                 android:textColor="@color/white" />

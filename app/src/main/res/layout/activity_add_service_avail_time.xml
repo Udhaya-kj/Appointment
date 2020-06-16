@@ -61,7 +61,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:orientation="vertical"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -313,13 +313,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="70dp"
                                 android:orientation="horizontal"
-                                android:visibility="visible"
+                                android:visibility="gone"
                                 android:weightSum="1">
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="70dp"
-                                    android:layout_weight="0.4"
+                                    android:layout_weight="0.3"
                                     android:gravity="center_vertical"
                                     android:paddingStart="8dp"
                                     android:paddingEnd="0dp"
@@ -348,7 +348,7 @@
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="70dp"
-                                    android:layout_weight="0.5"
+                                    android:layout_weight="0.6"
                                     android:gravity="center_vertical"
                                     android:orientation="vertical">
 
@@ -367,6 +367,7 @@
                                             android:text="09:00 am - 12:00 pm" />
 
                                         <ImageView
+
                                             android:id="@+id/image_edit_sun1"
                                             android:layout_width="0dp"
                                             android:layout_height="match_parent"
@@ -427,7 +428,7 @@
                                     <TextView
                                         android:layout_width="0dp"
                                         android:layout_height="70dp"
-                                        android:layout_weight="0.4"
+                                        android:layout_weight="0.3"
                                         android:gravity="center_vertical"
                                         android:paddingStart="8dp"
                                         android:paddingEnd="0dp"
@@ -446,14 +447,15 @@
                                             android:id="@+id/image_warning_mon2"
                                             android:layout_width="match_parent"
                                             android:layout_height="35dp"
-                                            android:padding="12dp"
-                                            android:src="@drawable/edit" />
+                                            android:padding="10dp"
+                                            android:tint="@color/red"
+                                            android:src="@drawable/warning" />
                                     </LinearLayout>
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="70dp"
-                                        android:layout_weight="0.5"
+                                        android:layout_weight="0.6"
                                         android:gravity="center_vertical"
                                         android:orientation="vertical">
 
@@ -533,7 +535,7 @@
                                     <TextView
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
-                                        android:layout_weight="0.4"
+                                        android:layout_weight="0.3"
                                         android:gravity="center_vertical"
                                         android:paddingStart="8dp"
                                         android:paddingEnd="0dp"
@@ -551,15 +553,16 @@
                                             android:id="@+id/image_warning_tue2"
                                             android:layout_width="match_parent"
                                             android:layout_height="35dp"
-                                            android:padding="12dp"
-                                            android:src="@drawable/edit" />
+                                            android:padding="10dp"
+                                            android:tint="@color/red"
+                                            android:src="@drawable/warning" />
                                     </LinearLayout>
 
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="70dp"
-                                        android:layout_weight="0.5"
+                                        android:layout_weight="0.6"
                                         android:gravity="center_vertical"
                                         android:orientation="vertical">
 
@@ -639,7 +642,7 @@
                                     <TextView
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
-                                        android:layout_weight="0.4"
+                                        android:layout_weight="0.3"
                                         android:gravity="center_vertical"
                                         android:paddingStart="8dp"
                                         android:paddingEnd="0dp"
@@ -658,15 +661,16 @@
                                             android:id="@+id/image_warning_wed2"
                                             android:layout_width="match_parent"
                                             android:layout_height="35dp"
-                                            android:padding="12dp"
-                                            android:src="@drawable/edit" />
+                                            android:padding="10dp"
+                                            android:tint="@color/red"
+                                            android:src="@drawable/warning" />
                                     </LinearLayout>
 
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="70dp"
-                                        android:layout_weight="0.5"
+                                        android:layout_weight="0.6"
                                         android:gravity="center_vertical"
                                         android:orientation="vertical">
 
@@ -746,7 +750,7 @@
                                     <TextView
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
-                                        android:layout_weight="0.4"
+                                        android:layout_weight="0.3"
                                         android:gravity="center_vertical"
                                         android:paddingStart="8dp"
                                         android:paddingEnd="0dp"
@@ -765,15 +769,16 @@
                                             android:id="@+id/image_warning_thu2"
                                             android:layout_width="match_parent"
                                             android:layout_height="35dp"
-                                            android:padding="12dp"
-                                            android:src="@drawable/edit" />
+                                            android:padding="10dp"
+                                            android:tint="@color/red"
+                                            android:src="@drawable/warning" />
                                     </LinearLayout>
 
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="70dp"
-                                        android:layout_weight="0.5"
+                                        android:layout_weight="0.6"
                                         android:gravity="center_vertical"
                                         android:orientation="vertical">
 
@@ -853,7 +858,7 @@
                                     <TextView
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
-                                        android:layout_weight="0.4"
+                                        android:layout_weight="0.3"
                                         android:gravity="center_vertical"
                                         android:paddingStart="8dp"
                                         android:paddingEnd="0dp"
@@ -872,15 +877,16 @@
                                             android:id="@+id/image_warning_fri2"
                                             android:layout_width="match_parent"
                                             android:layout_height="35dp"
-                                            android:padding="12dp"
-                                            android:src="@drawable/edit" />
+                                            android:padding="10dp"
+                                            android:tint="@color/red"
+                                            android:src="@drawable/warning" />
                                     </LinearLayout>
 
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="70dp"
-                                        android:layout_weight="0.5"
+                                        android:layout_weight="0.6"
                                         android:gravity="center_vertical"
                                         android:orientation="vertical">
 
@@ -960,7 +966,7 @@
                                     <TextView
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
-                                        android:layout_weight="0.4"
+                                        android:layout_weight="0.3"
                                         android:gravity="center_vertical"
                                         android:paddingStart="8dp"
                                         android:paddingEnd="0dp"
@@ -979,15 +985,16 @@
                                             android:id="@+id/image_warning_sat2"
                                             android:layout_width="match_parent"
                                             android:layout_height="35dp"
-                                            android:padding="12dp"
-                                            android:src="@drawable/edit" />
+                                            android:padding="10dp"
+                                            android:tint="@color/red"
+                                            android:src="@drawable/warning"/>
                                     </LinearLayout>
 
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="70dp"
-                                        android:layout_weight="0.5"
+                                        android:layout_weight="0.6"
                                         android:gravity="center_vertical"
                                         android:orientation="vertical">
 

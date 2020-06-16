@@ -53,7 +53,7 @@ public class AddServiceActivity extends AppCompatActivity {
     boolean isActiveSunday_p = true, isActiveMonday_p = true, isActiveTuesday_p = true, isActiveWednesday_p = true, isActiveThursday_p = true, isActiveFriday_p = true, isActiveSaturday_p = true;
 
     private String service_op_time, service_cl_time;
-    int hour = 0, minute = 0;
+    int time_mins=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,9 +152,11 @@ public class AddServiceActivity extends AppCompatActivity {
         String desc = sharedpreferences_service_data.getString(SER_DESCRIPTION, "");
         Log.d("AddService--->", "onCreate: "+name+","+dur+","+desc);
         et_ser_name.setText(name);
-        tv_ser_dur.setText(dur);
+        tv_ser_dur.setText(dur+" mins");
         et_ser_desc.setText(desc);
-
+        if(!TextUtils.isEmpty(dur)) {
+            time_mins = Integer.parseInt(dur);
+        }
         if (getIntent().getExtras() != null) {
             pageId = getIntent().getStringExtra("page_id");
             position = getIntent().getStringExtra("position");
@@ -326,10 +328,10 @@ public class AddServiceActivity extends AppCompatActivity {
                 String s_desc = et_ser_desc .getText().toString();
                 if (name.length() > 0) {
                     if (pageId.equals("3")) {
-                        if (hour == 0 && minute != 0) {
+                        if (time_mins != 0) {
                             SharedPreferences.Editor editor = sharedpreferences_service_data.edit();
                             editor.putString(SER_NAME, name);
-                            editor.putString(SER_DURATION, duration);
+                            editor.putString(SER_DURATION,String.valueOf(time_mins));
                             editor.putString(SER_DESCRIPTION, s_desc);
                             editor.commit();
 
@@ -341,27 +343,13 @@ public class AddServiceActivity extends AppCompatActivity {
                             in.putExtra("position", position);
                             startActivity(in);
                             finish();
-                        } else if ((hour != 0 && minute == 0) || (hour != 0 && minute != 0)) {
-                            SharedPreferences.Editor editor = sharedpreferences_service_data.edit();
-                            editor.putString(SER_NAME, name);
-                            editor.putString(SER_DURATION, duration);
-                            editor.putString(SER_DESCRIPTION, s_desc);
-                            editor.commit();
-                            Intent in = new Intent(AddServiceActivity.this, AddServiceAvailTimeActivity.class);
-                            in.putExtra("ser_name", name);
-                            in.putExtra("ser_dur", duration);
-                            in.putExtra("ser_desc", s_desc);
-                            in.putExtra("page_id", pageId);
-                            in.putExtra("position", position);
-                            startActivity(in);
-                            finish();
-                        } else {
+                        }  else {
                             getDialog("Select valid service duration");
                         }
                     } else {
                         SharedPreferences.Editor editor = sharedpreferences_service_data.edit();
                         editor.putString(SER_NAME, name);
-                        editor.putString(SER_DURATION, duration);
+                        editor.putString(SER_DURATION, String.valueOf(time_mins));
                         editor.putString(SER_DESCRIPTION, s_desc);
                         editor.commit();
                         Intent in = new Intent(AddServiceActivity.this, AddServiceAvailTimeActivity.class);
@@ -780,9 +768,10 @@ public class AddServiceActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hour = pickStartTime.getCurrentHour();
-                minute = pickStartTime.getCurrentMinute();
-                tv_ser_dur.setText(hour + " hrs " + minute + " mins");
+               int hour = pickStartTime.getCurrentHour();
+               int minute = pickStartTime.getCurrentMinute();
+                time_mins=(hour*60)+minute;
+                tv_ser_dur.setText(time_mins + " mins");
                 //  Toast.makeText(AddServiceActivity.this, hour+" hrs "+minute+" mins", Toast.LENGTH_SHORT).show();
                 pickerDialog.dismiss();
             }
