@@ -79,7 +79,7 @@ public class ViewCustomerApptActivity extends AppCompatActivity {
 
         c = Calendar.getInstance();
         System.out.println("Current time => " + c.getTime());
-        final SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        final SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         formattedDate = df.format(c.getTime());
         textView_date.setText(formattedDate);
 

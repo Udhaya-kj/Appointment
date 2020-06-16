@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         staff_mob_list = new ArrayList<>();
 
         sharedpreferences_ask_again = getSharedPreferences(StatusServiceStaffActivity.MyPREFERENCES_ASK_AGAIN, Context.MODE_PRIVATE);
-        sharedpreferences_services = getSharedPreferences(AddServiceActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
+        sharedpreferences_services = getSharedPreferences(AddServiceAvailTimeActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
         sharedpreferences_staffs = getSharedPreferences(AddStaffActivity.MyPREFERENCES_STAFFS, Context.MODE_PRIVATE);
 
        /* SharedPreferences.Editor editor = sharedpreferences_ask_again.edit();
@@ -58,8 +58,8 @@ public class LoginActivity extends AppCompatActivity {
         editor.commit();*/
 
 
-        String nameList = sharedpreferences_services.getString(AddServiceActivity.SERVICE_NAME, "");
-        String mobList = sharedpreferences_services.getString(AddServiceActivity.SERVICE_DURATION, "");
+        String nameList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_NAME, "");
+        String mobList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_DURATION, "");
         if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
             service_name_list = new Gson().fromJson(nameList, new TypeToken<ArrayList<String>>() {
             }.getType());
@@ -98,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                  String value = sharedpreferences_ask_again.getString(StatusServiceStaffActivity.VALUE, "");
                // Toast.makeText(LoginActivity.this, "Value :"+value, Toast.LENGTH_SHORT).show();
                 if(TextUtils.isEmpty(value)) {
-                    if (service_name_list.size() == 0 || staff_name_list.size() == 0) {
+                    if (service_name_list.isEmpty() || staff_name_list.isEmpty()) {
                         startActivity(new Intent(LoginActivity.this, StatusServiceStaffActivity.class));
                         finish();
                     } else {

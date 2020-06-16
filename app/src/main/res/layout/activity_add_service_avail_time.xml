@@ -43,7 +43,7 @@
                         android:id="@+id/rb_biz_hours"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:buttonTint="#4DBDF1"
+                        android:buttonTint="@color/app_blue"
                         android:text="Same as Business Hours" />
 
                     <RadioButton
@@ -51,7 +51,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:buttonTint="#4DBDF1"
+                        android:buttonTint="@color/app_blue"
                         android:text="Custom Time" />
 
                     <LinearLayout
@@ -283,37 +283,768 @@
                                 android:layout_gravity="center_horizontal"
                                 android:layout_marginTop="15dp"
                                 android:layout_marginBottom="15dp"
-                                android:background="#4DBDF1"
+                                android:background="@color/app_blue"
                                 android:text="ADD"
                                 android:textColor="@color/white" />
 
                         </LinearLayout>
 
-                        <TextView
-                            android:visibility="gone"
-                            android:id="@+id/text_invalid_time"
-                            android:layout_width="wrap_content"
-                            android:layout_height="35dp"
-                            android:minWidth="200dp"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="20dp"
-                            android:background="@color/red"
-                            android:gravity="center"
-                            android:paddingStart="10dp"
-                            android:paddingEnd="10dp"
-                            android:text="Invalid Time"
-                            android:textColor="@color/white" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recylerview_avail_hours"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:background="@drawable/layout_bg_grey"
                             android:padding="5dp"
-                            android:visibility="gone"
                             android:paddingTop="5dp"
                             android:paddingBottom="10dp"
+                            android:visibility="gone" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
                             android:background="@drawable/layout_bg_grey"
-                            android:layout_marginTop="20dp" />
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:id="@+id/layout_sunday"
+                                android:layout_width="match_parent"
+                                android:layout_height="70dp"
+                                android:orientation="horizontal"
+                                android:visibility="visible"
+                                android:weightSum="1">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="70dp"
+                                    android:layout_weight="0.4"
+                                    android:gravity="center_vertical"
+                                    android:paddingStart="8dp"
+                                    android:paddingEnd="0dp"
+                                    android:text="Sunday"
+                                    android:textStyle="bold" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="70dp"
+                                    android:layout_weight="0.1"
+                                    android:gravity="bottom"
+                                    android:orientation="vertical">
+
+                                    <ImageView
+                                        android:visibility="invisible"
+                                        android:id="@+id/image_warning_sun2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="35dp"
+                                        android:padding="10dp"
+                                        android:src="@drawable/warning"
+                                        android:tint="@color/red"
+                                        />
+                                </LinearLayout>
+
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="70dp"
+                                    android:layout_weight="0.5"
+                                    android:gravity="center_vertical"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="35dp"
+                                        android:orientation="horizontal"
+                                        android:weightSum="1">
+
+                                        <TextView
+                                            android:id="@+id/text_sunday_time1"
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="0.8"
+                                            android:gravity="center_vertical"
+                                            android:text="09:00 am - 12:00 pm" />
+
+                                        <ImageView
+                                            android:id="@+id/image_edit_sun1"
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="0.2"
+                                            android:padding="12dp"
+                                            android:src="@drawable/edit" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/layout_sunday_time2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="35dp"
+                                        android:orientation="horizontal"
+                                        android:visibility="visible"
+                                        android:weightSum="1">
+
+                                        <TextView
+                                            android:id="@+id/text_sunday_time2"
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="0.8"
+                                            android:gravity="center_vertical"
+                                            android:text="13:00 pm - 19:00 pm"
+                                            android:visibility="visible" />
+
+                                        <ImageView
+                                            android:id="@+id/image_edit_sun2"
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="0.2"
+                                            android:padding="12dp"
+                                            android:src="@drawable/edit" />
+
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layout_monday"
+                                android:layout_width="match_parent"
+                                android:layout_height="71dp"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:background="#DDDDDD" />
+
+                                <LinearLayout
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="70dp"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="70dp"
+                                        android:layout_weight="0.4"
+                                        android:gravity="center_vertical"
+                                        android:paddingStart="8dp"
+                                        android:paddingEnd="0dp"
+                                        android:text="Monday"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="70dp"
+                                        android:layout_weight="0.1"
+                                        android:gravity="bottom"
+                                        android:orientation="vertical">
+
+                                        <ImageView
+                                            android:visibility="invisible"
+                                            android:id="@+id/image_warning_mon2"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:padding="12dp"
+                                            android:src="@drawable/edit" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="70dp"
+                                        android:layout_weight="0.5"
+                                        android:gravity="center_vertical"
+                                        android:orientation="vertical">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:orientation="horizontal"
+                                            android:weightSum="1">
+
+                                            <TextView
+                                                android:id="@+id/text_monday_time1"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.8"
+                                                android:gravity="center_vertical"
+                                                android:text="09:00 am - 12:00 pm" />
+
+                                            <ImageView
+                                                android:id="@+id/image_edit_mon1"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.2"
+                                                android:padding="12dp"
+                                                android:src="@drawable/edit" />
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/layout_monday_time2"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:orientation="horizontal"
+                                            android:visibility="gone"
+                                            android:weightSum="1">
+
+                                            <TextView
+                                                android:id="@+id/text_monday_time2"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.8"
+                                                android:gravity="center_vertical"
+                                                android:text="13:00 pm - 19:00 pm"
+                                                android:visibility="visible" />
+
+                                            <ImageView
+                                                android:id="@+id/image_edit_mon2"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.2"
+                                                android:padding="12dp"
+                                                android:src="@drawable/edit" />
+
+                                        </LinearLayout>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layout_tuesday"
+                                android:layout_width="match_parent"
+                                android:layout_height="71dp"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:background="#DDDDDD" />
+
+                                <LinearLayout
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="70dp"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="0.4"
+                                        android:gravity="center_vertical"
+                                        android:paddingStart="8dp"
+                                        android:paddingEnd="0dp"
+                                        android:text="Tuesday"
+                                        android:textStyle="bold" />
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="70dp"
+                                        android:layout_weight="0.1"
+                                        android:gravity="bottom"
+                                        android:orientation="vertical">
+
+                                        <ImageView
+                                            android:visibility="invisible"
+                                            android:id="@+id/image_warning_tue2"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:padding="12dp"
+                                            android:src="@drawable/edit" />
+                                    </LinearLayout>
+
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="70dp"
+                                        android:layout_weight="0.5"
+                                        android:gravity="center_vertical"
+                                        android:orientation="vertical">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:orientation="horizontal"
+                                            android:weightSum="1">
+
+                                            <TextView
+                                                android:id="@+id/text_tuesday_time1"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.8"
+                                                android:gravity="center_vertical"
+                                                android:text="09:00 am - 12:00 pm" />
+
+                                            <ImageView
+                                                android:id="@+id/image_edit_tue1"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.2"
+                                                android:padding="12dp"
+                                                android:src="@drawable/edit" />
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/layout_tuesday_time2"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:orientation="horizontal"
+                                            android:visibility="gone"
+                                            android:weightSum="1">
+
+                                            <TextView
+                                                android:id="@+id/text_tuesday_time2"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.8"
+                                                android:gravity="center_vertical"
+                                                android:text="13:00 pm - 19:00 pm"
+                                                android:visibility="visible" />
+
+                                            <ImageView
+                                                android:id="@+id/image_edit_tue2"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.2"
+                                                android:padding="12dp"
+                                                android:src="@drawable/edit" />
+
+                                        </LinearLayout>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layout_wednesday"
+                                android:layout_width="match_parent"
+                                android:layout_height="71dp"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:background="#DDDDDD" />
+
+                                <LinearLayout
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="70dp"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="0.4"
+                                        android:gravity="center_vertical"
+                                        android:paddingStart="8dp"
+                                        android:paddingEnd="0dp"
+                                        android:text="Wednesday"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="70dp"
+                                        android:layout_weight="0.1"
+                                        android:gravity="bottom"
+                                        android:orientation="vertical">
+
+                                        <ImageView
+                                            android:visibility="invisible"
+                                            android:id="@+id/image_warning_wed2"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:padding="12dp"
+                                            android:src="@drawable/edit" />
+                                    </LinearLayout>
+
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="70dp"
+                                        android:layout_weight="0.5"
+                                        android:gravity="center_vertical"
+                                        android:orientation="vertical">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:orientation="horizontal"
+                                            android:weightSum="1">
+
+                                            <TextView
+                                                android:id="@+id/text_wednesday_time1"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.8"
+                                                android:gravity="center_vertical"
+                                                android:text="09:00 am - 12:00 pm" />
+
+                                            <ImageView
+                                                android:id="@+id/image_edit_wed1"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.2"
+                                                android:padding="12dp"
+                                                android:src="@drawable/edit" />
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/layout_wednesday_time2"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:orientation="horizontal"
+                                            android:visibility="gone"
+                                            android:weightSum="1">
+
+                                            <TextView
+                                                android:id="@+id/text_wednesday_time2"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.8"
+                                                android:gravity="center_vertical"
+                                                android:text="13:00 pm - 19:00 pm"
+                                                android:visibility="visible" />
+
+                                            <ImageView
+                                                android:id="@+id/image_edit_wed2"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.2"
+                                                android:padding="12dp"
+                                                android:src="@drawable/edit" />
+
+                                        </LinearLayout>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layout_thursday"
+                                android:layout_width="match_parent"
+                                android:layout_height="71dp"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:background="#DDDDDD" />
+
+                                <LinearLayout
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="70dp"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="0.4"
+                                        android:gravity="center_vertical"
+                                        android:paddingStart="8dp"
+                                        android:paddingEnd="0dp"
+                                        android:text="Thursday"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="70dp"
+                                        android:layout_weight="0.1"
+                                        android:gravity="bottom"
+                                        android:orientation="vertical">
+
+                                        <ImageView
+                                            android:visibility="invisible"
+                                            android:id="@+id/image_warning_thu2"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:padding="12dp"
+                                            android:src="@drawable/edit" />
+                                    </LinearLayout>
+
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="70dp"
+                                        android:layout_weight="0.5"
+                                        android:gravity="center_vertical"
+                                        android:orientation="vertical">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:orientation="horizontal"
+                                            android:weightSum="1">
+
+                                            <TextView
+                                                android:id="@+id/text_thursday_time1"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.8"
+                                                android:gravity="center_vertical"
+                                                android:text="09:00 am - 12:00 pm" />
+
+                                            <ImageView
+                                                android:id="@+id/image_edit_thu1"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.2"
+                                                android:padding="12dp"
+                                                android:src="@drawable/edit" />
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/layout_thursday_time2"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:orientation="horizontal"
+                                            android:visibility="gone"
+                                            android:weightSum="1">
+
+                                            <TextView
+                                                android:id="@+id/text_thursday_time2"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.8"
+                                                android:gravity="center_vertical"
+                                                android:text="13:00 pm - 19:00 pm"
+                                                android:visibility="visible" />
+
+                                            <ImageView
+                                                android:id="@+id/image_edit_thu2"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.2"
+                                                android:padding="12dp"
+                                                android:src="@drawable/edit" />
+
+                                        </LinearLayout>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layout_friday"
+                                android:layout_width="match_parent"
+                                android:layout_height="71dp"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:background="#DDDDDD" />
+
+                                <LinearLayout
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="70dp"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="0.4"
+                                        android:gravity="center_vertical"
+                                        android:paddingStart="8dp"
+                                        android:paddingEnd="0dp"
+                                        android:text="Friday"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="70dp"
+                                        android:layout_weight="0.1"
+                                        android:gravity="bottom"
+                                        android:orientation="vertical">
+
+                                        <ImageView
+                                            android:visibility="invisible"
+                                            android:id="@+id/image_warning_fri2"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:padding="12dp"
+                                            android:src="@drawable/edit" />
+                                    </LinearLayout>
+
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="70dp"
+                                        android:layout_weight="0.5"
+                                        android:gravity="center_vertical"
+                                        android:orientation="vertical">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:orientation="horizontal"
+                                            android:weightSum="1">
+
+                                            <TextView
+                                                android:id="@+id/text_friday_time1"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.8"
+                                                android:gravity="center_vertical"
+                                                android:text="09:00 am - 12:00 pm" />
+
+                                            <ImageView
+                                                android:id="@+id/image_edit_fri1"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.2"
+                                                android:padding="12dp"
+                                                android:src="@drawable/edit" />
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/layout_friday_time2"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:orientation="horizontal"
+                                            android:visibility="gone"
+                                            android:weightSum="1">
+
+                                            <TextView
+                                                android:id="@+id/text_friday_time2"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.8"
+                                                android:gravity="center_vertical"
+                                                android:text="13:00 pm - 19:00 pm"
+                                                android:visibility="visible" />
+
+                                            <ImageView
+                                                android:id="@+id/image_edit_fri2"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.2"
+                                                android:padding="12dp"
+                                                android:src="@drawable/edit" />
+
+                                        </LinearLayout>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layout_saturday"
+                                android:layout_width="match_parent"
+                                android:layout_height="71dp"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:background="#DDDDDD" />
+
+                                <LinearLayout
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="70dp"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="0.4"
+                                        android:gravity="center_vertical"
+                                        android:paddingStart="8dp"
+                                        android:paddingEnd="0dp"
+                                        android:text="Saturday"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="70dp"
+                                        android:layout_weight="0.1"
+                                        android:gravity="bottom"
+                                        android:orientation="vertical">
+
+                                        <ImageView
+                                            android:visibility="invisible"
+                                            android:id="@+id/image_warning_sat2"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:padding="12dp"
+                                            android:src="@drawable/edit" />
+                                    </LinearLayout>
+
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="70dp"
+                                        android:layout_weight="0.5"
+                                        android:gravity="center_vertical"
+                                        android:orientation="vertical">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:orientation="horizontal"
+                                            android:weightSum="1">
+
+                                            <TextView
+                                                android:id="@+id/text_saturday_time1"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.8"
+                                                android:gravity="center_vertical"
+                                                android:text="09:00 am - 12:00 pm" />
+
+                                            <ImageView
+                                                android:id="@+id/image_edit_sat1"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.2"
+                                                android:padding="12dp"
+                                                android:src="@drawable/edit" />
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/layout_saturday_time2"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:orientation="horizontal"
+                                            android:visibility="gone"
+                                            android:weightSum="1">
+
+                                            <TextView
+                                                android:id="@+id/text_saturday_time2"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.8"
+                                                android:gravity="center_vertical"
+                                                android:text="13:00 pm - 19:00 pm"
+                                                android:visibility="visible" />
+
+                                            <ImageView
+                                                android:id="@+id/image_edit_sat2"
+                                                android:layout_width="0dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.2"
+                                                android:padding="12dp"
+                                                android:src="@drawable/edit" />
+
+                                        </LinearLayout>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
                     </LinearLayout>
 
                 </LinearLayout>

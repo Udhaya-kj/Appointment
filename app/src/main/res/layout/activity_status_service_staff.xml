@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
->
+    android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_biz_appt_date"
@@ -32,62 +31,97 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:text="You have to create a service and staff to make an appointment"
-            android:textSize="17sp"
-            android:textStyle="bold" />
+            android:gravity="center"
+            android:text="Create a service and staff to make appointment"
+            android:textSize="17sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="20dp"
+            android:layout_height="120dp"
             android:layout_marginTop="30dp"
-            android:layout_marginEnd="0dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="1">
 
-            <ImageView
-                android:layout_width="50dp"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:contentDescription="TODO"
-                android:padding="8dp"
-                android:src="@drawable/tick">
+                android:layout_weight="0.2"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:weightSum="1">
 
-            </ImageView>
+                <ImageView
+                    android:id="@+id/image_service"
+                    android:layout_width="50dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.3"
+                    android:padding="2dp"
+                    android:src="@drawable/tick"
+                    android:tint="@color/dark_grey"
+                   />
 
-            <TextView
-                android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="2dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.4"
+                    android:background="#DDD" />
+
+                <ImageView
+                    android:id="@+id/image_staff"
+                    android:layout_width="50dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.3"
+                    android:contentDescription="TODO"
+                    android:padding="2dp"
+                    android:tint="@color/dark_grey"
+                    android:src="@drawable/tick" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="Services" />
+                android:layout_weight="0.8"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.3"
+                    android:gravity="center_vertical"
+                    android:text="Create Service" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_weight="0.4"
+                    android:gravity="center">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/dark_grey">
+
+                    </View>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.3"
+                    android:gravity="center_vertical"
+                    android:text="Create Staff" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="0dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:contentDescription="TODO"
-                android:padding="8dp"
-                android:src="@drawable/tick">
-
-            </ImageView>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="Staff" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="50dp"
             android:gravity="center"
             android:orientation="horizontal"
             android:weightSum="1">
@@ -96,25 +130,28 @@
                 android:id="@+id/button_status_dont_ask"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_weight="0.5"
+                android:background="@color/app_blue"
                 android:minWidth="150dp"
-                android:text="Don't ask again" />
+                android:text="Don't ask again"
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/button_status_create"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_weight="0.5"
+                android:background="@color/button_green"
                 android:minWidth="150dp"
-                android:text="OK" />
+                android:text="OK"
+                android:textColor="@color/white" />
 
 
         </LinearLayout>
-
 
     </LinearLayout>
 </LinearLayout>

@@ -59,9 +59,9 @@ public class CalendarServicesActivity extends AppCompatActivity {
         service_name_list = new ArrayList<>();
         service_dur_list = new ArrayList<>();
 
-        sharedpreferences_services = getSharedPreferences(AddServiceActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
-        String nameList = sharedpreferences_services.getString(AddServiceActivity.SERVICE_NAME, "");
-        String mobList = sharedpreferences_services.getString(AddServiceActivity.SERVICE_DURATION, "");
+        sharedpreferences_services = getSharedPreferences(AddServiceAvailTimeActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
+        String nameList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_NAME, "");
+        String mobList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_DURATION, "");
         if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
             service_name_list = new Gson().fromJson(nameList, new TypeToken<ArrayList<String>>() {
             }.getType());

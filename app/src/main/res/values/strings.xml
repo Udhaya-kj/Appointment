@@ -6,7 +6,7 @@
 
     <string name="current_time">"Current Rounded Time is : "</string>
     <string name="book_appt">"Book Appointment"</string>
-    <string name="change_appt">"Change Appointment"</string>
+    <string name="change_appt">"Reschedule Appointment"</string>
 
     <string name="name">"Name"</string>
     <string name="email">"Email"</string>

@@ -59,9 +59,9 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
         linearLayout_add_resource = findViewById(R.id.layout_add_resource);
         listView_services = findViewById(R.id.listview_services);
 
-        sharedpreferences_services = getSharedPreferences(AddServiceActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
-        String nameList = sharedpreferences_services.getString(AddServiceActivity.SERVICE_NAME, "");
-        String mobList = sharedpreferences_services.getString(AddServiceActivity.SERVICE_DURATION, "");
+        sharedpreferences_services = getSharedPreferences(AddServiceAvailTimeActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
+        String nameList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_NAME, "");
+        String mobList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_DURATION, "");
         if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
             service_name_list = new Gson().fromJson(nameList, new TypeToken<ArrayList<String>>() {
             }.getType());

@@ -114,12 +114,12 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent in = new Intent(ApptSlotDetailsActivity.this, ChangeApptActivity.class);
-                in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 in.putExtra("service",textView_ser_name.getText().toString().trim());
                 in.putExtra("staff",textView_staff.getText().toString().trim());
                 in.putExtra("appt_date",textView_booking_date.getText().toString().trim());
                 in.putExtra("appt_time",textView_booking_time.getText().toString().trim());
                 startActivity(in);
+                finish();
 
             }
         });

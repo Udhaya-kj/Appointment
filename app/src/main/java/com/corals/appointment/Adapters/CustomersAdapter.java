@@ -137,10 +137,6 @@ public class CustomersAdapter extends BaseAdapter implements Filterable {
 
                 popup.show();//showing popup menu
 
-             /*   @SuppressLint("RestrictedApi")
-                MenuPopupHelper menuHelper = new MenuPopupHelper(context, (MenuBuilder) popup.getMenu(), imageView);
-                menuHelper.setForceShowIcon(true);
-                menuHelper.show();*/
             }
         });
 

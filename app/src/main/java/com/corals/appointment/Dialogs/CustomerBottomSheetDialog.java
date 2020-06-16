@@ -68,16 +68,15 @@ public class CustomerBottomSheetDialog implements View.OnClickListener {
         } else if (v.getId() == R.id.layout_view_appt) {
             // Toast.makeText(mCtx, "View Appointment", Toast.LENGTH_SHORT).show();
             Intent in = new Intent(((Activity) mCtx), ViewCustomerApptActivity.class);
-            in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             in.putExtra("cus_name",name);
             mCtx.startActivity(in);
+            ((Activity) mCtx).finish();
         } else if (v.getId() == R.id.layout_make_appt) {
             //Toast.makeText(mCtx, "Make Appointment", Toast.LENGTH_SHORT).show();
             Intent in = new Intent(((Activity) mCtx), CalendarViewActivity.class);
-            in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             in.putExtra("cus_name",name);
             mCtx.startActivity(in);
-
+            ((Activity) mCtx).finish();
         }
     }
 

@@ -1,9 +1,5 @@
 package com.corals.appointment.Activity;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,30 +14,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.corals.appointment.R;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AddServiceActivity extends AppCompatActivity {
 
-    EditText et_res_name;
-    TextView tv_res_dur;
+    EditText et_ser_name,et_ser_desc;
+    TextView tv_ser_dur;
     Button button_continue;
     LinearLayout linearLayout_ser_providers;
     TextView textView_ser_providers;
-    private SharedPreferences sharedpreferences_services;
-    public static final String MyPREFERENCES_SERVICES = "MyPrefs_Services";
-    public static final String SERVICE_NAME = "service_name";
-    public static final String SERVICE_DURATION = "service_duration";
-    private ArrayList<String> service_name_list, service_dur_list;
     public String pageId = "", position = "";
 
     TextView text_service_op_time, text_service_cl_time;
@@ -57,6 +47,7 @@ public class AddServiceActivity extends AppCompatActivity {
     public static final String MyPREFERENCES_SERVICE_DATA = "MyPREFERENCES_SERVICE_DATA";
     public static final String SER_NAME = "SER_NAME";
     public static final String SER_DURATION = "SER_DURATION";
+    public static final String SER_DESCRIPTION = "SER_DESCRIPTION";
 
     Button btn_yes_sday_p, btn_yes_mnday_p, btn_yes_tsday_p, btn_yes_wedday_p, btn_yes_trsday_p, btn_yes_fdday_p, btn_yes_strday_p;
     boolean isActiveSunday_p = true, isActiveMonday_p = true, isActiveTuesday_p = true, isActiveWednesday_p = true, isActiveThursday_p = true, isActiveFriday_p = true, isActiveSaturday_p = true;
@@ -81,10 +72,10 @@ public class AddServiceActivity extends AppCompatActivity {
             }
         });
 
-        sharedpreferences_services = getSharedPreferences(MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
         sharedpreferences_service_data = getSharedPreferences(MyPREFERENCES_SERVICE_DATA, Context.MODE_PRIVATE);
-        et_res_name = findViewById(R.id.et_res_name);
-        tv_res_dur = findViewById(R.id.et_res_dur);
+        et_ser_name = findViewById(R.id.et_res_name);
+        et_ser_desc = findViewById(R.id.et_service_description);
+        tv_ser_dur = findViewById(R.id.et_res_dur);
         textView_ser_providers = findViewById(R.id.tv_ser_providers);
         linearLayout_ser_providers = findViewById(R.id.layout_ser_providers);
         button_continue = findViewById(R.id.button_res_continue);
@@ -156,34 +147,30 @@ public class AddServiceActivity extends AppCompatActivity {
         text_saturday_add3_1 = findViewById(R.id.text_saturday_add3_1);
         text_saturday_add3_2 = findViewById(R.id.text_saturday_add3_2);
 
-
-        service_name_list = new ArrayList<>();
-        service_dur_list = new ArrayList<>();
-
         String name = sharedpreferences_service_data.getString(SER_NAME, "");
         String dur = sharedpreferences_service_data.getString(SER_DURATION, "");
-
-        et_res_name.setText(name);
-        tv_res_dur.setText(dur);
+        String desc = sharedpreferences_service_data.getString(SER_DESCRIPTION, "");
+        Log.d("AddService--->", "onCreate: "+name+","+dur+","+desc);
+        et_ser_name.setText(name);
+        tv_ser_dur.setText(dur);
+        et_ser_desc.setText(desc);
 
         if (getIntent().getExtras() != null) {
             pageId = getIntent().getStringExtra("page_id");
             position = getIntent().getStringExtra("position");
-            String ser_provd = getIntent().getStringExtra("providers");
             String ser_name = getIntent().getStringExtra("name");
             String ser_dur = getIntent().getStringExtra("duration");
 
-            et_res_name.setText(ser_name);
-            tv_res_dur.setText(ser_dur);
-
-            if (!TextUtils.isEmpty(ser_provd)) {
-                textView_ser_providers.setVisibility(View.VISIBLE);
-                textView_ser_providers.setText(ser_provd);
+            if(TextUtils.isEmpty(name)) {
+                et_ser_name.setText(ser_name);
             }
-            //Toast.makeText(this, ""+pageId, Toast.LENGTH_SHORT).show();
+            if(TextUtils.isEmpty(dur)) {
+                tv_ser_dur.setText(ser_dur);
+            }
+
         }
 
-        tv_res_dur.setOnClickListener(new View.OnClickListener() {
+        tv_ser_dur.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 timepicker_dialog();
@@ -334,45 +321,62 @@ public class AddServiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String name = et_res_name.getText().toString();
-                String duration = tv_res_dur.getText().toString();
+                String name = et_ser_name.getText().toString();
+                String duration = tv_ser_dur.getText().toString();
+                String s_desc = et_ser_desc .getText().toString();
                 if (name.length() > 0) {
-                    if(pageId.equals("3")) {
+                    if (pageId.equals("3")) {
                         if (hour == 0 && minute != 0) {
+                            SharedPreferences.Editor editor = sharedpreferences_service_data.edit();
+                            editor.putString(SER_NAME, name);
+                            editor.putString(SER_DURATION, duration);
+                            editor.putString(SER_DESCRIPTION, s_desc);
+                            editor.commit();
+
                             Intent in = new Intent(AddServiceActivity.this, AddServiceAvailTimeActivity.class);
-                            in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             in.putExtra("ser_name", name);
                             in.putExtra("ser_dur", duration);
+                            in.putExtra("ser_desc", s_desc);
                             in.putExtra("page_id", pageId);
                             in.putExtra("position", position);
                             startActivity(in);
-
+                            finish();
                         } else if ((hour != 0 && minute == 0) || (hour != 0 && minute != 0)) {
-
+                            SharedPreferences.Editor editor = sharedpreferences_service_data.edit();
+                            editor.putString(SER_NAME, name);
+                            editor.putString(SER_DURATION, duration);
+                            editor.putString(SER_DESCRIPTION, s_desc);
+                            editor.commit();
                             Intent in = new Intent(AddServiceActivity.this, AddServiceAvailTimeActivity.class);
-                            in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             in.putExtra("ser_name", name);
                             in.putExtra("ser_dur", duration);
+                            in.putExtra("ser_desc", s_desc);
                             in.putExtra("page_id", pageId);
                             in.putExtra("position", position);
                             startActivity(in);
+                            finish();
                         } else {
                             getDialog("Select valid service duration");
                         }
-                    }
-                    else {
+                    } else {
+                        SharedPreferences.Editor editor = sharedpreferences_service_data.edit();
+                        editor.putString(SER_NAME, name);
+                        editor.putString(SER_DURATION, duration);
+                        editor.putString(SER_DESCRIPTION, s_desc);
+                        editor.commit();
                         Intent in = new Intent(AddServiceActivity.this, AddServiceAvailTimeActivity.class);
-                        in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         in.putExtra("ser_name", name);
                         in.putExtra("ser_dur", duration);
+                        in.putExtra("ser_desc", s_desc);
                         in.putExtra("page_id", pageId);
                         in.putExtra("position", position);
                         startActivity(in);
+                        finish();
                     }
 
                 } else {
-                    et_res_name.setError("Enter service name");
-                    et_res_name.requestFocus();
+                    et_ser_name.setError("Enter service name");
+                    et_ser_name.requestFocus();
                 }
 
 
@@ -438,13 +442,6 @@ public class AddServiceActivity extends AppCompatActivity {
         text_saturday_add3_1.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + "00:00" + "</u>  </font>"));
         text_saturday_add3_2.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + "00:00" + "</u>  </font>"));
 
-
-        tv_res_dur.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timepicker_dialog();
-            }
-        });
 
         text_service_op_time.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -785,7 +782,7 @@ public class AddServiceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 hour = pickStartTime.getCurrentHour();
                 minute = pickStartTime.getCurrentMinute();
-                tv_res_dur.setText(hour + " hrs " + minute + " mins");
+                tv_ser_dur.setText(hour + " hrs " + minute + " mins");
                 //  Toast.makeText(AddServiceActivity.this, hour+" hrs "+minute+" mins", Toast.LENGTH_SHORT).show();
                 pickerDialog.dismiss();
             }
@@ -852,17 +849,6 @@ public class AddServiceActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        String s_name = et_res_name.getText().toString();
-        String s_dur = tv_res_dur.getText().toString();
-        SharedPreferences.Editor editor = sharedpreferences_service_data.edit();
-        editor.putString(SER_NAME, s_name);
-        editor.putString(SER_DURATION, s_dur);
-        editor.commit();
-    }
 
     @Override
     public void onBackPressed() {

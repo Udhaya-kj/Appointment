@@ -52,7 +52,7 @@ public class CalendarViewActivity extends AppCompatActivity {
 
         c = Calendar.getInstance();
         System.out.println("Current time => " + c.getTime());
-        final SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        final SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         calendar_date = df.format(c.getTime());
         calendarView.setMinDate(System.currentTimeMillis() - 1000);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -79,6 +79,8 @@ public class CalendarViewActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
+        Intent in = new Intent(CalendarViewActivity.this, CustomerActivity_Bottom.class);
+        startActivity(in);
+        finish();
     }
 }

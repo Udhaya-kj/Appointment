@@ -1,19 +1,11 @@
 package com.corals.appointment.Activity;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,7 +14,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.corals.appointment.Adapters.MapServiceResourceRecyclerAdapter;
 import com.corals.appointment.R;
@@ -134,9 +131,9 @@ public class AddStaffActivity extends AppCompatActivity {
         service_dur_list = new ArrayList<>();
         arrayList_map_service = new ArrayList<>();
 
-        sharedpreferences_services = getSharedPreferences(AddServiceActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
-        String nameList = sharedpreferences_services.getString(AddServiceActivity.SERVICE_NAME, "");
-        String mobList = sharedpreferences_services.getString(AddServiceActivity.SERVICE_DURATION, "");
+        sharedpreferences_services = getSharedPreferences(AddServiceAvailTimeActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
+        String nameList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_NAME, "");
+        String mobList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_DURATION, "");
         if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
             service_name_list = new Gson().fromJson(nameList, new TypeToken<ArrayList<String>>() {
             }.getType());
@@ -348,7 +345,7 @@ public class AddStaffActivity extends AppCompatActivity {
                                 finish();
                             }
                         } else {
-                            Toast.makeText(AddStaffActivity.this, "Must select atleast one service", Toast.LENGTH_LONG).show();
+                            getDialog("Must select atleast one service");
                         }
 
                     } else {
@@ -1122,6 +1119,24 @@ public class AddStaffActivity extends AppCompatActivity {
         Intent in = new Intent(AddStaffActivity.this, StaffActivity_Bottom.class);
         startActivity(in);
         finish();
+
+    }
+
+    private void getDialog(String msg) {
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AddStaffActivity.this);
+        alertDialogBuilder.setMessage(msg);
+        alertDialogBuilder.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        arg0.dismiss();
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
 
     }
 }
