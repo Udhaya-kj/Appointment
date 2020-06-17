@@ -42,7 +42,7 @@
         android:gravity="center"
         android:hint="Password"
         android:imeOptions="actionDone"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:singleLine="true" />
 
     <TextView

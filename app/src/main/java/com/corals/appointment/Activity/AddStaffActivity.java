@@ -22,12 +22,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.corals.appointment.Adapters.MapServiceResourceRecyclerAdapter;
+import com.corals.appointment.Client.ApiCallback;
+import com.corals.appointment.Client.ApiException;
+import com.corals.appointment.Client.OkHttpApiClient;
+import com.corals.appointment.Client.api.MerchantApisApi;
+import com.corals.appointment.Client.model.AppointmentResources;
+import com.corals.appointment.Client.model.AppointmentService;
+import com.corals.appointment.Client.model.ApptTransactionBody;
+import com.corals.appointment.Client.model.ApptTransactionResponse;
 import com.corals.appointment.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 
 public class AddStaffActivity extends AppCompatActivity {
     EditText et_staff_name, et_staff_mob;
@@ -154,7 +164,7 @@ public class AddStaffActivity extends AppCompatActivity {
                         public void onClick(DialogInterface arg0, int arg1) {
                             arg0.dismiss();
                             Intent in = new Intent(AddStaffActivity.this, AddServiceActivity.class);
-                            in.putExtra("page_id","3");
+                            in.putExtra("page_id", "3");
                             startActivity(in);
                             finish();
 
@@ -305,6 +315,28 @@ public class AddStaffActivity extends AppCompatActivity {
                 if (name.length() > 0) {
                     if (mob.length() > 0) {
                         if (arrayList_map_service.size() != 0) {
+
+                            AppointmentResources appointmentResources = new AppointmentResources();
+                            appointmentResources.setResName(name);
+                            appointmentResources.setMobile(mob);
+                            appointmentResources.setMerId("");
+                            appointmentResources.setAvailStartTime("");
+                            appointmentResources.setAvailEndTime("");
+                            appointmentResources.setIsActive(true);
+                            appointmentResources.setParallelLoad("");
+                            appointmentResources.setResDate("");
+                            appointmentResources.setResId("");
+
+                            ApptTransactionBody transactionBody = new ApptTransactionBody();
+                            transactionBody.setReqType("TS-SR.CR");
+                            transactionBody.setResource(appointmentResources);
+                            try {
+                                apptCreateStaff(transactionBody);
+                            } catch (ApiException e) {
+                                e.printStackTrace();
+                            }
+
+
                             String nameList = sharedpreferences_staffs.getString(AddStaffActivity.NAME, "");
                             String mobList = sharedpreferences_staffs.getString(AddStaffActivity.MOBILE, "");
                             if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
@@ -1136,7 +1168,38 @@ public class AddStaffActivity extends AppCompatActivity {
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+    }
+
+
+    private void apptCreateStaff(ApptTransactionBody requestBody) throws ApiException {
+        Log.d("createStaff---", "createStaff: " + requestBody);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(AddStaffActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentTransactionAsync(requestBody, new ApiCallback<ApptTransactionResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("createStaff--->", "onFailure-" + e.getMessage());
+            }
+
+            @Override
+            public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("createStaff--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
 
 
     }
+
 }

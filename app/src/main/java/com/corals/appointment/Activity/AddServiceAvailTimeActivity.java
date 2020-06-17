@@ -34,6 +34,15 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.corals.appointment.Adapters.ServiceAvailCustomTimeAdapter;
+import com.corals.appointment.Client.ApiCallback;
+import com.corals.appointment.Client.ApiException;
+import com.corals.appointment.Client.OkHttpApiClient;
+import com.corals.appointment.Client.api.MerchantApisApi;
+import com.corals.appointment.Client.model.AppointmentService;
+import com.corals.appointment.Client.model.ApptTransactionBody;
+import com.corals.appointment.Client.model.ApptTransactionResponse;
+import com.corals.appointment.Client.model.SecurityAPIBody;
+import com.corals.appointment.Client.model.SecurityAPIResponse;
 import com.corals.appointment.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -43,6 +52,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
@@ -60,12 +71,13 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
     StringBuilder weekdays = new StringBuilder("yyyyyyy");
     int hour = 0, minute = 0;
 
+    private SharedPreferences sharedpreferences_sessionToken;
     private SharedPreferences sharedpreferences_services;
     public static final String MyPREFERENCES_SERVICES = "MyPrefs_Services";
     public static final String SERVICE_NAME = "service_name";
     public static final String SERVICE_DURATION = "service_duration";
     private ArrayList<String> service_name_list, service_dur_list;
-    String ser_name, ser_dur, page_id, position;
+    String ser_name, ser_dur,ser_desc, page_id, position;
 
     TextView textView_sun_time1, textView_sun_time2, textView_mon_time1, textView_mon_time2, textView_tue_time1, textView_tue_time2, textView_wed_time1, textView_wed_time2,
             textView_thu_time1, textView_thu_time2, textView_fri_time1, textView_fri_time2, textView_sat_time1, textView_sat_time2;
@@ -95,11 +107,13 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         if (getIntent().getExtras() != null) {
             ser_name = getIntent().getStringExtra("ser_name");
             ser_dur = getIntent().getStringExtra("ser_dur");
+            ser_desc = getIntent().getStringExtra("ser_desc");
             page_id = getIntent().getStringExtra("page_id");
             position = getIntent().getStringExtra("position");
             Log.d("AddSer--->", "onCreate: " + ser_name + "," + ser_dur + "," + page_id + "," + position);
         }
         sharedpreferences_services = getSharedPreferences(MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
+        sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
         radioButton_biz_hrs = findViewById(R.id.rb_biz_hours);
         radioButton_custom_time = findViewById(R.id.rb_custom_time);
         recyclerView = findViewById(R.id.recylerview_avail_hours);
@@ -714,7 +728,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     recyclerView.setAdapter(timeAdapter);
                                     timeAdapter.notifyDataSetChanged();*/
                                     } else {
-                                        getDialog("Unavailability time cannot overlap");
+                                        getDialog("Availability time cannot overlap");
                                     }
 
                                 } else {
@@ -761,7 +775,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     time_update_id = "";
                                     button_add_time.setText("ADD");
                                 } else {
-                                    getDialog("Unavailability time cannot overlap");
+                                    getDialog("Availability time cannot overlap");
                                 }
 
                             }
@@ -790,7 +804,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     recyclerView.setAdapter(timeAdapter);
                                     timeAdapter.notifyDataSetChanged();*/
                                     } else {
-                                        getDialog("Unavailability time cannot overlap");
+                                        getDialog("Availability time cannot overlap");
                                     }
 
                                 } else {
@@ -837,7 +851,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     time_update_id = "";
                                     button_add_time.setText("ADD");
                                 } else {
-                                    getDialog("Unavailability time cannot overlap");
+                                    getDialog("Availability time cannot overlap");
                                 }
 
                             }
@@ -864,7 +878,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     recyclerView.setAdapter(timeAdapter);
                                     timeAdapter.notifyDataSetChanged();*/
                                     } else {
-                                        getDialog("Unavailability time cannot overlap");
+                                        getDialog("Availability time cannot overlap");
                                     }
 
                                 } else {
@@ -911,7 +925,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     time_update_id = "";
                                     button_add_time.setText("ADD");
                                 } else {
-                                    getDialog("Unavailability time cannot overlap");
+                                    getDialog("Availability time cannot overlap");
                                 }
 
                             }
@@ -937,7 +951,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     recyclerView.setAdapter(timeAdapter);
                                     timeAdapter.notifyDataSetChanged();*/
                                     } else {
-                                        getDialog("Unavailability time cannot overlap");
+                                        getDialog("Availability time cannot overlap");
                                     }
 
                                 } else {
@@ -984,7 +998,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     time_update_id = "";
                                     button_add_time.setText("ADD");
                                 } else {
-                                    getDialog("Unavailability time cannot overlap");
+                                    getDialog("Availability time cannot overlap");
                                 }
 
                             }
@@ -1010,7 +1024,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     recyclerView.setAdapter(timeAdapter);
                                     timeAdapter.notifyDataSetChanged();*/
                                     } else {
-                                        getDialog("Unavailability time cannot overlap");
+                                        getDialog("Availability time cannot overlap");
                                     }
 
                                 } else {
@@ -1057,7 +1071,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     time_update_id = "";
                                     button_add_time.setText("ADD");
                                 } else {
-                                    getDialog("Unavailability time cannot overlap");
+                                    getDialog("Availability time cannot overlap");
                                 }
 
                             }
@@ -1083,7 +1097,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     recyclerView.setAdapter(timeAdapter);
                                     timeAdapter.notifyDataSetChanged();*/
                                     } else {
-                                        getDialog("Unavailability time cannot overlap");
+                                        getDialog("Availability time cannot overlap");
                                     }
 
                                 } else {
@@ -1130,7 +1144,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     time_update_id = "";
                                     button_add_time.setText("ADD");
                                 } else {
-                                    getDialog("Unavailability time cannot overlap");
+                                    getDialog("Availability time cannot overlap");
                                 }
 
                             }
@@ -1156,7 +1170,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     recyclerView.setAdapter(timeAdapter);
                                     timeAdapter.notifyDataSetChanged();*/
                                     } else {
-                                        getDialog("Unavailability time cannot overlap");
+                                        getDialog("Availability time cannot overlap");
                                     }
 
                                 } else {
@@ -1203,7 +1217,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     time_update_id = "";
                                     button_add_time.setText("ADD");
                                 } else {
-                                    getDialog("Unavailability time cannot overlap");
+                                    getDialog("Availability time cannot overlap");
                                 }
 
                             }
@@ -1231,6 +1245,21 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            AppointmentService appointmentService=new AppointmentService();
+                            appointmentService.setSerName(ser_name);
+                            appointmentService.setSerDuration(ser_dur);
+                            appointmentService.setSerDescription(ser_desc);
+
+                            ApptTransactionBody transactionBody=new ApptTransactionBody();
+                            transactionBody.setReqType("TS-SS.CS");
+                            transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN,""));
+                            transactionBody.setService(appointmentService);
+                            try {
+                                Log.d("Token--->", "token: "+sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN,""));
+                                apptCreateService(transactionBody);
+                            } catch (ApiException e) {
+                                e.printStackTrace();
+                            }
                             pd.dismiss();
                             String nameList = sharedpreferences_services.getString(SERVICE_NAME, "");
                             String mobList = sharedpreferences_services.getString(SERVICE_DURATION, "");
@@ -1585,5 +1614,36 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         String s_tm = strs[0];
         String e_tm = strs[1];
         return e_tm;
+    }
+
+    private void apptCreateService(ApptTransactionBody requestBody) throws ApiException {
+        Log.d("Voucher---", "uploadVoucher: " + requestBody);
+       OkHttpApiClient okHttpApiClient = new OkHttpApiClient(AddServiceAvailTimeActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentTransactionAsync(requestBody, new ApiCallback<ApptTransactionResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("createService--->", "onFailure-" + e.getMessage());
+            }
+
+            @Override
+            public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("createService--->", "onSuccess-" +statusCode+","+result.getStatusMessage());
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
+
+
     }
 }

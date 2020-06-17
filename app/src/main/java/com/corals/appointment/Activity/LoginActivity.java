@@ -1,30 +1,53 @@
 package com.corals.appointment.Activity;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.corals.appointment.Client.ApiCallback;
+import com.corals.appointment.Client.ApiException;
+import com.corals.appointment.Client.OkHttpApiClient;
+import com.corals.appointment.Client.api.MerchantApisApi;
+import com.corals.appointment.Client.model.Body;
+import com.corals.appointment.Client.model.SecurityAPIBody;
+import com.corals.appointment.Client.model.SecurityAPIResponse;
 import com.corals.appointment.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText editText_id,editText_password;
+    EditText editText_id, editText_password;
     TextView button_login;
     TextView textView;
 
@@ -33,22 +56,27 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences sharedpreferences_ask_again;
     private ArrayList<String> service_name_list, service_dur_list;
     private ArrayList<String> staff_name_list, staff_mob_list;
+    public static String sessionToken;
+    private SharedPreferences sharedpreferences_sessionToken;
+    public static final String MyPREFERENCES_SESSIONTOKEN = "MyPREFERENCES_SESSIONTOKEN ";
+    public static final String SESSIONTOKEN = "SESSIONTOKEN ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        editText_id=findViewById(R.id.edit_userid);
-        editText_password=findViewById(R.id.edit_password);
-        button_login=findViewById(R.id.button_login);
-        textView=findViewById(R.id.tv_signup);
+        editText_id = findViewById(R.id.edit_userid);
+        editText_password = findViewById(R.id.edit_password);
+        button_login = findViewById(R.id.button_login);
+        textView = findViewById(R.id.tv_signup);
 
         service_name_list = new ArrayList<>();
         service_dur_list = new ArrayList<>();
         staff_name_list = new ArrayList<>();
         staff_mob_list = new ArrayList<>();
 
+        sharedpreferences_sessionToken = getSharedPreferences(MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
         sharedpreferences_ask_again = getSharedPreferences(StatusServiceStaffActivity.MyPREFERENCES_ASK_AGAIN, Context.MODE_PRIVATE);
         sharedpreferences_services = getSharedPreferences(AddServiceAvailTimeActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
         sharedpreferences_staffs = getSharedPreferences(AddStaffActivity.MyPREFERENCES_STAFFS, Context.MODE_PRIVATE);
@@ -69,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
 
         String nameList1 = sharedpreferences_staffs.getString(AddStaffActivity.NAME, "");
         String mobList1 = sharedpreferences_staffs.getString(AddStaffActivity.MOBILE, "");
-        if(!TextUtils.isEmpty(nameList1) && !TextUtils.isEmpty(mobList1)) {
+        if (!TextUtils.isEmpty(nameList1) && !TextUtils.isEmpty(mobList1)) {
             staff_name_list = new Gson().fromJson(nameList1, new TypeToken<ArrayList<String>>() {
             }.getType());
             staff_mob_list = new Gson().fromJson(mobList1, new TypeToken<ArrayList<String>>() {
@@ -77,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
 
-        Log.d("listsize---->", "onCreate: " + service_name_list.size() + "," + service_dur_list.size()+","+ staff_name_list.size() + "," + staff_mob_list.size());
+        Log.d("listsize---->", "onCreate: " + service_name_list.size() + "," + service_dur_list.size() + "," + staff_name_list.size() + "," + staff_mob_list.size());
 
         textView.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + "Sign up" + "</u>  </font>"));
 
@@ -90,14 +118,50 @@ public class LoginActivity extends AppCompatActivity {
         });*/
 
         button_login.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
+                String email = editText_id.getText().toString().trim();
+                String pass = editText_password.getText().toString().trim();
 
-                String id=editText_id.getText().toString().trim();
-                String pswd=editText_password.getText().toString().trim();
-                 String value = sharedpreferences_ask_again.getString(StatusServiceStaffActivity.VALUE, "");
-               // Toast.makeText(LoginActivity.this, "Value :"+value, Toast.LENGTH_SHORT).show();
-                if(TextUtils.isEmpty(value)) {
+                if (!email.isEmpty()) {
+                    if (!pass.isEmpty()) {
+                    MessageDigest messageDigest = null;
+                    try {
+                        messageDigest = MessageDigest.getInstance("SHA-256");
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    }
+                    byte hashBytes[] = messageDigest.digest(pass.getBytes(StandardCharsets.UTF_8));
+                    BigInteger noHash = new BigInteger(1, hashBytes);
+                    String hashStr = noHash.toString(16);
+                    Log.d("PASSWORD--->", "onClick: " + hashStr);
+                    SecurityAPIBody securityAPIBody = new SecurityAPIBody();
+                    securityAPIBody.setReqType("SM-AL.LM");
+                    securityAPIBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
+                    securityAPIBody.setUserEmail(editText_id.getText().toString());
+                    securityAPIBody.setUserPass(hashStr);
+
+                    try {
+                        merchantApptLogin(securityAPIBody);
+                    } catch (ApiException e) {
+                        e.printStackTrace();
+                    }
+
+                    } else {
+                        editText_password.setError("Enter valid password");
+                        editText_password.requestFocus();
+                    }
+                } else {
+                    editText_id.setError("Enter valid email");
+                    editText_id.requestFocus();
+                }
+
+       /*         String id = editText_id.getText().toString().trim();
+                String pswd = editText_password.getText().toString().trim();
+                String value = sharedpreferences_ask_again.getString(StatusServiceStaffActivity.VALUE, "");
+                // Toast.makeText(LoginActivity.this, "Value :"+value, Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(value)) {
                     if (service_name_list.isEmpty() || staff_name_list.isEmpty()) {
                         startActivity(new Intent(LoginActivity.this, StatusServiceStaffActivity.class));
                         finish();
@@ -105,12 +169,66 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
                         finish();
                     }
-                }
-                else {
+                } else {
                     startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
                     finish();
-                }
+                }*/
             }
         });
+    }
+
+    private void merchantApptLogin(SecurityAPIBody requestBody) throws ApiException {
+
+        final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
+        pd.setMessage("Loading...");
+        pd.show();
+
+        Log.d("login---", "login: " + requestBody);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(LoginActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppoinmentSecurityAsync(requestBody, new ApiCallback<SecurityAPIResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                pd.dismiss();
+                Log.d("login--->", "onFailure-" + e.getMessage());
+            }
+
+            @Override
+            public void onSuccess(SecurityAPIResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+                pd.dismiss();
+                Log.d("login--->", "onSuccess-" + statusCode + " , " + result);
+
+                if (Integer.parseInt(result.getSessionToken()) == 200) {
+                    sessionToken = result.getSessionToken();
+                    SharedPreferences.Editor editor = sharedpreferences_services.edit();
+                    editor.putString(SESSIONTOKEN, sessionToken);
+                    editor.commit();
+
+                    startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+                    finish();
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
+
+
     }
 }
