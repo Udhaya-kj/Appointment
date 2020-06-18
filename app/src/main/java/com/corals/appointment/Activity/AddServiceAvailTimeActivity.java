@@ -77,15 +77,14 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
     public static final String SERVICE_NAME = "service_name";
     public static final String SERVICE_DURATION = "service_duration";
     private ArrayList<String> service_name_list, service_dur_list;
-    String ser_name, ser_dur,ser_desc, page_id, position;
+    String ser_name, ser_dur, ser_desc, page_id, position;
 
     TextView textView_sun_time1, textView_sun_time2, textView_mon_time1, textView_mon_time2, textView_tue_time1, textView_tue_time2, textView_wed_time1, textView_wed_time2,
             textView_thu_time1, textView_thu_time2, textView_fri_time1, textView_fri_time2, textView_sat_time1, textView_sat_time2;
-    LinearLayout linearLayout__sun, linearLayout__mon, linearLayout__tue, linearLayout__wed, linearLayout__thur, linearLayout__fri, linearLayout__sat,
-            linearLayout__sun2, linearLayout__mon2, linearLayout__tue2, linearLayout__wed2, linearLayout__thur2, linearLayout__fri2, linearLayout__sat2;
-    ImageView imageView_sun_time1, imageView_sun_time2, imageView_mon_time1, imageView_mon_time2, imageView_tue_time1, imageView_tue_time2, imageView_wed_time1, imageView_wed_time2,
-            imageView_thu_time1, imageView_thu_time2, imageView_fri_time1, imageView_fri_time2, imageView_sat_time1, imageView_sat_time2;
-    ImageView imageView_warning_sun2, imageView_warning_mon2, imageView_warning_tue2, imageView_warning_wed2, imageView_warning_thu2, imageView_warning_fri2, imageView_warning_sat2;
+    LinearLayout linearLayout__sun, linearLayout__mon, linearLayout__tue, linearLayout__wed, linearLayout__thur, linearLayout__fri, linearLayout__sat;
+    ImageView imageView_edit_sun,imageView_edit_mon,imageView_edit_tue,imageView_edit_wed,imageView_edit_thu,imageView_edit_fri,imageView_edit_sat;
+    ImageView imageView_warning_sun2, imageView_warning_mon2, imageView_warning_tue2, imageView_warning_wed2, imageView_warning_thu2, imageView_warning_fri2, imageView_warning_sat2,
+            imageView_warning_sun3, imageView_warning_mon3, imageView_warning_tue3, imageView_warning_wed3, imageView_warning_thu3, imageView_warning_fri3, imageView_warning_sat3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,20 +147,14 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         textView_sat_time1 = (TextView) findViewById(R.id.text_saturday_time1);
         textView_sat_time2 = (TextView) findViewById(R.id.text_saturday_time2);
 
-        imageView_sun_time1 = (ImageView) findViewById(R.id.image_edit_sun1);
-        imageView_sun_time2 = (ImageView) findViewById(R.id.image_edit_sun2);
-        imageView_mon_time1 = (ImageView) findViewById(R.id.image_edit_mon1);
-        imageView_mon_time2 = (ImageView) findViewById(R.id.image_edit_mon2);
-        imageView_tue_time1 = (ImageView) findViewById(R.id.image_edit_tue1);
-        imageView_tue_time2 = (ImageView) findViewById(R.id.image_edit_tue2);
-        imageView_wed_time1 = (ImageView) findViewById(R.id.image_edit_wed1);
-        imageView_wed_time2 = (ImageView) findViewById(R.id.image_edit_wed2);
-        imageView_thu_time1 = (ImageView) findViewById(R.id.image_edit_thu1);
-        imageView_thu_time2 = (ImageView) findViewById(R.id.image_edit_thu2);
-        imageView_fri_time1 = (ImageView) findViewById(R.id.image_edit_fri1);
-        imageView_fri_time2 = (ImageView) findViewById(R.id.image_edit_fri2);
-        imageView_sat_time1 = (ImageView) findViewById(R.id.image_edit_sat1);
-        imageView_sat_time2 = (ImageView) findViewById(R.id.image_edit_sat2);
+        imageView_edit_sun = (ImageView) findViewById(R.id.image_edit_sun);
+        imageView_edit_mon = (ImageView) findViewById(R.id.image_edit_mon);
+        imageView_edit_tue = (ImageView) findViewById(R.id.image_edit_tue);
+        imageView_edit_wed = (ImageView) findViewById(R.id.image_edit_wed);
+        imageView_edit_thu = (ImageView) findViewById(R.id.image_edit_thu);
+        imageView_edit_fri = (ImageView) findViewById(R.id.image_edit_fri);
+        imageView_edit_sat = (ImageView) findViewById(R.id.image_edit_sat);
+
 
         linearLayout__sun = (LinearLayout) findViewById(R.id.layout_sunday);
         linearLayout__mon = (LinearLayout) findViewById(R.id.layout_monday);
@@ -171,14 +164,6 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         linearLayout__fri = (LinearLayout) findViewById(R.id.layout_friday);
         linearLayout__sat = (LinearLayout) findViewById(R.id.layout_saturday);
 
-        linearLayout__sun2 = (LinearLayout) findViewById(R.id.layout_sunday_time2);
-        linearLayout__mon2 = (LinearLayout) findViewById(R.id.layout_monday_time2);
-        linearLayout__tue2 = (LinearLayout) findViewById(R.id.layout_tuesday_time2);
-        linearLayout__wed2 = (LinearLayout) findViewById(R.id.layout_wednesday_time2);
-        linearLayout__thur2 = (LinearLayout) findViewById(R.id.layout_thursday_time2);
-        linearLayout__fri2 = (LinearLayout) findViewById(R.id.layout_friday_time2);
-        linearLayout__sat2 = (LinearLayout) findViewById(R.id.layout_saturday_time2);
-
         imageView_warning_sun2 = (ImageView) findViewById(R.id.image_warning_sun2);
         imageView_warning_mon2 = (ImageView) findViewById(R.id.image_warning_mon2);
         imageView_warning_tue2 = (ImageView) findViewById(R.id.image_warning_tue2);
@@ -186,6 +171,14 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         imageView_warning_thu2 = (ImageView) findViewById(R.id.image_warning_thu2);
         imageView_warning_fri2 = (ImageView) findViewById(R.id.image_warning_fri2);
         imageView_warning_sat2 = (ImageView) findViewById(R.id.image_warning_sat2);
+
+        imageView_warning_sun3 = (ImageView) findViewById(R.id.image_warning_sun3);
+        imageView_warning_mon3 = (ImageView) findViewById(R.id.image_warning_mon3);
+        imageView_warning_tue3 = (ImageView) findViewById(R.id.image_warning_tue3);
+        imageView_warning_wed3 = (ImageView) findViewById(R.id.image_warning_wed3);
+        imageView_warning_thu3 = (ImageView) findViewById(R.id.image_warning_thu3);
+        imageView_warning_fri3 = (ImageView) findViewById(R.id.image_warning_fri3);
+        imageView_warning_sat3 = (ImageView) findViewById(R.id.image_warning_sat3);
 
 
         LinearLayoutManager lm = new LinearLayoutManager(this);
@@ -239,7 +232,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                 text_start_time.setText("00:00");
                 text_end_time.setText("00:00");
                 button_add_time.setText("ADD");
-                time_update_id="";
+                time_update_id = "";
                 // Toast.makeText(AddServiceAvailTimeActivity.this, ""+day, Toast.LENGTH_SHORT).show();
             }
 
@@ -469,7 +462,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
 
         //Edit sunday
-        imageView_sun_time1.setOnClickListener(new View.OnClickListener() {
+        imageView_edit_sun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String data_sun = list_sun.get(0);
@@ -485,24 +478,10 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
             }
         });
-        imageView_sun_time2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String data_sun = list_sun.get(1);
-                String[] strs = data_sun.split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
 
-                text_start_time.setText(s_tm);
-                text_end_time.setText(e_tm);
-                text_weekday.setText("Sunday");
-                button_add_time.setText("UPDATE");
-                time_update_id = "1";
-            }
-        });
 
         //Edit monday
-        imageView_mon_time1.setOnClickListener(new View.OnClickListener() {
+        imageView_edit_mon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -519,24 +498,10 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
             }
         });
-        imageView_mon_time2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String data_sun = list_mon.get(1);
-                String[] strs = data_sun.split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
 
-                text_start_time.setText(s_tm);
-                text_end_time.setText(e_tm);
-                text_weekday.setText("Monday");
-                button_add_time.setText("UPDATE");
-                time_update_id = "1";
-            }
-        });
 
         //Edit tuesday
-        imageView_tue_time1.setOnClickListener(new View.OnClickListener() {
+        imageView_edit_tue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -553,24 +518,10 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
             }
         });
-        imageView_tue_time2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String data_sun = list_tue.get(1);
-                String[] strs = data_sun.split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
 
-                text_start_time.setText(s_tm);
-                text_end_time.setText(e_tm);
-                text_weekday.setText("Tuesday");
-                button_add_time.setText("UPDATE");
-                time_update_id = "1";
-            }
-        });
 
         //Edit wednesday
-        imageView_wed_time1.setOnClickListener(new View.OnClickListener() {
+        imageView_edit_wed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String data_sun = list_wed.get(0);
@@ -585,24 +536,9 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                 time_update_id = "0";
             }
         });
-        imageView_wed_time2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String data_sun = list_wed.get(1);
-                String[] strs = data_sun.split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                text_start_time.setText(s_tm);
-                text_end_time.setText(e_tm);
-                text_weekday.setText("Wednesday");
-                button_add_time.setText("UPDATE");
-                time_update_id = "1";
-            }
-        });
 
         //Edit thursday
-        imageView_thu_time1.setOnClickListener(new View.OnClickListener() {
+        imageView_edit_thu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String data_sun = list_thu.get(0);
@@ -617,24 +553,10 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                 time_update_id = "0";
             }
         });
-        imageView_thu_time2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String data_sun = list_thu.get(1);
-                String[] strs = data_sun.split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
 
-                text_start_time.setText(s_tm);
-                text_end_time.setText(e_tm);
-                text_weekday.setText("Thursday");
-                button_add_time.setText("UPDATE");
-                time_update_id = "1";
-            }
-        });
 
         //Edit friday
-        imageView_fri_time1.setOnClickListener(new View.OnClickListener() {
+        imageView_edit_fri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String data_sun = list_fri.get(0);
@@ -649,24 +571,10 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                 time_update_id = "0";
             }
         });
-        imageView_fri_time2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String data_sun = list_fri.get(1);
-                String[] strs = data_sun.split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
 
-                text_start_time.setText(s_tm);
-                text_end_time.setText(e_tm);
-                text_weekday.setText("Friday");
-                button_add_time.setText("UPDATE");
-                time_update_id = "1";
-            }
-        });
 
         //Edit saturday
-        imageView_sat_time1.setOnClickListener(new View.OnClickListener() {
+        imageView_edit_sat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String data_sun = list_sat.get(0);
@@ -679,21 +587,6 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                 text_weekday.setText("Saturday");
                 button_add_time.setText("UPDATE");
                 time_update_id = "0";
-            }
-        });
-        imageView_sat_time2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String data_sun = list_sat.get(1);
-                String[] strs = data_sun.split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                text_start_time.setText(s_tm);
-                text_end_time.setText(e_tm);
-                text_weekday.setText("Saturday");
-                button_add_time.setText("UPDATE");
-                time_update_id = "1";
             }
         });
 
@@ -722,7 +615,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                         list_sun.add(s_time + " - " + e_time);
                                         textView_sun_time1.setText(list_sun.get(0));
                                         textView_sun_time2.setText(list_sun.get(1));
-                                        linearLayout__sun2.setVisibility(View.VISIBLE);
+                                        textView_sun_time2.setVisibility(View.VISIBLE);
 
                       /*            ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
                                     recyclerView.setAdapter(timeAdapter);
@@ -798,7 +691,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                         list_mon.add(s_time + " - " + e_time);
                                         textView_mon_time1.setText(list_mon.get(0));
                                         textView_mon_time2.setText(list_mon.get(1));
-                                        linearLayout__mon2.setVisibility(View.VISIBLE);
+                                        textView_mon_time2.setVisibility(View.VISIBLE);
 
                       /*            ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
                                     recyclerView.setAdapter(timeAdapter);
@@ -872,7 +765,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                         list_tue.add(s_time + " - " + e_time);
                                         textView_tue_time1.setText(list_tue.get(0));
                                         textView_tue_time2.setText(list_tue.get(1));
-                                        linearLayout__tue2.setVisibility(View.VISIBLE);
+                                        textView_tue_time2.setVisibility(View.VISIBLE);
 
                       /*            ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
                                     recyclerView.setAdapter(timeAdapter);
@@ -945,7 +838,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                         list_wed.add(s_time + " - " + e_time);
                                         textView_wed_time1.setText(list_wed.get(0));
                                         textView_wed_time2.setText(list_wed.get(1));
-                                        linearLayout__wed2.setVisibility(View.VISIBLE);
+                                        textView_wed_time2.setVisibility(View.VISIBLE);
 
                       /*            ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
                                     recyclerView.setAdapter(timeAdapter);
@@ -1018,7 +911,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                         list_thu.add(s_time + " - " + e_time);
                                         textView_thu_time1.setText(list_thu.get(0));
                                         textView_thu_time2.setText(list_thu.get(1));
-                                        linearLayout__thur2.setVisibility(View.VISIBLE);
+                                        textView_thu_time2.setVisibility(View.VISIBLE);
 
                       /*            ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
                                     recyclerView.setAdapter(timeAdapter);
@@ -1091,7 +984,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                         list_fri.add(s_time + " - " + e_time);
                                         textView_fri_time1.setText(list_fri.get(0));
                                         textView_fri_time2.setText(list_fri.get(1));
-                                        linearLayout__fri2.setVisibility(View.VISIBLE);
+                                        textView_fri_time2.setVisibility(View.VISIBLE);
 
                       /*            ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
                                     recyclerView.setAdapter(timeAdapter);
@@ -1164,7 +1057,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                         list_sat.add(s_time + " - " + e_time);
                                         textView_sat_time1.setText(list_sat.get(0));
                                         textView_sat_time2.setText(list_sat.get(1));
-                                        linearLayout__sat2.setVisibility(View.VISIBLE);
+                                        textView_sat_time2.setVisibility(View.VISIBLE);
 
                       /*            ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
                                     recyclerView.setAdapter(timeAdapter);
@@ -1239,29 +1132,25 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (isSelected) {
-                    final ProgressDialog pd = new ProgressDialog(AddServiceAvailTimeActivity.this);
-                    pd.setMessage("Creating service...");
-                    pd.show();
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            AppointmentService appointmentService=new AppointmentService();
-                            appointmentService.setSerName(ser_name);
-                            appointmentService.setSerDuration(ser_dur);
-                            appointmentService.setSerDescription(ser_desc);
 
-                            ApptTransactionBody transactionBody=new ApptTransactionBody();
-                            transactionBody.setReqType("TS-SS.CS");
-                            transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN,""));
-                            transactionBody.setService(appointmentService);
-                            try {
-                                Log.d("Token--->", "token: "+sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN,""));
-                                apptCreateService(transactionBody);
-                            } catch (ApiException e) {
-                                e.printStackTrace();
-                            }
-                            pd.dismiss();
-                            String nameList = sharedpreferences_services.getString(SERVICE_NAME, "");
+                    AppointmentService appointmentService = new AppointmentService();
+                    appointmentService.setSerName(ser_name);
+                    appointmentService.setSerDuration(ser_dur);
+                    appointmentService.setSerDescription(ser_desc);
+
+                    ApptTransactionBody transactionBody = new ApptTransactionBody();
+                    transactionBody.setReqType("TS-SS.CS");
+                    transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+                    transactionBody.setService(appointmentService);
+                    try {
+                        Log.d("Token--->", "token: " + sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+                        apptCreateService(transactionBody);
+                    } catch (ApiException e) {
+                        e.printStackTrace();
+                    }
+
+
+                       /*     String nameList = sharedpreferences_services.getString(SERVICE_NAME, "");
                             String mobList = sharedpreferences_services.getString(SERVICE_DURATION, "");
                             if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
                                 service_name_list = new Gson().fromJson(nameList, new TypeToken<ArrayList<String>>() {
@@ -1295,10 +1184,9 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                 Intent in = new Intent(AddServiceAvailTimeActivity.this, SetupServiceActivity_Bottom.class);
                                 startActivity(in);
                                 finish();
-                            }
+                            }*/
 
-                        }
-                    }, 2000);
+
                 } else {
                     getDialog("Pick any one option");
                 }
@@ -1617,20 +1505,45 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
     }
 
     private void apptCreateService(ApptTransactionBody requestBody) throws ApiException {
-        Log.d("Voucher---", "uploadVoucher: " + requestBody);
-       OkHttpApiClient okHttpApiClient = new OkHttpApiClient(AddServiceAvailTimeActivity.this);
+
+        final ProgressDialog pd = new ProgressDialog(AddServiceAvailTimeActivity.this);
+        pd.setMessage("Creating service...");
+        pd.show();
+
+
+        Log.d("service---", "service: " + requestBody);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(AddServiceAvailTimeActivity.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();
         webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
 
         webMerchantApisApi.merchantAppointmentTransactionAsync(requestBody, new ApiCallback<ApptTransactionResponse>() {
             @Override
-            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+            public void onFailure(final ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
                 Log.d("createService--->", "onFailure-" + e.getMessage());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(AddServiceAvailTimeActivity.this, "Service setup Failed :"+ e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
             public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
-                Log.d("createService--->", "onSuccess-" +statusCode+","+result.getStatusMessage());
+                Log.d("createService--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
+                pd.dismiss();
+                if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    Intent in = new Intent(AddServiceAvailTimeActivity.this, SetupServiceActivity_Bottom.class);
+                    startActivity(in);
+                    finish();
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(AddServiceAvailTimeActivity.this, "Service setup Failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
 
             @Override

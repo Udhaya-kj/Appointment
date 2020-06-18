@@ -39,6 +39,8 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -48,7 +50,7 @@ import java.util.Objects;
 public class LoginActivity extends AppCompatActivity {
 
     EditText editText_id, editText_password;
-    TextView button_login;
+    TextView button_login, textView_fg_pass;
     TextView textView;
 
     private SharedPreferences sharedpreferences_services;
@@ -70,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         editText_password = findViewById(R.id.edit_password);
         button_login = findViewById(R.id.button_login);
         textView = findViewById(R.id.tv_signup);
+        textView_fg_pass = findViewById(R.id.text_forgot_pass);
 
         service_name_list = new ArrayList<>();
         service_dur_list = new ArrayList<>();
@@ -109,14 +112,20 @@ public class LoginActivity extends AppCompatActivity {
 
         textView.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + "Sign up" + "</u>  </font>"));
 
-    /*    textView.setOnClickListener(new View.OnClickListener() {
+        textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
+                Toast.makeText(LoginActivity.this, "Register...", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        textView_fg_pass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
                 finish();
             }
-        });*/
-
+        });
         button_login.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -126,27 +135,27 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (!email.isEmpty()) {
                     if (!pass.isEmpty()) {
-                    MessageDigest messageDigest = null;
-                    try {
-                        messageDigest = MessageDigest.getInstance("SHA-256");
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    }
-                    byte hashBytes[] = messageDigest.digest(pass.getBytes(StandardCharsets.UTF_8));
-                    BigInteger noHash = new BigInteger(1, hashBytes);
-                    String hashStr = noHash.toString(16);
-                    Log.d("PASSWORD--->", "onClick: " + hashStr);
-                    SecurityAPIBody securityAPIBody = new SecurityAPIBody();
-                    securityAPIBody.setReqType("SM-AL.LM");
-                    securityAPIBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
-                    securityAPIBody.setUserEmail(editText_id.getText().toString());
-                    securityAPIBody.setUserPass(hashStr);
+                        MessageDigest messageDigest = null;
+                        try {
+                            messageDigest = MessageDigest.getInstance("SHA-256");
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                        }
+                        byte hashBytes[] = messageDigest.digest(pass.getBytes(StandardCharsets.UTF_8));
+                        BigInteger noHash = new BigInteger(1, hashBytes);
+                        String hashStr = noHash.toString(16);
+                        Log.d("PASSWORD--->", "onClick: " + hashStr);
+                        SecurityAPIBody securityAPIBody = new SecurityAPIBody();
+                        securityAPIBody.setReqType("SM-AL.LM");
+                        securityAPIBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
+                        securityAPIBody.setUserEmail(editText_id.getText().toString());
+                        securityAPIBody.setUserPass(hashStr);
 
-                    try {
-                        merchantApptLogin(securityAPIBody);
-                    } catch (ApiException e) {
-                        e.printStackTrace();
-                    }
+                        try {
+                            merchantApptLogin(securityAPIBody);
+                        } catch (ApiException e) {
+                            e.printStackTrace();
+                        }
 
                     } else {
                         editText_password.setError("Enter valid password");
@@ -200,9 +209,9 @@ public class LoginActivity extends AppCompatActivity {
                 pd.dismiss();
                 Log.d("login--->", "onSuccess-" + statusCode + " , " + result);
 
-                if (Integer.parseInt(result.getSessionToken()) == 200) {
+                if (Integer.parseInt(result.getStatusCode()) == 200) {
                     sessionToken = result.getSessionToken();
-                    SharedPreferences.Editor editor = sharedpreferences_services.edit();
+                    SharedPreferences.Editor editor = sharedpreferences_sessionToken.edit();
                     editor.putString(SESSIONTOKEN, sessionToken);
                     editor.commit();
 

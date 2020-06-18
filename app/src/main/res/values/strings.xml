@@ -11,4 +11,7 @@
     <string name="name">"Name"</string>
     <string name="email">"Email"</string>
     <string name="mobile">"Mobile"</string>
+    <string name="forgot_pass">Forgot Password</string>
+    <string name="pass_reset_content">We just need your registered mobile number to reset your password</string>
+    <string name="reset_pass">Reset Password</string>
 </resources>
