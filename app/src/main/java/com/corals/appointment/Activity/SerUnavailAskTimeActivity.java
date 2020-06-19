@@ -1,25 +1,14 @@
 package com.corals.appointment.Activity;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -29,15 +18,29 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.corals.appointment.Adapters.ChangeApptSlotRecycleAdapter;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.corals.appointment.Adapters.SerUnavailSlotRecycleAdapter;
+import com.corals.appointment.Client.ApiCallback;
+import com.corals.appointment.Client.ApiException;
+import com.corals.appointment.Client.OkHttpApiClient;
+import com.corals.appointment.Client.api.MerchantApisApi;
+import com.corals.appointment.Client.model.ApptTransactionBody;
+import com.corals.appointment.Client.model.ApptTransactionResponse;
+import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.receiver.ConnectivityReceiver;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class SerUnavailAskTimeActivity extends AppCompatActivity {
 
@@ -52,6 +55,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity {
     int hour = 0, minute = 0;
     RecyclerView recyclerView_slots;
     private ArrayList<String> list_time_slot,list_unavail;
+    private IntermediateAlertDialog intermediateAlertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -213,6 +217,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity {
                             Intent in = new Intent(SerUnavailAskTimeActivity.this, DashboardActivity.class);
                             startActivity(in);
                             finish();
+                            overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                         }
                     }, 2000);
               /*  } else {
@@ -274,11 +279,24 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(SerUnavailAskTimeActivity.this, "You have reached the limit", Toast.LENGTH_LONG).show();
                 }
-
-
             }
 
         });
+
+  /*      ApptTransactionBody transactionBody = new ApptTransactionBody();
+        transactionBody.setReqType("TS-SR.CR");
+        try {
+            boolean isConn = ConnectivityReceiver.isConnected();
+            if (isConn) {
+                apptServiceUnavailability(transactionBody);
+            } else {
+                Toast.makeText(SerUnavailAskTimeActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }*/
+
+
     }
 
     private void getAnimation(String msg) {
@@ -412,6 +430,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity {
         Intent in = new Intent(SerUnavailAskTimeActivity.this, SettingsActivity.class);
         startActivity(in);
         finish();
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
     }
 
     void timepicker_dialog(final String id) {
@@ -525,6 +544,42 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity {
 
         timePicker.setOnTimeChangedListener(mStartTimeChangedListener);
 
+    }
+
+    private void apptServiceUnavailability(ApptTransactionBody requestBody) throws ApiException {
+        Log.d("createStaff---", "createStaff: " + requestBody);
+        intermediateAlertDialog = new IntermediateAlertDialog(SerUnavailAskTimeActivity.this);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(SerUnavailAskTimeActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentTransactionAsync(requestBody, new ApiCallback<ApptTransactionResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("createStaff--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+            }
+
+            @Override
+            public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("createStaff--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
     }
 
 

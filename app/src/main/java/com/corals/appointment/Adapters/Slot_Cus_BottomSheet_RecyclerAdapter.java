@@ -65,9 +65,6 @@ public class Slot_Cus_BottomSheet_RecyclerAdapter extends RecyclerView.Adapter<S
                 if (bottomSheetDialog != null &&bottomSheetDialog.isShowing()) {
                     bottomSheetDialog.dismiss();
                 }
-                else {
-                    Toast.makeText(context, "Bottom Sheet is null", Toast.LENGTH_SHORT).show();
-                }
                 
                 Intent i = new Intent(context, ApptSlotDetailsActivity.class);
                 i.putExtra("name",arrayList1.get(position));
@@ -75,6 +72,7 @@ public class Slot_Cus_BottomSheet_RecyclerAdapter extends RecyclerView.Adapter<S
                 i.putExtra("time", time);
                 context.startActivity(i);
                 ((Activity) context).finish();
+                ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
 

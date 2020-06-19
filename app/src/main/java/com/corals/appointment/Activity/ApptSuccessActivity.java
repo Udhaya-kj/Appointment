@@ -23,6 +23,7 @@ public class ApptSuccessActivity extends AppCompatActivity {
                 Intent in = new Intent(ApptSuccessActivity.this, DashboardActivity.class);
                 startActivity(in);
                 finish();
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
     }
@@ -33,5 +34,6 @@ public class ApptSuccessActivity extends AppCompatActivity {
         Intent in = new Intent(ApptSuccessActivity.this, DashboardActivity.class);
         startActivity(in);
         finish();
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
     }
 }

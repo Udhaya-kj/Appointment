@@ -29,6 +29,7 @@ public class DashboardActivity extends AppCompatActivity {
                 Intent i = new Intent(DashboardActivity.this, AppointmentActivity.class);
                 startActivity(i);
                 finish();
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
 
@@ -38,6 +39,7 @@ public class DashboardActivity extends AppCompatActivity {
                 Intent i = new Intent(DashboardActivity.this, CustomerActivity_Bottom.class);
                 startActivity(i);
                 finish();
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
 
@@ -47,6 +49,7 @@ public class DashboardActivity extends AppCompatActivity {
                 Intent i = new Intent(DashboardActivity.this, StaffActivity_Bottom.class);
                 startActivity(i);
                 finish();
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
 
@@ -56,6 +59,7 @@ public class DashboardActivity extends AppCompatActivity {
                 Intent i = new Intent(DashboardActivity.this, SetupServiceActivity_Bottom.class);
                 startActivity(i);
                 finish();
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
 
@@ -65,6 +69,7 @@ public class DashboardActivity extends AppCompatActivity {
                 Intent i = new Intent(DashboardActivity.this, SettingsActivity.class);
                 startActivity(i);
                 finish();
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
     }

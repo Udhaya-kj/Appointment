@@ -88,7 +88,7 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
                                     public void run() {
                                         pd.dismiss();
                                         Toast.makeText(ApptSlotDetailsActivity.this, "Appointment Successfully Cancelled!", Toast.LENGTH_SHORT).show();
-                                        Intent in = new Intent(ApptSlotDetailsActivity.this, ViewApptServiceActivity.class);
+                                        Intent in = new Intent(ApptSlotDetailsActivity.this, AppointmentActivity.class);
                                         startActivity(in);
                                         finish();
                                     }
@@ -120,7 +120,7 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
                 in.putExtra("appt_time",textView_booking_time.getText().toString().trim());
                 startActivity(in);
                 finish();
-
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
 
@@ -139,9 +139,10 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        Intent i = new Intent(ApptSlotDetailsActivity.this, ViewApptServiceActivity.class);
+        Intent i = new Intent(ApptSlotDetailsActivity.this, AppointmentActivity.class);
         startActivity(i);
         finish();
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
 
     }
 }

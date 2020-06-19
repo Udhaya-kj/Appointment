@@ -19,15 +19,25 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.corals.appointment.Client.ApiCallback;
+import com.corals.appointment.Client.ApiException;
+import com.corals.appointment.Client.OkHttpApiClient;
+import com.corals.appointment.Client.api.MerchantApisApi;
+import com.corals.appointment.Client.model.ApptTransactionBody;
+import com.corals.appointment.Client.model.ApptTransactionResponse;
+import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.receiver.ConnectivityReceiver;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class ApptConfirmActivity extends AppCompatActivity {
 
     Button button_done;
     TextView tv_n1, tv_m1;
-
+    private IntermediateAlertDialog intermediateAlertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,10 +106,22 @@ public class ApptConfirmActivity extends AppCompatActivity {
 
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
-
-
             }
         });
+
+     /*            ApptTransactionBody transactionBody = new ApptTransactionBody();
+        transactionBody.setReqType("TS-SR.CR");
+        try {
+            boolean isConn = ConnectivityReceiver.isConnected();
+            if (isConn) {
+                bookAppointment(transactionBody);
+            } else {
+                Toast.makeText(ApptConfirmActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }*/
+
 
     }
 
@@ -132,5 +154,42 @@ public class ApptConfirmActivity extends AppCompatActivity {
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
+
+    private void bookAppointment(ApptTransactionBody requestBody) throws ApiException {
+        Log.d("createStaff---", "createStaff: " + requestBody);
+        intermediateAlertDialog = new IntermediateAlertDialog(ApptConfirmActivity.this);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(ApptConfirmActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentTransactionAsync(requestBody, new ApiCallback<ApptTransactionResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("createStaff--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+            }
+
+            @Override
+            public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("createStaff--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
+    }
+
 
 }

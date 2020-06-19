@@ -41,6 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
                 i.putExtra("task", "1");
                 startActivity(i);
                 finish();
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
 
@@ -51,6 +52,7 @@ public class SettingsActivity extends AppCompatActivity {
                 i.putExtra("task", "2");
                 startActivity(i);
                 finish();
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
     }
@@ -63,5 +65,6 @@ public class SettingsActivity extends AppCompatActivity {
         Intent i = new Intent(SettingsActivity.this, DashboardActivity.class);
         startActivity(i);
         finish();
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
     }
 }

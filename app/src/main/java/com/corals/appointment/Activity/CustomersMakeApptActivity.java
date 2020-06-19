@@ -70,6 +70,7 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
                 i.putExtra("page_id", "02");
                 startActivity(i);
                 finish();
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
 
@@ -121,10 +122,12 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
             Intent i = new Intent(CustomersMakeApptActivity.this, TimeSlotsActivity.class);
             startActivity(i);
             finish();
+            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
         } else if (!TextUtils.isEmpty(pageId) && pageId.equals("2")) {
             Intent i = new Intent(CustomersMakeApptActivity.this, ViewApptServiceActivity.class);
             startActivity(i);
             finish();
+            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
         }
     }
 

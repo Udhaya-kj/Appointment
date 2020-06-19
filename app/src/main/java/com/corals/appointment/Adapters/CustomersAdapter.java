@@ -98,6 +98,7 @@ public class CustomersAdapter extends BaseAdapter implements Filterable {
                             i.putExtra("cus_mob", (mDisplayedValues.get(position).mobile));
                             context.startActivity(i);
                             ((Activity) context).finish();
+                            ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                         } else if (item.getTitle().equals("Delete")) {
                             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
                             alertDialogBuilder.setMessage("Are you sure, You want to delete "+mDisplayedValues.get(position).name+"?");

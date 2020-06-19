@@ -1,6 +1,7 @@
 package com.corals.appointment.Activity;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,7 +27,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.corals.appointment.Adapters.ServicesAdapter_Calender;
 import com.corals.appointment.Adapters.ServicesRecyclerviewAdapter;
+import com.corals.appointment.Client.ApiCallback;
+import com.corals.appointment.Client.ApiException;
+import com.corals.appointment.Client.OkHttpApiClient;
+import com.corals.appointment.Client.api.MerchantApisApi;
+import com.corals.appointment.Client.model.AppointmentEnquiryBody;
+import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
+import com.corals.appointment.Client.model.SecurityAPIBody;
+import com.corals.appointment.Client.model.SecurityAPIResponse;
+import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -34,6 +45,8 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 
 public class AppointmentActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
@@ -51,6 +64,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
     TextView textView_no_ser, textView_cal_next;
     CalendarView calendarView;
     String calendar_date;
+    private IntermediateAlertDialog intermediateAlertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +127,20 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
             }
         });
 
+
+      /*  AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+        boolean isConn = ConnectivityReceiver.isConnected();
+        if (isConn) {
+            try {
+                fetchServices(enquiryBody);
+            } catch (ApiException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(AppointmentActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+        }*/
+
+
         sharedpreferences_services = getSharedPreferences(AddServiceAvailTimeActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
         String nameList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_NAME, "");
         String mobList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_DURATION, "");
@@ -125,7 +153,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
 
         Log.d("listsize---->", "onCreate: " + service_name_list + "," + service_dur_list);
         if (service_name_list.size() != 0 && service_dur_list.size() != 0) {
-            servicesAdapter = new ServicesAdapter_Calender(AppointmentActivity.this, "",service_name_list, service_dur_list);
+            servicesAdapter = new ServicesAdapter_Calender(AppointmentActivity.this, "", service_name_list, service_dur_list);
             listView_services.setAdapter(servicesAdapter);
             textView_no_ser.setVisibility(View.GONE);
             recyclerView_services.setVisibility(View.VISIBLE);
@@ -202,7 +230,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
             public void onClick(View v) {
                 timePickerDialog = TimePickerDialog.newInstance(AppointmentActivity.this, Hour, Minute, false);
                 timePickerDialog.setThemeDark(false);
-                timePickerDialog.setTimeInterval(0,15);
+                timePickerDialog.setTimeInterval(0, 15);
                 //timePickerDialog.showYearPickerFirst(false);
                 timePickerDialog.setTitle("Time Picker");
 
@@ -231,6 +259,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
         i.putExtra("date", date);
         startActivity(i);
         finish();
+        overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
     }
 
     @Override
@@ -246,6 +275,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
         Intent i = new Intent(AppointmentActivity.this, DashboardActivity.class);
         startActivity(i);
         finish();
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
     }
 
     @Override
@@ -319,7 +349,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.action_calendar);
 
-        if (service_name_list.size()!=0) {
+        if (service_name_list.size() != 0) {
             item.setEnabled(true);
             item.getIcon().setAlpha(255);
         } else {
@@ -329,4 +359,45 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
         }
         return true;
     }
+
+    private void fetchServices(AppointmentEnquiryBody requestBody) throws ApiException {
+
+        intermediateAlertDialog = new IntermediateAlertDialog(AppointmentActivity.this);
+
+        Log.d("login---", "login: " + requestBody);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(AppointmentActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentEnquiryAsync(requestBody, new ApiCallback<AppointmentEnquiryResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("fetchService--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+            }
+
+            @Override
+            public void onSuccess(AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+
+                Log.d("fetchService--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
+
+    }
+
 }

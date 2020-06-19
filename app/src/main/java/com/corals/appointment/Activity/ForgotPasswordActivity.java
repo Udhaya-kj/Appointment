@@ -48,6 +48,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     in.putExtra("mobile", mob);
                     startActivity(in);
                     finish();
+                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                 }
                 else {
                     editText_mob.setError("Enter valid mobile");
@@ -63,5 +64,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         Intent in = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
         startActivity(in);
         finish();
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
     }
 }

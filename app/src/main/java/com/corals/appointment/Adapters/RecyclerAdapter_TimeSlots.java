@@ -82,6 +82,7 @@ public class RecyclerAdapter_TimeSlots extends RecyclerView.Adapter<RecyclerAdap
                     in.putExtra("page_id","1");
                     context.startActivity(in);
                     ((Activity) context).finish();
+                    ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
 
    /*                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
                     alertDialogBuilder.setMessage("Are you sure, You want to book this appointment?");

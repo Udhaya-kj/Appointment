@@ -32,6 +32,8 @@
 
 
             <LinearLayout
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
                 android:id="@+id/layout_ser_unavail"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
@@ -73,6 +75,8 @@
                 android:background="#DDDDDD"></View>
 
             <LinearLayout
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
                 android:id="@+id/layout_staff_leave"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"

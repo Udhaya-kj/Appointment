@@ -210,6 +210,7 @@ public class OtpActivity extends AppCompatActivity {
                             in.putExtra("mobile",mob);
                             startActivity(in);
                             finish();
+                            overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                         } else {
 
                             progress.setVisibility(View.INVISIBLE);

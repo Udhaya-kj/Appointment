@@ -71,12 +71,14 @@ public class CustomerBottomSheetDialog implements View.OnClickListener {
             in.putExtra("cus_name",name);
             mCtx.startActivity(in);
             ((Activity) mCtx).finish();
+            ((Activity) mCtx).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
         } else if (v.getId() == R.id.layout_make_appt) {
             //Toast.makeText(mCtx, "Make Appointment", Toast.LENGTH_SHORT).show();
             Intent in = new Intent(((Activity) mCtx), CalendarViewActivity.class);
             in.putExtra("cus_name",name);
             mCtx.startActivity(in);
             ((Activity) mCtx).finish();
+            ((Activity) mCtx).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
         }
     }
 

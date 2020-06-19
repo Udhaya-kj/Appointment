@@ -8,15 +8,27 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.corals.appointment.Client.ApiCallback;
+import com.corals.appointment.Client.ApiException;
+import com.corals.appointment.Client.OkHttpApiClient;
+import com.corals.appointment.Client.api.MerchantApisApi;
+import com.corals.appointment.Client.model.ApptTransactionBody;
+import com.corals.appointment.Client.model.ApptTransactionResponse;
+import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class CreateCustomerActivity extends AppCompatActivity {
     EditText editText_cus_name, editText_cus_mob;
@@ -27,7 +39,7 @@ public class CreateCustomerActivity extends AppCompatActivity {
     public static final String CUSTOMER_MOBILE = "CUSTOMER_MOBILE";
     private ArrayList<String> cus_name_list, cus_mob_list;
     public String pageId = "", position = "";
-
+    private IntermediateAlertDialog intermediateAlertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,10 +178,61 @@ public class CreateCustomerActivity extends AppCompatActivity {
                     editText_cus_name.setError("Enter valid name");
                     editText_cus_name.requestFocus();
                 }
+            }
+        });
 
+      /*  ApptTransactionBody transactionBody = new ApptTransactionBody();
+        transactionBody.setReqType("TS-SR.CR");
+        try {
+            boolean isConn = ConnectivityReceiver.isConnected();
+            if (isConn) {
+                createCustomer(transactionBody);
+            } else {
+                Toast.makeText(CreateCustomerActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }*/
+
+
+    }
+
+    private void createCustomer(ApptTransactionBody requestBody) throws ApiException {
+        Log.d("createCustomer---", "createCustomer: " + requestBody);
+        intermediateAlertDialog = new IntermediateAlertDialog(CreateCustomerActivity.this);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(CreateCustomerActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentTransactionAsync(requestBody, new ApiCallback<ApptTransactionResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("createCustomer--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+            }
+
+            @Override
+            public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("createCustomer--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
 
             }
         });
+
+
     }
 
     @Override

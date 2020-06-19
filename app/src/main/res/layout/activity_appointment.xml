@@ -17,7 +17,7 @@
         android:textAlignment="center"
         app:elevation="4dp"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:title="Appointments"
+        app:title="Services"
         app:titleTextColor="@color/white" />
 
     <LinearLayout

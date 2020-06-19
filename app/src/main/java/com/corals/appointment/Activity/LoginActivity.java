@@ -1,21 +1,15 @@
 package com.corals.appointment.Activity;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,25 +21,16 @@ import com.corals.appointment.Client.ApiCallback;
 import com.corals.appointment.Client.ApiException;
 import com.corals.appointment.Client.OkHttpApiClient;
 import com.corals.appointment.Client.api.MerchantApisApi;
-import com.corals.appointment.Client.model.Body;
 import com.corals.appointment.Client.model.SecurityAPIBody;
 import com.corals.appointment.Client.model.SecurityAPIResponse;
+import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -62,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences sharedpreferences_sessionToken;
     public static final String MyPREFERENCES_SESSIONTOKEN = "MyPREFERENCES_SESSIONTOKEN ";
     public static final String SESSIONTOKEN = "SESSIONTOKEN ";
+    private IntermediateAlertDialog intermediateAlertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,13 +110,19 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
                 finish();
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
         button_login.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                String email = editText_id.getText().toString().trim();
+
+                startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+                finish();
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+
+               /* String email = editText_id.getText().toString().trim();
                 String pass = editText_password.getText().toString().trim();
 
                 if (!email.isEmpty()) {
@@ -145,6 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                         BigInteger noHash = new BigInteger(1, hashBytes);
                         String hashStr = noHash.toString(16);
                         Log.d("PASSWORD--->", "onClick: " + hashStr);
+
                         SecurityAPIBody securityAPIBody = new SecurityAPIBody();
                         securityAPIBody.setReqType("SM-AL.LM");
                         securityAPIBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
@@ -152,7 +145,14 @@ public class LoginActivity extends AppCompatActivity {
                         securityAPIBody.setUserPass(hashStr);
 
                         try {
+                          boolean isConn = ConnectivityReceiver.isConnected();
+
+        if (isConn) {
                             merchantApptLogin(securityAPIBody);
+                            }
+                            else{
+                             Toast.makeText(LoginActivity.this, "No internet connection", Toast.LENGTH_SHORT).show();
+                            }
                         } catch (ApiException e) {
                             e.printStackTrace();
                         }
@@ -165,7 +165,10 @@ public class LoginActivity extends AppCompatActivity {
                     editText_id.setError("Enter valid email");
                     editText_id.requestFocus();
                 }
+*/
 
+
+                //First created
        /*         String id = editText_id.getText().toString().trim();
                 String pswd = editText_password.getText().toString().trim();
                 String value = sharedpreferences_ask_again.getString(StatusServiceStaffActivity.VALUE, "");
@@ -188,9 +191,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void merchantApptLogin(SecurityAPIBody requestBody) throws ApiException {
 
-        final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
-        pd.setMessage("Loading...");
-        pd.show();
+
+        intermediateAlertDialog = new IntermediateAlertDialog(LoginActivity.this);
 
         Log.d("login---", "login: " + requestBody);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(LoginActivity.this);
@@ -200,13 +202,17 @@ public class LoginActivity extends AppCompatActivity {
         webMerchantApisApi.merchantAppoinmentSecurityAsync(requestBody, new ApiCallback<SecurityAPIResponse>() {
             @Override
             public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
-                pd.dismiss();
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
                 Log.d("login--->", "onFailure-" + e.getMessage());
             }
 
             @Override
             public void onSuccess(SecurityAPIResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
-                pd.dismiss();
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
                 Log.d("login--->", "onSuccess-" + statusCode + " , " + result);
 
                 if (Integer.parseInt(result.getStatusCode()) == 200) {

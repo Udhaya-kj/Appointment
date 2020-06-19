@@ -63,6 +63,7 @@ public class ServicesRecyclerviewAdapter extends RecyclerView.Adapter<ServicesRe
                 //i.putExtra("date", CalendarServicesActivity.cal_date);
                 context.startActivity(i);
                 ((Activity)context).finish();
+                ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
 

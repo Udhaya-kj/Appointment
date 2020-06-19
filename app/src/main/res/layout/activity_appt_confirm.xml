@@ -15,7 +15,7 @@
         android:textAlignment="center"
         app:elevation="4dp"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:title="@string/book_appt"
+        app:title="Review &amp; Confirm"
         app:titleTextColor="@color/white" />
 
     <LinearLayout

@@ -18,6 +18,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.corals.appointment.Adapters.CustomersAdapter;
+import com.corals.appointment.Client.ApiCallback;
+import com.corals.appointment.Client.ApiException;
+import com.corals.appointment.Client.OkHttpApiClient;
+import com.corals.appointment.Client.api.MerchantApisApi;
+import com.corals.appointment.Client.model.AppointmentEnquiryBody;
+import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
+import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.Model.CustomersModel;
 import com.corals.appointment.R;
 import com.google.gson.Gson;
@@ -25,6 +32,8 @@ import com.google.gson.reflect.TypeToken;
 
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class CustomerActivity_Bottom extends AppCompatActivity {
     private ListView listView_customers;
@@ -35,7 +44,7 @@ public class CustomerActivity_Bottom extends AppCompatActivity {
     LinearLayout linearLayout_add_customer;
     private ArrayList<CustomersModel> mCustomersArrayList = new ArrayList<CustomersModel>();
     EditText editText_search;
-
+    private IntermediateAlertDialog intermediateAlertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +76,7 @@ public class CustomerActivity_Bottom extends AppCompatActivity {
                 i.putExtra("page_id", "2");
                 startActivity(i);
                 finish();
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
 
@@ -109,6 +119,59 @@ public class CustomerActivity_Bottom extends AppCompatActivity {
 
             }
         });
+
+               /*       AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+        boolean isConn = ConnectivityReceiver.isConnected();
+        if (isConn) {
+            try {
+                fetchMerCustomers(enquiryBody);
+            } catch (ApiException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(CustomerActivity_Bottom.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+        }*/
+
+    }
+
+    private void fetchMerCustomers(AppointmentEnquiryBody requestBody) throws ApiException {
+
+        intermediateAlertDialog = new IntermediateAlertDialog(CustomerActivity_Bottom.this);
+
+        Log.d("login---", "login: " + requestBody);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(CustomerActivity_Bottom.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentEnquiryAsync(requestBody, new ApiCallback<AppointmentEnquiryResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("fetchService--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+            }
+
+            @Override
+            public void onSuccess(AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+
+                Log.d("fetchService--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
+
     }
 
 
@@ -118,5 +181,6 @@ public class CustomerActivity_Bottom extends AppCompatActivity {
         Intent i = new Intent(CustomerActivity_Bottom.this, DashboardActivity.class);
         startActivity(i);
         finish();
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
     }
 }

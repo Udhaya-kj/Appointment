@@ -174,5 +174,6 @@ public class ViewCustomerApptActivity extends AppCompatActivity {
         Intent in = new Intent(ViewCustomerApptActivity.this, CustomerActivity_Bottom.class);
         startActivity(in);
         finish();
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
     }
 }

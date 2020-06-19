@@ -58,6 +58,7 @@ public class StaffListAdapter extends ArrayAdapter<String> {
                 i.putExtra("mobile", arrayList1.get(position));
                 context.startActivity(i);
                 ((Activity)context).finish();
+                ((Activity)context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
 

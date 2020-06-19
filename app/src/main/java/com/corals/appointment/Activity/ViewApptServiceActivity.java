@@ -13,13 +13,24 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.corals.appointment.Adapters.ApptServiceSlotsAdapter;
+import com.corals.appointment.Client.ApiCallback;
+import com.corals.appointment.Client.ApiException;
+import com.corals.appointment.Client.OkHttpApiClient;
+import com.corals.appointment.Client.api.MerchantApisApi;
+import com.corals.appointment.Client.model.AppointmentEnquiryBody;
+import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
+import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.receiver.ConnectivityReceiver;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 
 public class ViewApptServiceActivity extends AppCompatActivity {
     RecyclerView recyclerView;
@@ -28,6 +39,7 @@ public class ViewApptServiceActivity extends AppCompatActivity {
     TextView textView_date;
     Calendar c;
     String formattedDate,service;
+    private IntermediateAlertDialog intermediateAlertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +108,6 @@ public class ViewApptServiceActivity extends AppCompatActivity {
 
         LinearLayoutManager lm = new LinearLayoutManager(ViewApptServiceActivity.this);
         recyclerView.setLayoutManager(lm);
-
         ApptServiceSlotsAdapter apptServiceSlotsAdapter = new ApptServiceSlotsAdapter(ViewApptServiceActivity.this, arrayList_slot_time, arrayList_slot_cus_name, arrayList_slot_cus_mob, arrayList_available);
         recyclerView.setAdapter(apptServiceSlotsAdapter);
 
@@ -160,27 +171,18 @@ public class ViewApptServiceActivity extends AppCompatActivity {
             }
         });
 
-/*        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
+       /*       AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+        boolean isConn = ConnectivityReceiver.isConnected();
+        if (isConn) {
+            try {
+                fetchApptService(enquiryBody);
+            } catch (ApiException e) {
+                e.printStackTrace();
             }
+        } else {
+            Toast.makeText(ViewApptServiceActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+        }*/
 
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0) {
-                    System.out.println("Scrolled Downwards");
-                    Toast.makeText(ViewApptServiceActivity.this, "Scrolled Downwards", Toast.LENGTH_SHORT).show();
-                } else if (dy < 0) {
-                    System.out.println("Scrolled Upwards");
-                    Toast.makeText(ViewApptServiceActivity.this, "Scrolled Upwards", Toast.LENGTH_SHORT).show();
-                } else {
-                    System.out.println("No Vertical Scrolled");
-                    Toast.makeText(ViewApptServiceActivity.this, "No Vertical Scrolled", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
 
 
     }
@@ -191,5 +193,46 @@ public class ViewApptServiceActivity extends AppCompatActivity {
         Intent in = new Intent(ViewApptServiceActivity.this, AppointmentActivity.class);
         startActivity(in);
         finish();
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+    }
+
+    private void fetchApptService(AppointmentEnquiryBody requestBody) throws ApiException {
+
+        intermediateAlertDialog = new IntermediateAlertDialog(ViewApptServiceActivity.this);
+
+        Log.d("login---", "login: " + requestBody);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(ViewApptServiceActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentEnquiryAsync(requestBody, new ApiCallback<AppointmentEnquiryResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("fetchService--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+            }
+
+            @Override
+            public void onSuccess(AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+
+                Log.d("fetchService--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
+
     }
 }

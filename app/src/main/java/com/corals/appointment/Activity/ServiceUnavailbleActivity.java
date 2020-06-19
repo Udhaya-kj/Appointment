@@ -13,17 +13,28 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.corals.appointment.Adapters.ServiceUnvailabilityServicesAdapter;
 import com.corals.appointment.Adapters.ServicesAdapter_Calender;
 import com.corals.appointment.Adapters.ServicesRecyclerviewAdapter;
 import com.corals.appointment.Adapters.StaffLeaveAdapter;
 import com.corals.appointment.Adapters.StaffListAdapter;
+import com.corals.appointment.Client.ApiCallback;
+import com.corals.appointment.Client.ApiException;
+import com.corals.appointment.Client.OkHttpApiClient;
+import com.corals.appointment.Client.api.MerchantApisApi;
+import com.corals.appointment.Client.model.AppointmentEnquiryBody;
+import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
+import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class ServiceUnavailbleActivity extends AppCompatActivity {
 
@@ -34,7 +45,7 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
     private ArrayList<String> staff_name_list, staff_mob_list;
     private SharedPreferences sharedpreferences_staffs;
     String task;
-
+    private IntermediateAlertDialog intermediateAlertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +126,18 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
             }
         }
 
+   /*   AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+        boolean isConn = ConnectivityReceiver.isConnected();
+        if (isConn) {
+            try {
+                fetchServices(enquiryBody);
+            } catch (ApiException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(ServiceUnavailbleActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+        }
+*/
 
     }
 
@@ -125,5 +148,46 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
         Intent i = new Intent(ServiceUnavailbleActivity.this, SettingsActivity.class);
         startActivity(i);
         finish();
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
     }
+
+    private void fetchServices(AppointmentEnquiryBody requestBody) throws ApiException {
+
+        intermediateAlertDialog = new IntermediateAlertDialog(ServiceUnavailbleActivity.this);
+        Log.d("login---", "login: " + requestBody);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(ServiceUnavailbleActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentEnquiryAsync(requestBody, new ApiCallback<AppointmentEnquiryResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("fetchService--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+            }
+
+            @Override
+            public void onSuccess(AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+
+                Log.d("fetchService--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
+
+    }
+
 }

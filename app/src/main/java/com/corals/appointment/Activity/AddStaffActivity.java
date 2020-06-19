@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +31,9 @@ import com.corals.appointment.Client.model.AppointmentResources;
 import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
+import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -65,6 +68,7 @@ public class AddStaffActivity extends AppCompatActivity {
     boolean isActiveSunday_p = true, isActiveMonday_p = true, isActiveTuesday_p = true, isActiveWednesday_p = true, isActiveThursday_p = true, isActiveFriday_p = true, isActiveSaturday_p = true;
     TextView text_staff_in_time, text_staff_out_time;
     private String staff_in_time, staff_out_time;
+    private IntermediateAlertDialog intermediateAlertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -316,7 +320,7 @@ public class AddStaffActivity extends AppCompatActivity {
                     if (mob.length() > 0) {
                         if (arrayList_map_service.size() != 0) {
 
-                            AppointmentResources appointmentResources = new AppointmentResources();
+                            /*AppointmentResources appointmentResources = new AppointmentResources();
                             appointmentResources.setResName(name);
                             appointmentResources.setMobile(mob);
                             appointmentResources.setMerId("");
@@ -331,10 +335,15 @@ public class AddStaffActivity extends AppCompatActivity {
                             transactionBody.setReqType("TS-SR.CR");
                             transactionBody.setResource(appointmentResources);
                             try {
-                                apptCreateStaff(transactionBody);
+                                boolean isConn = ConnectivityReceiver.isConnected();
+                                if (isConn) {
+                                    apptCreateStaff(transactionBody);
+                                } else {
+                                    Toast.makeText(AddStaffActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+                                }
                             } catch (ApiException e) {
                                 e.printStackTrace();
-                            }
+                            }*/
 
 
                             String nameList = sharedpreferences_staffs.getString(AddStaffActivity.NAME, "");
@@ -360,6 +369,7 @@ public class AddStaffActivity extends AppCompatActivity {
                                 Intent in = new Intent(AddStaffActivity.this, StaffActivity_Bottom.class);
                                 startActivity(in);
                                 finish();
+                                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                             } else if (pageId.equals("03")) {
                                 staff_name_list.set(Integer.parseInt(position), name);
                                 staff_mob_list.set(Integer.parseInt(position), mob);
@@ -375,6 +385,7 @@ public class AddStaffActivity extends AppCompatActivity {
                                 //in.putExtra("page_id", "3");
                                 startActivity(in);
                                 finish();
+                                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                             }
                         } else {
                             getDialog("Must select atleast one service");
@@ -1151,6 +1162,7 @@ public class AddStaffActivity extends AppCompatActivity {
         Intent in = new Intent(AddStaffActivity.this, StaffActivity_Bottom.class);
         startActivity(in);
         finish();
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
 
     }
 
@@ -1173,6 +1185,7 @@ public class AddStaffActivity extends AppCompatActivity {
 
     private void apptCreateStaff(ApptTransactionBody requestBody) throws ApiException {
         Log.d("createStaff---", "createStaff: " + requestBody);
+        intermediateAlertDialog = new IntermediateAlertDialog(AddStaffActivity.this);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(AddStaffActivity.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();
         webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
@@ -1181,11 +1194,17 @@ public class AddStaffActivity extends AppCompatActivity {
             @Override
             public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
                 Log.d("createStaff--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
             }
 
             @Override
             public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
                 Log.d("createStaff--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
             }
 
             @Override
@@ -1198,8 +1217,6 @@ public class AddStaffActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 
 }

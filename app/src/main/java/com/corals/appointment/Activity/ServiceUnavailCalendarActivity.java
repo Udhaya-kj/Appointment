@@ -88,6 +88,8 @@ public class ServiceUnavailCalendarActivity extends AppCompatActivity {
                 in.putExtra("date", calendar_date);
                 startActivity(in);
                 finish();
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+
             }
         });
 
@@ -100,5 +102,6 @@ public class ServiceUnavailCalendarActivity extends AppCompatActivity {
         Intent in = new Intent(ServiceUnavailCalendarActivity.this, SettingsActivity.class);
         startActivity(in);
         finish();
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
     }
 }

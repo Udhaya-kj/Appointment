@@ -28,13 +28,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.corals.appointment.Adapters.ChangeApptSlotRecycleAdapter;
+import com.corals.appointment.Client.ApiCallback;
+import com.corals.appointment.Client.ApiException;
+import com.corals.appointment.Client.OkHttpApiClient;
+import com.corals.appointment.Client.api.MerchantApisApi;
+import com.corals.appointment.Client.model.ApptTransactionBody;
+import com.corals.appointment.Client.model.ApptTransactionResponse;
+import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 
 public class ChangeApptActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
@@ -53,7 +63,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
     RecyclerView recyclerView;
     TextView textView_ser, textView_staff, textView_date, textView_time;
     LinearLayout linearLayout;
-
+    private IntermediateAlertDialog intermediateAlertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -264,21 +274,37 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
                     @Override
                     public void run() {
                         pd.dismiss();
-                        Intent i = new Intent(ChangeApptActivity.this, ViewApptServiceActivity.class);
+                        Intent i = new Intent(ChangeApptActivity.this, AppointmentActivity.class);
                         startActivity(i);
                         finish();
+                        overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                     }
                 }, 2000);
             }
         });
+
+       /*         ApptTransactionBody transactionBody = new ApptTransactionBody();
+        transactionBody.setReqType("TS-SR.CR");
+        try {
+            boolean isConn = ConnectivityReceiver.isConnected();
+            if (isConn) {
+                changeApptCustomer(transactionBody);
+            } else {
+                Toast.makeText(ChangeApptActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }*/
+
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i = new Intent(ChangeApptActivity.this, ViewApptServiceActivity.class);
+        Intent i = new Intent(ChangeApptActivity.this, AppointmentActivity.class);
         startActivity(i);
         finish();
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
     }
 
     @Override
@@ -286,4 +312,41 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
         String date = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
         textView_appt_date.setText(date);
     }
+
+    private void changeApptCustomer(ApptTransactionBody requestBody) throws ApiException {
+        Log.d("createStaff---", "createStaff: " + requestBody);
+        intermediateAlertDialog = new IntermediateAlertDialog(ChangeApptActivity.this);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(ChangeApptActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentTransactionAsync(requestBody, new ApiCallback<ApptTransactionResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("createStaff--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+            }
+
+            @Override
+            public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("createStaff--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
+    }
+
 }

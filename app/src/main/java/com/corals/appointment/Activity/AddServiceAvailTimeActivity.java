@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -19,6 +20,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -28,6 +30,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -43,7 +46,9 @@ import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
 import com.corals.appointment.Client.model.SecurityAPIBody;
 import com.corals.appointment.Client.model.SecurityAPIResponse;
+import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -61,7 +66,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
     Spinner spinner_weekdays;
     LinearLayout layout_custom_time, layout_add_time;
     RecyclerView recyclerView;
-
+    private IntermediateAlertDialog intermediateAlertDialog;
     Button btn_yes_sday_p, btn_yes_mnday_p, btn_yes_tsday_p, btn_yes_wedday_p, btn_yes_trsday_p, btn_yes_fdday_p, btn_yes_strday_p, button_add_time, button_add_ser;
     boolean isActiveSunday_p = true, isActiveMonday_p = true, isActiveTuesday_p = true, isActiveWednesday_p = true, isActiveThursday_p = true, isActiveFriday_p = true, isActiveSaturday_p = true;
     TextView text_start_time, text_end_time, text_weekday;
@@ -79,12 +84,15 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
     private ArrayList<String> service_name_list, service_dur_list;
     String ser_name, ser_dur, ser_desc, page_id, position;
 
-    TextView textView_sun_time1, textView_sun_time2, textView_mon_time1, textView_mon_time2, textView_tue_time1, textView_tue_time2, textView_wed_time1, textView_wed_time2,
-            textView_thu_time1, textView_thu_time2, textView_fri_time1, textView_fri_time2, textView_sat_time1, textView_sat_time2;
-    LinearLayout linearLayout__sun, linearLayout__mon, linearLayout__tue, linearLayout__wed, linearLayout__thur, linearLayout__fri, linearLayout__sat;
-    ImageView imageView_edit_sun,imageView_edit_mon,imageView_edit_tue,imageView_edit_wed,imageView_edit_thu,imageView_edit_fri,imageView_edit_sat;
+    TextView textView_sun_time1, textView_sun_time2, textView_sun_time3, textView_mon_time1, textView_mon_time2, textView_mon_time3, textView_tue_time1, textView_tue_time2, textView_tue_time3, textView_wed_time1, textView_wed_time2, textView_wed_time3,
+            textView_thu_time1, textView_thu_time2, textView_thu_time3, textView_fri_time1, textView_fri_time2, textView_fri_time3, textView_sat_time1, textView_sat_time2, textView_sat_time3;
+    LinearLayout linearLayout__sun, linearLayout__mon, linearLayout__tue, linearLayout__wed, linearLayout__thur, linearLayout__fri, linearLayout__sat,
+            linearLayout__sun2, linearLayout__mon2, linearLayout__tue2, linearLayout__wed2, linearLayout__thur2, linearLayout__fri2, linearLayout__sat2,
+            linearLayout__sun3, linearLayout__mon3, linearLayout__tue3, linearLayout__wed3, linearLayout__thur3, linearLayout__fri3, linearLayout__sat3;
+    ImageView imageView_edit_sun, imageView_edit_mon, imageView_edit_tue, imageView_edit_wed, imageView_edit_thu, imageView_edit_fri, imageView_edit_sat;
     ImageView imageView_warning_sun2, imageView_warning_mon2, imageView_warning_tue2, imageView_warning_wed2, imageView_warning_thu2, imageView_warning_fri2, imageView_warning_sat2,
             imageView_warning_sun3, imageView_warning_mon3, imageView_warning_tue3, imageView_warning_wed3, imageView_warning_thu3, imageView_warning_fri3, imageView_warning_sat3;
+    ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,21 +139,29 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         text_weekday = findViewById(R.id.text_weekday);
         button_add_time = findViewById(R.id.button_add_time);
         button_add_ser = findViewById(R.id.button_add_service);
+        scrollView = findViewById(R.id.scrollview_avail_time);
 
         textView_sun_time1 = (TextView) findViewById(R.id.text_sunday_time1);
         textView_sun_time2 = (TextView) findViewById(R.id.text_sunday_time2);
+        textView_sun_time3 = (TextView) findViewById(R.id.text_sunday_time3);
         textView_mon_time1 = (TextView) findViewById(R.id.text_monday_time1);
         textView_mon_time2 = (TextView) findViewById(R.id.text_monday_time2);
+        textView_mon_time3 = (TextView) findViewById(R.id.text_monday_time3);
         textView_tue_time1 = (TextView) findViewById(R.id.text_tuesday_time1);
         textView_tue_time2 = (TextView) findViewById(R.id.text_tuesday_time2);
+        textView_tue_time3 = (TextView) findViewById(R.id.text_tuesday_time3);
         textView_wed_time1 = (TextView) findViewById(R.id.text_wednesday_time1);
         textView_wed_time2 = (TextView) findViewById(R.id.text_wednesday_time2);
+        textView_wed_time3 = (TextView) findViewById(R.id.text_wednesday_time3);
         textView_thu_time1 = (TextView) findViewById(R.id.text_thursday_time1);
         textView_thu_time2 = (TextView) findViewById(R.id.text_thursday_time2);
+        textView_thu_time3 = (TextView) findViewById(R.id.text_thursday_time3);
         textView_fri_time1 = (TextView) findViewById(R.id.text_friday_time1);
         textView_fri_time2 = (TextView) findViewById(R.id.text_friday_time2);
+        textView_fri_time3 = (TextView) findViewById(R.id.text_friday_time3);
         textView_sat_time1 = (TextView) findViewById(R.id.text_saturday_time1);
         textView_sat_time2 = (TextView) findViewById(R.id.text_saturday_time2);
+        textView_sat_time3 = (TextView) findViewById(R.id.text_saturday_time3);
 
         imageView_edit_sun = (ImageView) findViewById(R.id.image_edit_sun);
         imageView_edit_mon = (ImageView) findViewById(R.id.image_edit_mon);
@@ -163,6 +179,22 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         linearLayout__thur = (LinearLayout) findViewById(R.id.layout_thursday);
         linearLayout__fri = (LinearLayout) findViewById(R.id.layout_friday);
         linearLayout__sat = (LinearLayout) findViewById(R.id.layout_saturday);
+
+        linearLayout__sun2 = (LinearLayout) findViewById(R.id.layout_sunday_time2);
+        linearLayout__mon2 = (LinearLayout) findViewById(R.id.layout_monday_time2);
+        linearLayout__tue2 = (LinearLayout) findViewById(R.id.layout_tuesday_time2);
+        linearLayout__wed2 = (LinearLayout) findViewById(R.id.layout_wednesday_time2);
+        linearLayout__thur2 = (LinearLayout) findViewById(R.id.layout_thursday_time2);
+        linearLayout__fri2 = (LinearLayout) findViewById(R.id.layout_friday_time2);
+        linearLayout__sat2 = (LinearLayout) findViewById(R.id.layout_saturday_time2);
+
+        linearLayout__sun3 = (LinearLayout) findViewById(R.id.layout_sunday_time3);
+        linearLayout__mon3 = (LinearLayout) findViewById(R.id.layout_monday_time3);
+        linearLayout__tue3 = (LinearLayout) findViewById(R.id.layout_tuesday_time3);
+        linearLayout__wed3 = (LinearLayout) findViewById(R.id.layout_wednesday_time3);
+        linearLayout__thur3 = (LinearLayout) findViewById(R.id.layout_thursday_time3);
+        linearLayout__fri3 = (LinearLayout) findViewById(R.id.layout_friday_time3);
+        linearLayout__sat3 = (LinearLayout) findViewById(R.id.layout_saturday_time3);
 
         imageView_warning_sun2 = (ImageView) findViewById(R.id.image_warning_sun2);
         imageView_warning_mon2 = (ImageView) findViewById(R.id.image_warning_mon2);
@@ -270,6 +302,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
                     weekdays.setCharAt(0, 'n');
                     getWeekDays(String.valueOf(weekdays));
+                    getWeekDaysLayout(String.valueOf(weekdays));
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_sday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -279,6 +312,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
                     weekdays.setCharAt(0, 'y');
                     getWeekDays(String.valueOf(weekdays));
+                    getWeekDaysLayout(String.valueOf(weekdays));
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 }
             }
@@ -297,16 +331,16 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
                     weekdays.setCharAt(1, 'n');
                     getWeekDays(String.valueOf(weekdays));
+                    getWeekDaysLayout(String.valueOf(weekdays));
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_mnday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
                     btn_yes_mnday_p.setTextColor(getResources().getColor(R.color.white));
                     isActiveMonday_p = true;
                     //arrayList_weekdays.add(1, "Monday");
-
-
                     weekdays.setCharAt(1, 'y');
                     getWeekDays(String.valueOf(weekdays));
+                    getWeekDaysLayout(String.valueOf(weekdays));
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 }
             }
@@ -324,9 +358,9 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     isActiveTuesday_p = false;
                     //arrayList_weekdays.add(2, "");
 
-
                     weekdays.setCharAt(2, 'n');
                     getWeekDays(String.valueOf(weekdays));
+                    getWeekDaysLayout(String.valueOf(weekdays));
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_tsday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -334,9 +368,9 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     isActiveTuesday_p = true;
                     //arrayList_weekdays.add(2, "Tuesday");
 
-
                     weekdays.setCharAt(2, 'y');
                     getWeekDays(String.valueOf(weekdays));
+                    getWeekDaysLayout(String.valueOf(weekdays));
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 }
             }
@@ -356,6 +390,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
                     weekdays.setCharAt(3, 'n');
                     getWeekDays(String.valueOf(weekdays));
+                    getWeekDaysLayout(String.valueOf(weekdays));
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_wedday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -365,6 +400,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
                     weekdays.setCharAt(3, 'y');
                     getWeekDays(String.valueOf(weekdays));
+                    getWeekDaysLayout(String.valueOf(weekdays));
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 }
 
@@ -386,6 +422,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
                     weekdays.setCharAt(4, 'n');
                     getWeekDays(String.valueOf(weekdays));
+                    getWeekDaysLayout(String.valueOf(weekdays));
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_trsday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -395,6 +432,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
                     weekdays.setCharAt(4, 'y');
                     getWeekDays(String.valueOf(weekdays));
+                    getWeekDaysLayout(String.valueOf(weekdays));
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 }
 
@@ -416,6 +454,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
                     weekdays.setCharAt(5, 'n');
                     getWeekDays(String.valueOf(weekdays));
+                    getWeekDaysLayout(String.valueOf(weekdays));
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_fdday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -425,6 +464,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
                     weekdays.setCharAt(5, 'y');
                     getWeekDays(String.valueOf(weekdays));
+                    getWeekDaysLayout(String.valueOf(weekdays));
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 }
 
@@ -446,6 +486,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
                     weekdays.setCharAt(6, 'n');
                     getWeekDays(String.valueOf(weekdays));
+                    getWeekDaysLayout(String.valueOf(weekdays));
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_strday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -455,6 +496,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
                     weekdays.setCharAt(6, 'y');
                     getWeekDays(String.valueOf(weekdays));
+                    getWeekDaysLayout(String.valueOf(weekdays));
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 }
             }
@@ -465,17 +507,14 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         imageView_edit_sun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String data_sun = list_sun.get(0);
-                String[] strs = data_sun.split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                text_start_time.setText(s_tm);
-                text_end_time.setText(e_tm);
                 text_weekday.setText("Sunday");
-                button_add_time.setText("UPDATE");
-                time_update_id = "0";
-
+                text_start_time.setText("00:00");
+                text_end_time.setText("00:00");
+                list_sun.clear();
+                textView_sun_time1.setText("00:00 - 00:00");
+                textView_sun_time2.setText("00:00 - 00:00");
+                textView_sun_time3.setText("00:00 - 00:00");
+                getScrollTop();
             }
         });
 
@@ -484,56 +523,44 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         imageView_edit_mon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                String data_sun = list_mon.get(0);
-                String[] strs = data_sun.split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                text_start_time.setText(s_tm);
-                text_end_time.setText(e_tm);
                 text_weekday.setText("Monday");
-                button_add_time.setText("UPDATE");
-                time_update_id = "0";
-
+                text_start_time.setText("00:00");
+                text_end_time.setText("00:00");
+                list_mon.clear();
+                textView_mon_time1.setText("00:00 - 00:00");
+                textView_mon_time2.setText("00:00 - 00:00");
+                textView_mon_time3.setText("00:00 - 00:00");
+                getScrollTop();
             }
         });
-
 
         //Edit tuesday
         imageView_edit_tue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                String data_sun = list_tue.get(0);
-                String[] strs = data_sun.split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                text_start_time.setText(s_tm);
-                text_end_time.setText(e_tm);
                 text_weekday.setText("Tuesday");
-                button_add_time.setText("UPDATE");
-                time_update_id = "0";
-
+                text_start_time.setText("00:00");
+                text_end_time.setText("00:00");
+                list_tue.clear();
+                textView_tue_time1.setText("00:00 - 00:00");
+                textView_tue_time2.setText("00:00 - 00:00");
+                textView_tue_time3.setText("00:00 - 00:00");
+                getScrollTop();
             }
         });
-
 
         //Edit wednesday
         imageView_edit_wed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String data_sun = list_wed.get(0);
-                String[] strs = data_sun.split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                text_start_time.setText(s_tm);
-                text_end_time.setText(e_tm);
                 text_weekday.setText("Wednesday");
-                button_add_time.setText("UPDATE");
-                time_update_id = "0";
+                text_start_time.setText("00:00");
+                text_end_time.setText("00:00");
+                list_wed.clear();
+                textView_wed_time1.setText("00:00 - 00:00");
+                textView_wed_time2.setText("00:00 - 00:00");
+                textView_wed_time3.setText("00:00 - 00:00");
+                getScrollTop();
             }
         });
 
@@ -541,16 +568,14 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         imageView_edit_thu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String data_sun = list_thu.get(0);
-                String[] strs = data_sun.split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                text_start_time.setText(s_tm);
-                text_end_time.setText(e_tm);
                 text_weekday.setText("Thursday");
-                button_add_time.setText("UPDATE");
-                time_update_id = "0";
+                text_start_time.setText("00:00");
+                text_end_time.setText("00:00");
+                list_thu.clear();
+                textView_thu_time1.setText("00:00 - 00:00");
+                textView_thu_time2.setText("00:00 - 00:00");
+                textView_thu_time3.setText("00:00 - 00:00");
+                getScrollTop();
             }
         });
 
@@ -559,16 +584,14 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         imageView_edit_fri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String data_sun = list_fri.get(0);
-                String[] strs = data_sun.split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                text_start_time.setText(s_tm);
-                text_end_time.setText(e_tm);
                 text_weekday.setText("Friday");
-                button_add_time.setText("UPDATE");
-                time_update_id = "0";
+                text_start_time.setText("00:00");
+                text_end_time.setText("00:00");
+                list_fri.clear();
+                textView_fri_time1.setText("00:00 - 00:00");
+                textView_fri_time2.setText("00:00 - 00:00");
+                textView_fri_time3.setText("00:00 - 00:00");
+                getScrollTop();
             }
         });
 
@@ -577,16 +600,14 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         imageView_edit_sat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String data_sun = list_sat.get(0);
-                String[] strs = data_sun.split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                text_start_time.setText(s_tm);
-                text_end_time.setText(e_tm);
                 text_weekday.setText("Saturday");
-                button_add_time.setText("UPDATE");
-                time_update_id = "0";
+                text_start_time.setText("00:00");
+                text_end_time.setText("00:00");
+                list_sat.clear();
+                textView_sat_time1.setText("00:00 - 00:00");
+                textView_sat_time2.setText("00:00 - 00:00");
+                textView_sat_time3.setText("00:00 - 00:00");
+                getScrollTop();
             }
         });
 
@@ -594,6 +615,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         button_add_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String weekday = text_weekday.getText().toString();
                 String s_time = text_start_time.getText().toString();
                 String e_time = text_end_time.getText().toString();
@@ -602,520 +624,362 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                 if (chktime) {
                     if (weekday.equals("Sunday")) {
 
-                        if (button_add_time.getText().equals("ADD")) {
-                            if (list_sun.size() <= 1) {
-                                if (list_sun.size() == 1) {
-                                    String data_sun = list_sun.get(0);
-                                    String[] strs = data_sun.split(" - ");
-                                    String s_tm = strs[0];
-                                    String e_tm = strs[1];
+                        if (list_sun.size() <= 2) {
+                            if (list_sun.size() == 1) {
+                                String data_sun = list_sun.get(0);
+                                String[] strs = data_sun.split(" - ");
+                                String s_tm = strs[0];
+                                String e_tm = strs[1];
 
-                                    boolean chktime_slot2 = checktimings2(e_tm, s_time);
-                                    if (chktime_slot2) {
-                                        list_sun.add(s_time + " - " + e_time);
-                                        textView_sun_time1.setText(list_sun.get(0));
-                                        textView_sun_time2.setText(list_sun.get(1));
-                                        textView_sun_time2.setVisibility(View.VISIBLE);
-
-                      /*            ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
-                                    recyclerView.setAdapter(timeAdapter);
-                                    timeAdapter.notifyDataSetChanged();*/
-                                    } else {
-                                        getDialog("Availability time cannot overlap");
-                                    }
-
-                                } else {
-
+                                boolean chktime_slot2 = checktimings2(e_tm, s_time);
+                                if (chktime_slot2) {
                                     list_sun.add(s_time + " - " + e_time);
-                                    textView_sun_time1.setText(list_sun.get(0));
-                                    linearLayout__sun.setVisibility(View.VISIBLE);
+                                    textView_sun_time2.setText(list_sun.get(1));
+                                    runAnimation(textView_sun_time2);
+                                    getAddTimeScrollBottom(linearLayout__sun);
+                                } else {
+                                    getDialog("Availability time cannot overlap");
+                                }
+
+                            } else if (list_sun.size() == 2) {
+                                String data_sun = list_sun.get(1);
+                                String[] strs = data_sun.split(" - ");
+                                String s_tm = strs[0];
+                                String e_tm = strs[1];
+
+                                boolean chktime_slot2 = checktimings2(e_tm, s_time);
+                                if (chktime_slot2) {
+                                    list_sun.add(s_time + " - " + e_time);
+                                    textView_sun_time3.setText(list_sun.get(2));
+                                    runAnimation(textView_sun_time3);
+                                    getAddTimeScrollBottom(linearLayout__sun);
+                                } else {
+                                    getDialog("Availability time cannot overlap");
+                                }
+
+                            } else {
+
+                                list_sun.add(s_time + " - " + e_time);
+                                textView_sun_time1.setText(list_sun.get(0));
+                                linearLayout__sun.setVisibility(View.VISIBLE);
+                                runAnimation(textView_sun_time1);
+                                getAddTimeScrollBottom(linearLayout__sun);
 
                                 /*recyclerView.setVisibility(View.VISIBLE);
                                 ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
                                 recyclerView.setAdapter(timeAdapter);
                                 timeAdapter.notifyDataSetChanged();*/
-                                }
-                            } else {
-                                getDialog("You have reached the limit for sunday");
                             }
                         } else {
-                            //Update
-                            if (!TextUtils.isEmpty(time_update_id) && time_update_id.equals("0")) {
-                                list_sun.set(0, s_time + " - " + e_time);
-                                textView_sun_time1.setText(list_sun.get(0));
-
-                                if (list_sun.size() > 1) {
-                                    String start_time = getStartTime(list_sun.get(1));
-                                    String end_time = getEndTime(list_sun.get(0));
-                                    boolean chktime_slot2 = checktimings2(end_time, start_time);
-                                    if (!chktime_slot2) {
-                                        imageView_warning_sun2.setVisibility(View.VISIBLE);
-                                    } else {
-                                        imageView_warning_sun2.setVisibility(View.INVISIBLE);
-                                    }
-
-                                    time_update_id = "";
-                                    button_add_time.setText("ADD");
-                                }
-                            } else if (!TextUtils.isEmpty(time_update_id) && time_update_id.equals("1")) {
-                                String end_time = getEndTime(list_sun.get(0));
-                                boolean chktime_slot2 = checktimings2(end_time, s_time);
-                                if (chktime_slot2) {
-                                    list_sun.add(1, s_time + " - " + e_time);
-                                    textView_sun_time1.setText(list_sun.get(0));
-                                    textView_sun_time2.setText(list_sun.get(1));
-                                    imageView_warning_sun2.setVisibility(View.INVISIBLE);
-                                    time_update_id = "";
-                                    button_add_time.setText("ADD");
-                                } else {
-                                    getDialog("Availability time cannot overlap");
-                                }
-
-                            }
-
+                            getDialog("You have reached the limit for sunday");
                         }
 
 
                     } else if (weekday.equals("Monday")) {
 
-                        if (button_add_time.getText().equals("ADD")) {
-                            if (list_mon.size() <= 1) {
-                                if (list_mon.size() == 1) {
-                                    String data_sun = list_mon.get(0);
-                                    String[] strs = data_sun.split(" - ");
-                                    String s_tm = strs[0];
-                                    String e_tm = strs[1];
+                        if (list_mon.size() <= 2) {
+                            if (list_mon.size() == 1) {
+                                String data_sun = list_mon.get(0);
+                                String[] strs = data_sun.split(" - ");
+                                String s_tm = strs[0];
+                                String e_tm = strs[1];
 
-                                    boolean chktime_slot2 = checktimings2(e_tm, s_time);
-                                    if (chktime_slot2) {
-                                        list_mon.add(s_time + " - " + e_time);
-                                        textView_mon_time1.setText(list_mon.get(0));
-                                        textView_mon_time2.setText(list_mon.get(1));
-                                        textView_mon_time2.setVisibility(View.VISIBLE);
-
-                      /*            ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
-                                    recyclerView.setAdapter(timeAdapter);
-                                    timeAdapter.notifyDataSetChanged();*/
-                                    } else {
-                                        getDialog("Availability time cannot overlap");
-                                    }
-
-                                } else {
-
+                                boolean chktime_slot2 = checktimings2(e_tm, s_time);
+                                if (chktime_slot2) {
                                     list_mon.add(s_time + " - " + e_time);
-                                    textView_mon_time1.setText(list_mon.get(0));
-                                    linearLayout__mon.setVisibility(View.VISIBLE);
+                                    textView_mon_time2.setText(list_mon.get(1));
+                                    getAddTimeScrollBottom(linearLayout__mon);
+                                    runAnimation(textView_mon_time2);
+                                } else {
+                                    getDialog("Availability time cannot overlap");
+                                }
+
+                            } else if (list_mon.size() == 2) {
+                                String data_sun = list_mon.get(1);
+                                String[] strs = data_sun.split(" - ");
+                                String s_tm = strs[0];
+                                String e_tm = strs[1];
+
+                                boolean chktime_slot2 = checktimings2(e_tm, s_time);
+                                if (chktime_slot2) {
+                                    list_mon.add(s_time + " - " + e_time);
+                                    textView_mon_time3.setText(list_mon.get(2));
+                                    getAddTimeScrollBottom(linearLayout__mon);
+                                    runAnimation(textView_mon_time3);
+                                } else {
+                                    getDialog("Availability time cannot overlap");
+                                }
+
+                            } else {
+
+                                list_mon.add(s_time + " - " + e_time);
+                                textView_mon_time1.setText(list_mon.get(0));
+                                linearLayout__mon.setVisibility(View.VISIBLE);
+                                getAddTimeScrollBottom(linearLayout__mon);
+                                runAnimation(textView_mon_time1);
 
                                 /*recyclerView.setVisibility(View.VISIBLE);
                                 ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
                                 recyclerView.setAdapter(timeAdapter);
                                 timeAdapter.notifyDataSetChanged();*/
-                                }
-                            } else {
-                                getDialog("You have reached the limit for monday");
                             }
                         } else {
-                            //Update
-                            if (!TextUtils.isEmpty(time_update_id) && time_update_id.equals("0")) {
-                                list_mon.set(0, s_time + " - " + e_time);
-                                textView_mon_time1.setText(list_mon.get(0));
-
-                                if (list_mon.size() > 1) {
-                                    String start_time = getStartTime(list_mon.get(1));
-                                    String end_time = getEndTime(list_mon.get(0));
-                                    boolean chktime_slot2 = checktimings2(end_time, start_time);
-                                    if (!chktime_slot2) {
-                                        imageView_warning_mon2.setVisibility(View.VISIBLE);
-                                    } else {
-                                        imageView_warning_mon2.setVisibility(View.INVISIBLE);
-                                    }
-
-                                    time_update_id = "";
-                                    button_add_time.setText("ADD");
-                                }
-                            } else if (!TextUtils.isEmpty(time_update_id) && time_update_id.equals("1")) {
-                                String end_time = getEndTime(list_mon.get(0));
-                                boolean chktime_slot2 = checktimings2(end_time, s_time);
-                                if (chktime_slot2) {
-                                    list_mon.add(1, s_time + " - " + e_time);
-                                    textView_mon_time1.setText(list_mon.get(0));
-                                    textView_mon_time2.setText(list_mon.get(1));
-                                    imageView_warning_mon2.setVisibility(View.INVISIBLE);
-                                    time_update_id = "";
-                                    button_add_time.setText("ADD");
-                                } else {
-                                    getDialog("Availability time cannot overlap");
-                                }
-
-                            }
-
+                            getDialog("You have reached the limit for monday");
                         }
+
 
                     } else if (weekday.equals("Tuesday")) {
-                        if (button_add_time.getText().equals("ADD")) {
-                            if (list_tue.size() <= 1) {
-                                if (list_tue.size() == 1) {
-                                    String data_sun = list_tue.get(0);
-                                    String[] strs = data_sun.split(" - ");
-                                    String s_tm = strs[0];
-                                    String e_tm = strs[1];
+                        if (list_tue.size() <= 2) {
+                            if (list_tue.size() == 1) {
+                                String data_sun = list_tue.get(0);
+                                String[] strs = data_sun.split(" - ");
+                                String s_tm = strs[0];
+                                String e_tm = strs[1];
 
-                                    boolean chktime_slot2 = checktimings2(e_tm, s_time);
-                                    if (chktime_slot2) {
-                                        list_tue.add(s_time + " - " + e_time);
-                                        textView_tue_time1.setText(list_tue.get(0));
-                                        textView_tue_time2.setText(list_tue.get(1));
-                                        textView_tue_time2.setVisibility(View.VISIBLE);
-
-                      /*            ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
-                                    recyclerView.setAdapter(timeAdapter);
-                                    timeAdapter.notifyDataSetChanged();*/
-                                    } else {
-                                        getDialog("Availability time cannot overlap");
-                                    }
-
-                                } else {
-
+                                boolean chktime_slot2 = checktimings2(e_tm, s_time);
+                                if (chktime_slot2) {
                                     list_tue.add(s_time + " - " + e_time);
-                                    textView_tue_time1.setText(list_tue.get(0));
-                                    linearLayout__tue.setVisibility(View.VISIBLE);
-
-                                /*recyclerView.setVisibility(View.VISIBLE);
-                                ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
-                                recyclerView.setAdapter(timeAdapter);
-                                timeAdapter.notifyDataSetChanged();*/
-                                }
-                            } else {
-                                getDialog("You have reached the limit for tuesday");
-                            }
-                        } else {
-                            //Update
-                            if (!TextUtils.isEmpty(time_update_id) && time_update_id.equals("0")) {
-                                list_tue.set(0, s_time + " - " + e_time);
-                                textView_tue_time1.setText(list_tue.get(0));
-
-                                if (list_tue.size() > 1) {
-                                    String start_time = getStartTime(list_tue.get(1));
-                                    String end_time = getEndTime(list_tue.get(0));
-                                    boolean chktime_slot2 = checktimings2(end_time, start_time);
-                                    if (!chktime_slot2) {
-                                        imageView_warning_tue2.setVisibility(View.VISIBLE);
-                                    } else {
-                                        imageView_warning_tue2.setVisibility(View.INVISIBLE);
-                                    }
-
-                                    time_update_id = "";
-                                    button_add_time.setText("ADD");
-                                }
-                            } else if (!TextUtils.isEmpty(time_update_id) && time_update_id.equals("1")) {
-                                String end_time = getEndTime(list_tue.get(0));
-                                boolean chktime_slot2 = checktimings2(end_time, s_time);
-                                if (chktime_slot2) {
-                                    list_tue.add(1, s_time + " - " + e_time);
-                                    textView_tue_time1.setText(list_tue.get(0));
                                     textView_tue_time2.setText(list_tue.get(1));
-                                    imageView_warning_tue2.setVisibility(View.INVISIBLE);
-                                    time_update_id = "";
-                                    button_add_time.setText("ADD");
+                                    getAddTimeScrollBottom(linearLayout__tue);
+                                    runAnimation(textView_tue_time2);
                                 } else {
                                     getDialog("Availability time cannot overlap");
                                 }
 
-                            }
+                            } else if (list_tue.size() == 2) {
+                                String data_sun = list_tue.get(1);
+                                String[] strs = data_sun.split(" - ");
+                                String s_tm = strs[0];
+                                String e_tm = strs[1];
 
+                                boolean chktime_slot2 = checktimings2(e_tm, s_time);
+                                if (chktime_slot2) {
+                                    list_tue.add(s_time + " - " + e_time);
+                                    textView_tue_time3.setText(list_tue.get(2));
+                                    getAddTimeScrollBottom(linearLayout__tue);
+                                    runAnimation(textView_tue_time3);
+                                } else {
+                                    getDialog("Availability time cannot overlap");
+                                }
+
+                            } else {
+
+                                list_tue.add(s_time + " - " + e_time);
+                                textView_tue_time1.setText(list_tue.get(0));
+                                linearLayout__tue.setVisibility(View.VISIBLE);
+                                getAddTimeScrollBottom(linearLayout__tue);
+                                runAnimation(textView_tue_time1);
+
+                                /*recyclerView.setVisibility(View.VISIBLE);
+                                ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
+                                recyclerView.setAdapter(timeAdapter);
+                                timeAdapter.notifyDataSetChanged();*/
+                            }
+                        } else {
+                            getDialog("You have reached the limit for tuesday");
                         }
+
                     } else if (weekday.equals("Wednesday")) {
-                        if (button_add_time.getText().equals("ADD")) {
-                            if (list_wed.size() <= 1) {
-                                if (list_wed.size() == 1) {
-                                    String data_sun = list_wed.get(0);
-                                    String[] strs = data_sun.split(" - ");
-                                    String s_tm = strs[0];
-                                    String e_tm = strs[1];
+                        if (list_wed.size() <= 2) {
+                            if (list_wed.size() == 1) {
+                                String data_sun = list_wed.get(0);
+                                String[] strs = data_sun.split(" - ");
+                                String s_tm = strs[0];
+                                String e_tm = strs[1];
 
-                                    boolean chktime_slot2 = checktimings2(e_tm, s_time);
-                                    if (chktime_slot2) {
-                                        list_wed.add(s_time + " - " + e_time);
-                                        textView_wed_time1.setText(list_wed.get(0));
-                                        textView_wed_time2.setText(list_wed.get(1));
-                                        textView_wed_time2.setVisibility(View.VISIBLE);
-
-                      /*            ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
-                                    recyclerView.setAdapter(timeAdapter);
-                                    timeAdapter.notifyDataSetChanged();*/
-                                    } else {
-                                        getDialog("Availability time cannot overlap");
-                                    }
-
-                                } else {
-
+                                boolean chktime_slot2 = checktimings2(e_tm, s_time);
+                                if (chktime_slot2) {
                                     list_wed.add(s_time + " - " + e_time);
-                                    textView_wed_time1.setText(list_wed.get(0));
-                                    linearLayout__wed.setVisibility(View.VISIBLE);
-
-                                /*recyclerView.setVisibility(View.VISIBLE);
-                                ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
-                                recyclerView.setAdapter(timeAdapter);
-                                timeAdapter.notifyDataSetChanged();*/
-                                }
-                            } else {
-                                getDialog("You have reached the limit for wednesday");
-                            }
-                        } else {
-                            //Update
-                            if (!TextUtils.isEmpty(time_update_id) && time_update_id.equals("0")) {
-                                list_wed.set(0, s_time + " - " + e_time);
-                                textView_wed_time1.setText(list_wed.get(0));
-
-                                if (list_wed.size() > 1) {
-                                    String start_time = getStartTime(list_wed.get(1));
-                                    String end_time = getEndTime(list_wed.get(0));
-                                    boolean chktime_slot2 = checktimings2(end_time, start_time);
-                                    if (!chktime_slot2) {
-                                        imageView_warning_wed2.setVisibility(View.VISIBLE);
-                                    } else {
-                                        imageView_warning_wed2.setVisibility(View.INVISIBLE);
-                                    }
-
-                                    time_update_id = "";
-                                    button_add_time.setText("ADD");
-                                }
-                            } else if (!TextUtils.isEmpty(time_update_id) && time_update_id.equals("1")) {
-                                String end_time = getEndTime(list_wed.get(0));
-                                boolean chktime_slot2 = checktimings2(end_time, s_time);
-                                if (chktime_slot2) {
-                                    list_wed.add(1, s_time + " - " + e_time);
-                                    textView_wed_time1.setText(list_wed.get(0));
                                     textView_wed_time2.setText(list_wed.get(1));
-                                    imageView_warning_wed2.setVisibility(View.INVISIBLE);
-                                    time_update_id = "";
-                                    button_add_time.setText("ADD");
+                                    getAddTimeScrollBottom(linearLayout__wed);
+                                    runAnimation(textView_wed_time2);
                                 } else {
                                     getDialog("Availability time cannot overlap");
                                 }
 
-                            }
+                            } else if (list_wed.size() == 2) {
+                                String data_sun = list_wed.get(1);
+                                String[] strs = data_sun.split(" - ");
+                                String s_tm = strs[0];
+                                String e_tm = strs[1];
 
+                                boolean chktime_slot2 = checktimings2(e_tm, s_time);
+                                if (chktime_slot2) {
+                                    list_wed.add(s_time + " - " + e_time);
+                                    textView_wed_time3.setText(list_wed.get(2));
+                                    getAddTimeScrollBottom(linearLayout__wed);
+                                    runAnimation(textView_wed_time3);
+                                } else {
+                                    getDialog("Availability time cannot overlap");
+                                }
+
+                            } else {
+
+                                list_wed.add(s_time + " - " + e_time);
+                                textView_wed_time1.setText(list_wed.get(0));
+                                linearLayout__wed.setVisibility(View.VISIBLE);
+                                getAddTimeScrollBottom(linearLayout__wed);
+                                runAnimation(textView_wed_time1);
+
+                                /*recyclerView.setVisibility(View.VISIBLE);
+                                ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
+                                recyclerView.setAdapter(timeAdapter);
+                                timeAdapter.notifyDataSetChanged();*/
+                            }
+                        } else {
+                            getDialog("You have reached the limit for wednesday");
                         }
+
                     } else if (weekday.equals("Thursday")) {
-                        if (button_add_time.getText().equals("ADD")) {
-                            if (list_thu.size() <= 1) {
-                                if (list_thu.size() == 1) {
-                                    String data_sun = list_thu.get(0);
-                                    String[] strs = data_sun.split(" - ");
-                                    String s_tm = strs[0];
-                                    String e_tm = strs[1];
+                        if (list_thu.size() <= 2) {
+                            if (list_thu.size() == 1) {
+                                String data_sun = list_thu.get(0);
+                                String[] strs = data_sun.split(" - ");
+                                String s_tm = strs[0];
+                                String e_tm = strs[1];
 
-                                    boolean chktime_slot2 = checktimings2(e_tm, s_time);
-                                    if (chktime_slot2) {
-                                        list_thu.add(s_time + " - " + e_time);
-                                        textView_thu_time1.setText(list_thu.get(0));
-                                        textView_thu_time2.setText(list_thu.get(1));
-                                        textView_thu_time2.setVisibility(View.VISIBLE);
-
-                      /*            ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
-                                    recyclerView.setAdapter(timeAdapter);
-                                    timeAdapter.notifyDataSetChanged();*/
-                                    } else {
-                                        getDialog("Availability time cannot overlap");
-                                    }
-
-                                } else {
-
+                                boolean chktime_slot2 = checktimings2(e_tm, s_time);
+                                if (chktime_slot2) {
                                     list_thu.add(s_time + " - " + e_time);
-                                    textView_thu_time1.setText(list_thu.get(0));
-                                    linearLayout__thur.setVisibility(View.VISIBLE);
-
-                                /*recyclerView.setVisibility(View.VISIBLE);
-                                ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
-                                recyclerView.setAdapter(timeAdapter);
-                                timeAdapter.notifyDataSetChanged();*/
-                                }
-                            } else {
-                                getDialog("You have reached the limit for thursday");
-                            }
-                        } else {
-                            //Update
-                            if (!TextUtils.isEmpty(time_update_id) && time_update_id.equals("0")) {
-                                list_thu.set(0, s_time + " - " + e_time);
-                                textView_thu_time1.setText(list_thu.get(0));
-
-                                if (list_thu.size() > 1) {
-                                    String start_time = getStartTime(list_thu.get(1));
-                                    String end_time = getEndTime(list_thu.get(0));
-                                    boolean chktime_slot2 = checktimings2(end_time, start_time);
-                                    if (!chktime_slot2) {
-                                        imageView_warning_thu2.setVisibility(View.VISIBLE);
-                                    } else {
-                                        imageView_warning_thu2.setVisibility(View.INVISIBLE);
-                                    }
-
-                                    time_update_id = "";
-                                    button_add_time.setText("ADD");
-                                }
-                            } else if (!TextUtils.isEmpty(time_update_id) && time_update_id.equals("1")) {
-                                String end_time = getEndTime(list_thu.get(0));
-                                boolean chktime_slot2 = checktimings2(end_time, s_time);
-                                if (chktime_slot2) {
-                                    list_thu.add(1, s_time + " - " + e_time);
-                                    textView_thu_time1.setText(list_thu.get(0));
                                     textView_thu_time2.setText(list_thu.get(1));
-                                    imageView_warning_thu2.setVisibility(View.INVISIBLE);
-                                    time_update_id = "";
-                                    button_add_time.setText("ADD");
+                                    getAddTimeScrollBottom(linearLayout__thur);
+                                    runAnimation(textView_thu_time2);
                                 } else {
                                     getDialog("Availability time cannot overlap");
                                 }
 
-                            }
+                            } else if (list_thu.size() == 2) {
+                                String data_sun = list_thu.get(1);
+                                String[] strs = data_sun.split(" - ");
+                                String s_tm = strs[0];
+                                String e_tm = strs[1];
 
+                                boolean chktime_slot2 = checktimings2(e_tm, s_time);
+                                if (chktime_slot2) {
+                                    list_thu.add(s_time + " - " + e_time);
+                                    textView_thu_time3.setText(list_thu.get(2));
+                                    getAddTimeScrollBottom(linearLayout__thur);
+                                    runAnimation(textView_thu_time3);
+                                } else {
+                                    getDialog("Availability time cannot overlap");
+                                }
+
+                            } else {
+
+                                list_thu.add(s_time + " - " + e_time);
+                                textView_thu_time1.setText(list_thu.get(0));
+                                linearLayout__thur.setVisibility(View.VISIBLE);
+                                getAddTimeScrollBottom(linearLayout__thur);
+                                runAnimation(textView_thu_time1);
+                                /*recyclerView.setVisibility(View.VISIBLE);
+                                ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
+                                recyclerView.setAdapter(timeAdapter);
+                                timeAdapter.notifyDataSetChanged();*/
+                            }
+                        } else {
+                            getDialog("You have reached the limit for thursday");
                         }
+
                     } else if (weekday.equals("Friday")) {
-                        if (button_add_time.getText().equals("ADD")) {
-                            if (list_fri.size() <= 1) {
-                                if (list_fri.size() == 1) {
-                                    String data_sun = list_fri.get(0);
-                                    String[] strs = data_sun.split(" - ");
-                                    String s_tm = strs[0];
-                                    String e_tm = strs[1];
+                        if (list_fri.size() <= 2) {
+                            if (list_fri.size() == 1) {
+                                String data_sun = list_fri.get(0);
+                                String[] strs = data_sun.split(" - ");
+                                String s_tm = strs[0];
+                                String e_tm = strs[1];
 
-                                    boolean chktime_slot2 = checktimings2(e_tm, s_time);
-                                    if (chktime_slot2) {
-                                        list_fri.add(s_time + " - " + e_time);
-                                        textView_fri_time1.setText(list_fri.get(0));
-                                        textView_fri_time2.setText(list_fri.get(1));
-                                        textView_fri_time2.setVisibility(View.VISIBLE);
-
-                      /*            ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
-                                    recyclerView.setAdapter(timeAdapter);
-                                    timeAdapter.notifyDataSetChanged();*/
-                                    } else {
-                                        getDialog("Availability time cannot overlap");
-                                    }
-
-                                } else {
-
+                                boolean chktime_slot2 = checktimings2(e_tm, s_time);
+                                if (chktime_slot2) {
                                     list_fri.add(s_time + " - " + e_time);
-                                    textView_fri_time1.setText(list_fri.get(0));
-                                    linearLayout__fri.setVisibility(View.VISIBLE);
-
-                                /*recyclerView.setVisibility(View.VISIBLE);
-                                ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
-                                recyclerView.setAdapter(timeAdapter);
-                                timeAdapter.notifyDataSetChanged();*/
-                                }
-                            } else {
-                                getDialog("You have reached the limit for friday");
-                            }
-                        } else {
-                            //Update
-                            if (!TextUtils.isEmpty(time_update_id) && time_update_id.equals("0")) {
-                                list_fri.set(0, s_time + " - " + e_time);
-                                textView_fri_time1.setText(list_fri.get(0));
-
-                                if (list_fri.size() > 1) {
-                                    String start_time = getStartTime(list_fri.get(1));
-                                    String end_time = getEndTime(list_fri.get(0));
-                                    boolean chktime_slot2 = checktimings2(end_time, start_time);
-                                    if (!chktime_slot2) {
-                                        imageView_warning_fri2.setVisibility(View.VISIBLE);
-                                    } else {
-                                        imageView_warning_fri2.setVisibility(View.INVISIBLE);
-                                    }
-
-                                    time_update_id = "";
-                                    button_add_time.setText("ADD");
-                                }
-                            } else if (!TextUtils.isEmpty(time_update_id) && time_update_id.equals("1")) {
-                                String end_time = getEndTime(list_fri.get(0));
-                                boolean chktime_slot2 = checktimings2(end_time, s_time);
-                                if (chktime_slot2) {
-                                    list_fri.add(1, s_time + " - " + e_time);
-                                    textView_fri_time1.setText(list_fri.get(0));
                                     textView_fri_time2.setText(list_fri.get(1));
-                                    imageView_warning_fri2.setVisibility(View.INVISIBLE);
-                                    time_update_id = "";
-                                    button_add_time.setText("ADD");
+                                    getAddTimeScrollBottom(linearLayout__fri);
+                                    runAnimation(textView_fri_time2);
                                 } else {
                                     getDialog("Availability time cannot overlap");
                                 }
 
-                            }
+                            } else if (list_fri.size() == 2) {
+                                String data_sun = list_fri.get(1);
+                                String[] strs = data_sun.split(" - ");
+                                String s_tm = strs[0];
+                                String e_tm = strs[1];
 
-                        }
-                    } else if (weekday.equals("Saturday")) {
-                        if (button_add_time.getText().equals("ADD")) {
-                            if (list_sat.size() <= 1) {
-                                if (list_sat.size() == 1) {
-                                    String data_sun = list_sat.get(0);
-                                    String[] strs = data_sun.split(" - ");
-                                    String s_tm = strs[0];
-                                    String e_tm = strs[1];
-
-                                    boolean chktime_slot2 = checktimings2(e_tm, s_time);
-                                    if (chktime_slot2) {
-                                        list_sat.add(s_time + " - " + e_time);
-                                        textView_sat_time1.setText(list_sat.get(0));
-                                        textView_sat_time2.setText(list_sat.get(1));
-                                        textView_sat_time2.setVisibility(View.VISIBLE);
-
-                      /*            ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
-                                    recyclerView.setAdapter(timeAdapter);
-                                    timeAdapter.notifyDataSetChanged();*/
-                                    } else {
-                                        getDialog("Availability time cannot overlap");
-                                    }
-
+                                boolean chktime_slot2 = checktimings2(e_tm, s_time);
+                                if (chktime_slot2) {
+                                    list_fri.add(s_time + " - " + e_time);
+                                    textView_fri_time3.setText(list_fri.get(2));
+                                    getAddTimeScrollBottom(linearLayout__fri);
+                                    runAnimation(textView_fri_time3);
                                 } else {
+                                    getDialog("Availability time cannot overlap");
+                                }
 
-                                    list_sat.add(s_time + " - " + e_time);
-                                    textView_sat_time1.setText(list_sat.get(0));
-                                    linearLayout__sat.setVisibility(View.VISIBLE);
+                            } else {
 
+                                list_fri.add(s_time + " - " + e_time);
+                                textView_fri_time1.setText(list_fri.get(0));
+                                linearLayout__fri.setVisibility(View.VISIBLE);
+                                getAddTimeScrollBottom(linearLayout__fri);
+                                runAnimation(textView_fri_time1);
                                 /*recyclerView.setVisibility(View.VISIBLE);
                                 ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
                                 recyclerView.setAdapter(timeAdapter);
                                 timeAdapter.notifyDataSetChanged();*/
-                                }
-                            } else {
-                                getDialog("You have reached the limit for saturday");
                             }
                         } else {
-                            //Update
-                            if (!TextUtils.isEmpty(time_update_id) && time_update_id.equals("0")) {
-                                list_sat.set(0, s_time + " - " + e_time);
-                                textView_sat_time1.setText(list_sat.get(0));
+                            getDialog("You have reached the limit for friday");
+                        }
 
-                                if (list_sat.size() > 1) {
-                                    String start_time = getStartTime(list_sat.get(1));
-                                    String end_time = getEndTime(list_sat.get(0));
-                                    boolean chktime_slot2 = checktimings2(end_time, start_time);
-                                    if (!chktime_slot2) {
-                                        imageView_warning_sat2.setVisibility(View.VISIBLE);
-                                    } else {
-                                        imageView_warning_sat2.setVisibility(View.INVISIBLE);
-                                    }
+                    } else if (weekday.equals("Saturday")) {
+                        if (list_sat.size() <= 2) {
+                            if (list_sat.size() == 1) {
+                                String data_sun = list_sat.get(0);
+                                String[] strs = data_sun.split(" - ");
+                                String s_tm = strs[0];
+                                String e_tm = strs[1];
 
-                                    time_update_id = "";
-                                    button_add_time.setText("ADD");
-                                }
-                            } else if (!TextUtils.isEmpty(time_update_id) && time_update_id.equals("1")) {
-                                String end_time = getEndTime(list_sat.get(0));
-                                boolean chktime_slot2 = checktimings2(end_time, s_time);
+                                boolean chktime_slot2 = checktimings2(e_tm, s_time);
                                 if (chktime_slot2) {
-                                    list_sat.add(1, s_time + " - " + e_time);
-                                    textView_sat_time1.setText(list_sat.get(0));
+                                    list_sat.add(s_time + " - " + e_time);
                                     textView_sat_time2.setText(list_sat.get(1));
-                                    imageView_warning_sat2.setVisibility(View.INVISIBLE);
-                                    time_update_id = "";
-                                    button_add_time.setText("ADD");
+                                    getAddTimeScrollBottom(linearLayout__sat);
+                                    runAnimation(textView_sat_time2);
                                 } else {
                                     getDialog("Availability time cannot overlap");
                                 }
 
-                            }
+                            } else if (list_sat.size() == 2) {
+                                String data_sun = list_sat.get(1);
+                                String[] strs = data_sun.split(" - ");
+                                String s_tm = strs[0];
+                                String e_tm = strs[1];
 
+                                boolean chktime_slot2 = checktimings2(e_tm, s_time);
+                                if (chktime_slot2) {
+                                    list_sat.add(s_time + " - " + e_time);
+                                    textView_sat_time3.setText(list_sat.get(2));
+                                    getAddTimeScrollBottom(linearLayout__sat);
+                                    runAnimation(textView_sat_time3);
+                                } else {
+                                    getDialog("Availability time cannot overlap");
+                                }
+
+                            } else {
+
+                                list_sat.add(s_time + " - " + e_time);
+                                textView_sat_time1.setText(list_sat.get(0));
+                                linearLayout__sat.setVisibility(View.VISIBLE);
+                                getAddTimeScrollBottom(linearLayout__sat);
+                                runAnimation(textView_sat_time1);
+                                /*recyclerView.setVisibility(View.VISIBLE);
+                                ServiceAvailCustomTimeAdapter timeAdapter = new ServiceAvailCustomTimeAdapter(AddServiceAvailTimeActivity.this, list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat);
+                                recyclerView.setAdapter(timeAdapter);
+                                timeAdapter.notifyDataSetChanged();*/
+                            }
+                        } else {
+                            getDialog("You have reached the limit for saturday");
                         }
+
                     }
 
                     //layout_add_time.setVisibility(View.GONE);
@@ -1124,6 +988,8 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                 } else {
                     getDialog("Invalid Time");
                 }
+
+
             }
         });
 
@@ -1133,7 +999,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
                 if (isSelected) {
 
-                    AppointmentService appointmentService = new AppointmentService();
+              /*      AppointmentService appointmentService = new AppointmentService();
                     appointmentService.setSerName(ser_name);
                     appointmentService.setSerDuration(ser_dur);
                     appointmentService.setSerDescription(ser_desc);
@@ -1144,13 +1010,19 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     transactionBody.setService(appointmentService);
                     try {
                         Log.d("Token--->", "token: " + sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+                        boolean isConn = ConnectivityReceiver.isConnected();
+                        if (isConn) {
                         apptCreateService(transactionBody);
+                        }
+                        else {
+                            Toast.makeText(AddServiceAvailTimeActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+                        }
                     } catch (ApiException e) {
                         e.printStackTrace();
                     }
+*/
 
-
-                       /*     String nameList = sharedpreferences_services.getString(SERVICE_NAME, "");
+                            String nameList = sharedpreferences_services.getString(SERVICE_NAME, "");
                             String mobList = sharedpreferences_services.getString(SERVICE_DURATION, "");
                             if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
                                 service_name_list = new Gson().fromJson(nameList, new TypeToken<ArrayList<String>>() {
@@ -1171,6 +1043,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                 Intent in = new Intent(AddServiceAvailTimeActivity.this, SetupServiceActivity_Bottom.class);
                                 startActivity(in);
                                 finish();
+                                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                             } else if (!TextUtils.isEmpty(page_id) && page_id.equals("03")) {
                                 service_name_list.set(Integer.parseInt(position), ser_name);
                                 service_dur_list.set(Integer.parseInt(position), ser_dur);
@@ -1184,7 +1057,8 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                 Intent in = new Intent(AddServiceAvailTimeActivity.this, SetupServiceActivity_Bottom.class);
                                 startActivity(in);
                                 finish();
-                            }*/
+                                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                            }
 
 
                 } else {
@@ -1268,6 +1142,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         in.putExtra("page_id", page_id);
         startActivity(in);
         finish();
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
 
     }
 
@@ -1310,6 +1185,49 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
         ArrayAdapter arrayAdapter_weekdays = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, arrayList_weekdays);
         spinner_weekdays.setAdapter(arrayAdapter_weekdays);
+
+    }
+
+    public void getWeekDaysLayout(String weekday) {
+
+        if (String.valueOf(weekday.charAt(0)).equals("n")) {
+            linearLayout__sun.setVisibility(View.GONE);
+        } else {
+            linearLayout__sun.setVisibility(View.VISIBLE);
+        }
+        if (String.valueOf(weekday.charAt(1)).equals("n")) {
+            linearLayout__mon.setVisibility(View.GONE);
+        } else {
+            linearLayout__mon.setVisibility(View.VISIBLE);
+        }
+
+        if (String.valueOf(weekday.charAt(2)).equals("n")) {
+            linearLayout__tue.setVisibility(View.GONE);
+        } else {
+            linearLayout__tue.setVisibility(View.VISIBLE);
+        }
+
+        if (String.valueOf(weekday.charAt(3)).equals("n")) {
+            linearLayout__wed.setVisibility(View.GONE);
+        } else {
+            linearLayout__wed.setVisibility(View.VISIBLE);
+        }
+        if (String.valueOf(weekday.charAt(4)).equals("n")) {
+            linearLayout__thur.setVisibility(View.GONE);
+        } else {
+            linearLayout__thur.setVisibility(View.VISIBLE);
+        }
+        if (String.valueOf(weekday.charAt(5)).equals("n")) {
+            linearLayout__fri.setVisibility(View.GONE);
+        } else {
+            linearLayout__fri.setVisibility(View.VISIBLE);
+        }
+
+        if (String.valueOf(weekday.charAt(6)).equals("n")) {
+            linearLayout__sat.setVisibility(View.GONE);
+        } else {
+            linearLayout__sat.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -1506,11 +1424,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
     private void apptCreateService(ApptTransactionBody requestBody) throws ApiException {
 
-        final ProgressDialog pd = new ProgressDialog(AddServiceAvailTimeActivity.this);
-        pd.setMessage("Creating service...");
-        pd.show();
-
-
+        intermediateAlertDialog = new IntermediateAlertDialog(AddServiceAvailTimeActivity.this);
         Log.d("service---", "service: " + requestBody);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(AddServiceAvailTimeActivity.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();
@@ -1520,10 +1434,13 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
             @Override
             public void onFailure(final ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
                 Log.d("createService--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(AddServiceAvailTimeActivity.this, "Service setup Failed :"+ e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddServiceAvailTimeActivity.this, "Service setup Failed :" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -1531,7 +1448,9 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
             @Override
             public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
                 Log.d("createService--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
-                pd.dismiss();
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
                     Intent in = new Intent(AddServiceAvailTimeActivity.this, SetupServiceActivity_Bottom.class);
                     startActivity(in);
@@ -1559,4 +1478,36 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
 
     }
+
+    private void getScrollTop() {
+        scrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                scrollView.fullScroll(ScrollView.FOCUS_UP);
+            }
+        });
+    }
+
+    private void getAddTimeScrollBottom(final View view) {
+        scrollView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                scrollView.smoothScrollTo(0, view.getBottom());
+            }
+        },500);
+    }
+
+    private void runAnimation(final View view) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Animation a = AnimationUtils.loadAnimation(AddServiceAvailTimeActivity.this, R.anim.blinking_animation1);
+                a.reset();
+                view.clearAnimation();
+                view.startAnimation(a);
+            }
+        },800);
+
+    }
+
 }

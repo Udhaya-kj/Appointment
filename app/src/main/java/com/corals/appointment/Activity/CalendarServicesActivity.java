@@ -9,25 +9,36 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.corals.appointment.Adapters.ServicesAdapter_Calender;
+import com.corals.appointment.Client.ApiCallback;
+import com.corals.appointment.Client.ApiException;
+import com.corals.appointment.Client.OkHttpApiClient;
+import com.corals.appointment.Client.api.MerchantApisApi;
+import com.corals.appointment.Client.model.AppointmentEnquiryBody;
+import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
+import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class CalendarServicesActivity extends AppCompatActivity {
 
     ListView recyclerView_services;
-    TextView textView_no_ser,textView_appt_dt;
+    TextView textView_no_ser, textView_appt_dt;
     private ArrayList<String> service_name_list, service_dur_list;
     private SharedPreferences sharedpreferences_services;
     public static String cal_date = "", pageId;
-
+    private IntermediateAlertDialog intermediateAlertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +95,20 @@ public class CalendarServicesActivity extends AppCompatActivity {
             recyclerView_services.setVisibility(View.GONE);
         }
 
+
+       /* AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+        enquiryBody.setReqType("");
+        boolean isConn = ConnectivityReceiver.isConnected();
+        if (isConn) {
+            try {
+                fetchServices(enquiryBody);
+            } catch (ApiException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(CalendarServicesActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+        }*/
+
     }
 
     @Override
@@ -93,10 +118,52 @@ public class CalendarServicesActivity extends AppCompatActivity {
             Intent i = new Intent(CalendarServicesActivity.this, AppointmentActivity.class);
             startActivity(i);
             finish();
+            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
         } else if (!TextUtils.isEmpty(pageId) && pageId.equals("2")) {
             Intent i = new Intent(CalendarServicesActivity.this, CalendarViewActivity.class);
             startActivity(i);
             finish();
+            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
         }
+    }
+
+    private void fetchServices(AppointmentEnquiryBody requestBody) throws ApiException {
+
+        intermediateAlertDialog = new IntermediateAlertDialog(CalendarServicesActivity.this);
+
+        Log.d("login---", "login: " + requestBody);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(CalendarServicesActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentEnquiryAsync(requestBody, new ApiCallback<AppointmentEnquiryResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("fetchService--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+            }
+
+            @Override
+            public void onSuccess(AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+
+                Log.d("fetchService--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
+
     }
 }

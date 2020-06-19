@@ -50,6 +50,7 @@ public class ServiceUnvailabilityServicesAdapter extends RecyclerView.Adapter<Se
                 i.putExtra("service", arrayList1.get(position));
                 context.startActivity(i);
                 ((Activity)context).finish();
+                ((Activity)context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
 

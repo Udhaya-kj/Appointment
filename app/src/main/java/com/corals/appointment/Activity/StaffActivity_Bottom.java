@@ -27,6 +27,7 @@ public class StaffActivity_Bottom extends AppCompatActivity {
     StaffListAdapter staffListAdapter;
     LinearLayout linearLayout_add_staff;
     public String pageId = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,24 +47,24 @@ public class StaffActivity_Bottom extends AppCompatActivity {
         });
         staff_name_list = new ArrayList<>();
         staff_mob_list = new ArrayList<>();
-        listView_staffs=findViewById(R.id.listview_staffs);
+        listView_staffs = findViewById(R.id.listview_staffs);
         linearLayout_add_staff = findViewById(R.id.layout_add_staff);
 
-        if(getIntent().getExtras()!=null){
-            pageId=getIntent().getStringExtra("page_id");
+        if (getIntent().getExtras() != null) {
+            pageId = getIntent().getStringExtra("page_id");
         }
 
         String nameList = sharedpreferences_staffs.getString(AddStaffActivity.NAME, "");
         String mobList = sharedpreferences_staffs.getString(AddStaffActivity.MOBILE, "");
-        if(!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
+        if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
             staff_name_list = new Gson().fromJson(nameList, new TypeToken<ArrayList<String>>() {
             }.getType());
             staff_mob_list = new Gson().fromJson(mobList, new TypeToken<ArrayList<String>>() {
             }.getType());
         }
 
-        if(staff_name_list.size()!=0){
-            staffListAdapter=new StaffListAdapter(StaffActivity_Bottom.this,staff_name_list,staff_mob_list);
+        if (staff_name_list.size() != 0) {
+            staffListAdapter = new StaffListAdapter(StaffActivity_Bottom.this, staff_name_list, staff_mob_list);
             listView_staffs.setAdapter(staffListAdapter);
 
         }
@@ -75,6 +76,7 @@ public class StaffActivity_Bottom extends AppCompatActivity {
                 in.putExtra("page_id", "3");
                 startActivity(in);
                 finish();
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
 
@@ -85,9 +87,10 @@ public class StaffActivity_Bottom extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-            Intent in = new Intent(StaffActivity_Bottom.this, DashboardActivity.class);
-            startActivity(in);
-            finish();
+        Intent in = new Intent(StaffActivity_Bottom.this, DashboardActivity.class);
+        startActivity(in);
+        finish();
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
 
 
     }

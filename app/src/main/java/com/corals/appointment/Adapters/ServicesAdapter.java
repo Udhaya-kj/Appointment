@@ -58,6 +58,7 @@ public class ServicesAdapter extends ArrayAdapter<String> {
                 i.putExtra("duration", arrayList1.get(position));
                 context.startActivity(i);
                 ((Activity)context).finish();
+                ((Activity)context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
 
             }
         });

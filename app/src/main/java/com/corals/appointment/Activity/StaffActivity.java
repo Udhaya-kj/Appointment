@@ -73,6 +73,7 @@ public class StaffActivity extends AppCompatActivity {
                 in.putExtra("page_id", "03");
                 startActivity(in);
                 finish();
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
 

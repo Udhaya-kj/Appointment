@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/light_grey"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -15,10 +16,11 @@
         android:textAlignment="center"
         app:elevation="4dp"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:title="@string/book_appt"
+        app:title="Select Time"
         app:titleTextColor="@color/white" />
 
     <LinearLayout
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:paddingStart="10dp"
@@ -67,16 +69,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#DDDDDD" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center_vertical"
-        android:text="Select Time"
-        android:textSize="16sp"
-        android:layout_marginTop="10dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="0dp"
-        android:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_time_slots"

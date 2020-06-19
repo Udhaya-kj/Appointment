@@ -71,6 +71,7 @@ public class CalendarViewActivity extends AppCompatActivity {
                 i.putExtra("date", calendar_date);
                 startActivity(i);
                 finish();
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
 

@@ -32,6 +32,7 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
     ServicesAdapter servicesAdapter;
     public String pageId = "";
     private SharedPreferences sharedpreferences_service_data;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,9 +109,9 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
                 in.putExtra("page_id", "3");
                 startActivity(in);
                 finish();
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
-
 
 
     }
@@ -119,9 +120,10 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-            Intent in = new Intent(SetupServiceActivity_Bottom.this, DashboardActivity.class);
-            startActivity(in);
-            finish();
+        Intent in = new Intent(SetupServiceActivity_Bottom.this, DashboardActivity.class);
+        startActivity(in);
+        finish();
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
 
     }
 }

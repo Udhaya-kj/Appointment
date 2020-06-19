@@ -65,6 +65,7 @@ public class CustomersAdapter_MakeAppt extends BaseAdapter implements Filterable
                 i.putExtra("cus_mob", mDisplayedValues.get(position).mobile);
                 context.startActivity(i);
                 ((Activity) context).finish();
+                ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
 

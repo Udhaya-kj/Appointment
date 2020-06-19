@@ -4,8 +4,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -19,7 +21,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.corals.appointment.Client.ApiCallback;
+import com.corals.appointment.Client.ApiException;
+import com.corals.appointment.Client.OkHttpApiClient;
+import com.corals.appointment.Client.api.MerchantApisApi;
+import com.corals.appointment.Client.model.SecurityAPIBody;
+import com.corals.appointment.Client.model.SecurityAPIResponse;
+import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.receiver.ConnectivityReceiver;
+
+import java.util.List;
+import java.util.Map;
 
 public class PasswordResetActivity extends AppCompatActivity {
 
@@ -27,7 +40,7 @@ public class PasswordResetActivity extends AppCompatActivity {
     EditText editText_mob, editText_new_pass, editText_confirm_pass;
     CheckBox checkBox_new_pass, checkBox_confirm_pass;
     Button button_submit;
-
+    private IntermediateAlertDialog intermediateAlertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +112,27 @@ public class PasswordResetActivity extends AppCompatActivity {
                         if (!TextUtils.isEmpty(confirm_pass) && confirm_pass.length() >= 8) {
                             if (new_pass.equals(confirm_pass)){
 
+
+                             /*   boolean isConn = ConnectivityReceiver.isConnected();
+
+                                if (isConn) {
+                                    SecurityAPIBody securityAPIBody = new SecurityAPIBody();
+                                    securityAPIBody.setReqType("SM-AL.FM");
+                                    securityAPIBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
+                                    securityAPIBody.setUserMob(mob);
+                                    securityAPIBody.setUserPass(confirm_pass);
+
+                                    try {
+                                        resetPassword(securityAPIBody);
+                                    } catch (ApiException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                else {
+                                    Toast.makeText(PasswordResetActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+
+                                }*/
+
                             Toast.makeText(PasswordResetActivity.this, "Password has been changed successfully!", Toast.LENGTH_SHORT).show();
 
                         } else {
@@ -142,5 +176,59 @@ public class PasswordResetActivity extends AppCompatActivity {
         Intent in = new Intent(PasswordResetActivity.this, ForgotPasswordActivity.class);
         startActivity(in);
         finish();
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+    }
+
+    private void resetPassword(SecurityAPIBody requestBody) throws ApiException {
+
+        intermediateAlertDialog = new IntermediateAlertDialog(PasswordResetActivity.this);
+        Log.d("login---", "login: " + requestBody);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(PasswordResetActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppoinmentSecurityAsync(requestBody, new ApiCallback<SecurityAPIResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+                Log.d("login--->", "onFailure-" + e.getMessage());
+            }
+
+            @Override
+            public void onSuccess(SecurityAPIResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+                Log.d("login--->", "onSuccess-" + statusCode + " , " + result);
+
+                if (Integer.parseInt(result.getStatusCode()) == 200) {
+
+
+                    startActivity(new Intent(PasswordResetActivity.this, LoginActivity.class));
+                    finish();
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(PasswordResetActivity.this, "Password reset Failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
+
+
     }
 }

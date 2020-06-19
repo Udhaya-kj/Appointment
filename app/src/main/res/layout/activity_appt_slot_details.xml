@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EEEEEE"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_appt_details"
@@ -21,281 +20,305 @@
         app:title="Appointment Details"
         app:titleTextColor="#FFFFFF" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:fillViewport="true"
+        android:focusable="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/layout_bg_white"
-            android:gravity="center_vertical"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="8dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Name"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tv_appt_det_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="John" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/layout_bg_white"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Mobile"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tv_appt_det_mob"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="9999999999" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/layout_bg_white"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Service Name"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tv_appt_det_ser_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="Hair Cut" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/layout_bg_white"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Staff"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tv_appt_det_staff_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="Virat" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/layout_bg_white"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Booking Date"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tv_appt_det_booking_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="02-June-2020" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/layout_bg_white"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Booking Time"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tv_appt_det_booking_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="02-June-2020" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:padding="15dp">
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/layout_bg_white"
-                android:id="@+id/layout_call"
-                android:padding="8dp"
-                android:layout_marginEnd="10dp"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:tint="#4DBDF1"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:padding="2dp"
-                    android:src="@drawable/phone" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="0dp"
-                    android:text="Call"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:background="@drawable/layout_bg_white"
-                android:id="@+id/layout_sent_reminder"
-                android:padding="8dp"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:tint="#4DBDF1"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/reminder" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="0dp"
-                    android:text="Send Reminder"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <LinearLayout
-                android:minHeight="55dp"
-                android:background="@drawable/layout_bg_white"
-                android:id="@+id/layout_cancel_appt"
-                android:padding="8dp"
-                android:layout_marginEnd="10dp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:tint="#4DBDF1"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/travel" />
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="8dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="0dp"
-                    android:text="Cancel Appointment"
+                    android:text="Name"
                     android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/tv_appt_det_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="John" />
             </LinearLayout>
 
-
             <LinearLayout
-                android:minHeight="55dp"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/layout_bg_white"
-                android:id="@+id/layout_change_appt"
-                android:padding="8dp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:tint="#4DBDF1"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/appointment" />
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="8dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="0dp"
-                    android:text="Reschedule Appointment"
+                    android:text="Mobile"
                     android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/tv_appt_det_mob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="9999999999" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/layout_bg_white"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Service Name"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_appt_det_ser_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="Hair Cut" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/layout_bg_white"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Staff"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_appt_det_staff_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="Virat" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/layout_bg_white"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Booking Date"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_appt_det_booking_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="02-June-2020" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/layout_bg_white"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Booking Time"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_appt_det_booking_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="02-June-2020" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:id="@+id/layout_call"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/layout_bg_white"
+                    android:gravity="center_vertical"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:padding="2dp"
+                        android:src="@drawable/phone"
+                        android:tint="#4DBDF1" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="0dp"
+                        android:text="Call"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/layout_sent_reminder"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/layout_bg_white"
+                    android:gravity="center_vertical"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/reminder"
+                        android:tint="#4DBDF1" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="0dp"
+                        android:text="Send Reminder"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="7dp"
+                    app:cardBackgroundColor="@color/white"
+                    android:layout_marginEnd="10dp"
+                    android:minHeight="55dp"
+                    app:cardElevation="4dp"
+                    android:layout_weight="1">
+
+                <LinearLayout
+                    android:id="@+id/layout_cancel_appt"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/travel"
+                        android:tint="#4DBDF1" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="0dp"
+                        android:text="Cancel Appointment"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="7dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/white"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:id="@+id/layout_change_appt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:gravity="center_vertical"
+                        android:minHeight="55dp"
+                        android:padding="8dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/appointment"
+                            android:tint="#4DBDF1" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="0dp"
+                            android:text="Reschedule Appointment"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+
         </LinearLayout>
 
-
-    </LinearLayout>
-
-
+    </ScrollView>
 </LinearLayout>

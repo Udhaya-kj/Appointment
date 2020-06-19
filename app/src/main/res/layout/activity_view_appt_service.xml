@@ -33,6 +33,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:padding="12dp"
+            android:tint="@color/app_blue"
             android:src="@drawable/back"
             android:id="@+id/image_appt_back"
             />
@@ -52,6 +53,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:padding="12dp"
+            android:tint="@color/app_blue"
             android:src="@drawable/next"
             />
     </LinearLayout>

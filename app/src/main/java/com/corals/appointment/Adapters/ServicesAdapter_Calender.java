@@ -52,6 +52,7 @@ public class ServicesAdapter_Calender extends ArrayAdapter<String> {
                 i.putExtra("date", date);
                 context.startActivity(i);
                 ((Activity) context).finish();
+                ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
         return rowView;
