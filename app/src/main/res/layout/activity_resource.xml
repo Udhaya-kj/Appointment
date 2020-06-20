@@ -82,6 +82,55 @@
                 android:gravity="center_vertical"
                 android:paddingStart="5dp"
                 android:paddingEnd="0dp"
+                android:text="Service Amount"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/et_ser_amount"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/layout_bg_grey"
+                android:gravity="center_vertical"
+                android:hint="Enter service amount"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:paddingStart="10dp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/layout_bg_grey"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="5dp"
+                android:paddingEnd="0dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="0dp"
+                    android:text="Show service amount to customers?" />
+
+                <Switch
+                    android:id="@+id/switch_show_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="0dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:paddingStart="5dp"
+                android:paddingEnd="0dp"
                 android:text="Service Description"
                 android:textStyle="bold" />
 
@@ -98,15 +147,15 @@
                 android:paddingStart="10dp" />
 
 
-            </LinearLayout>
+        </LinearLayout>
 
 
         <Button
             android:id="@+id/button_res_continue"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.08"
             android:layout_margin="8dp"
+            android:layout_weight="0.08"
             android:background="@color/button_green"
             android:text="Next"
             android:textColor="@color/white" />

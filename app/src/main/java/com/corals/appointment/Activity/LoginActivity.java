@@ -25,9 +25,14 @@ import com.corals.appointment.Client.model.SecurityAPIBody;
 import com.corals.appointment.Client.model.SecurityAPIResponse;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,10 +48,10 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences sharedpreferences_ask_again;
     private ArrayList<String> service_name_list, service_dur_list;
     private ArrayList<String> staff_name_list, staff_mob_list;
-    public static String sessionToken;
     private SharedPreferences sharedpreferences_sessionToken;
     public static final String MyPREFERENCES_SESSIONTOKEN = "MyPREFERENCES_SESSIONTOKEN ";
     public static final String SESSIONTOKEN = "SESSIONTOKEN ";
+    public static final String MERID = "MERID ";
     private IntermediateAlertDialog intermediateAlertDialog;
 
     @Override
@@ -118,11 +123,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+          /*      startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
                 finish();
-                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);*/
 
-               /* String email = editText_id.getText().toString().trim();
+                String email = editText_id.getText().toString().trim();
                 String pass = editText_password.getText().toString().trim();
 
                 if (!email.isEmpty()) {
@@ -139,19 +144,17 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("PASSWORD--->", "onClick: " + hashStr);
 
                         SecurityAPIBody securityAPIBody = new SecurityAPIBody();
-                        securityAPIBody.setReqType("SM-AL.LM");
+                        securityAPIBody.setReqType("S-L.M");
                         securityAPIBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
                         securityAPIBody.setUserEmail(editText_id.getText().toString());
                         securityAPIBody.setUserPass(hashStr);
 
                         try {
-                          boolean isConn = ConnectivityReceiver.isConnected();
-
-        if (isConn) {
-                            merchantApptLogin(securityAPIBody);
-                            }
-                            else{
-                             Toast.makeText(LoginActivity.this, "No internet connection", Toast.LENGTH_SHORT).show();
+                            boolean isConn = ConnectivityReceiver.isConnected();
+                            if (isConn) {
+                                merchantApptLogin(securityAPIBody);
+                            } else {
+                                Toast.makeText(LoginActivity.this, "No internet connection", Toast.LENGTH_SHORT).show();
                             }
                         } catch (ApiException e) {
                             e.printStackTrace();
@@ -165,7 +168,6 @@ public class LoginActivity extends AppCompatActivity {
                     editText_id.setError("Enter valid email");
                     editText_id.requestFocus();
                 }
-*/
 
 
                 //First created
@@ -216,9 +218,8 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d("login--->", "onSuccess-" + statusCode + " , " + result);
 
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
-                    sessionToken = result.getSessionToken();
                     SharedPreferences.Editor editor = sharedpreferences_sessionToken.edit();
-                    editor.putString(SESSIONTOKEN, sessionToken);
+                    editor.putString(SESSIONTOKEN, result.getSessionToken());
                     editor.commit();
 
                     startActivity(new Intent(LoginActivity.this, DashboardActivity.class));

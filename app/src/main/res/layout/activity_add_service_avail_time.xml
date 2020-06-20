@@ -29,8 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="true"
-            android:focusableInTouchMode="true"
-            >
+            android:focusableInTouchMode="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -263,22 +262,22 @@
                                     android:orientation="vertical">
 
                                     <TextView
-                                        android:background="?attr/selectableItemBackgroundBorderless"
-                                        android:clickable="true"
                                         android:id="@+id/text_start_time"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
+                                        android:background="?attr/selectableItemBackgroundBorderless"
+                                        android:clickable="true"
                                         android:gravity="center"
                                         android:text="00:00"
                                         android:textColor="#3B91CD" />
 
                                     <TextView
-                                        android:background="?attr/selectableItemBackgroundBorderless"
-                                        android:clickable="true"
                                         android:id="@+id/text_end_time"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="15dp"
+                                        android:background="?attr/selectableItemBackgroundBorderless"
+                                        android:clickable="true"
                                         android:gravity="center"
                                         android:text="00:00"
                                         android:textColor="#3B91CD" />
@@ -314,6 +313,29 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:orientation="horizontal"
+                            android:visibility="visible"
+                            android:layout_marginTop="20dp"
+                            >
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Copy to all days"
+                                />
+                            <Switch
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/switch_all_days"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="0dp"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
                             android:background="@drawable/layout_bg_grey"
                             android:orientation="vertical">
@@ -322,132 +344,144 @@
                                 android:id="@+id/layout_sunday"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:orientation="horizontal"
-                                android:visibility="visible"
-                                android:weightSum="1">
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_weight="0.3"
-                                    android:paddingStart="8dp"
-                                    android:paddingEnd="0dp"
-                                    android:text="Sunday"
-                                    android:textStyle="bold" />
+                                android:orientation="vertical">
 
                                 <LinearLayout
-                                    android:layout_width="0dp"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="0.58"
-                                    android:gravity="center_vertical"
-                                    android:orientation="vertical">
-
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="35dp"
-                                        android:orientation="horizontal"
-                                        android:weightSum="1">
-
-                                        <ImageView
-                                            android:id="@+id/image_warning_sun1"
-                                            android:layout_width="0dp"
-                                            android:layout_height="35dp"
-                                            android:layout_weight="0.2"
-                                            android:padding="10dp"
-                                            android:src="@drawable/clock"
-                                            android:visibility="visible" />
-                                        <TextView
-                                            android:id="@+id/text_sunday_time1"
-                                            android:layout_width="0dp"
-                                            android:layout_height="35dp"
-                                            android:layout_weight="0.8"
-                                            android:gravity="center_vertical"
-                                            android:text="00:00 - 00:00" />
-
-                                    </LinearLayout>
-
-                                    <LinearLayout
-                                        android:id="@+id/layout_sunday_time2"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="35dp"
-                                        android:orientation="horizontal"
-                                        android:weightSum="1">
-
-                                        <ImageView
-                                            android:id="@+id/image_warning_sun2"
-                                            android:layout_width="0dp"
-                                            android:layout_height="35dp"
-                                            android:layout_weight="0.2"
-                                            android:padding="10dp"
-                                            android:src="@drawable/clock"
-                                            android:visibility="visible" />
-
-                                        <TextView
-                                            android:id="@+id/text_sunday_time2"
-                                            android:layout_width="0dp"
-                                            android:layout_height="35dp"
-                                            android:layout_weight="0.8"
-                                            android:gravity="center_vertical"
-                                            android:text="00:00 - 00:00"
-                                            android:visibility="visible" />
-
-                                    </LinearLayout>
-
-
-                                    <LinearLayout
-                                        android:id="@+id/layout_sunday_time3"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="35dp"
-                                        android:orientation="horizontal"
-                                        android:weightSum="1">
-
-                                        <ImageView
-                                            android:id="@+id/image_warning_sun3"
-                                            android:layout_width="0dp"
-                                            android:layout_height="35dp"
-                                            android:layout_weight="0.2"
-                                            android:padding="10dp"
-                                            android:src="@drawable/clock"
-                                            android:visibility="visible" />
-
-                                        <TextView
-                                            android:id="@+id/text_sunday_time3"
-                                            android:layout_width="0dp"
-                                            android:layout_height="35dp"
-                                            android:layout_weight="0.8"
-                                            android:gravity="center_vertical"
-                                            android:text="00:00 - 00:00"
-                                            android:visibility="visible" />
-
-
-                                    </LinearLayout>
-
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="0.12"
                                     android:gravity="center"
-                                    android:orientation="vertical">
+                                    android:orientation="horizontal"
+                                    android:visibility="visible"
+                                    android:weightSum="1">
 
-                                    <ImageView
-                                        android:background="?attr/selectableItemBackgroundBorderless"
-                                        android:clickable="true"
-                                        android:id="@+id/image_edit_sun"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="35dp"
-                                        android:padding="12dp"
-                                        android:src="@drawable/edit"
-                                        android:visibility="visible" />
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="0.3"
+                                        android:paddingStart="8dp"
+                                        android:paddingEnd="0dp"
+                                        android:text="Sunday"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.58"
+                                        android:gravity="center_vertical"
+                                        android:orientation="vertical">
 
 
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:orientation="horizontal"
+                                            android:weightSum="1">
+
+                                            <ImageView
+                                                android:id="@+id/image_warning_sun1"
+                                                android:layout_width="0dp"
+                                                android:layout_height="35dp"
+                                                android:layout_weight="0.2"
+                                                android:padding="10dp"
+                                                android:src="@drawable/clock"
+                                                android:visibility="visible" />
+
+                                            <TextView
+                                                android:id="@+id/text_sunday_time1"
+                                                android:layout_width="0dp"
+                                                android:layout_height="35dp"
+                                                android:layout_weight="0.8"
+                                                android:gravity="center_vertical"
+                                                android:text="00:00 - 00:00" />
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/layout_sunday_time2"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:orientation="horizontal"
+                                            android:weightSum="1">
+
+                                            <ImageView
+                                                android:id="@+id/image_warning_sun2"
+                                                android:layout_width="0dp"
+                                                android:layout_height="35dp"
+                                                android:layout_weight="0.2"
+                                                android:padding="10dp"
+                                                android:src="@drawable/clock"
+                                                android:visibility="visible" />
+
+                                            <TextView
+                                                android:id="@+id/text_sunday_time2"
+                                                android:layout_width="0dp"
+                                                android:layout_height="35dp"
+                                                android:layout_weight="0.8"
+                                                android:gravity="center_vertical"
+                                                android:text="00:00 - 00:00"
+                                                android:visibility="visible" />
+
+                                        </LinearLayout>
+
+
+                                        <LinearLayout
+                                            android:id="@+id/layout_sunday_time3"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:orientation="horizontal"
+                                            android:weightSum="1">
+
+                                            <ImageView
+                                                android:id="@+id/image_warning_sun3"
+                                                android:layout_width="0dp"
+                                                android:layout_height="35dp"
+                                                android:layout_weight="0.2"
+                                                android:padding="10dp"
+                                                android:src="@drawable/clock"
+                                                android:visibility="visible" />
+
+                                            <TextView
+                                                android:id="@+id/text_sunday_time3"
+                                                android:layout_width="0dp"
+                                                android:layout_height="35dp"
+                                                android:layout_weight="0.8"
+                                                android:gravity="center_vertical"
+                                                android:text="00:00 - 00:00"
+                                                android:visibility="visible" />
+
+
+                                        </LinearLayout>
+
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="0.12"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+
+                                        <ImageView
+                                            android:id="@+id/image_edit_sun"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="35dp"
+                                            android:background="?attr/selectableItemBackgroundBorderless"
+                                            android:clickable="true"
+                                            android:padding="12dp"
+                                            android:src="@drawable/edit"
+                                            android:visibility="visible" />
+
+                                    </LinearLayout>
                                 </LinearLayout>
 
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:background="#DDDDDD" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -456,7 +490,6 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
                                 android:visibility="visible">
-
 
 
                                 <LinearLayout
@@ -491,6 +524,7 @@
                                             android:layout_height="35dp"
                                             android:orientation="horizontal"
                                             android:weightSum="1">
+
                                             <ImageView
                                                 android:id="@+id/image_warning_mon1"
                                                 android:layout_width="0dp"
@@ -577,11 +611,11 @@
                                         android:orientation="vertical">
 
                                         <ImageView
-                                            android:background="?attr/selectableItemBackgroundBorderless"
-                                            android:clickable="true"
                                             android:id="@+id/image_edit_mon"
                                             android:layout_width="match_parent"
                                             android:layout_height="35dp"
+                                            android:background="?attr/selectableItemBackgroundBorderless"
+                                            android:clickable="true"
                                             android:padding="12dp"
                                             android:src="@drawable/edit"
                                             android:visibility="visible" />
@@ -590,6 +624,13 @@
 
 
                                 </LinearLayout>
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:background="#DDDDDD" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -599,12 +640,6 @@
                                 android:orientation="vertical"
                                 android:visibility="visible">
 
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:layout_marginStart="8dp"
-                                    android:layout_marginEnd="8dp"
-                                    android:background="#DDDDDD" />
 
                                 <LinearLayout
 
@@ -720,17 +755,24 @@
                                         android:orientation="vertical">
 
                                         <ImageView
-                                            android:background="?attr/selectableItemBackgroundBorderless"
-                                            android:clickable="true"
                                             android:id="@+id/image_edit_tue"
                                             android:layout_width="match_parent"
                                             android:layout_height="35dp"
+                                            android:background="?attr/selectableItemBackgroundBorderless"
+                                            android:clickable="true"
                                             android:padding="12dp"
                                             android:src="@drawable/edit"
                                             android:visibility="visible" />
 
                                     </LinearLayout>
                                 </LinearLayout>
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:background="#DDDDDD" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -740,12 +782,6 @@
                                 android:orientation="vertical"
                                 android:visibility="visible">
 
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:layout_marginStart="8dp"
-                                    android:layout_marginEnd="8dp"
-                                    android:background="#DDDDDD" />
 
                                 <LinearLayout
 
@@ -865,17 +901,25 @@
                                         android:orientation="vertical">
 
                                         <ImageView
-                                            android:background="?attr/selectableItemBackgroundBorderless"
-                                            android:clickable="true"
                                             android:id="@+id/image_edit_wed"
                                             android:layout_width="match_parent"
                                             android:layout_height="35dp"
+                                            android:background="?attr/selectableItemBackgroundBorderless"
+                                            android:clickable="true"
                                             android:padding="12dp"
                                             android:src="@drawable/edit"
                                             android:visibility="visible" />
 
                                     </LinearLayout>
                                 </LinearLayout>
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:background="#DDDDDD" />
+
                             </LinearLayout>
 
                             <LinearLayout
@@ -884,13 +928,6 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
                                 android:visibility="visible">
-
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:layout_marginStart="8dp"
-                                    android:layout_marginEnd="8dp"
-                                    android:background="#DDDDDD" />
 
                                 <LinearLayout
 
@@ -1009,17 +1046,25 @@
                                         android:orientation="vertical">
 
                                         <ImageView
-                                            android:background="?attr/selectableItemBackgroundBorderless"
-                                            android:clickable="true"
                                             android:id="@+id/image_edit_thu"
                                             android:layout_width="match_parent"
                                             android:layout_height="35dp"
+                                            android:background="?attr/selectableItemBackgroundBorderless"
+                                            android:clickable="true"
                                             android:padding="12dp"
                                             android:src="@drawable/edit"
                                             android:visibility="visible" />
 
                                     </LinearLayout>
                                 </LinearLayout>
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:background="#DDDDDD" />
+
                             </LinearLayout>
 
                             <LinearLayout
@@ -1028,13 +1073,6 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
                                 android:visibility="visible">
-
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:layout_marginStart="8dp"
-                                    android:layout_marginEnd="8dp"
-                                    android:background="#DDDDDD" />
 
                                 <LinearLayout
 
@@ -1153,11 +1191,11 @@
                                         android:orientation="vertical">
 
                                         <ImageView
-                                            android:background="?attr/selectableItemBackgroundBorderless"
-                                            android:clickable="true"
                                             android:id="@+id/image_edit_fri"
                                             android:layout_width="match_parent"
                                             android:layout_height="35dp"
+                                            android:background="?attr/selectableItemBackgroundBorderless"
+                                            android:clickable="true"
                                             android:padding="12dp"
                                             android:src="@drawable/edit"
                                             android:visibility="visible" />
@@ -1166,6 +1204,14 @@
 
 
                                 </LinearLayout>
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:background="#DDDDDD" />
+
                             </LinearLayout>
 
 
@@ -1175,13 +1221,6 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
                                 android:visibility="visible">
-
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:layout_marginStart="8dp"
-                                    android:layout_marginEnd="8dp"
-                                    android:background="#DDDDDD" />
 
                                 <LinearLayout
 
@@ -1300,11 +1339,11 @@
                                         android:orientation="vertical">
 
                                         <ImageView
-                                            android:background="?attr/selectableItemBackgroundBorderless"
-                                            android:clickable="true"
                                             android:id="@+id/image_edit_sat"
                                             android:layout_width="match_parent"
                                             android:layout_height="35dp"
+                                            android:background="?attr/selectableItemBackgroundBorderless"
+                                            android:clickable="true"
                                             android:padding="12dp"
                                             android:src="@drawable/edit"
                                             android:visibility="visible" />

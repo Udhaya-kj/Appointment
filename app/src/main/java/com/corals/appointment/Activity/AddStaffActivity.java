@@ -320,7 +320,7 @@ public class AddStaffActivity extends AppCompatActivity {
                     if (mob.length() > 0) {
                         if (arrayList_map_service.size() != 0) {
 
-                            /*AppointmentResources appointmentResources = new AppointmentResources();
+                            AppointmentResources appointmentResources = new AppointmentResources();
                             appointmentResources.setResName(name);
                             appointmentResources.setMobile(mob);
                             appointmentResources.setMerId("");
@@ -332,7 +332,7 @@ public class AddStaffActivity extends AppCompatActivity {
                             appointmentResources.setResId("");
 
                             ApptTransactionBody transactionBody = new ApptTransactionBody();
-                            transactionBody.setReqType("TS-SR.CR");
+                            transactionBody.setReqType("T-R.C");
                             transactionBody.setResource(appointmentResources);
                             try {
                                 boolean isConn = ConnectivityReceiver.isConnected();
@@ -343,7 +343,7 @@ public class AddStaffActivity extends AppCompatActivity {
                                 }
                             } catch (ApiException e) {
                                 e.printStackTrace();
-                            }*/
+                            }
 
 
                             String nameList = sharedpreferences_staffs.getString(AddStaffActivity.NAME, "");
