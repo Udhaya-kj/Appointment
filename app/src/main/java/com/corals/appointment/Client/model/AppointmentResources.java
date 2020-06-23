@@ -13,20 +13,18 @@
 
 package com.corals.appointment.Client.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * AppointmentResources
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-13T07:13:20.960Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-20T15:31:28.176Z")
 public class AppointmentResources {
   @SerializedName("res_id")
   private String resId = null;
@@ -34,26 +32,23 @@ public class AppointmentResources {
   @SerializedName("res_name")
   private String resName = null;
 
-  @SerializedName("parallel_load")
-  private String parallelLoad = null;
+  @SerializedName("manageable_load")
+  private String manageableLoad = null;
 
   @SerializedName("mer_id")
   private String merId = null;
 
-  @SerializedName("res_date")
-  private String resDate = null;
-
   @SerializedName("mobile")
   private String mobile = null;
 
+  @SerializedName("avail_days")
+  private List<AvailDay> availDays = null;
+
+  @SerializedName("same_buss_time")
+  private Boolean sameBussTime = null;
+
   @SerializedName("is_active")
   private Boolean isActive = null;
-
-  @SerializedName("avail_start_time")
-  private String availStartTime = null;
-
-  @SerializedName("avail_end_time")
-  private String availEndTime = null;
 
   public AppointmentResources resId(String resId) {
     this.resId = resId;
@@ -64,7 +59,7 @@ public class AppointmentResources {
    * Get resId
    * @return resId
   **/
-   @Schema(description = "")
+  @Schema(description = "")
   public String getResId() {
     return resId;
   }
@@ -91,22 +86,22 @@ public class AppointmentResources {
     this.resName = resName;
   }
 
-  public AppointmentResources parallelLoad(String parallelLoad) {
-    this.parallelLoad = parallelLoad;
+  public AppointmentResources manageableLoad(String manageableLoad) {
+    this.manageableLoad = manageableLoad;
     return this;
   }
 
    /**
-   * Get parallelLoad
-   * @return parallelLoad
+   * Get manageableLoad
+   * @return manageableLoad
   **/
   @Schema(description = "")
-  public String getParallelLoad() {
-    return parallelLoad;
+  public String getManageableLoad() {
+    return manageableLoad;
   }
 
-  public void setParallelLoad(String parallelLoad) {
-    this.parallelLoad = parallelLoad;
+  public void setManageableLoad(String manageableLoad) {
+    this.manageableLoad = manageableLoad;
   }
 
   public AppointmentResources merId(String merId) {
@@ -127,24 +122,6 @@ public class AppointmentResources {
     this.merId = merId;
   }
 
-  public AppointmentResources resDate(String resDate) {
-    this.resDate = resDate;
-    return this;
-  }
-
-   /**
-   * Get resDate
-   * @return resDate
-  **/
-  @Schema(description = "")
-  public String getResDate() {
-    return resDate;
-  }
-
-  public void setResDate(String resDate) {
-    this.resDate = resDate;
-  }
-
   public AppointmentResources mobile(String mobile) {
     this.mobile = mobile;
     return this;
@@ -161,6 +138,50 @@ public class AppointmentResources {
 
   public void setMobile(String mobile) {
     this.mobile = mobile;
+  }
+
+  public AppointmentResources availDays(List<AvailDay> availDays) {
+    this.availDays = availDays;
+    return this;
+  }
+
+  public AppointmentResources addAvailDaysItem(AvailDay availDaysItem) {
+    if (this.availDays == null) {
+      this.availDays = new ArrayList<AvailDay>();
+    }
+    this.availDays.add(availDaysItem);
+    return this;
+  }
+
+   /**
+   * Get availDays
+   * @return availDays
+  **/
+  @Schema(description = "")
+  public List<AvailDay> getAvailDays() {
+    return availDays;
+  }
+
+  public void setAvailDays(List<AvailDay> availDays) {
+    this.availDays = availDays;
+  }
+
+  public AppointmentResources sameBussTime(Boolean sameBussTime) {
+    this.sameBussTime = sameBussTime;
+    return this;
+  }
+
+   /**
+   * Get sameBussTime
+   * @return sameBussTime
+  **/
+  @Schema(description = "")
+  public Boolean isSameBussTime() {
+    return sameBussTime;
+  }
+
+  public void setSameBussTime(Boolean sameBussTime) {
+    this.sameBussTime = sameBussTime;
   }
 
   public AppointmentResources isActive(Boolean isActive) {
@@ -181,42 +202,6 @@ public class AppointmentResources {
     this.isActive = isActive;
   }
 
-  public AppointmentResources availStartTime(String availStartTime) {
-    this.availStartTime = availStartTime;
-    return this;
-  }
-
-   /**
-   * Get availStartTime
-   * @return availStartTime
-  **/
-  @Schema(description = "")
-  public String getAvailStartTime() {
-    return availStartTime;
-  }
-
-  public void setAvailStartTime(String availStartTime) {
-    this.availStartTime = availStartTime;
-  }
-
-  public AppointmentResources availEndTime(String availEndTime) {
-    this.availEndTime = availEndTime;
-    return this;
-  }
-
-   /**
-   * Get availEndTime
-   * @return availEndTime
-  **/
-  @Schema(description = "")
-  public String getAvailEndTime() {
-    return availEndTime;
-  }
-
-  public void setAvailEndTime(String availEndTime) {
-    this.availEndTime = availEndTime;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -229,18 +214,17 @@ public class AppointmentResources {
     AppointmentResources appointmentResources = (AppointmentResources) o;
     return Objects.equals(this.resId, appointmentResources.resId) &&
         Objects.equals(this.resName, appointmentResources.resName) &&
-        Objects.equals(this.parallelLoad, appointmentResources.parallelLoad) &&
+        Objects.equals(this.manageableLoad, appointmentResources.manageableLoad) &&
         Objects.equals(this.merId, appointmentResources.merId) &&
-        Objects.equals(this.resDate, appointmentResources.resDate) &&
         Objects.equals(this.mobile, appointmentResources.mobile) &&
-        Objects.equals(this.isActive, appointmentResources.isActive) &&
-        Objects.equals(this.availStartTime, appointmentResources.availStartTime) &&
-        Objects.equals(this.availEndTime, appointmentResources.availEndTime);
+        Objects.equals(this.availDays, appointmentResources.availDays) &&
+        Objects.equals(this.sameBussTime, appointmentResources.sameBussTime) &&
+        Objects.equals(this.isActive, appointmentResources.isActive);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(resId, resName, parallelLoad, merId, resDate, mobile, isActive, availStartTime, availEndTime);
+    return Objects.hash(resId, resName, manageableLoad, merId, mobile, availDays, sameBussTime, isActive);
   }
 
 
@@ -251,13 +235,12 @@ public class AppointmentResources {
     
     sb.append("    resId: ").append(toIndentedString(resId)).append("\n");
     sb.append("    resName: ").append(toIndentedString(resName)).append("\n");
-    sb.append("    parallelLoad: ").append(toIndentedString(parallelLoad)).append("\n");
+    sb.append("    manageableLoad: ").append(toIndentedString(manageableLoad)).append("\n");
     sb.append("    merId: ").append(toIndentedString(merId)).append("\n");
-    sb.append("    resDate: ").append(toIndentedString(resDate)).append("\n");
     sb.append("    mobile: ").append(toIndentedString(mobile)).append("\n");
+    sb.append("    availDays: ").append(toIndentedString(availDays)).append("\n");
+    sb.append("    sameBussTime: ").append(toIndentedString(sameBussTime)).append("\n");
     sb.append("    isActive: ").append(toIndentedString(isActive)).append("\n");
-    sb.append("    availStartTime: ").append(toIndentedString(availStartTime)).append("\n");
-    sb.append("    availEndTime: ").append(toIndentedString(availEndTime)).append("\n");
     sb.append("}");
     return sb.toString();
   }

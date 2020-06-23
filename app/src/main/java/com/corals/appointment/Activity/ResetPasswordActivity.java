@@ -4,7 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.corals.appointment.Client.ApiCallback;
@@ -30,17 +29,19 @@ import com.corals.appointment.Client.model.SecurityAPIResponse;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 import java.util.Map;
 
-public class PasswordResetActivity extends AppCompatActivity {
+public class ResetPasswordActivity extends AppCompatActivity {
 
     String mob;
     EditText editText_mob, editText_new_pass, editText_confirm_pass;
     CheckBox checkBox_new_pass, checkBox_confirm_pass;
-    Button button_submit;
+    MaterialButton button_submit;
     private IntermediateAlertDialog intermediateAlertDialog;
+    private SharedPreferences sharedpreferences_sessionToken;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +59,7 @@ public class PasswordResetActivity extends AppCompatActivity {
             }
         });
 
+        sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
         editText_mob = findViewById(R.id.edit_reset_mob);
         editText_new_pass = findViewById(R.id.edit_new_pass);
         editText_confirm_pass = findViewById(R.id.edit_confirm_pass);
@@ -111,17 +113,15 @@ public class PasswordResetActivity extends AppCompatActivity {
                     if (!TextUtils.isEmpty(new_pass) && new_pass.length() >= 8) {
                         if (!TextUtils.isEmpty(confirm_pass) && confirm_pass.length() >= 8) {
                             if (new_pass.equals(confirm_pass)){
-
-
-                             /*   boolean isConn = ConnectivityReceiver.isConnected();
-
+                                boolean isConn = ConnectivityReceiver.isConnected();
                                 if (isConn) {
                                     SecurityAPIBody securityAPIBody = new SecurityAPIBody();
-                                    securityAPIBody.setReqType("SM-AL.FM");
+                                    securityAPIBody.setReqType("S-RP.");
                                     securityAPIBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
-                                    securityAPIBody.setUserMob(mob);
+                                    securityAPIBody.setMerId("119070138");
+                                    securityAPIBody.setUserMob("9998771");
+                                    securityAPIBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
                                     securityAPIBody.setUserPass(confirm_pass);
-
                                     try {
                                         resetPassword(securityAPIBody);
                                     } catch (ApiException e) {
@@ -129,11 +129,11 @@ public class PasswordResetActivity extends AppCompatActivity {
                                     }
                                 }
                                 else {
-                                    Toast.makeText(PasswordResetActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ResetPasswordActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
 
-                                }*/
+                                }
 
-                            Toast.makeText(PasswordResetActivity.this, "Password has been changed successfully!", Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(PasswordResetActivity.this, "Password has been changed successfully!", Toast.LENGTH_SHORT).show();
 
                         } else {
                                 getDialog("Password does not match. Check your password");
@@ -156,7 +156,7 @@ public class PasswordResetActivity extends AppCompatActivity {
 
     private void getDialog(String msg) {
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PasswordResetActivity.this);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ResetPasswordActivity.this);
         alertDialogBuilder.setMessage(msg);
         alertDialogBuilder.setPositiveButton("OK",
                 new DialogInterface.OnClickListener() {
@@ -173,7 +173,7 @@ public class PasswordResetActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent in = new Intent(PasswordResetActivity.this, ForgotPasswordActivity.class);
+        Intent in = new Intent(ResetPasswordActivity.this, ForgotPasswordActivity.class);
         startActivity(in);
         finish();
         overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
@@ -181,9 +181,9 @@ public class PasswordResetActivity extends AppCompatActivity {
 
     private void resetPassword(SecurityAPIBody requestBody) throws ApiException {
 
-        intermediateAlertDialog = new IntermediateAlertDialog(PasswordResetActivity.this);
+        intermediateAlertDialog = new IntermediateAlertDialog(ResetPasswordActivity.this);
         Log.d("login---", "login: " + requestBody);
-        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(PasswordResetActivity.this);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(ResetPasswordActivity.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();
         webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
 
@@ -204,15 +204,13 @@ public class PasswordResetActivity extends AppCompatActivity {
                 Log.d("login--->", "onSuccess-" + statusCode + " , " + result);
 
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
-
-
-                    startActivity(new Intent(PasswordResetActivity.this, LoginActivity.class));
+                    startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
                     finish();
                 } else {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(PasswordResetActivity.this, "Password reset Failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ResetPasswordActivity.this, "Password reset Failed", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

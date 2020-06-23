@@ -98,6 +98,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
     ScrollView scrollView;
     Switch aSwitch_all_days;
     String all_days_time1 = "00:00 - 00:00", all_days_time2 = "00:00 - 00:00", all_days_time3 = "00:00 - 00:00";
+    boolean isSameBizHrs = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -245,6 +246,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     radioButton_biz_hrs.setChecked(true);
                     radioButton_custom_time.setChecked(false);
                     layout_custom_time.setVisibility(View.GONE);
+                    isSameBizHrs=true;
                 }
                 isSelected = true;
             }
@@ -257,6 +259,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     radioButton_biz_hrs.setChecked(false);
                     radioButton_custom_time.setChecked(true);
                     layout_custom_time.setVisibility(View.VISIBLE);
+                    isSameBizHrs=false;
                 }
                 isSelected = true;
             }
@@ -265,9 +268,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         aSwitch_all_days.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                 if (isChecked) {
-
                     if (list_sun.isEmpty() && list_mon.isEmpty() && list_tue.isEmpty() && list_wed.isEmpty() && list_thu.isEmpty() && list_fri.isEmpty() && list_sat.isEmpty()) {
                         getAllDaysTime("00:00 - 00:00", "00:00 - 00:00", "00:00 - 00:00");
                     } else {
@@ -357,35 +358,21 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                         }*/
 
                         getAllDaysTime(all_days_time1, all_days_time2, all_days_time3);
+                        getClearList();
                         getCopyTimeAllDays(String.valueOf(weekdays), all_days_time1, all_days_time2, all_days_time3);
                         Log.d("Copy_all_day---->", "onCheckedChanged: " + all_days_time1 + "," + all_days_time2 + "," + all_days_time3);
                     }
 
                 } else {
                     getAllDaysTime("00:00 - 00:00", "00:00 - 00:00", "00:00 - 00:00");
-                    list_sun.clear();
-                    list_mon.clear();
-                    list_tue.clear();
-                    list_wed.clear();
-                    list_thu.clear();
-                    list_fri.clear();
-                    list_sat.clear();
-
+                    getClearList();
                     all_days_time1 = "00:00 - 00:00";
                     all_days_time2 = "00:00 - 00:00";
                     all_days_time3 = "00:00 - 00:00";
-
                 }
             }
         });
         final ArrayList<String> arrayList_weekdays = new ArrayList<>();
-        arrayList_weekdays.add("Sunday");
-        arrayList_weekdays.add("Monday");
-        arrayList_weekdays.add("Tuesday");
-        arrayList_weekdays.add("Wednesday");
-        arrayList_weekdays.add("Thursday");
-        arrayList_weekdays.add("Friday");
-        arrayList_weekdays.add("Saturday");
 
         spinner_weekdays.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -773,6 +760,8 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     textView_sun_time2.setText(list_sun.get(1));
                                     runAnimation(textView_sun_time2);
                                     getAddTimeScrollBottom(linearLayout__sun);
+
+                                    Log.d("sunday_list--->", "add_time: " + list_sun);
                                 } else {
                                     getDialog("Availability time cannot overlap");
                                 }
@@ -789,6 +778,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                     textView_sun_time3.setText(list_sun.get(2));
                                     runAnimation(textView_sun_time3);
                                     getAddTimeScrollBottom(linearLayout__sun);
+                                    Log.d("sunday_list--->", "add_time: " + list_sun);
                                 } else {
                                     getDialog("Availability time cannot overlap");
                                 }
@@ -1133,6 +1123,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                Log.d("sunday_list--->", "onClick: " + list_sun.size() + "," + list_mon.size() + "," + list_tue.size() + "," + list_wed.size() + "," + list_thu.size() + "," + list_fri.size() + "," + list_sat.size());
                 if (isSelected) {
                     AvailDay availDay_sun = new AvailDay();
                     AvailDay availDay_mon = new AvailDay();
@@ -1181,6 +1172,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
                     //Sunday
                     if (!list_sun.isEmpty()) {
+                        Log.d("sunday_list--->", "submit: " + list_sun);
                         if (list_sun.size() > 0) {
                             String[] strs = list_sun.get(0).split(" - ");
                             String s_tm = strs[0];
@@ -1205,7 +1197,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                             Log.d("Sun--->", "onClick: > 1" + " 2");
                         }
 
-                        if (list_sun.size() == 3) {
+                        if (list_sun.size() > 2) {
                             String[] strs = list_sun.get(2).split(" - ");
                             String s_tm = strs[0];
                             String e_tm = strs[1];
@@ -1256,7 +1248,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                             Log.d("Mon--->", "onClick: > 1" + " 2");
                         }
 
-                        if (list_mon.size() == 3) {
+                        if (list_mon.size() > 2) {
                             String[] strs = list_mon.get(2).split(" - ");
                             String s_tm = strs[0];
                             String e_tm = strs[1];
@@ -1307,7 +1299,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                             Log.d("Tue--->", "onClick: > 1" + " 2");
                         }
 
-                        if (list_tue.size() == 3) {
+                        if (list_tue.size() > 2) {
                             String[] strs = list_tue.get(2).split(" - ");
                             String s_tm = strs[0];
                             String e_tm = strs[1];
@@ -1359,7 +1351,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                             Log.d("Wed--->", "onClick: > 1" + " 2");
                         }
 
-                        if (list_wed.size() == 3) {
+                        if (list_wed.size() > 2) {
                             String[] strs = list_wed.get(2).split(" - ");
                             String s_tm = strs[0];
                             String e_tm = strs[1];
@@ -1411,7 +1403,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                             Log.d("Thu--->", "onClick: > 1" + " 2");
                         }
 
-                        if (list_thu.size() == 3) {
+                        if (list_thu.size() > 2) {
                             String[] strs = list_thu.get(2).split(" - ");
                             String s_tm = strs[0];
                             String e_tm = strs[1];
@@ -1463,7 +1455,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                             Log.d("Fri--->", "onClick: > 1" + " 2");
                         }
 
-                        if (list_fri.size() == 3) {
+                        if (list_fri.size() > 2) {
                             String[] strs = list_fri.get(2).split(" - ");
                             String s_tm = strs[0];
                             String e_tm = strs[1];
@@ -1516,7 +1508,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                             Log.d("Sat--->", "onClick: > 1" + " 2");
                         }
 
-                        if (list_sat.size() == 3) {
+                        if (list_sat.size() > 2) {
                             String[] strs = list_sat.get(2).split(" - ");
                             String s_tm = strs[0];
                             String e_tm = strs[1];
@@ -1558,6 +1550,8 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     appointmentService.setSerPrice(amount);
                     appointmentService.setIsActive(true);
                     appointmentService.setMerId("119070138");
+                    appointmentService.setSameBussTime(isSameBizHrs);
+                    showamount = "1";
                     if (showamount.equals("1")) {
                         appointmentService.setIsShowCust(true);
                     } else {
@@ -1630,71 +1624,6 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         });
     }
 
-
-    public void get_start_time() {
-        // Launch Time Picker Dialog
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, android.R.style.Theme_Holo_Dialog_MinWidth,
-                new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        // view.setBackgroundColor(getResources().getColor(R.color.button_background));
-                        String time_hr = String.valueOf(hourOfDay);
-                        String time_min = String.valueOf(minute);
-                        String min = null, hr = null;
-                        if (time_hr.length() == 1 && time_min.length() == 1) {
-                            min = "0" + "" + time_min;
-                            hr = "0" + "" + time_hr;
-                            start_time = hr + ":" + min;
-                        } else if (time_hr.length() == 1 && time_min.length() != 1) {
-                            hr = "0" + "" + time_hr;
-                            start_time = hr + ":" + minute;
-                        } else if (time_hr.length() != 1 && time_min.length() == 1) {
-                            min = "0" + "" + time_min;
-                            start_time = hourOfDay + ":" + min;
-                        } else {
-                            start_time = hourOfDay + ":" + minute;
-                        }
-                        Log.d("Time===>", "" + start_time);
-                        //editText_start_time.setText(time_active);
-                        text_start_time.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + start_time + "</u>  </font>"));
-
-                    }
-                }, 00, 00, false);
-        timePickerDialog.show();
-    }
-
-    public void get_end_time() {
-        // Get Current Time*
-        // Launch Time Picker Dialog
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, android.R.style.Theme_Holo_Dialog_MinWidth,
-                new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        // view.setBackgroundColor(getResources().getColor(R.color.button_background));
-                        String time_hr = String.valueOf(hourOfDay);
-                        String time_min = String.valueOf(minute);
-                        String min = null, hr = null;
-                        if (time_hr.length() == 1 && time_min.length() == 1) {
-                            min = "0" + "" + time_min;
-                            hr = "0" + "" + time_hr;
-                            end_time = hr + ":" + min;
-                        } else if (time_hr.length() == 1 && time_min.length() != 1) {
-                            hr = "0" + "" + time_hr;
-                            end_time = hr + ":" + minute;
-                        } else if (time_hr.length() != 1 && time_min.length() == 1) {
-                            min = "0" + "" + time_min;
-                            end_time = hourOfDay + ":" + min;
-                        } else {
-                            end_time = hourOfDay + ":" + minute;
-                        }
-                        Log.d("Time===>", "" + end_time);
-                        //editText_start_time.setText(time_active);
-                        text_end_time.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + end_time + "</u>  </font>"));
-
-                    }
-                }, 00, 00, false);
-        timePickerDialog.show();
-    }
 
     @Override
     public void onBackPressed() {
@@ -1801,7 +1730,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
     }
 
     public void getCopyTimeAllDays(String weekday, String time1, String time2, String time3) {
-        Log.d("getCopyTimeAllDays", "getCopyTimeAllDays: "+weekday+","+time1+","+time2+","+time3);
+        Log.d("getCopyTimeAllDays", "getCopyTimeAllDays: " + weekday + "," + time1 + "," + time2 + "," + time3);
         if (String.valueOf(weekday.charAt(0)).equals("y")) {
             list_sun.add(time1);
             if (!time2.equals("00:00 - 00:00")) {
@@ -1811,6 +1740,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                 list_sun.add(time3);
             }
         }
+
         if (String.valueOf(weekday.charAt(1)).equals("y")) {
             list_mon.add(time1);
             if (!time2.equals("00:00 - 00:00")) {
@@ -2173,5 +2103,15 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         textView_sat_time1.setText(time1);
         textView_sat_time2.setText(time2);
         textView_sat_time3.setText(time3);
+    }
+
+    private void getClearList() {
+        list_sun.clear();
+        list_mon.clear();
+        list_tue.clear();
+        list_wed.clear();
+        list_thu.clear();
+        list_fri.clear();
+        list_sat.clear();
     }
 }

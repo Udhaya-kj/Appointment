@@ -33,6 +33,7 @@ import com.corals.appointment.Client.OkHttpApiClient;
 import com.corals.appointment.Client.api.MerchantApisApi;
 import com.corals.appointment.Client.model.AppointmentEnquiryBody;
 import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
+import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.Client.model.SecurityAPIBody;
 import com.corals.appointment.Client.model.SecurityAPIResponse;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
@@ -65,7 +66,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
     CalendarView calendarView;
     String calendar_date;
     private IntermediateAlertDialog intermediateAlertDialog;
-
+    private SharedPreferences sharedpreferences_sessionToken;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +84,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
             }
         });
 
+        sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
         calendar = Calendar.getInstance();
         Year = calendar.get(Calendar.YEAR);
         Month = calendar.get(Calendar.MONTH);
@@ -128,7 +130,12 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
         });
 
 
-      /*  AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+        AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+        enquiryBody.setReqType("E-S.");
+        enquiryBody.setMerId("119070138");
+        enquiryBody.callerType("m");
+        enquiryBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
+        enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
         boolean isConn = ConnectivityReceiver.isConnected();
         if (isConn) {
             try {
@@ -138,7 +145,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
             }
         } else {
             Toast.makeText(AppointmentActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
-        }*/
+        }
 
 
         sharedpreferences_services = getSharedPreferences(AddServiceAvailTimeActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
@@ -152,7 +159,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
         }
 
         Log.d("listsize---->", "onCreate: " + service_name_list + "," + service_dur_list);
-        if (service_name_list.size() != 0 && service_dur_list.size() != 0) {
+    /*    if (service_name_list.size() != 0 && service_dur_list.size() != 0) {
             servicesAdapter = new ServicesAdapter_Calender(AppointmentActivity.this, "", service_name_list, service_dur_list);
             listView_services.setAdapter(servicesAdapter);
             textView_no_ser.setVisibility(View.GONE);
@@ -164,7 +171,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
         } else {
             textView_no_ser.setVisibility(View.VISIBLE);
             recyclerView_services.setVisibility(View.GONE);
-        }
+        }*/
 
 
         final Button button_datepicker = (Button) findViewById(R.id.button_datepicker);
@@ -379,11 +386,53 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
             }
 
             @Override
-            public void onSuccess(AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+            public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
 
-                Log.d("fetchService--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
+                Log.d("fetchService--->", "onSuccess-" + statusCode + "," + result);
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
+                }
+                if(Integer.parseInt("200")==200){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Toast.makeText(AppointmentActivity.this, ""+result.getStatusMessage(), Toast.LENGTH_SHORT).show();
+
+                            List<AppointmentService> appointmentServicesList = result.getServices();
+                            for (int t = 0; t < appointmentServicesList.size(); t++) {
+                                String ser_name = appointmentServicesList.get(t).getSerName();
+                                String ser_dur = appointmentServicesList.get(t).getSerDuration();
+
+                                service_name_list.add(ser_name);
+                                service_dur_list.add(ser_dur);
+
+                            }
+                            if (service_name_list.size() != 0) {
+                                servicesAdapter = new ServicesAdapter_Calender(AppointmentActivity.this, "", service_name_list, service_dur_list);
+                                listView_services.setAdapter(servicesAdapter);
+                                textView_no_ser.setVisibility(View.GONE);
+                                recyclerView_services.setVisibility(View.VISIBLE);
+
+                                ServicesRecyclerviewAdapter servicesRecyclerviewAdapter = new ServicesRecyclerviewAdapter(AppointmentActivity.this, service_name_list, service_dur_list);
+                                recyclerView_services.setAdapter(servicesRecyclerviewAdapter);
+
+                            } else {
+                                textView_no_ser.setVisibility(View.VISIBLE);
+                                recyclerView_services.setVisibility(View.GONE);
+                            }
+
+
+                        }
+                    });
+                }
+                else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(AppointmentActivity.this, ""+result.getStatusMessage(), Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
                 }
             }
 

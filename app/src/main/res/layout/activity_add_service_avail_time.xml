@@ -31,18 +31,15 @@
             android:focusable="true"
             android:focusableInTouchMode="true">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="15dp">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <RadioButton
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginTop="10dp"
                         android:id="@+id/rb_biz_hours"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -50,21 +47,32 @@
                         android:text="Same as Business Hours" />
 
                     <RadioButton
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
                         android:id="@+id/rb_custom_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:buttonTint="@color/app_blue"
                         android:text="Custom Time" />
 
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardElevation="3dp"
+                        app:cardBackgroundColor="#F5F7F7"
+                        app:cardCornerRadius="5dp"
+                        android:layout_margin="10dp"
+                        >
+
                     <LinearLayout
+
                         android:id="@+id/layout_custom_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:orientation="vertical"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -196,10 +204,10 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:layout_marginStart="5dp"
+                            android:layout_marginStart="8dp"
                             android:layout_marginTop="20dp"
-                            android:layout_marginEnd="5dp"
-                            android:background="#EEEEEE"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/border_edittext"
                             android:gravity="center">
 
                             <Spinner
@@ -209,13 +217,14 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:elevation="3dp"
                             android:id="@+id/layout_add_time"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:background="@drawable/layout_bg_grey"
+                            android:layout_marginTop="30dp"
+                            android:background="@drawable/layout_bg_white"
                             android:orientation="vertical"
-                            android:padding="10dp"
+                            android:layout_margin="8dp"
                             android:visibility="visible">
 
                             <TextView
@@ -224,6 +233,8 @@
                                 android:layout_height="40dp"
                                 android:gravity="center_vertical"
                                 android:text="Sunday"
+                                android:paddingStart="30dp"
+                                android:paddingEnd="0dp"
                                 android:textColor="@color/app_blue"
                                 android:textStyle="bold" />
 
@@ -284,15 +295,14 @@
                                 </LinearLayout>
                             </LinearLayout>
 
-                            <Button
-
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/button_add_time"
                                 android:layout_width="150dp"
-                                android:layout_height="30dp"
+                                android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
                                 android:layout_marginTop="25dp"
                                 android:layout_marginBottom="15dp"
-                                android:background="@color/app_blue"
+                                android:backgroundTint="@color/app_blue"
                                 android:text="ADD"
                                 android:textColor="@color/white" />
 
@@ -337,8 +347,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
-                            android:background="@drawable/layout_bg_grey"
                             android:orientation="vertical">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:background="#DDDDDD" />
 
                             <LinearLayout
                                 android:id="@+id/layout_sunday"
@@ -1355,19 +1371,21 @@
                         </LinearLayout>
 
                     </LinearLayout>
+                    </androidx.cardview.widget.CardView>
 
-
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_add_service"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="50dp"
-                        android:background="#21AE18"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="80dp"
+                        android:layout_margin="8dp"
+                        android:layout_marginBottom="50dp"
+                        android:backgroundTint="@color/button_green"
                         android:text="CREATE SERVICE"
                         android:textColor="#FFFFFF" />
                 </LinearLayout>
 
-            </LinearLayout>
+
         </ScrollView>
     </LinearLayout>
 </LinearLayout>

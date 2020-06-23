@@ -13,22 +13,18 @@
 
 package com.corals.appointment.Client.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * ApptTransactionBody
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-13T07:13:20.960Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-20T15:31:28.176Z")
 public class ApptTransactionBody {
   @SerializedName("req_type")
   private String reqType = null;
@@ -84,6 +80,9 @@ public class ApptTransactionBody {
   @SerializedName("ser_res_unavail")
   private List<ServiceResourceUnavailBody> serResUnavail = null;
 
+  @SerializedName("ser_res_maps")
+  private List<MapServiceResourceBody> serResMaps = null;
+
   public ApptTransactionBody reqType(String reqType) {
     this.reqType = reqType;
     return this;
@@ -93,7 +92,7 @@ public class ApptTransactionBody {
    * Get reqType
    * @return reqType
   **/
-   @Schema(description = "")
+  @Schema(description = "")
   public String getReqType() {
     return reqType;
   }
@@ -416,6 +415,32 @@ public class ApptTransactionBody {
     this.serResUnavail = serResUnavail;
   }
 
+  public ApptTransactionBody serResMaps(List<MapServiceResourceBody> serResMaps) {
+    this.serResMaps = serResMaps;
+    return this;
+  }
+
+  public ApptTransactionBody addSerResMapsItem(MapServiceResourceBody serResMapsItem) {
+    if (this.serResMaps == null) {
+      this.serResMaps = new ArrayList<MapServiceResourceBody>();
+    }
+    this.serResMaps.add(serResMapsItem);
+    return this;
+  }
+
+   /**
+   * Get serResMaps
+   * @return serResMaps
+  **/
+  @Schema(description = "")
+  public List<MapServiceResourceBody> getSerResMaps() {
+    return serResMaps;
+  }
+
+  public void setSerResMaps(List<MapServiceResourceBody> serResMaps) {
+    this.serResMaps = serResMaps;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -443,12 +468,13 @@ public class ApptTransactionBody {
         Objects.equals(this.slotNo, apptTransactionBody.slotNo) &&
         Objects.equals(this.resource, apptTransactionBody.resource) &&
         Objects.equals(this.service, apptTransactionBody.service) &&
-        Objects.equals(this.serResUnavail, apptTransactionBody.serResUnavail);
+        Objects.equals(this.serResUnavail, apptTransactionBody.serResUnavail) &&
+        Objects.equals(this.serResMaps, apptTransactionBody.serResMaps);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(reqType, sessionToken, merId, deviceId, serId, resId, apptId, custId, startTime, endTime, startSlot, endSlot, isFullDay, date, slotNo, resource, service, serResUnavail);
+    return Objects.hash(reqType, sessionToken, merId, deviceId, serId, resId, apptId, custId, startTime, endTime, startSlot, endSlot, isFullDay, date, slotNo, resource, service, serResUnavail, serResMaps);
   }
 
 
@@ -475,6 +501,7 @@ public class ApptTransactionBody {
     sb.append("    resource: ").append(toIndentedString(resource)).append("\n");
     sb.append("    service: ").append(toIndentedString(service)).append("\n");
     sb.append("    serResUnavail: ").append(toIndentedString(serResUnavail)).append("\n");
+    sb.append("    serResMaps: ").append(toIndentedString(serResMaps)).append("\n");
     sb.append("}");
     return sb.toString();
   }

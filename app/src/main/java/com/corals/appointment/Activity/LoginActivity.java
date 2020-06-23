@@ -1,6 +1,5 @@
 package com.corals.appointment.Activity;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +26,7 @@ import com.corals.appointment.Client.model.SecurityAPIResponse;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
+import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -40,9 +41,10 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity {
 
     EditText editText_id, editText_password;
-    TextView button_login, textView_fg_pass;
-    TextView textView;
-
+    TextView textView_fg_pass;
+    TextView textView,textView_title;
+    ImageView imageView_logo;
+    MaterialButton button_login;
     private SharedPreferences sharedpreferences_services;
     private SharedPreferences sharedpreferences_staffs;
     private SharedPreferences sharedpreferences_ask_again;
@@ -64,6 +66,13 @@ public class LoginActivity extends AppCompatActivity {
         button_login = findViewById(R.id.button_login);
         textView = findViewById(R.id.tv_signup);
         textView_fg_pass = findViewById(R.id.text_forgot_pass);
+
+        imageView_logo=findViewById(R.id.image_logo);
+        textView_title=findViewById(R.id.text_app_title);
+
+       /* Animation animation= AnimationUtils.loadAnimation(this,R.anim.fadein_anim);
+        imageView_logo.startAnimation(animation);
+        textView_title.startAnimation(animation);*/
 
         service_name_list = new ArrayList<>();
         service_dur_list = new ArrayList<>();
@@ -113,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
         textView_fg_pass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
+                startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
                 finish();
                 overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
@@ -215,7 +224,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
-                Log.d("login--->", "onSuccess-" + statusCode + " , " + result);
+                Log.d("login--->", "onSuccess-" + statusCode + " , " + result+ " , " + result.getSessionToken());
 
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
                     SharedPreferences.Editor editor = sharedpreferences_sessionToken.edit();

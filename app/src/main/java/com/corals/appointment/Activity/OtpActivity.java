@@ -3,17 +3,13 @@ package com.corals.appointment.Activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
@@ -25,6 +21,7 @@ import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskExecutors;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseException;
@@ -38,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 public class OtpActivity extends AppCompatActivity {
 
-    private Button button_next;
+    private MaterialButton button_next;
     private TextView textView_resend, textView_time;
 
     private String mVerificationId;
@@ -63,7 +60,7 @@ public class OtpActivity extends AppCompatActivity {
         linearLayout = (FrameLayout) findViewById(R.id.layout_otp);
         progress = findViewById(R.id.verify_otp_progress_bar);
         editTextCode = (EditText) findViewById(R.id.editText_Code);
-        button_next = (Button) findViewById(R.id.button_next_opt_fragment);
+        button_next = (MaterialButton) findViewById(R.id.button_next_opt_fragment);
         textView_resend = (TextView) findViewById(R.id.text_resend_otp);
         textView_time = (TextView) findViewById(R.id.text_time);
         //textView_resend.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + "Resend OTP" + "</u>  </font>"));
@@ -206,7 +203,7 @@ public class OtpActivity extends AppCompatActivity {
                             //verification successful we will start the profile activity
                             progress.setVisibility(View.INVISIBLE);
 
-                            Intent in = new Intent(getApplicationContext(), PasswordResetActivity.class);
+                            Intent in = new Intent(getApplicationContext(), ResetPasswordActivity.class);
                             in.putExtra("mobile",mob);
                             startActivity(in);
                             finish();

@@ -11,11 +11,12 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.corals.appointment.R;
+import com.google.android.material.button.MaterialButton;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 
     EditText editText_mob;
-    Button button_forgot_continue;
+    MaterialButton button_forgot_continue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

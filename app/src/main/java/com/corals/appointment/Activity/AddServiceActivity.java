@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +31,6 @@ import java.util.Calendar;
 public class AddServiceActivity extends AppCompatActivity {
 
     EditText et_ser_name, et_ser_desc, et_ser_amt;
-    TextView tv_ser_dur;
     Button button_continue;
     public String pageId = "", position = "";
 
@@ -44,6 +44,7 @@ public class AddServiceActivity extends AppCompatActivity {
     Switch aSwitch;
     int time_mins = 0;
     String showAmtCustomer = "0";
+    private TextView tv_ser_duration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,7 @@ public class AddServiceActivity extends AppCompatActivity {
         sharedpreferences_service_data = getSharedPreferences(MyPREFERENCES_SERVICE_DATA, Context.MODE_PRIVATE);
         et_ser_name = findViewById(R.id.et_res_name);
         et_ser_desc = findViewById(R.id.et_service_description);
-        tv_ser_dur = findViewById(R.id.et_res_dur);
+        tv_ser_duration = findViewById(R.id.tv_res_dur);
         et_ser_amt = findViewById(R.id.et_ser_amount);
         button_continue = findViewById(R.id.button_res_continue);
         aSwitch = findViewById(R.id.switch_show_amount);
@@ -80,7 +81,7 @@ public class AddServiceActivity extends AppCompatActivity {
             et_ser_name.setText(name);
         }
         if (!TextUtils.isEmpty(dur)) {
-            tv_ser_dur.setText(dur + " mins");
+            tv_ser_duration.setText(dur);
         }
         if (!TextUtils.isEmpty(desc)) {
             et_ser_desc.setText(desc);
@@ -109,13 +110,13 @@ public class AddServiceActivity extends AppCompatActivity {
                 et_ser_name.setText(ser_name);
             }
             if (TextUtils.isEmpty(dur) && !TextUtils.isEmpty(ser_dur)) {
-                tv_ser_dur.setText(ser_dur);
+                tv_ser_duration.setText(ser_dur);
                 time_mins = Integer.parseInt(ser_dur);
             }
 
         }
 
-        tv_ser_dur.setOnClickListener(new View.OnClickListener() {
+        tv_ser_duration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 timepicker_dialog();
@@ -136,7 +137,7 @@ public class AddServiceActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 String name = et_ser_name.getText().toString();
-                String duration = tv_ser_dur.getText().toString();
+                String duration = tv_ser_duration.getText().toString();
                 String s_desc = et_ser_desc.getText().toString();
                 String s_amt = et_ser_amt.getText().toString();
                 if (name.length() > 0) {
@@ -199,8 +200,7 @@ public class AddServiceActivity extends AppCompatActivity {
                 int hour = pickStartTime.getCurrentHour();
                 int minute = pickStartTime.getCurrentMinute();
                 time_mins = (hour * 60) + minute;
-                tv_ser_dur.setText(time_mins + " mins");
-                //  Toast.makeText(AddServiceActivity.this, hour+" hrs "+minute+" mins", Toast.LENGTH_SHORT).show();
+                tv_ser_duration.setText(String.valueOf(time_mins));
                 pickerDialog.dismiss();
             }
         });
