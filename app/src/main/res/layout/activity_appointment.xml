@@ -293,14 +293,6 @@
                 android:textSize="17sp"
                 android:visibility="gone" />
 
-                <ListView
-                    android:id="@+id/listview_services"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:divider="#DDDDDD"
-                    android:dividerHeight="1dp"
-                    android:visibility="gone" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerview_services"

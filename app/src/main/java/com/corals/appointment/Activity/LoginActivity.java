@@ -224,11 +224,12 @@ public class LoginActivity extends AppCompatActivity {
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
-                Log.d("login--->", "onSuccess-" + statusCode + " , " + result+ " , " + result.getSessionToken());
+                Log.d("login--->", "onSuccess-" + statusCode + " , " + result+ " , " + result.getUserId());
 
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
                     SharedPreferences.Editor editor = sharedpreferences_sessionToken.edit();
                     editor.putString(SESSIONTOKEN, result.getSessionToken());
+                    editor.putString(MERID, result.getUserId());
                     editor.commit();
 
                     startActivity(new Intent(LoginActivity.this, DashboardActivity.class));

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,23 +19,37 @@ import androidx.appcompat.app.AlertDialog;
 
 
 import com.corals.appointment.Activity.AddStaffActivity;
+import com.corals.appointment.Client.model.AppointmentResources;
+import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class StaffListAdapter extends ArrayAdapter<String> {
+public class StaffListAdapter extends BaseAdapter {
 
     private final Activity context;
-    ArrayList<String> arrayList;
-    ArrayList<String> arrayList1;
-
-    public StaffListAdapter(Activity context, ArrayList<String> arrayList, ArrayList<String> arrayList1) {
-        super(context, R.layout.layout_staff, arrayList);
+    List<AppointmentResources> appointmentResources;
+    public StaffListAdapter(Activity context,List<AppointmentResources> appointmentResources) {
         // TODO Auto-generated constructor stub
 
         this.context = context;
-        this.arrayList = arrayList;
-        this.arrayList1 = arrayList1;
+        this.appointmentResources = appointmentResources;
+    }
+
+    @Override
+    public int getCount() {
+        return appointmentResources.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     public View getView(final int position, View view, ViewGroup parent) {
@@ -45,7 +60,7 @@ public class StaffListAdapter extends ArrayAdapter<String> {
         ImageView imageView_edit = (ImageView) rowView.findViewById(R.id.image_edit);
         ImageView imageView_delete = (ImageView) rowView.findViewById(R.id.image_delete);
         LinearLayout linearLayout = (LinearLayout) rowView.findViewById(R.id.layout_staff);
-        titleText.setText(arrayList.get(position));
+        titleText.setText(appointmentResources.get(position).getResName());
 
         imageView_edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,8 +69,10 @@ public class StaffListAdapter extends ArrayAdapter<String> {
                 Intent i = new Intent(context, AddStaffActivity.class);
                 i.putExtra("page_id", "03");
                 i.putExtra("position", String.valueOf(position));
-                i.putExtra("name", arrayList.get(position));
-                i.putExtra("mobile", arrayList1.get(position));
+                i.putExtra("res_id", appointmentResources.get(position).getResId());
+                i.putExtra("name", appointmentResources.get(position).getResName());
+                i.putExtra("mobile", appointmentResources.get(position).getMobile());
+                i.putExtra("mng_load", appointmentResources.get(position).getManageableLoad());
                 context.startActivity(i);
                 ((Activity)context).finish();
                 ((Activity)context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
@@ -65,8 +82,6 @@ public class StaffListAdapter extends ArrayAdapter<String> {
         imageView_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
                 alertDialogBuilder.setMessage("Are you sure, You want to delete this staff?");
                 alertDialogBuilder.setPositiveButton("Yes",

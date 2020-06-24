@@ -19,11 +19,10 @@ import java.util.Objects;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-
 /**
  * SecurityAPIResponse
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-13T07:13:20.960Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-24T14:51:36.154Z")
 public class SecurityAPIResponse {
   @SerializedName("status_code")
   private String statusCode = null;
@@ -33,6 +32,9 @@ public class SecurityAPIResponse {
 
   @SerializedName("session_token")
   private String sessionToken = null;
+
+  @SerializedName("user_id")
+  private String userId = null;
 
   public SecurityAPIResponse statusCode(String statusCode) {
     this.statusCode = statusCode;
@@ -61,7 +63,7 @@ public class SecurityAPIResponse {
    * Get statusMessage
    * @return statusMessage
   **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getStatusMessage() {
     return statusMessage;
   }
@@ -79,13 +81,31 @@ public class SecurityAPIResponse {
    * Get sessionToken
    * @return sessionToken
   **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getSessionToken() {
     return sessionToken;
   }
 
   public void setSessionToken(String sessionToken) {
     this.sessionToken = sessionToken;
+  }
+
+  public SecurityAPIResponse userId(String userId) {
+    this.userId = userId;
+    return this;
+  }
+
+   /**
+   * Get userId
+   * @return userId
+  **/
+   @Schema(description = "")
+  public String getUserId() {
+    return userId;
+  }
+
+  public void setUserId(String userId) {
+    this.userId = userId;
   }
 
 
@@ -100,12 +120,13 @@ public class SecurityAPIResponse {
     SecurityAPIResponse securityAPIResponse = (SecurityAPIResponse) o;
     return Objects.equals(this.statusCode, securityAPIResponse.statusCode) &&
         Objects.equals(this.statusMessage, securityAPIResponse.statusMessage) &&
-        Objects.equals(this.sessionToken, securityAPIResponse.sessionToken);
+        Objects.equals(this.sessionToken, securityAPIResponse.sessionToken) &&
+        Objects.equals(this.userId, securityAPIResponse.userId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(statusCode, statusMessage, sessionToken);
+    return Objects.hash(statusCode, statusMessage, sessionToken, userId);
   }
 
 
@@ -117,6 +138,7 @@ public class SecurityAPIResponse {
     sb.append("    statusCode: ").append(toIndentedString(statusCode)).append("\n");
     sb.append("    statusMessage: ").append(toIndentedString(statusMessage)).append("\n");
     sb.append("    sessionToken: ").append(toIndentedString(sessionToken)).append("\n");
+    sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

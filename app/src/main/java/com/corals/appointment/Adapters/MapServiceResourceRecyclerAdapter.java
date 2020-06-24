@@ -1,6 +1,7 @@
 package com.corals.appointment.Adapters;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,19 +14,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.corals.appointment.Activity.AddStaffActivity;
+import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MapServiceResourceRecyclerAdapter  extends RecyclerView.Adapter<MapServiceResourceRecyclerAdapter.MyViewHolder> {
-    ArrayList<String> arrayList1;
     Activity context;
-    String res;
+    List<AppointmentService> appointmentServiceArrayList;
 
-    public MapServiceResourceRecyclerAdapter(Activity context, ArrayList<String> arrayList1) {
+    public MapServiceResourceRecyclerAdapter(Activity context,List<AppointmentService> appointmentServiceArrayList) {
         this.context = context;
-        this.arrayList1 = arrayList1;
-
+        this.appointmentServiceArrayList = appointmentServiceArrayList;
     }
 
     @Override
@@ -38,17 +39,18 @@ public class MapServiceResourceRecyclerAdapter  extends RecyclerView.Adapter<Map
     @Override
     public void onBindViewHolder(final MapServiceResourceRecyclerAdapter.MyViewHolder holder, final int position) {
 
-        holder.textView_serv_name.setText(arrayList1.get(position));
+        holder.textView_serv_name.setText(appointmentServiceArrayList.get(position).getSerName());
 
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(!isChecked){
-                    AddStaffActivity.arrayList_map_service.remove(arrayList1.get(position));
+                    AddStaffActivity.arrayList_map_service.remove(appointmentServiceArrayList.get(position).getSerId());
+                    Log.d("list_map_service--->", "onCheckedChanged: "+AddStaffActivity.arrayList_map_service);
                 }
                 else {
-                    AddStaffActivity.arrayList_map_service.add(arrayList1.get(position));
-
+                    AddStaffActivity.arrayList_map_service.add(appointmentServiceArrayList.get(position).getSerId());
+                    Log.d("list_map_service--->", "onCheckedChanged: "+AddStaffActivity.arrayList_map_service);
                 }
             }
         });
@@ -58,10 +60,10 @@ public class MapServiceResourceRecyclerAdapter  extends RecyclerView.Adapter<Map
             public void onClick(View v) {
                 if(holder.checkBox.isChecked()){
                     holder.checkBox.setChecked(false);
-                    AddStaffActivity.arrayList_map_service.remove(arrayList1.get(position));
+                    AddStaffActivity.arrayList_map_service.remove(appointmentServiceArrayList.get(position).getSerId());
                 }
                 else {
-                    AddStaffActivity.arrayList_map_service.add(arrayList1.get(position));
+                    AddStaffActivity.arrayList_map_service.add(appointmentServiceArrayList.get(position).getSerId());
                     holder.checkBox.setChecked(true);
                 }
             }
@@ -70,7 +72,7 @@ public class MapServiceResourceRecyclerAdapter  extends RecyclerView.Adapter<Map
 
     @Override
     public int getItemCount() {
-        return arrayList1.size();
+        return appointmentServiceArrayList.size();
     }
 
 

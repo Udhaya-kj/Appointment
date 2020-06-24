@@ -46,7 +46,7 @@ public class DashboardActivity extends AppCompatActivity {
         textView_staff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(DashboardActivity.this, StaffActivity_Bottom.class);
+                Intent i = new Intent(DashboardActivity.this, SetupStaffActivity_Bottom.class);
                 startActivity(i);
                 finish();
                 overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);

@@ -56,8 +56,6 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
     int Year, Month, Day, Hour, Minute;
     Calendar calendar;
     EditText textView;
-    String res;
-    ListView listView_services;
     RecyclerView recyclerView_services;
     private ArrayList<String> service_name_list, service_dur_list;
     private SharedPreferences sharedpreferences_services;
@@ -67,6 +65,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
     String calendar_date;
     private IntermediateAlertDialog intermediateAlertDialog;
     private SharedPreferences sharedpreferences_sessionToken;
+    Menu menu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +92,6 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
         Minute = calendar.get(Calendar.MINUTE);
 
         calendarView = findViewById(R.id.calendarView);
-        listView_services = findViewById(R.id.listview_services);
         recyclerView_services = findViewById(R.id.recyclerview_services);
 
         LinearLayoutManager li = new LinearLayoutManager(AppointmentActivity.this);
@@ -132,7 +130,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
 
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
         enquiryBody.setReqType("E-S.");
-        enquiryBody.setMerId("119070138");
+        enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         enquiryBody.callerType("m");
         enquiryBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
         enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
@@ -287,6 +285,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -352,7 +351,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
         }
     }
 
-    @Override
+ /*   @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.action_calendar);
 
@@ -365,7 +364,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
             item.getIcon().setAlpha(130);
         }
         return true;
-    }
+    }*/
 
     private void fetchServices(AppointmentEnquiryBody requestBody) throws ApiException {
 
@@ -392,7 +391,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
-                if(Integer.parseInt("200")==200){
+                if(Integer.parseInt(result.getStatusCode())==200){
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -408,15 +407,13 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
 
                             }
                             if (service_name_list.size() != 0) {
-                                servicesAdapter = new ServicesAdapter_Calender(AppointmentActivity.this, "", service_name_list, service_dur_list);
-                                listView_services.setAdapter(servicesAdapter);
                                 textView_no_ser.setVisibility(View.GONE);
                                 recyclerView_services.setVisibility(View.VISIBLE);
-
                                 ServicesRecyclerviewAdapter servicesRecyclerviewAdapter = new ServicesRecyclerviewAdapter(AppointmentActivity.this, service_name_list, service_dur_list);
                                 recyclerView_services.setAdapter(servicesRecyclerviewAdapter);
 
                             } else {
+                                menu.findItem(R.id.action_calendar).setEnabled(false);
                                 textView_no_ser.setVisibility(View.VISIBLE);
                                 recyclerView_services.setVisibility(View.GONE);
                             }

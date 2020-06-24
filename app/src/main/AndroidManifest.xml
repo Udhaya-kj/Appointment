@@ -47,7 +47,7 @@
         <activity android:name=".Activity.SetupServiceActivity_Bottom"
             android:theme="@style/AppTheme.MaterialTheme"
             />
-        <activity android:name=".Activity.StaffActivity_Bottom"
+        <activity android:name=".Activity.SetupStaffActivity_Bottom"
             android:theme="@style/AppTheme.MaterialTheme"
             />
         <activity android:name=".Activity.SettingsActivity" />
@@ -56,7 +56,6 @@
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".Activity.ApptSuccessActivity" />
         <activity android:name=".Activity.SelectServiceProvidersActivity" />
-        <activity android:name=".Activity.StaffActivity" />
         <activity
             android:name=".Activity.AddStaffActivity"
             android:windowSoftInputMode="stateHidden"
@@ -64,13 +63,11 @@
             />
         <activity android:name=".Activity.CreateCustomerActivity" />
         <activity android:name=".Activity.ApptConfirmActivity" />
-        <activity android:name=".Activity.SetupServiceActivity" />
         <activity android:name=".Activity.CustomersMakeApptActivity" />
         <activity
             android:name=".Activity.AddServiceActivity"
             android:theme="@style/AppTheme.MaterialTheme"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".Activity.ServiceActivity" />
         <activity
             android:name=".Activity.LoginActivity"
             android:theme="@style/AppTheme.SplashNoActionBar"></activity>
