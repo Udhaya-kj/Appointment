@@ -2,10 +2,13 @@ package com.corals.appointment.Activity;
 
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,13 +27,19 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.corals.appointment.Adapters.ApptServiceSlotsAdapter;
 import com.corals.appointment.Adapters.SerUnavailSlotRecycleAdapter;
 import com.corals.appointment.Client.ApiCallback;
 import com.corals.appointment.Client.ApiException;
 import com.corals.appointment.Client.OkHttpApiClient;
 import com.corals.appointment.Client.api.MerchantApisApi;
+import com.corals.appointment.Client.model.AppointmentEnquiryBody;
+import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
+import com.corals.appointment.Client.model.Appointments;
 import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
+import com.corals.appointment.Client.model.ServiceResourceUnavailBody;
+import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
@@ -45,17 +54,20 @@ import java.util.Map;
 public class SerUnavailAskTimeActivity extends AppCompatActivity {
 
     TextView text_start_time, text_end_time, textView_appn_dt, textView_res, textView_time_title, text_st_am_pm, text_et_am_pm;
-    LinearLayout linearLayout, linearLayout_show_time, layout_show_time1, layout_show_time2,layout_slots;
+    LinearLayout linearLayout, linearLayout_show_time, layout_show_time1, layout_show_time2, layout_slots;
     Button button_submit, button_add_time;
     String start_time, end_time, task;
-    TextView tv_time_yes, tv_time_no, textView_time_validation, textView_ser_unavail_time1, textView_ser_unavail_time2, text_unavail_time_dt,textView_response,textView_fullday_hint;
+    TextView tv_time_yes, tv_time_no, textView_time_validation, textView_ser_unavail_time1, textView_ser_unavail_time2, text_unavail_time_dt, textView_response, textView_fullday_hint;
     ImageView imageView;
     boolean isValidTime = false;
     ArrayList<String> arrayList_start_time1, arrayList_start_time2, arrayList_end_time1, arrayList_end_time2;
     int hour = 0, minute = 0;
     RecyclerView recyclerView_slots;
-    private ArrayList<String> list_time_slot,list_unavail;
+    private ArrayList<String> list_time_slot, list_unavail;
     private IntermediateAlertDialog intermediateAlertDialog;
+    String ser_id, ser, dt;
+    private SharedPreferences sharedpreferences_sessionToken;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,13 +120,15 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity {
         arrayList_start_time2 = new ArrayList<>();
         arrayList_end_time1 = new ArrayList<>();
         arrayList_end_time2 = new ArrayList<>();
+        sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
         if (getIntent().getExtras() != null) {
             task = getIntent().getStringExtra("task");
-            String res = getIntent().getStringExtra("service");
-            String dt = getIntent().getStringExtra("date");
-            Log.d("Appn_Date---->", "onCreate: " + dt + "," + res);
+            ser_id = getIntent().getStringExtra("service");
+            ser = getIntent().getStringExtra("service");
+            dt = getIntent().getStringExtra("date");
+            Log.d("Appn_Date---->", "onCreate: " + ser_id + "," + ser + "," + dt);
             textView_appn_dt.setText(dt);
-            textView_res.setText(res);
+            textView_res.setText(ser);
 
             if (task.equals("1")) {
                 imageView.setBackgroundResource(R.drawable.order);
@@ -127,7 +141,6 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity {
             }
 
         }
-
 
         list_time_slot.add("08:00 am - 08:30 am");
         list_time_slot.add("12:00 pm - 12:30 pm");
@@ -151,7 +164,30 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity {
         list_unavail.add("0");
         list_unavail.add("0");
 
-        final SerUnavailSlotRecycleAdapter serUnavailSlotRecycleAdapter = new SerUnavailSlotRecycleAdapter(SerUnavailAskTimeActivity.this, list_time_slot,list_unavail,task);
+
+        AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+        enquiryBody.setReqType("E-AA.");
+        enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        enquiryBody.callerType("m");
+        enquiryBody.setSerId(ser_id);
+        enquiryBody.setDate(dt);
+        enquiryBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
+        enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+        boolean isConn = ConnectivityReceiver.isConnected();
+        if (isConn) {
+            try {
+                intermediateAlertDialog = new IntermediateAlertDialog(SerUnavailAskTimeActivity.this);
+                fetchApptAvailSlots(enquiryBody);
+            } catch (ApiException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(SerUnavailAskTimeActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+        final SerUnavailSlotRecycleAdapter serUnavailSlotRecycleAdapter = new SerUnavailSlotRecycleAdapter(SerUnavailAskTimeActivity.this, list_time_slot, list_unavail, task);
         recyclerView_slots.setAdapter(serUnavailSlotRecycleAdapter);
        /* Drawable horizontalDivider = ContextCompat.getDrawable(this, R.drawable.line_divider);
         Drawable verticalDivider = ContextCompat.getDrawable(this, R.drawable.line_divider);
@@ -206,23 +242,96 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //if (isValidTime) {
-                    final ProgressDialog pd = new ProgressDialog(SerUnavailAskTimeActivity.this);
-                    pd.setMessage("Submitting...");
-                    pd.show();
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            pd.dismiss();
-                            Intent in = new Intent(SerUnavailAskTimeActivity.this, DashboardActivity.class);
-                            startActivity(in);
-                            finish();
-                            overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
-                        }
-                    }, 2000);
-              /*  } else {
+          /*      //if (isValidTime) {
+                final ProgressDialog pd = new ProgressDialog(SerUnavailAskTimeActivity.this);
+                pd.setMessage("Submitting...");
+                pd.show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        pd.dismiss();
+                        Intent in = new Intent(SerUnavailAskTimeActivity.this, DashboardActivity.class);
+                        startActivity(in);
+                        finish();
+                        overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                    }
+                }, 2000);
+              *//*  } else {
                     Toast.makeText(SerUnavailAskTimeActivity.this, "Select valid time!", Toast.LENGTH_SHORT).show();
                 }*/
+
+                sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
+                if(!TextUtils.isEmpty(task) && task.equals("1")) {
+
+                    ServiceResourceUnavailBody serviceResourceUnavailBody=new ServiceResourceUnavailBody();
+                    List<ServiceResourceUnavailBody> serviceResourceUnavailBodyList = new ArrayList<>();
+                    serviceResourceUnavailBody.setDate("");
+                    serviceResourceUnavailBody.setSlotNo("");
+                    serviceResourceUnavailBody.setIsFullDay(true);
+                    serviceResourceUnavailBody.setStartTime("");
+                    serviceResourceUnavailBody.setEndTime("");
+                    serviceResourceUnavailBody.setStartSlot("");
+                    serviceResourceUnavailBody.setEndSlot("");
+                    serviceResourceUnavailBodyList.add(serviceResourceUnavailBody);
+
+                    ApptTransactionBody transactionBody = new ApptTransactionBody();
+                    transactionBody.setReqType("T-UA.S");
+                    transactionBody.setResId(ser_id);
+                    transactionBody.setDate(dt);
+                    transactionBody.serResUnavail(serviceResourceUnavailBodyList);
+                    transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+                    transactionBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
+                    transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+
+                    try {
+                        Log.d("Token--->", "token: " + sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+                        boolean isConn = ConnectivityReceiver.isConnected();
+                        if (isConn) {
+                            intermediateAlertDialog = new IntermediateAlertDialog(SerUnavailAskTimeActivity.this);
+                            apptServiceUnavailability(transactionBody);
+                        } else {
+                            Toast.makeText(SerUnavailAskTimeActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (ApiException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else if(!TextUtils.isEmpty(task) && task.equals("2")) {
+                    ServiceResourceUnavailBody serviceResourceUnavailBody=new ServiceResourceUnavailBody();
+                    List<ServiceResourceUnavailBody> serviceResourceUnavailBodyList = new ArrayList<>();
+                    serviceResourceUnavailBody.setDate("");
+                    serviceResourceUnavailBody.setSlotNo("");
+                    serviceResourceUnavailBody.setIsFullDay(true);
+                    serviceResourceUnavailBody.setStartTime("");
+                    serviceResourceUnavailBody.setEndTime("");
+              /*      serviceResourceUnavailBody.setStartSlot("");
+                    serviceResourceUnavailBody.setEndSlot("");*/
+                    serviceResourceUnavailBodyList.add(serviceResourceUnavailBody);
+
+                    ApptTransactionBody transactionBody = new ApptTransactionBody();
+                    transactionBody.setReqType("T-UA.R");
+                    transactionBody.setResId(ser_id);
+                    transactionBody.setDate(dt);
+                    transactionBody.serResUnavail(serviceResourceUnavailBodyList);
+                    transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+                    transactionBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
+                    transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+
+                    try {
+                        Log.d("Token--->", "token: " + sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+                        boolean isConn = ConnectivityReceiver.isConnected();
+                        if (isConn) {
+                            intermediateAlertDialog = new IntermediateAlertDialog(SerUnavailAskTimeActivity.this);
+                            apptResourceUnavailability(transactionBody);
+                        } else {
+                            Toast.makeText(SerUnavailAskTimeActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (ApiException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
             }
         });
         Log.d("arrayList_time--->", "onClick: " + arrayList_start_time1.size());
@@ -298,6 +407,128 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity {
 
 
     }
+
+    private void fetchApptAvailSlots(AppointmentEnquiryBody requestBody) throws ApiException {
+
+        Log.d("fetchApptService---", "login: " + requestBody);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(SerUnavailAskTimeActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentEnquiryAsync(requestBody, new ApiCallback<AppointmentEnquiryResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("fetchApptService--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(SerUnavailAskTimeActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                startActivity(new Intent(SerUnavailAskTimeActivity.this, ServiceUnavailbleActivity.class));
+                                finish();
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                            }
+                        };
+                    }
+                });
+
+            }
+
+            @Override
+            public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+
+                Log.d("fetchApptService--->", "onSuccess-" + statusCode + "," + result);
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+
+                if(Integer.parseInt(result.getStatusCode())==200) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Toast.makeText(AppointmentActivity.this, ""+result.getStatusMessage(), Toast.LENGTH_SHORT).show();
+                            List<Appointments> appointmentAvailableSlots = new ArrayList<>();
+                            List<Appointments> appointmentAvailableSlotsList = result.getAppointments();
+                            for (int t = 0; t < appointmentAvailableSlotsList.size(); t++) {
+                                String appt_id = appointmentAvailableSlotsList.get(t).getApptId();
+                                String start_time = appointmentAvailableSlotsList.get(t).getStartTime();
+                                String end_time = appointmentAvailableSlotsList.get(t).getEndTime();
+
+                                Log.d("Appt--->", "run: "+appt_id+","+start_time+","+end_time);
+                                Appointments appointments = new Appointments();
+                                appointments.setApptId(appt_id);
+                                appointments.setStartTime(start_time);
+                                appointments.setEndTime(end_time);
+                                appointmentAvailableSlots.add(appointments);
+
+                            }
+                            if (!appointmentAvailableSlots.isEmpty()) {
+                              /*  textView_no_ser.setVisibility(View.GONE);
+                                recyclerView_services.setVisibility(View.VISIBLE);*/
+                                final SerUnavailSlotRecycleAdapter serUnavailSlotRecycleAdapter = new SerUnavailSlotRecycleAdapter(SerUnavailAskTimeActivity.this, list_time_slot, list_unavail, task);
+                                recyclerView_slots.setAdapter(serUnavailSlotRecycleAdapter);
+
+                            } else {
+                             /*   textView_no_ser.setVisibility(View.VISIBLE);
+                                recyclerView_services.setVisibility(View.GONE);*/
+                            }
+
+
+                        }
+                    });
+                }
+                else if(Integer.parseInt(result.getStatusCode())==404) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, "No available slots found for "+ser+" service", "OK", "","Success") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(SerUnavailAskTimeActivity.this, ServiceUnavailbleActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
+                        }
+                    });
+                }
+                else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(SerUnavailAskTimeActivity.this, ServiceUnavailbleActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
+                        }
+                    });
+                }
+
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
+
+    }
+
+
 
     private void getAnimation(String msg) {
         textView_time_validation.setVisibility(View.VISIBLE);
@@ -560,6 +791,19 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity {
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(SerUnavailAskTimeActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                startActivity(new Intent(SerUnavailAskTimeActivity.this, SetupServiceActivity_Bottom.class));
+                                finish();
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                            }
+                        };
+                    }
+                });
             }
 
             @Override
@@ -568,6 +812,119 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity {
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
+                if (Integer.parseInt(result.getStatusCode()) == 200) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, "Service unavailability added successfully!", "OK", "","Success") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(SerUnavailAskTimeActivity.this, SetupServiceActivity_Bottom.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                                }
+                            };
+                        }
+                    });
+
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, "Service unavailability added failed. Please try again later!", "OK", "","Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(SerUnavailAskTimeActivity.this, SetupServiceActivity_Bottom.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
+                        }
+                    });
+                }
+
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
+    }
+
+    private void apptResourceUnavailability(ApptTransactionBody requestBody) throws ApiException {
+        Log.d("createStaff---", "createStaff: " + requestBody);
+        intermediateAlertDialog = new IntermediateAlertDialog(SerUnavailAskTimeActivity.this);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(SerUnavailAskTimeActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentTransactionAsync(requestBody, new ApiCallback<ApptTransactionResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("createStaff--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(SerUnavailAskTimeActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                startActivity(new Intent(SerUnavailAskTimeActivity.this, SetupServiceActivity_Bottom.class));
+                                finish();
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                            }
+                        };
+                    }
+                });
+            }
+
+            @Override
+            public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("createStaff--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+                if (Integer.parseInt(result.getStatusCode()) == 200) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, "Staff unavailability added successfully!", "OK", "","Success") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(SerUnavailAskTimeActivity.this, SetupServiceActivity_Bottom.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                                }
+                            };
+                        }
+                    });
+
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, "Staff unavailability added failed. Please try again later!", "OK", "","Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(SerUnavailAskTimeActivity.this, SetupServiceActivity_Bottom.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
+                        }
+                    });
+                }
+
             }
 
             @Override

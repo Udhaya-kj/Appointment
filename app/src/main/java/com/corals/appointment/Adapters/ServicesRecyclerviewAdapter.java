@@ -10,35 +10,28 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.corals.appointment.Activity.ServiceUnavailCalendarActivity;
 import com.corals.appointment.Activity.TimeSlotsActivity;
 import com.corals.appointment.Activity.ViewApptServiceActivity;
+import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.R;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
-public class ServicesRecyclerviewAdapter extends RecyclerView.Adapter<ServicesRecyclerviewAdapter.MyViewHolder> implements DatePickerDialog.OnDateSetListener {
-    ArrayList<String> arrayList1, arrayList2, arrayList_val;
+public class ServicesRecyclerviewAdapter extends RecyclerView.Adapter<ServicesRecyclerviewAdapter.MyViewHolder>  {
+    List<AppointmentService> appointmentServices;
     Activity context;
-    DatePickerDialog datePickerDialog;
-    TimePickerDialog timePickerDialog;
-    int Year, Month, Day, Hour, Minute;
-    Calendar calendar;
-    String res;
-    public ServicesRecyclerviewAdapter(Activity context, ArrayList<String> arrayList1, ArrayList<String> arrayList2) {
+    String id;
+    public ServicesRecyclerviewAdapter(Activity context,String id,List<AppointmentService> appointmentServices) {
 
         this.context = context;
-        this.arrayList1 = arrayList1;
-        this.arrayList2 = arrayList2;
+        this.id = id;
+        this.appointmentServices = appointmentServices;
 
-        calendar = Calendar.getInstance();
-        Year = calendar.get(Calendar.YEAR);
-        Month = calendar.get(Calendar.MONTH);
-        Day = calendar.get(Calendar.DAY_OF_MONTH);
-        Hour = calendar.get(Calendar.HOUR_OF_DAY);
-        Minute = calendar.get(Calendar.MINUTE);
     }
 
     @Override
@@ -51,19 +44,30 @@ public class ServicesRecyclerviewAdapter extends RecyclerView.Adapter<ServicesRe
     @Override
     public void onBindViewHolder(final ServicesRecyclerviewAdapter.MyViewHolder holder, final int position) {
 
-        holder.textView_ser_name.setText(arrayList1.get(position));
-        holder.textView_ser_dur.setText(arrayList2.get(position));
+        holder.textView_ser_name.setText(appointmentServices.get(position).getSerName());
+        //holder.textView_ser_dur.setText(appointmentServices.get(position).getSerDuration());
 
         holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent i = new Intent(context, ViewApptServiceActivity.class);
-                i.putExtra("service", arrayList1.get(position));
-                //i.putExtra("date", CalendarServicesActivity.cal_date);
-                context.startActivity(i);
-                ((Activity)context).finish();
-                ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                if(id.equals("1")) {
+                    Intent i = new Intent(context, ViewApptServiceActivity.class);
+                    i.putExtra("service_id", appointmentServices.get(position).getSerId());
+                    i.putExtra("service", appointmentServices.get(position).getSerName());
+                    context.startActivity(i);
+                    ((Activity) context).finish();
+                    ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                }
+                else if(id.equals("5")){
+                    Intent i = new Intent(context, ServiceUnavailCalendarActivity.class);
+                    i.putExtra("task", "1");
+                    i.putExtra("service_id", appointmentServices.get(position).getSerId());
+                    i.putExtra("service", appointmentServices.get(position).getSerName());
+                    context.startActivity(i);
+                    ((Activity) context).finish();
+                    ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                }
             }
         });
 
@@ -72,23 +76,9 @@ public class ServicesRecyclerviewAdapter extends RecyclerView.Adapter<ServicesRe
 
     @Override
     public int getItemCount() {
-        return arrayList1.size();
+        return appointmentServices.size();
     }
 
-    @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        String date = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
-
-        //Toast.makeText(context, date + "," + res, Toast.LENGTH_LONG).show();
-
-        //TextView text_datepicker = (TextView) findViewById(R.id.text_datepicker);
-        // text_datepicker.setText(date);
-        Intent i = new Intent(context, TimeSlotsActivity.class);
-        i.putExtra("resource", res);
-        i.putExtra("date", date);
-        context.startActivity(i);
-        ((Activity) context).finish();
-    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 

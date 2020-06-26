@@ -29,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="true"
+            android:fillViewport="true"
             android:focusableInTouchMode="true">
 
                 <LinearLayout
@@ -72,7 +73,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:orientation="vertical"
-                        android:visibility="gone">
+                        android:visibility="visible">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -93,7 +94,8 @@
                             android:orientation="horizontal"
                             android:weightSum="0.7">
 
-                            <Button
+
+                            <TextView
                                 android:id="@+id/btn_yes_sunday_P"
                                 android:layout_width="0dp"
                                 android:layout_height="35dp"
@@ -109,7 +111,7 @@
                                 android:textSize="10sp"
                                 android:visibility="visible" />
 
-                            <Button
+                            <TextView
                                 android:id="@+id/btn_yes_monday_P"
                                 android:layout_width="0dp"
                                 android:layout_height="35dp"
@@ -119,11 +121,12 @@
                                 android:paddingStart="0dp"
                                 android:paddingEnd="0dp"
                                 android:text="Mon"
+                                android:gravity="center"
                                 android:textAllCaps="false"
                                 android:textColor="@color/white"
                                 android:textSize="10sp" />
 
-                            <Button
+                            <TextView
                                 android:id="@+id/btn_yes_tuesday_P"
                                 android:layout_width="0dp"
                                 android:layout_height="35dp"
@@ -138,7 +141,7 @@
                                 android:textColor="@color/white"
                                 android:textSize="10sp" />
 
-                            <Button
+                            <TextView
                                 android:id="@+id/btn_yes_wedsnesday_P"
                                 android:layout_width="0dp"
                                 android:layout_height="35dp"
@@ -153,7 +156,7 @@
                                 android:textColor="@color/white"
                                 android:textSize="10sp" />
 
-                            <Button
+                            <TextView
                                 android:id="@+id/btn_yes_thursday_P"
                                 android:layout_width="0dp"
                                 android:layout_height="35dp"
@@ -168,7 +171,7 @@
                                 android:textColor="@color/white"
                                 android:textSize="10sp" />
 
-                            <Button
+                            <TextView
                                 android:id="@+id/btn_yes_friday_P"
                                 android:layout_width="0dp"
                                 android:layout_height="35dp"
@@ -183,7 +186,7 @@
                                 android:textColor="@color/white"
                                 android:textSize="10sp" />
 
-                            <Button
+                            <TextView
                                 android:id="@+id/btn_yes_saturday_P"
                                 android:layout_width="0dp"
                                 android:layout_height="35dp"

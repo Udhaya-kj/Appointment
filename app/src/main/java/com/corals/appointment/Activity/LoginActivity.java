@@ -23,6 +23,7 @@ import com.corals.appointment.Client.OkHttpApiClient;
 import com.corals.appointment.Client.api.MerchantApisApi;
 import com.corals.appointment.Client.model.SecurityAPIBody;
 import com.corals.appointment.Client.model.SecurityAPIResponse;
+import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
@@ -61,6 +62,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+            boolean isConn = ConnectivityReceiver.isConnected();
+            if (!isConn) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(LoginActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title),"Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                finish();
+                            }
+                        };
+                    }
+                });
+            }
         editText_id = findViewById(R.id.edit_userid);
         editText_password = findViewById(R.id.edit_password);
         button_login = findViewById(R.id.button_login);
@@ -111,7 +126,6 @@ public class LoginActivity extends AppCompatActivity {
         Log.d("listsize---->", "onCreate: " + service_name_list.size() + "," + service_dur_list.size() + "," + staff_name_list.size() + "," + staff_mob_list.size());
 
         textView.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + "Sign up" + "</u>  </font>"));
-
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,7 +177,18 @@ public class LoginActivity extends AppCompatActivity {
                             if (isConn) {
                                 merchantApptLogin(securityAPIBody);
                             } else {
-                                Toast.makeText(LoginActivity.this, "No internet connection", Toast.LENGTH_SHORT).show();
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        new AlertDialogFailure(LoginActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title),"Failed") {
+                                            @Override
+                                            public void onButtonClick() {
+                                                finish();
+                                            }
+                                        };
+                                    }
+                                });
                             }
                         } catch (ApiException e) {
                             e.printStackTrace();
@@ -213,10 +238,22 @@ public class LoginActivity extends AppCompatActivity {
         webMerchantApisApi.merchantAppoinmentSecurityAsync(requestBody, new ApiCallback<SecurityAPIResponse>() {
             @Override
             public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+
+                Log.d("login--->", "OnFailure :" + statusCode + " , " + e.getMessage().toString());
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
-                Log.d("login--->", "onFailure-" + e.getMessage());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(LoginActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                            @Override
+                            public void onButtonClick() {
+                               // finish();
+                            }
+                        };
+                    }
+                });
             }
 
             @Override
@@ -235,12 +272,20 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
                     finish();
                 } else {
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                            new AlertDialogFailure(LoginActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                   // finish();
+                                }
+                            };
                         }
                     });
+
+
                 }
             }
 

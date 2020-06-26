@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * MapServiceResourceBody
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-20T15:31:28.176Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-24T14:51:36.154Z")
 public class MapServiceResourceBody {
   @SerializedName("ser_id")
   private String serId = null;
@@ -30,18 +30,18 @@ public class MapServiceResourceBody {
   @SerializedName("res_id")
   private String resId = null;
 
-  @SerializedName("map_id")
-  private String mapId = null;
+  @SerializedName("delete")
+  private Boolean delete = null;
 
   public MapServiceResourceBody serId(String serId) {
     this.serId = serId;
     return this;
   }
 
-   /**
+  /**
    * Get serId
    * @return serId
-  **/
+   **/
   @Schema(description = "")
   public String getSerId() {
     return serId;
@@ -56,11 +56,11 @@ public class MapServiceResourceBody {
     return this;
   }
 
-   /**
+  /**
    * Get resId
    * @return resId
-  **/
-  @Schema(description = "")
+   **/
+ @Schema(description = "")
   public String getResId() {
     return resId;
   }
@@ -69,27 +69,27 @@ public class MapServiceResourceBody {
     this.resId = resId;
   }
 
-  public MapServiceResourceBody mapId(String mapId) {
-    this.mapId = mapId;
+  public MapServiceResourceBody delete(Boolean delete) {
+    this.delete = delete;
     return this;
   }
 
-   /**
-   * Get mapId
-   * @return mapId
-  **/
-  @Schema(description = "")
-  public String getMapId() {
-    return mapId;
+  /**
+   * Get delete
+   * @return delete
+   **/
+ @Schema(description = "")
+  public Boolean isDelete() {
+    return delete;
   }
 
-  public void setMapId(String mapId) {
-    this.mapId = mapId;
+  public void setDelete(Boolean delete) {
+    this.delete = delete;
   }
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -98,13 +98,13 @@ public class MapServiceResourceBody {
     }
     MapServiceResourceBody mapServiceResourceBody = (MapServiceResourceBody) o;
     return Objects.equals(this.serId, mapServiceResourceBody.serId) &&
-        Objects.equals(this.resId, mapServiceResourceBody.resId) &&
-        Objects.equals(this.mapId, mapServiceResourceBody.mapId);
+            Objects.equals(this.resId, mapServiceResourceBody.resId) &&
+            Objects.equals(this.delete, mapServiceResourceBody.delete);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(serId, resId, mapId);
+    return Objects.hash(serId, resId, delete);
   }
 
 
@@ -112,10 +112,10 @@ public class MapServiceResourceBody {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class MapServiceResourceBody {\n");
-    
+
     sb.append("    serId: ").append(toIndentedString(serId)).append("\n");
     sb.append("    resId: ").append(toIndentedString(resId)).append("\n");
-    sb.append("    mapId: ").append(toIndentedString(mapId)).append("\n");
+    sb.append("    delete: ").append(toIndentedString(delete)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -124,7 +124,7 @@ public class MapServiceResourceBody {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

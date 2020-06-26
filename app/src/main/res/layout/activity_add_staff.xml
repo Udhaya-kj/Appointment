@@ -27,6 +27,9 @@
             android:id="@+id/scrollview_add_staff"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:fillViewport="true"
             android:scrollbars="vertical">
 
             <LinearLayout
@@ -82,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
-                    android:hint="Staff max appointments per slot"
+                    android:hint="Appointments within a slot"
                     app:boxStrokeColor="@color/mtrl_textinput_default_box_stroke_color">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -195,7 +198,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:paddingStart="10dp"
-                        android:text="Select staff working hours"
+                        android:text="Select staff availability time"
                         android:textStyle="bold" />
 
                     <RadioButton
@@ -218,6 +221,7 @@
                         android:text="Custom Time" />
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/cardview_custom_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="30dp"
@@ -233,7 +237,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="10dp"
                             android:orientation="vertical"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -254,7 +258,8 @@
                                 android:orientation="horizontal"
                                 android:weightSum="0.7">
 
-                                <Button
+
+                                <TextView
                                     android:id="@+id/btn_yes_sunday_P"
                                     android:layout_width="0dp"
                                     android:layout_height="35dp"
@@ -270,7 +275,7 @@
                                     android:textSize="10sp"
                                     android:visibility="visible" />
 
-                                <Button
+                                <TextView
                                     android:id="@+id/btn_yes_monday_P"
                                     android:layout_width="0dp"
                                     android:layout_height="35dp"
@@ -280,11 +285,12 @@
                                     android:paddingStart="0dp"
                                     android:paddingEnd="0dp"
                                     android:text="Mon"
+                                    android:gravity="center"
                                     android:textAllCaps="false"
                                     android:textColor="@color/white"
                                     android:textSize="10sp" />
 
-                                <Button
+                                <TextView
                                     android:id="@+id/btn_yes_tuesday_P"
                                     android:layout_width="0dp"
                                     android:layout_height="35dp"
@@ -299,7 +305,7 @@
                                     android:textColor="@color/white"
                                     android:textSize="10sp" />
 
-                                <Button
+                                <TextView
                                     android:id="@+id/btn_yes_wedsnesday_P"
                                     android:layout_width="0dp"
                                     android:layout_height="35dp"
@@ -314,7 +320,7 @@
                                     android:textColor="@color/white"
                                     android:textSize="10sp" />
 
-                                <Button
+                                <TextView
                                     android:id="@+id/btn_yes_thursday_P"
                                     android:layout_width="0dp"
                                     android:layout_height="35dp"
@@ -329,7 +335,7 @@
                                     android:textColor="@color/white"
                                     android:textSize="10sp" />
 
-                                <Button
+                                <TextView
                                     android:id="@+id/btn_yes_friday_P"
                                     android:layout_width="0dp"
                                     android:layout_height="35dp"
@@ -344,7 +350,7 @@
                                     android:textColor="@color/white"
                                     android:textSize="10sp" />
 
-                                <Button
+                                <TextView
                                     android:id="@+id/btn_yes_saturday_P"
                                     android:layout_width="0dp"
                                     android:layout_height="35dp"
@@ -469,17 +475,6 @@
 
                             </LinearLayout>
 
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/recylerview_avail_hours"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="20dp"
-                                android:background="@drawable/layout_bg_grey"
-                                android:padding="5dp"
-                                android:paddingTop="5dp"
-                                android:paddingBottom="10dp"
-                                android:visibility="gone" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"

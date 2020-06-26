@@ -27,17 +27,24 @@
             android:theme="@style/AppTheme.MaterialTheme"/>
         <activity android:name=".Activity.ForgotPasswordActivity"
             android:theme="@style/AppTheme.MaterialTheme"/>
-        <activity android:name=".Activity.SerUnavailAskTimeActivity" />
-        <activity android:name=".Activity.ServiceUnavailCalendarActivity" />
-        <activity android:name=".Activity.ServiceUnavailbleActivity" />
+        <activity android:name=".Activity.SerUnavailAskTimeActivity"
+            android:theme="@style/AppTheme.MaterialTheme"/>
+        <activity android:name=".Activity.ServiceUnavailCalendarActivity"
+            android:theme="@style/AppTheme.MaterialTheme"/>
+        <activity android:name=".Activity.ServiceUnavailbleActivity"
+            android:theme="@style/AppTheme.MaterialTheme"/>
         <activity android:name=".Activity.AddServiceAvailTimeActivity"
+            android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppTheme.MaterialTheme">
 
         </activity>
         <activity android:name=".Activity.TimePickerActivity" />
-        <activity android:name=".Activity.ViewCustomerApptActivity" />
-        <activity android:name=".Activity.ViewApptServiceActivity" />
-        <activity android:name=".Activity.CalendarViewActivity" />
+        <activity android:name=".Activity.ViewCustomerApptActivity"
+            android:theme="@style/AppTheme.MaterialTheme"/>
+        <activity android:name=".Activity.ViewApptServiceActivity"
+            android:theme="@style/AppTheme.MaterialTheme"/>
+        <activity android:name=".Activity.CalendarViewActivity"
+            android:theme="@style/AppTheme.MaterialTheme"/>
         <activity android:name=".Activity.StatusServiceStaffActivity" />
         <activity
             android:name=".Activity.ChangeApptActivity"
@@ -50,7 +57,8 @@
         <activity android:name=".Activity.SetupStaffActivity_Bottom"
             android:theme="@style/AppTheme.MaterialTheme"
             />
-        <activity android:name=".Activity.SettingsActivity" />
+        <activity android:name=".Activity.SettingsActivity"
+            android:theme="@style/AppTheme.MaterialTheme"/>
         <activity
             android:name=".Activity.CustomerActivity_Bottom"
             android:windowSoftInputMode="stateHidden" />
@@ -62,7 +70,8 @@
             android:theme="@style/AppTheme.MaterialTheme"
             />
         <activity android:name=".Activity.CreateCustomerActivity" />
-        <activity android:name=".Activity.ApptConfirmActivity" />
+        <activity android:name=".Activity.ApptConfirmActivity"
+            android:theme="@style/AppTheme.MaterialTheme"/>
         <activity android:name=".Activity.CustomersMakeApptActivity" />
         <activity
             android:name=".Activity.AddServiceActivity"
@@ -73,7 +82,8 @@
             android:theme="@style/AppTheme.SplashNoActionBar"></activity>
         <activity android:name=".Activity.AppointmentActivity"
             android:theme="@style/AppTheme.MaterialTheme"/>
-        <activity android:name=".Activity.TimeSlotsActivity" />
+        <activity android:name=".Activity.TimeSlotsActivity"
+            android:theme="@style/AppTheme.MaterialTheme"/>
         <activity android:name=".Activity.DashboardActivity" />
 
         <receiver

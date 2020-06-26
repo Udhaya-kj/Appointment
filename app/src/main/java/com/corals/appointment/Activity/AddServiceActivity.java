@@ -32,6 +32,7 @@ import com.corals.appointment.Client.api.MerchantApisApi;
 import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
+import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
@@ -87,7 +88,7 @@ public class AddServiceActivity extends AppCompatActivity {
         button_continue = findViewById(R.id.button_res_continue);
         aSwitch = findViewById(R.id.switch_show_amount);
 
-
+        tv_ser_duration.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + "00" + "</u>  </font>"));
         if (getIntent().getExtras() != null) {
             pageId = getIntent().getStringExtra("page_id");
 
@@ -98,6 +99,8 @@ public class AddServiceActivity extends AppCompatActivity {
                 ser_id = getIntent().getStringExtra("ser_id");
                 ser_desc = getIntent().getStringExtra("description");
                 show_cust = getIntent().getStringExtra("show_cust");
+                tv_ser_duration.setEnabled(false);
+                toolbar.setTitle("UPDATE SERVICE");
                 button_continue.setText("UPDATE SERVICE");
             } else if (pageId.equals("003")) {
                 ser_name = sharedpreferences_service_data.getString(SER_NAME, "");
@@ -112,7 +115,8 @@ public class AddServiceActivity extends AppCompatActivity {
                 et_ser_name.setText(ser_name);
             }
             if (!TextUtils.isEmpty(ser_dur)) {
-                tv_ser_duration.setText(ser_dur);
+                tv_ser_duration.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + ser_dur + "</u>  </font>"));
+                //tv_ser_duration.setText(ser_dur);
                 time_mins = Integer.parseInt(ser_dur);
             }
             if (!TextUtils.isEmpty(ser_amount)) {
@@ -188,18 +192,17 @@ public class AddServiceActivity extends AppCompatActivity {
                                 } else if (pageId.equals("03")) {
                                     AppointmentService appointmentService = new AppointmentService();
                                     appointmentService.setSerId(ser_id);
-                                    appointmentService.setSerName(ser_name);
+                                    appointmentService.setSerName(name);
                                     appointmentService.setSerDuration(ser_dur);
-                                    appointmentService.setSerPrice(ser_amount);
+                                    appointmentService.setSerPrice(s_amt);
                                     appointmentService.setIsActive(true);
                                     appointmentService.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
-                                    appointmentService.setSerDescription(ser_desc);
-                                    if (!TextUtils.isEmpty(show_cust) && show_cust.equals("true")) {
+                                    appointmentService.setSerDescription(s_desc);
+                                    if (!TextUtils.isEmpty(showAmtCustomer) && showAmtCustomer.equals("1")) {
                                         appointmentService.setIsShowCust(true);
                                     } else {
                                         appointmentService.setIsShowCust(false);
                                     }
-
 
                                     ApptTransactionBody transactionBody = new ApptTransactionBody();
                                     transactionBody.setReqType("T-S.U");
@@ -264,7 +267,8 @@ public class AddServiceActivity extends AppCompatActivity {
                 int hour = pickStartTime.getCurrentHour();
                 int minute = pickStartTime.getCurrentMinute();
                 time_mins = (hour * 60) + minute;
-                tv_ser_duration.setText(String.valueOf(time_mins));
+                //tv_ser_duration.setText(String.valueOf(time_mins));
+                tv_ser_duration.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + String.valueOf(time_mins) + "</u>  </font>"));
                 pickerDialog.dismiss();
             }
         });
@@ -380,7 +384,14 @@ public class AddServiceActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(AddServiceActivity.this, "Service update Failed :" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        new AlertDialogFailure(AddServiceActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                startActivity(new Intent(AddServiceActivity.this, SetupServiceActivity_Bottom.class));
+                                finish();
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                            }
+                        };
                     }
                 });
             }
@@ -392,15 +403,33 @@ public class AddServiceActivity extends AppCompatActivity {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
-                    Intent in = new Intent(AddServiceActivity.this, SetupServiceActivity_Bottom.class);
-                    startActivity(in);
-                    finish();
-                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddServiceActivity.this, "Service updated successfully!", "OK", "","Success") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(AddServiceActivity.this, SetupServiceActivity_Bottom.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                                }
+                            };
+                        }
+                    });
+
                 } else {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(AddServiceActivity.this, "Service update Failed", Toast.LENGTH_SHORT).show();
+                            new AlertDialogFailure(AddServiceActivity.this, "Service update failed. Please try again later!", "OK", "","Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(AddServiceActivity.this, SetupServiceActivity_Bottom.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
                         }
                     });
                 }

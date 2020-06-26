@@ -26,6 +26,10 @@ import com.corals.appointment.Client.OkHttpApiClient;
 import com.corals.appointment.Client.api.MerchantApisApi;
 import com.corals.appointment.Client.model.AppointmentEnquiryBody;
 import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
+import com.corals.appointment.Client.model.AppointmentResources;
+import com.corals.appointment.Client.model.AppointmentService;
+import com.corals.appointment.Client.model.MapServiceResourceBody;
+import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
@@ -46,6 +50,7 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
     private SharedPreferences sharedpreferences_staffs;
     String task;
     private IntermediateAlertDialog intermediateAlertDialog;
+    private SharedPreferences sharedpreferences_sessionToken;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +67,7 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
+        sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
         if (getIntent().getExtras() != null) {
             task = getIntent().getStringExtra("task");
             if (task.equals("2")) {
@@ -85,7 +90,24 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
 
         if (task.equals("1")) {
             textView_ser_staff.setText("Select service");
-            String nameList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_NAME, "");
+            AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+            enquiryBody.setReqType("E-S.");
+            enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+            enquiryBody.callerType("m");
+            enquiryBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
+            enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+            boolean isConn = ConnectivityReceiver.isConnected();
+            if (isConn) {
+                try {
+                    intermediateAlertDialog = new IntermediateAlertDialog(ServiceUnavailbleActivity.this);
+                    fetchServices(enquiryBody);
+                } catch (ApiException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(ServiceUnavailbleActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+            }
+     /*       String nameList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_NAME, "");
             String mobList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_DURATION, "");
             if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
                 service_name_list = new Gson().fromJson(nameList, new TypeToken<ArrayList<String>>() {
@@ -103,10 +125,10 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
                 textView_no_ser.setText("No services created");
                 textView_no_ser.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
-            }
+            }*/
         } else if (task.equals("2")) {
             textView_ser_staff.setText("Select staff");
-            String nameList1 = sharedpreferences_staffs.getString(AddStaffActivity.NAME, "");
+          /*  String nameList1 = sharedpreferences_staffs.getString(AddStaffActivity.NAME, "");
             String mobList1 = sharedpreferences_staffs.getString(AddStaffActivity.MOBILE, "");
             if (!TextUtils.isEmpty(nameList1) && !TextUtils.isEmpty(mobList1)) {
                 staff_name_list = new Gson().fromJson(nameList1, new TypeToken<ArrayList<String>>() {
@@ -123,21 +145,29 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
                 textView_no_ser.setText("No staffs created");
                 textView_no_ser.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
+            }*/
+
+            AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+            enquiryBody.setReqType("E-R.");
+            enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+            enquiryBody.callerType("m");
+            enquiryBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
+            enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+            boolean isConn = ConnectivityReceiver.isConnected();
+            if (isConn) {
+                try {
+                    intermediateAlertDialog = new IntermediateAlertDialog(ServiceUnavailbleActivity.this);
+                    fetchStaff(enquiryBody);
+                } catch (ApiException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(ServiceUnavailbleActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
             }
         }
 
-   /*   AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
-        boolean isConn = ConnectivityReceiver.isConnected();
-        if (isConn) {
-            try {
-                fetchServices(enquiryBody);
-            } catch (ApiException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Toast.makeText(ServiceUnavailbleActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
-        }
-*/
+
+
 
     }
 
@@ -153,7 +183,8 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
 
     private void fetchServices(AppointmentEnquiryBody requestBody) throws ApiException {
 
-        intermediateAlertDialog = new IntermediateAlertDialog(ServiceUnavailbleActivity.this);
+
+
         Log.d("login---", "login: " + requestBody);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(ServiceUnavailbleActivity.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();
@@ -166,14 +197,76 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(ServiceUnavailbleActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                startActivity(new Intent(ServiceUnavailbleActivity.this, DashboardActivity.class));
+                                finish();
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                            }
+                        };
+                    }
+                });
             }
 
             @Override
-            public void onSuccess(AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+            public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
 
-                Log.d("fetchService--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
+                Log.d("fetchService--->", "onSuccess-" + statusCode + "," + result);
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
+                }
+                if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Toast.makeText(AppointmentActivity.this, ""+result.getStatusMessage(), Toast.LENGTH_SHORT).show();
+                            List<AppointmentService> appointmentServices = new ArrayList<>();
+                            List<AppointmentService> appointmentServicesList = result.getServices();
+                            for (int t = 0; t < appointmentServicesList.size(); t++) {
+                                String ser_name = appointmentServicesList.get(t).getSerName();
+                                String ser_dur = appointmentServicesList.get(t).getSerDuration();
+                                String ser_Id = appointmentServicesList.get(t).getSerId();
+
+                                AppointmentService appointmentService = new AppointmentService();
+                                appointmentService.setSerId(ser_Id);
+                                appointmentService.setSerName(ser_name);
+                                appointmentService.setSerDuration(ser_dur);
+                                appointmentServices.add(appointmentService);
+                            }
+                            if (!appointmentServices.isEmpty()) {
+                                textView_no_ser.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
+                                ServicesRecyclerviewAdapter servicesRecyclerviewAdapter = new ServicesRecyclerviewAdapter(ServiceUnavailbleActivity.this,"5", appointmentServices);
+                                recyclerView.setAdapter(servicesRecyclerviewAdapter);
+
+                            } else {
+                                textView_no_ser.setText("No services created");
+                                textView_no_ser.setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.GONE);
+                            }
+
+
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ServiceUnavailbleActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(ServiceUnavailbleActivity.this, DashboardActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
+                        }
+                    });
                 }
             }
 
@@ -189,5 +282,113 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
         });
 
     }
+
+
+    private void fetchStaff(AppointmentEnquiryBody requestBody) throws ApiException {
+
+        Log.d("fetchService--->", "fetchService: " + requestBody);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(ServiceUnavailbleActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentEnquiryAsync(requestBody, new ApiCallback<AppointmentEnquiryResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("fetchStaff--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(ServiceUnavailbleActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                startActivity(new Intent(ServiceUnavailbleActivity.this, DashboardActivity.class));
+                                finish();
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                            }
+                        };
+                    }
+                });
+            }
+
+            @Override
+            public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+
+                Log.d("fetchStaff--->", "onSuccess-" + statusCode + "," + result+ "," + result.getResources());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+                if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Toast.makeText(AppointmentActivity.this, ""+result.getStatusMessage(), Toast.LENGTH_SHORT).show();
+                            List<AppointmentResources> appointmentResources = new ArrayList<>();
+                            List<AppointmentResources> appointmentResourcesList = result.getResources();
+                            for (int t = 0; t < appointmentResourcesList.size(); t++) {
+                                String res_name = appointmentResourcesList.get(t).getResName();
+                                String res_mob = appointmentResourcesList.get(t).getMobile();
+                                String res_load = appointmentResourcesList.get(t).getManageableLoad();
+                                String res_id = appointmentResourcesList.get(t).getResId();
+                                List<MapServiceResourceBody> mapServiceResourceBodyList = appointmentResourcesList.get(t).getSerResMaps();
+                                //boolean sameBussTime = appointmentResourcesList.get(t).isSameBussTime();
+                                Log.d("staff_data---", "run: "+res_name+","+res_mob+","+res_load+","+res_id+","+mapServiceResourceBodyList);
+
+                                AppointmentResources appointmentResources1 = new AppointmentResources();
+                                appointmentResources1.setResId(res_id);
+                                appointmentResources1.setResName(res_name);
+                                appointmentResources1.setMobile(res_mob);
+                                appointmentResources1.setManageableLoad(res_load);
+                                appointmentResources1.setSameBussTime(true);
+                                appointmentResources1.setSerResMaps(mapServiceResourceBodyList);
+                                appointmentResources.add(appointmentResources1);
+                            }
+                            if (!appointmentResources.isEmpty() && appointmentResources!=null) {
+                                StaffLeaveAdapter staffListAdapter = new StaffLeaveAdapter(ServiceUnavailbleActivity.this, appointmentResources);
+                                recyclerView.setAdapter(staffListAdapter);
+
+
+                            } else {
+                                textView_no_ser.setText("No staffs created");
+                                textView_no_ser.setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.GONE);
+                            }
+
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ServiceUnavailbleActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(ServiceUnavailbleActivity.this, DashboardActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
+
+    }
+
+
 
 }

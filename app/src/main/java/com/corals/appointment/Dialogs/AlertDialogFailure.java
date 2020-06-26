@@ -16,21 +16,23 @@ import com.google.android.material.button.MaterialButton;
 
 public abstract class AlertDialogFailure {
 
-    public AlertDialogFailure(Context mcntx, String msg, String btnTxt, String oopsmsg) {
-        failureDiolog(mcntx, msg, btnTxt, oopsmsg);
+    public AlertDialogFailure(Context mcntx, String msg, String btnTxt, String oopsmsg, String title) {
+        failureDiolog(mcntx, msg, btnTxt, oopsmsg,title);
     }
 
 
-    private void failureDiolog(Context mcntx, String msg, String btnTxt, String oopsmsg) {
+    private void failureDiolog(Context mcntx, String msg, String btnTxt, String oopsmsg, String title) {
         AlertDialog.Builder builder;
         AlertDialog alertDialog = null;
         View view = LayoutInflater.from(mcntx).inflate(R.layout.alert_diolog_failed, null, false);
         MaterialButton btn = view.findViewById(R.id.buttonOk);
         TextView txtvw = view.findViewById(R.id.alert_diolog_msg);
+        TextView txt_title = view.findViewById(R.id.text_alert_response);
         TextView oops = view.findViewById(R.id.oops);
         if (oopsmsg.equals("")) {
             oops.setVisibility(View.GONE);
         }
+        txt_title.setText(title);
         txtvw.setText(msg);
         btn.setText(btnTxt);
         oops.setText(oopsmsg);

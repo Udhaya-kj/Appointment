@@ -38,10 +38,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                 textView_title.clearAnimation();
 
                 Intent in=new Intent(SplashScreenActivity.this,LoginActivity.class);
-            /*    Pair[] pairs=new Pair[2];
-                pairs[0] =new Pair<View,String>(imageView_logo,"image_logo");
-                pairs[1] =new Pair<View,String>(textView_title,"text_app_title");
-                ActivityOptions activityOptions=ActivityOptions.makeSceneTransitionAnimation(SplashScreenActivity.this,pairs);*/
                 startActivity(in);
                 finish();
             }

@@ -28,6 +28,7 @@ import com.corals.appointment.Client.api.MerchantApisApi;
 import com.corals.appointment.Client.model.AppointmentEnquiryBody;
 import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
 import com.corals.appointment.Client.model.AppointmentService;
+import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
@@ -79,6 +80,11 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
         service_dur_list = new ArrayList<>();
         linearLayout_add_resource = findViewById(R.id.layout_add_resource);
         listView_services = findViewById(R.id.listview_services);
+
+        SharedPreferences preferences = getSharedPreferences(AddServiceActivity.MyPREFERENCES_SERVICE_DATA, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.commit();
 
    /*     sharedpreferences_services = getSharedPreferences(AddServiceAvailTimeActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
         String nameList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_NAME, "");
@@ -180,6 +186,19 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(SetupServiceActivity_Bottom.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                startActivity(new Intent(SetupServiceActivity_Bottom.this, DashboardActivity.class));
+                                finish();
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                            }
+                        };
+                    }
+                });
             }
 
             @Override
@@ -236,8 +255,14 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(SetupServiceActivity_Bottom.this, "" + result.getStatusMessage(), Toast.LENGTH_SHORT).show();
-
+                            new AlertDialogFailure(SetupServiceActivity_Bottom.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(SetupServiceActivity_Bottom.this, DashboardActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
                         }
                     });
                 }

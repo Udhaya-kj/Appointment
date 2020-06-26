@@ -25,6 +25,8 @@ import com.corals.appointment.Client.model.AppointmentEnquiryBody;
 import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
 import com.corals.appointment.Client.model.AppointmentResources;
 import com.corals.appointment.Client.model.AppointmentService;
+import com.corals.appointment.Client.model.MapServiceResourceBody;
+import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
@@ -146,12 +148,26 @@ public class    SetupStaffActivity_Bottom extends AppCompatActivity {
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(SetupStaffActivity_Bottom.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                startActivity(new Intent(SetupStaffActivity_Bottom.this, DashboardActivity.class));
+                                finish();
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                            }
+                        };
+                    }
+                });
             }
 
             @Override
             public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
 
-                Log.d("fetchStaff--->", "onSuccess-" + statusCode + "," + result);
+                Log.d("fetchStaff--->", "onSuccess-" + statusCode + "," + result+ "," + result.getResources());
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
@@ -167,15 +183,18 @@ public class    SetupStaffActivity_Bottom extends AppCompatActivity {
                                 String res_mob = appointmentResourcesList.get(t).getMobile();
                                 String res_load = appointmentResourcesList.get(t).getManageableLoad();
                                 String res_id = appointmentResourcesList.get(t).getResId();
-                                Log.d("staff_data---", "run: "+res_name+","+res_mob+","+res_load+","+res_id);
+                                List<MapServiceResourceBody> mapServiceResourceBodyList = appointmentResourcesList.get(t).getSerResMaps();
+                                //boolean sameBussTime = appointmentResourcesList.get(t).isSameBussTime();
+                                Log.d("staff_data---", "run: "+res_name+","+res_mob+","+res_load+","+res_id+","+mapServiceResourceBodyList);
 
                                 AppointmentResources appointmentResources1 = new AppointmentResources();
                                 appointmentResources1.setResId(res_id);
                                 appointmentResources1.setResName(res_name);
                                 appointmentResources1.setMobile(res_mob);
                                 appointmentResources1.setManageableLoad(res_load);
+                                appointmentResources1.setSameBussTime(true);
+                                appointmentResources1.setSerResMaps(mapServiceResourceBodyList);
                                 appointmentResources.add(appointmentResources1);
-
                             }
                             if (appointmentResources.size() != 0) {
                                 textView_no_staff.setVisibility(View.GONE);
@@ -196,8 +215,14 @@ public class    SetupStaffActivity_Bottom extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(SetupStaffActivity_Bottom.this, "" + result.getStatusMessage(), Toast.LENGTH_SHORT).show();
-
+                            new AlertDialogFailure(SetupStaffActivity_Bottom.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(SetupStaffActivity_Bottom.this, DashboardActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
                         }
                     });
                 }

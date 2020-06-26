@@ -36,6 +36,7 @@ import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
 import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.Client.model.SecurityAPIBody;
 import com.corals.appointment.Client.model.SecurityAPIResponse;
+import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
@@ -57,7 +58,6 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
     Calendar calendar;
     EditText textView;
     RecyclerView recyclerView_services;
-    private ArrayList<String> service_name_list, service_dur_list;
     private SharedPreferences sharedpreferences_services;
     ServicesAdapter_Calender servicesAdapter;
     TextView textView_no_ser, textView_cal_next;
@@ -66,6 +66,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
     private IntermediateAlertDialog intermediateAlertDialog;
     private SharedPreferences sharedpreferences_sessionToken;
     Menu menu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,10 +103,6 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
         textView_cal_next = findViewById(R.id.text_calendar_next);
         textView.setSelection(7);
 
-        service_name_list = new ArrayList<>();
-        service_dur_list = new ArrayList<>();
-
-
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
@@ -127,7 +124,6 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
             }
         });
 
-
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
         enquiryBody.setReqType("E-S.");
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
@@ -142,11 +138,23 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
                 e.printStackTrace();
             }
         } else {
-            Toast.makeText(AppointmentActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialogFailure(AppointmentActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title),"Failed") {
+                        @Override
+                        public void onButtonClick() {
+                            startActivity(new Intent(AppointmentActivity.this, DashboardActivity.class));
+                            finish();
+                            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                        }
+                    };
+                }
+            });
         }
 
 
-        sharedpreferences_services = getSharedPreferences(AddServiceAvailTimeActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
+      /*  sharedpreferences_services = getSharedPreferences(AddServiceAvailTimeActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
         String nameList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_NAME, "");
         String mobList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_DURATION, "");
         if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
@@ -156,7 +164,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
             }.getType());
         }
 
-        Log.d("listsize---->", "onCreate: " + service_name_list + "," + service_dur_list);
+        Log.d("listsize---->", "onCreate: " + service_name_list + "," + service_dur_list);*/
     /*    if (service_name_list.size() != 0 && service_dur_list.size() != 0) {
             servicesAdapter = new ServicesAdapter_Calender(AppointmentActivity.this, "", service_name_list, service_dur_list);
             listView_services.setAdapter(servicesAdapter);
@@ -258,7 +266,14 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        String date = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+        int mnth = monthOfYear + 1;
+        String month = null;
+        if (String.valueOf(mnth).length() == 1) {
+            month = "0" + String.valueOf(mnth);
+        } else {
+            month = String.valueOf(mnth);
+        }
+        String date = year + "-" + (Integer.parseInt(month)) + "-" + dayOfMonth;
         Intent i = new Intent(AppointmentActivity.this, CalendarServicesActivity.class);
         i.putExtra("page_id", "1");
         i.putExtra("date", date);
@@ -382,6 +397,20 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(AppointmentActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                startActivity(new Intent(AppointmentActivity.this, DashboardActivity.class));
+                                finish();
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                            }
+                        };
+                    }
+                });
             }
 
             @Override
@@ -391,25 +420,29 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
-                if(Integer.parseInt(result.getStatusCode())==200){
+                if (Integer.parseInt(result.getStatusCode()) == 200) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             //Toast.makeText(AppointmentActivity.this, ""+result.getStatusMessage(), Toast.LENGTH_SHORT).show();
-
+                            List<AppointmentService> appointmentServices = new ArrayList<>();
                             List<AppointmentService> appointmentServicesList = result.getServices();
                             for (int t = 0; t < appointmentServicesList.size(); t++) {
                                 String ser_name = appointmentServicesList.get(t).getSerName();
                                 String ser_dur = appointmentServicesList.get(t).getSerDuration();
+                                String ser_Id = appointmentServicesList.get(t).getSerId();
 
-                                service_name_list.add(ser_name);
-                                service_dur_list.add(ser_dur);
+                                AppointmentService appointmentService = new AppointmentService();
+                                appointmentService.setSerId(ser_Id);
+                                appointmentService.setSerName(ser_name);
+                                appointmentService.setSerDuration(ser_dur);
+                                appointmentServices.add(appointmentService);
 
                             }
-                            if (service_name_list.size() != 0) {
+                            if (!appointmentServices.isEmpty()) {
                                 textView_no_ser.setVisibility(View.GONE);
                                 recyclerView_services.setVisibility(View.VISIBLE);
-                                ServicesRecyclerviewAdapter servicesRecyclerviewAdapter = new ServicesRecyclerviewAdapter(AppointmentActivity.this, service_name_list, service_dur_list);
+                                ServicesRecyclerviewAdapter servicesRecyclerviewAdapter = new ServicesRecyclerviewAdapter(AppointmentActivity.this,"1", appointmentServices);
                                 recyclerView_services.setAdapter(servicesRecyclerviewAdapter);
 
                             } else {
@@ -421,13 +454,18 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
 
                         }
                     });
-                }
-                else {
+                } else {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(AppointmentActivity.this, ""+result.getStatusMessage(), Toast.LENGTH_SHORT).show();
-
+                            new AlertDialogFailure(AppointmentActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(AppointmentActivity.this, DashboardActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
                         }
                     });
                 }

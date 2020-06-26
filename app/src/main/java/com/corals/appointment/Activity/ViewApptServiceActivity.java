@@ -6,8 +6,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,12 +18,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.corals.appointment.Adapters.ApptServiceSlotsAdapter;
+import com.corals.appointment.Adapters.ServicesRecyclerviewAdapter;
 import com.corals.appointment.Client.ApiCallback;
 import com.corals.appointment.Client.ApiException;
 import com.corals.appointment.Client.OkHttpApiClient;
 import com.corals.appointment.Client.api.MerchantApisApi;
+import com.corals.appointment.Client.model.AppointmentAvailableSlots;
 import com.corals.appointment.Client.model.AppointmentEnquiryBody;
 import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
+import com.corals.appointment.Client.model.AppointmentService;
+import com.corals.appointment.Client.model.Appointments;
+import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
@@ -38,8 +45,10 @@ public class ViewApptServiceActivity extends AppCompatActivity {
     ImageView imageView_back, imageView_next;
     TextView textView_date;
     Calendar c;
-    String formattedDate,service;
+    String formattedDate, service, service_id;
     private IntermediateAlertDialog intermediateAlertDialog;
+    private SharedPreferences sharedpreferences_sessionToken;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +65,9 @@ public class ViewApptServiceActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
+        sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
         if (getIntent().getExtras() != null) {
+            service_id = getIntent().getStringExtra("service_id");
             service = getIntent().getStringExtra("service");
             toolbar.setTitle(service);
         }
@@ -85,7 +95,6 @@ public class ViewApptServiceActivity extends AppCompatActivity {
         arrayList_slot_cus_mob.add("8787878787");
         arrayList_slot_cus_mob.add("9090909090");
 
-
         arrayList_available.add("1");
         arrayList_available.add("0");
         arrayList_available.add("0");
@@ -108,8 +117,8 @@ public class ViewApptServiceActivity extends AppCompatActivity {
 
         LinearLayoutManager lm = new LinearLayoutManager(ViewApptServiceActivity.this);
         recyclerView.setLayoutManager(lm);
-        ApptServiceSlotsAdapter apptServiceSlotsAdapter = new ApptServiceSlotsAdapter(ViewApptServiceActivity.this, arrayList_slot_time, arrayList_slot_cus_name, arrayList_slot_cus_mob, arrayList_available);
-        recyclerView.setAdapter(apptServiceSlotsAdapter);
+/*        ApptServiceSlotsAdapter apptServiceSlotsAdapter = new ApptServiceSlotsAdapter(ViewApptServiceActivity.this, arrayList_slot_time, arrayList_slot_cus_name, arrayList_slot_cus_mob, arrayList_available);
+        recyclerView.setAdapter(apptServiceSlotsAdapter);*/
 
         imageView_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,19 +180,28 @@ public class ViewApptServiceActivity extends AppCompatActivity {
             }
         });
 
-       /*       AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+        final SimpleDateFormat df_ser = new SimpleDateFormat("yyyy-MM-dd");
+        String dt_appt = df_ser.format(c.getTime());
+
+        AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+        enquiryBody.setReqType("E-A.MS");
+        enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        enquiryBody.callerType("m");
+        enquiryBody.setSerId(service_id);
+        enquiryBody.setDate(dt_appt);
+        enquiryBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
+        enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
         boolean isConn = ConnectivityReceiver.isConnected();
         if (isConn) {
             try {
+                intermediateAlertDialog = new IntermediateAlertDialog(ViewApptServiceActivity.this);
                 fetchApptService(enquiryBody);
             } catch (ApiException e) {
                 e.printStackTrace();
             }
         } else {
             Toast.makeText(ViewApptServiceActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
-        }*/
-
-
+        }
 
     }
 
@@ -198,9 +216,7 @@ public class ViewApptServiceActivity extends AppCompatActivity {
 
     private void fetchApptService(AppointmentEnquiryBody requestBody) throws ApiException {
 
-        intermediateAlertDialog = new IntermediateAlertDialog(ViewApptServiceActivity.this);
-
-        Log.d("login---", "login: " + requestBody);
+        Log.d("fetchApptService---", "login: " + requestBody);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(ViewApptServiceActivity.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();
         webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
@@ -208,19 +224,101 @@ public class ViewApptServiceActivity extends AppCompatActivity {
         webMerchantApisApi.merchantAppointmentEnquiryAsync(requestBody, new ApiCallback<AppointmentEnquiryResponse>() {
             @Override
             public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
-                Log.d("fetchService--->", "onFailure-" + e.getMessage());
+                Log.d("fetchApptService--->", "onFailure-" + e.getMessage());
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(ViewApptServiceActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                startActivity(new Intent(ViewApptServiceActivity.this, AppointmentActivity.class));
+                                finish();
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                            }
+                        };
+                    }
+                });
+
             }
 
             @Override
-            public void onSuccess(AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+            public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
 
-                Log.d("fetchService--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
+                Log.d("fetchApptService--->", "onSuccess-" + statusCode + "," + result);
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
+
+                if(Integer.parseInt(result.getStatusCode())==200) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Toast.makeText(AppointmentActivity.this, ""+result.getStatusMessage(), Toast.LENGTH_SHORT).show();
+                            List<Appointments> appointmentAvailableSlots = new ArrayList<>();
+                            List<Appointments> appointmentAvailableSlotsList = result.getAppointments();
+                            for (int t = 0; t < appointmentAvailableSlotsList.size(); t++) {
+                                String appt_id = appointmentAvailableSlotsList.get(t).getApptId();
+                                String start_time = appointmentAvailableSlotsList.get(t).getStartTime();
+                                String end_time = appointmentAvailableSlotsList.get(t).getEndTime();
+
+                                Log.d("Appt--->", "run: "+appt_id+","+start_time+","+end_time);
+                                Appointments appointments = new Appointments();
+                                appointments.setApptId(appt_id);
+                                appointments.setStartTime(start_time);
+                                appointments.setEndTime(end_time);
+                                appointmentAvailableSlots.add(appointments);
+
+                            }
+                            if (!appointmentAvailableSlots.isEmpty()) {
+                              /*  textView_no_ser.setVisibility(View.GONE);
+                                recyclerView_services.setVisibility(View.VISIBLE);*/
+                                ApptServiceSlotsAdapter apptServiceSlotsAdapter = new ApptServiceSlotsAdapter(ViewApptServiceActivity.this, appointmentAvailableSlots);
+                                recyclerView.setAdapter(apptServiceSlotsAdapter);
+
+                            } else {
+                             /*   textView_no_ser.setVisibility(View.VISIBLE);
+                                recyclerView_services.setVisibility(View.GONE);*/
+                            }
+
+
+                        }
+                    });
+                }
+                else if(Integer.parseInt(result.getStatusCode())==404) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ViewApptServiceActivity.this, "No appointments found for "+service+" service", "OK", "","Success") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(ViewApptServiceActivity.this, AppointmentActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
+                        }
+                    });
+                }
+                else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ViewApptServiceActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(ViewApptServiceActivity.this, AppointmentActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
+                        }
+                    });
+                }
+
             }
 
             @Override

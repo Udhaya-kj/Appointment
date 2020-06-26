@@ -12,22 +12,21 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.corals.appointment.Activity.CustomersMakeApptActivity;
+import com.corals.appointment.Client.model.Appointments;
 import com.corals.appointment.Dialogs.ViewSlotCustomersBottomDialog;
 import com.corals.appointment.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlotsAdapter.MyViewHolder> {
-    ArrayList<String> arrayList_time, arrayList_cus_name, arrayList_cus_mob, arrayList_available;
     Activity context;
-
-    public ApptServiceSlotsAdapter(Activity context, ArrayList<String> arrayList1, ArrayList<String> arrayList2, ArrayList<String> arrayList3, ArrayList<String> arrayList4) {
+    List<Appointments> appointmentAvailableSlots;
+    public ApptServiceSlotsAdapter(Activity context,  List<Appointments> appointmentAvailableSlots) {
         this.context = context;
-        this.arrayList_time = arrayList1;
-        this.arrayList_cus_name = arrayList2;
-        this.arrayList_cus_mob = arrayList3;
-        this.arrayList_available = arrayList4;
+        this.appointmentAvailableSlots = appointmentAvailableSlots;
+
     }
 
     @Override
@@ -40,9 +39,9 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
     @Override
     public void onBindViewHolder(final ApptServiceSlotsAdapter.MyViewHolder holder, final int position) {
 
-        holder.textView_ser_time.setText(arrayList_time.get(position));
+        holder.textView_ser_time.setText(appointmentAvailableSlots.get(position).getStartTime()+" - "+appointmentAvailableSlots.get(position).getEndTime());
 
-        if (arrayList_available.get(position).equals("0")) {
+       /* if (arrayList_available.get(position).equals("0")) {
             holder.linearLayout_color.setBackgroundResource(R.drawable.left_round_corners_blue);
             holder.imageView_avail.setBackgroundResource(R.drawable.tick);
             holder.imageView_avail.setEnabled(false);
@@ -50,14 +49,14 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
             holder.linearLayout_color.setBackgroundResource(R.drawable.left_round_corners_green);
             holder.imageView_avail.setBackgroundResource(R.drawable.add_green);
             holder.imageView_avail.setEnabled(true);
-        }
+        }*/
 
         holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BottomSheetDialog bd = new BottomSheetDialog(context);
-                ViewSlotCustomersBottomDialog viewSlotCustomersBottomDialog = new ViewSlotCustomersBottomDialog(context,arrayList_time.get(position), arrayList_cus_name, arrayList_cus_mob, bd);
-                viewSlotCustomersBottomDialog.showBottomSheetDialog();
+              /*  ViewSlotCustomersBottomDialog viewSlotCustomersBottomDialog = new ViewSlotCustomersBottomDialog(context,arrayList_time.get(position), arrayList_cus_name, arrayList_cus_mob, bd);
+                viewSlotCustomersBottomDialog.showBottomSheetDialog();*/
             }
         });
 
@@ -76,7 +75,7 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
 
     @Override
     public int getItemCount() {
-        return arrayList_time.size();
+        return appointmentAvailableSlots.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

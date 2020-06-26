@@ -21,7 +21,7 @@ public class ServiceUnavailCalendarActivity extends AppCompatActivity {
     CalendarView calendarView;
     Button button_next;
     TextView textView_ser,textView_title;
-    String ser, task, calendar_date;
+    String ser_id,ser, task, calendar_date;
     Calendar c;
     ImageView imageView;
 
@@ -50,6 +50,7 @@ public class ServiceUnavailCalendarActivity extends AppCompatActivity {
         calendarView. setMinDate(System. currentTimeMillis() - 1000);
         if (getIntent().getExtras() != null) {
             task = getIntent().getStringExtra("task");
+            ser_id = getIntent().getStringExtra("service_id");
             ser = getIntent().getStringExtra("service");
             textView_ser.setText(ser);
             if (task.equals("1")) {
@@ -63,7 +64,7 @@ public class ServiceUnavailCalendarActivity extends AppCompatActivity {
         }
         c = Calendar.getInstance();
         System.out.println("Current time => " + c.getTime());
-        final SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         calendar_date = df.format(c.getTime());
 
 
@@ -84,12 +85,12 @@ public class ServiceUnavailCalendarActivity extends AppCompatActivity {
 
                 Intent in = new Intent(ServiceUnavailCalendarActivity.this, SerUnavailAskTimeActivity.class);
                 in.putExtra("task", task);
+                in.putExtra("service_id", ser_id);
                 in.putExtra("service", ser);
                 in.putExtra("date", calendar_date);
                 startActivity(in);
                 finish();
                 overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
-
             }
         });
 

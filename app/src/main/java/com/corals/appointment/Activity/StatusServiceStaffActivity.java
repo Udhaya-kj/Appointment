@@ -39,8 +39,6 @@ public class StatusServiceStaffActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status_service_staff);
 
-
-
         imageView_service = findViewById(R.id.image_service);
         imageView_staff = findViewById(R.id.image_staff);
         button_ok = findViewById(R.id.button_status_create);

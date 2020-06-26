@@ -11,17 +11,19 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.corals.appointment.Activity.ServiceUnavailCalendarActivity;
+import com.corals.appointment.Client.model.AppointmentResources;
 import com.corals.appointment.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class StaffLeaveAdapter extends RecyclerView.Adapter<StaffLeaveAdapter.MyViewHolder> {
-    ArrayList<String> arrayList1;
     Activity context;
-    public StaffLeaveAdapter(Activity context, ArrayList<String> arrayList1) {
+    List<AppointmentResources> appointmentResources;
+    public StaffLeaveAdapter(Activity context,  List<AppointmentResources> appointmentResources) {
 
         this.context = context;
-        this.arrayList1 = arrayList1;
+        this.appointmentResources = appointmentResources;
 
     }
 
@@ -35,7 +37,7 @@ public class StaffLeaveAdapter extends RecyclerView.Adapter<StaffLeaveAdapter.My
     @Override
     public void onBindViewHolder(final StaffLeaveAdapter.MyViewHolder holder, final int position) {
 
-        holder.textView_staff_name.setText(arrayList1.get(position));
+        holder.textView_staff_name.setText(appointmentResources.get(position).getResName());
         // holder.textView_ser_dur.setText(arrayList2.get(position)+" mins");
 
         holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
@@ -44,7 +46,8 @@ public class StaffLeaveAdapter extends RecyclerView.Adapter<StaffLeaveAdapter.My
 
                 Intent i = new Intent(context, ServiceUnavailCalendarActivity.class);
                 i.putExtra("task", "2");
-                i.putExtra("service", arrayList1.get(position));
+                i.putExtra("service_id", appointmentResources.get(position).getResId());
+                i.putExtra("service", appointmentResources.get(position).getResName());
                 context.startActivity(i);
                 ((Activity)context).finish();
                 ((Activity)context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
@@ -56,7 +59,7 @@ public class StaffLeaveAdapter extends RecyclerView.Adapter<StaffLeaveAdapter.My
 
     @Override
     public int getItemCount() {
-        return arrayList1.size();
+        return appointmentResources.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

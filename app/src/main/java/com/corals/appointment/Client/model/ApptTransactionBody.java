@@ -24,8 +24,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * ApptTransactionBody
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-20T15:31:28.176Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-26T13:30:21.935Z")
 public class ApptTransactionBody {
+  @SerializedName("mobile")
+  private String mobile = null;
+
+  @SerializedName("name")
+  private String name = null;
+
+  @SerializedName("mail")
+  private String mail = null;
+
   @SerializedName("req_type")
   private String reqType = null;
 
@@ -80,18 +89,69 @@ public class ApptTransactionBody {
   @SerializedName("ser_res_unavail")
   private List<ServiceResourceUnavailBody> serResUnavail = null;
 
-  @SerializedName("ser_res_maps")
-  private List<MapServiceResourceBody> serResMaps = null;
+  public ApptTransactionBody mobile(String mobile) {
+    this.mobile = mobile;
+    return this;
+  }
+
+  /**
+   * Get mobile
+   * @return mobile
+   **/
+  @Schema(description = "")
+  public String getMobile() {
+    return mobile;
+  }
+
+  public void setMobile(String mobile) {
+    this.mobile = mobile;
+  }
+
+  public ApptTransactionBody name(String name) {
+    this.name = name;
+    return this;
+  }
+
+  /**
+   * Get name
+   * @return name
+   **/
+  @Schema(description = "")
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public ApptTransactionBody mail(String mail) {
+    this.mail = mail;
+    return this;
+  }
+
+  /**
+   * Get mail
+   * @return mail
+   **/
+  @Schema(description = "")
+  public String getMail() {
+    return mail;
+  }
+
+  public void setMail(String mail) {
+    this.mail = mail;
+  }
 
   public ApptTransactionBody reqType(String reqType) {
     this.reqType = reqType;
     return this;
   }
 
-   /**
+  /**
    * Get reqType
    * @return reqType
-  **/
+   **/
   @Schema(description = "")
   public String getReqType() {
     return reqType;
@@ -106,10 +166,10 @@ public class ApptTransactionBody {
     return this;
   }
 
-   /**
+  /**
    * Get sessionToken
    * @return sessionToken
-  **/
+   **/
   @Schema(description = "")
   public String getSessionToken() {
     return sessionToken;
@@ -124,10 +184,10 @@ public class ApptTransactionBody {
     return this;
   }
 
-   /**
+  /**
    * Get merId
    * @return merId
-  **/
+   **/
   @Schema(description = "")
   public String getMerId() {
     return merId;
@@ -142,10 +202,10 @@ public class ApptTransactionBody {
     return this;
   }
 
-   /**
+  /**
    * Get deviceId
    * @return deviceId
-  **/
+   **/
   @Schema(description = "")
   public String getDeviceId() {
     return deviceId;
@@ -160,10 +220,10 @@ public class ApptTransactionBody {
     return this;
   }
 
-   /**
+  /**
    * Get serId
    * @return serId
-  **/
+   **/
   @Schema(description = "")
   public String getSerId() {
     return serId;
@@ -178,10 +238,10 @@ public class ApptTransactionBody {
     return this;
   }
 
-   /**
+  /**
    * Get resId
    * @return resId
-  **/
+   **/
   @Schema(description = "")
   public String getResId() {
     return resId;
@@ -196,10 +256,10 @@ public class ApptTransactionBody {
     return this;
   }
 
-   /**
+  /**
    * Get apptId
    * @return apptId
-  **/
+   **/
   @Schema(description = "")
   public String getApptId() {
     return apptId;
@@ -214,10 +274,10 @@ public class ApptTransactionBody {
     return this;
   }
 
-   /**
+  /**
    * Get custId
    * @return custId
-  **/
+   **/
   @Schema(description = "")
   public String getCustId() {
     return custId;
@@ -232,10 +292,10 @@ public class ApptTransactionBody {
     return this;
   }
 
-   /**
+  /**
    * Get startTime
    * @return startTime
-  **/
+   **/
   @Schema(description = "")
   public String getStartTime() {
     return startTime;
@@ -250,10 +310,10 @@ public class ApptTransactionBody {
     return this;
   }
 
-   /**
+  /**
    * Get endTime
    * @return endTime
-  **/
+   **/
   @Schema(description = "")
   public String getEndTime() {
     return endTime;
@@ -268,10 +328,10 @@ public class ApptTransactionBody {
     return this;
   }
 
-   /**
+  /**
    * Get startSlot
    * @return startSlot
-  **/
+   **/
   @Schema(description = "")
   public String getStartSlot() {
     return startSlot;
@@ -286,10 +346,10 @@ public class ApptTransactionBody {
     return this;
   }
 
-   /**
+  /**
    * Get endSlot
    * @return endSlot
-  **/
+   **/
   @Schema(description = "")
   public String getEndSlot() {
     return endSlot;
@@ -304,10 +364,10 @@ public class ApptTransactionBody {
     return this;
   }
 
-   /**
+  /**
    * Get isFullDay
    * @return isFullDay
-  **/
+   **/
   @Schema(description = "")
   public Boolean isIsFullDay() {
     return isFullDay;
@@ -322,10 +382,10 @@ public class ApptTransactionBody {
     return this;
   }
 
-   /**
+  /**
    * Get date
    * @return date
-  **/
+   **/
   @Schema(description = "")
   public String getDate() {
     return date;
@@ -340,10 +400,10 @@ public class ApptTransactionBody {
     return this;
   }
 
-   /**
+  /**
    * Get slotNo
    * @return slotNo
-  **/
+   **/
   @Schema(description = "")
   public String getSlotNo() {
     return slotNo;
@@ -358,10 +418,10 @@ public class ApptTransactionBody {
     return this;
   }
 
-   /**
+  /**
    * Get resource
    * @return resource
-  **/
+   **/
   @Schema(description = "")
   public AppointmentResources getResource() {
     return resource;
@@ -376,10 +436,10 @@ public class ApptTransactionBody {
     return this;
   }
 
-   /**
+  /**
    * Get service
    * @return service
-  **/
+   **/
   @Schema(description = "")
   public AppointmentService getService() {
     return service;
@@ -402,10 +462,10 @@ public class ApptTransactionBody {
     return this;
   }
 
-   /**
+  /**
    * Get serResUnavail
    * @return serResUnavail
-  **/
+   **/
   @Schema(description = "")
   public List<ServiceResourceUnavailBody> getSerResUnavail() {
     return serResUnavail;
@@ -415,35 +475,9 @@ public class ApptTransactionBody {
     this.serResUnavail = serResUnavail;
   }
 
-  public ApptTransactionBody serResMaps(List<MapServiceResourceBody> serResMaps) {
-    this.serResMaps = serResMaps;
-    return this;
-  }
-
-  public ApptTransactionBody addSerResMapsItem(MapServiceResourceBody serResMapsItem) {
-    if (this.serResMaps == null) {
-      this.serResMaps = new ArrayList<MapServiceResourceBody>();
-    }
-    this.serResMaps.add(serResMapsItem);
-    return this;
-  }
-
-   /**
-   * Get serResMaps
-   * @return serResMaps
-  **/
-  @Schema(description = "")
-  public List<MapServiceResourceBody> getSerResMaps() {
-    return serResMaps;
-  }
-
-  public void setSerResMaps(List<MapServiceResourceBody> serResMaps) {
-    this.serResMaps = serResMaps;
-  }
-
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -451,30 +485,32 @@ public class ApptTransactionBody {
       return false;
     }
     ApptTransactionBody apptTransactionBody = (ApptTransactionBody) o;
-    return Objects.equals(this.reqType, apptTransactionBody.reqType) &&
-        Objects.equals(this.sessionToken, apptTransactionBody.sessionToken) &&
-        Objects.equals(this.merId, apptTransactionBody.merId) &&
-        Objects.equals(this.deviceId, apptTransactionBody.deviceId) &&
-        Objects.equals(this.serId, apptTransactionBody.serId) &&
-        Objects.equals(this.resId, apptTransactionBody.resId) &&
-        Objects.equals(this.apptId, apptTransactionBody.apptId) &&
-        Objects.equals(this.custId, apptTransactionBody.custId) &&
-        Objects.equals(this.startTime, apptTransactionBody.startTime) &&
-        Objects.equals(this.endTime, apptTransactionBody.endTime) &&
-        Objects.equals(this.startSlot, apptTransactionBody.startSlot) &&
-        Objects.equals(this.endSlot, apptTransactionBody.endSlot) &&
-        Objects.equals(this.isFullDay, apptTransactionBody.isFullDay) &&
-        Objects.equals(this.date, apptTransactionBody.date) &&
-        Objects.equals(this.slotNo, apptTransactionBody.slotNo) &&
-        Objects.equals(this.resource, apptTransactionBody.resource) &&
-        Objects.equals(this.service, apptTransactionBody.service) &&
-        Objects.equals(this.serResUnavail, apptTransactionBody.serResUnavail) &&
-        Objects.equals(this.serResMaps, apptTransactionBody.serResMaps);
+    return Objects.equals(this.mobile, apptTransactionBody.mobile) &&
+            Objects.equals(this.name, apptTransactionBody.name) &&
+            Objects.equals(this.mail, apptTransactionBody.mail) &&
+            Objects.equals(this.reqType, apptTransactionBody.reqType) &&
+            Objects.equals(this.sessionToken, apptTransactionBody.sessionToken) &&
+            Objects.equals(this.merId, apptTransactionBody.merId) &&
+            Objects.equals(this.deviceId, apptTransactionBody.deviceId) &&
+            Objects.equals(this.serId, apptTransactionBody.serId) &&
+            Objects.equals(this.resId, apptTransactionBody.resId) &&
+            Objects.equals(this.apptId, apptTransactionBody.apptId) &&
+            Objects.equals(this.custId, apptTransactionBody.custId) &&
+            Objects.equals(this.startTime, apptTransactionBody.startTime) &&
+            Objects.equals(this.endTime, apptTransactionBody.endTime) &&
+            Objects.equals(this.startSlot, apptTransactionBody.startSlot) &&
+            Objects.equals(this.endSlot, apptTransactionBody.endSlot) &&
+            Objects.equals(this.isFullDay, apptTransactionBody.isFullDay) &&
+            Objects.equals(this.date, apptTransactionBody.date) &&
+            Objects.equals(this.slotNo, apptTransactionBody.slotNo) &&
+            Objects.equals(this.resource, apptTransactionBody.resource) &&
+            Objects.equals(this.service, apptTransactionBody.service) &&
+            Objects.equals(this.serResUnavail, apptTransactionBody.serResUnavail);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(reqType, sessionToken, merId, deviceId, serId, resId, apptId, custId, startTime, endTime, startSlot, endSlot, isFullDay, date, slotNo, resource, service, serResUnavail, serResMaps);
+    return Objects.hash(mobile, name, mail, reqType, sessionToken, merId, deviceId, serId, resId, apptId, custId, startTime, endTime, startSlot, endSlot, isFullDay, date, slotNo, resource, service, serResUnavail);
   }
 
 
@@ -482,7 +518,10 @@ public class ApptTransactionBody {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ApptTransactionBody {\n");
-    
+
+    sb.append("    mobile: ").append(toIndentedString(mobile)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    mail: ").append(toIndentedString(mail)).append("\n");
     sb.append("    reqType: ").append(toIndentedString(reqType)).append("\n");
     sb.append("    sessionToken: ").append(toIndentedString(sessionToken)).append("\n");
     sb.append("    merId: ").append(toIndentedString(merId)).append("\n");
@@ -501,7 +540,6 @@ public class ApptTransactionBody {
     sb.append("    resource: ").append(toIndentedString(resource)).append("\n");
     sb.append("    service: ").append(toIndentedString(service)).append("\n");
     sb.append("    serResUnavail: ").append(toIndentedString(serResUnavail)).append("\n");
-    sb.append("    serResMaps: ").append(toIndentedString(serResMaps)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -510,7 +548,7 @@ public class ApptTransactionBody {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

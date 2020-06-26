@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -49,6 +50,7 @@ import com.corals.appointment.Client.model.AvailDay;
 import com.corals.appointment.Client.model.SecurityAPIBody;
 import com.corals.appointment.Client.model.SecurityAPIResponse;
 import com.corals.appointment.Client.model.TimeData;
+import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
@@ -70,7 +72,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
     LinearLayout layout_custom_time, layout_add_time;
     RecyclerView recyclerView;
     private IntermediateAlertDialog intermediateAlertDialog;
-    Button btn_yes_sday_p, btn_yes_mnday_p, btn_yes_tsday_p, btn_yes_wedday_p, btn_yes_trsday_p, btn_yes_fdday_p, btn_yes_strday_p, button_add_time, button_add_ser;
+    TextView btn_yes_sday_p, btn_yes_mnday_p, btn_yes_tsday_p, btn_yes_wedday_p, btn_yes_trsday_p, btn_yes_fdday_p, btn_yes_strday_p, button_add_time, button_add_ser;
     boolean isActiveSunday_p = true, isActiveMonday_p = true, isActiveTuesday_p = true, isActiveWednesday_p = true, isActiveThursday_p = true, isActiveFriday_p = true, isActiveSaturday_p = true;
     TextView text_start_time, text_end_time, text_weekday;
     ArrayList<String> list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat;
@@ -135,13 +137,13 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         spinner_weekdays = findViewById(R.id.spinner_weekdays);
         layout_custom_time = findViewById(R.id.layout_custom_time);
         layout_add_time = findViewById(R.id.layout_add_time);
-        btn_yes_sday_p = (Button) findViewById(R.id.btn_yes_sunday_P);
-        btn_yes_mnday_p = (Button) findViewById(R.id.btn_yes_monday_P);
-        btn_yes_tsday_p = (Button) findViewById(R.id.btn_yes_tuesday_P);
-        btn_yes_wedday_p = (Button) findViewById(R.id.btn_yes_wedsnesday_P);
-        btn_yes_trsday_p = (Button) findViewById(R.id.btn_yes_thursday_P);
-        btn_yes_fdday_p = (Button) findViewById(R.id.btn_yes_friday_P);
-        btn_yes_strday_p = (Button) findViewById(R.id.btn_yes_saturday_P);
+        btn_yes_sday_p = findViewById(R.id.btn_yes_sunday_P);
+        btn_yes_mnday_p = findViewById(R.id.btn_yes_monday_P);
+        btn_yes_tsday_p = findViewById(R.id.btn_yes_tuesday_P);
+        btn_yes_wedday_p = findViewById(R.id.btn_yes_wedsnesday_P);
+        btn_yes_trsday_p = findViewById(R.id.btn_yes_thursday_P);
+        btn_yes_fdday_p = findViewById(R.id.btn_yes_friday_P);
+        btn_yes_strday_p = findViewById(R.id.btn_yes_saturday_P);
         text_start_time = findViewById(R.id.text_start_time);
         text_end_time = findViewById(R.id.text_end_time);
         text_weekday = findViewById(R.id.text_weekday);
@@ -246,7 +248,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     radioButton_biz_hrs.setChecked(true);
                     radioButton_custom_time.setChecked(false);
                     layout_custom_time.setVisibility(View.GONE);
-                    isSameBizHrs=true;
+                    isSameBizHrs = true;
                 }
                 isSelected = true;
             }
@@ -259,7 +261,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     radioButton_biz_hrs.setChecked(false);
                     radioButton_custom_time.setChecked(true);
                     layout_custom_time.setVisibility(View.VISIBLE);
-                    isSameBizHrs=false;
+                    isSameBizHrs = false;
                 }
                 isSelected = true;
             }
@@ -1107,10 +1109,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                         }
 
                     }
-
                     //layout_add_time.setVisibility(View.GONE);
-
-
                 } else {
                     getDialog("Invalid Time");
                 }
@@ -1122,7 +1121,12 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         button_add_ser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                try {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
                 Log.d("sunday_list--->", "onClick: " + list_sun.size() + "," + list_mon.size() + "," + list_tue.size() + "," + list_wed.size() + "," + list_thu.size() + "," + list_fri.size() + "," + list_sat.size());
                 if (isSelected) {
                     AvailDay availDay_sun = new AvailDay();
@@ -1549,9 +1553,8 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     appointmentService.setSerDuration(ser_dur);
                     appointmentService.setSerPrice(amount);
                     appointmentService.setIsActive(true);
-                    appointmentService.setMerId("119070138");
+                    appointmentService.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
                     appointmentService.setSameBussTime(isSameBizHrs);
-                    showamount = "1";
                     if (showamount.equals("1")) {
                         appointmentService.setIsShowCust(true);
                     } else {
@@ -1562,7 +1565,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
                     ApptTransactionBody transactionBody = new ApptTransactionBody();
                     transactionBody.setReqType("T-S.C");
-                    transactionBody.setMerId("119070138");
+                    transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
                     transactionBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
                     transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
                     transactionBody.setService(appointmentService);
@@ -2010,7 +2013,14 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(AddServiceAvailTimeActivity.this, "Service setup Failed :" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        new AlertDialogFailure(AddServiceAvailTimeActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                startActivity(new Intent(AddServiceAvailTimeActivity.this, SetupServiceActivity_Bottom.class));
+                                finish();
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                            }
+                        };
                     }
                 });
             }
@@ -2022,15 +2032,33 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
-                    Intent in = new Intent(AddServiceAvailTimeActivity.this, SetupServiceActivity_Bottom.class);
-                    startActivity(in);
-                    finish();
-                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddServiceAvailTimeActivity.this, "Service successfully created!", "OK", "", getResources().getString(R.string.success)) {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(AddServiceAvailTimeActivity.this, SetupServiceActivity_Bottom.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                                }
+                            };
+                        }
+                    });
+
                 } else {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(AddServiceAvailTimeActivity.this, "Service setup Failed", Toast.LENGTH_SHORT).show();
+                            new AlertDialogFailure(AddServiceAvailTimeActivity.this, "Service setup failed. Please try again later!", "OK", "", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(AddServiceAvailTimeActivity.this, SetupServiceActivity_Bottom.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
                         }
                     });
                 }

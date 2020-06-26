@@ -6,31 +6,46 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
 import com.corals.appointment.Activity.TimeSlotsActivity;
+import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class ServicesAdapter_Calender extends ArrayAdapter<String> {
+public class ServicesAdapter_Calender extends BaseAdapter {
 
     private final Activity context;
-    ArrayList<String> arrayList;
-    ArrayList<String> arrayList1;
     String date;
-
-    public ServicesAdapter_Calender(Activity context,String date, ArrayList<String> arrayList, ArrayList<String> arrayList1) {
-        super(context, R.layout.layout_services_calender, arrayList);
+    List<AppointmentService> appointmentServices;
+    public ServicesAdapter_Calender(Activity context,String date,List<AppointmentService> appointmentServices) {
         // TODO Auto-generated constructor stub
 
         this.context = context;
         this.date = date;
-        this.arrayList = arrayList;
-        this.arrayList1 = arrayList1;
+        this.appointmentServices = appointmentServices;
 
+
+    }
+
+    @Override
+    public int getCount() {
+        return appointmentServices.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     public View getView(final int position, View view, ViewGroup parent) {
@@ -40,15 +55,15 @@ public class ServicesAdapter_Calender extends ArrayAdapter<String> {
         TextView ser_name = (TextView) rowView.findViewById(R.id.text_service_name);
         TextView ser_dur = (TextView) rowView.findViewById(R.id.text_ser_dur);
         LinearLayout layout_services_calender = (LinearLayout) rowView.findViewById(R.id.layout_ser_calender);
-        ser_name.setText(arrayList.get(position));
-        ser_dur.setText(arrayList1.get(position));
+        ser_name.setText(appointmentServices.get(position).getSerName());
 
         layout_services_calender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent i = new Intent(context, TimeSlotsActivity.class);
-                i.putExtra("service", arrayList.get(position));
+                i.putExtra("service_id", appointmentServices.get(position).getSerId());
+                i.putExtra("service", appointmentServices.get(position).getSerName());
                 i.putExtra("date", date);
                 context.startActivity(i);
                 ((Activity) context).finish();

@@ -28,7 +28,7 @@
             android:id="@+id/text_staff_name"
             android:layout_width="0dp"
             android:layout_height="60dp"
-            android:layout_weight="9"
+            android:layout_weight="8"
             android:clickable="false"
             android:gravity="center_vertical"
             android:maxLines="1"
@@ -37,6 +37,13 @@
             android:singleLine="true"
             android:text="Udhayakumar"
             android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:src="@drawable/right_arrow" />
     </LinearLayout>
 
     <LinearLayout
