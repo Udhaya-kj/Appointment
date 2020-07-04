@@ -24,6 +24,8 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.corals.appointment.Activity.AddStaffActivity;
 import com.corals.appointment.Activity.LoginActivity;
+import com.corals.appointment.Activity.SerUnavailAskTimeActivity;
+import com.corals.appointment.Activity.SettingsActivity;
 import com.corals.appointment.Activity.SetupStaffActivity_Bottom;
 import com.corals.appointment.Client.ApiCallback;
 import com.corals.appointment.Client.ApiException;
@@ -35,9 +37,11 @@ import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
 import com.corals.appointment.Client.model.MapServiceResourceBody;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
+import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
+import com.google.gson.Gson;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -86,7 +90,6 @@ public class StaffListAdapter extends BaseAdapter {
         imageView_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(context, "Edit Staff", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(context, AddStaffActivity.class);
                 i.putExtra("page_id", "03");
                 i.putExtra("position", String.valueOf(position));
@@ -95,7 +98,7 @@ public class StaffListAdapter extends BaseAdapter {
                 i.putExtra("mobile", appointmentResources.get(position).getMobile());
                 i.putExtra("mng_load", appointmentResources.get(position).getManageableLoad());
                 i.putExtra("sameBizTime", appointmentResources.get(position).isSameBussTime());
-                i.putExtra("mapSerRes", (Serializable) appointmentResources.get(position).getSerResMaps());
+                i.putExtra("mapSerRes", (Serializable)appointmentResources.get(position).getSerResMaps());
                 context.startActivity(i);
                 ((Activity) context).finish();
                 ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
@@ -105,29 +108,45 @@ public class StaffListAdapter extends BaseAdapter {
         imageView_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-                alertDialogBuilder.setMessage("Are you sure, You want to delete this staff?");
-                alertDialogBuilder.setPositiveButton("Yes",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                arg0.dismiss();
-                                List<MapServiceResourceBody> mapServiceResourceBodyList = appointmentResources.get(position).getSerResMaps();
 
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogYesNo(context, "Delete Staff?", "Are you sure, You want to delete "+appointmentResources.get(position).getResName()+"?", "Yes", "No") {
+                            @Override
+                            public void onOKButtonClick() {
                                 sharedpreferences_sessionToken = context.getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
+
+                                List<MapServiceResourceBody> mapServiceResourceBodyList = appointmentResources.get(position).getSerResMaps();
+                                List<MapServiceResourceBody>  mapServiceResourceBodyList_update=new ArrayList<>();
+                                if(!mapServiceResourceBodyList.isEmpty() && mapServiceResourceBodyList!=null) {
+                                    for (int q = 0; q < mapServiceResourceBodyList.size(); q++) {
+
+                                        MapServiceResourceBody mapServiceResourceBody = new MapServiceResourceBody();
+                                        String resId = mapServiceResourceBodyList.get(q).getResId();
+                                        String serId = mapServiceResourceBodyList.get(q).getSerId();
+                                        boolean isdelete = mapServiceResourceBodyList.get(q).isDelete();
+
+                                        mapServiceResourceBody.setResId(resId);
+                                        mapServiceResourceBody.setSerId(serId);
+                                        mapServiceResourceBody.setDelete(true);
+                                        mapServiceResourceBodyList_update.add(mapServiceResourceBody);
+                                    }
+                                }
                                 AppointmentResources appointmentResources1 = new AppointmentResources();
                                 appointmentResources1.setResId(appointmentResources.get(position).getResId());
                                 appointmentResources1.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
                                 appointmentResources1.setIsActive(false);
-                                appointmentResources1.serResMaps(mapServiceResourceBodyList);
-                                appointmentResources1.setSameBussTime(appointmentResources.get(position).isSameBussTime());
+                                appointmentResources1.serResMaps(mapServiceResourceBodyList_update);
+                                appointmentResources1.setSameBussTime(true);
+                                //appointmentResources1.setSameBussTime(appointmentResources.get(position).isSameBussTime());
                                 //appointmentResources.availDays(availDayList);
 
                                 ApptTransactionBody transactionBody = new ApptTransactionBody();
                                 transactionBody.setReqType("T-R.U");
                                 transactionBody.setResId(appointmentResources.get(position).getResId());
                                 transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
-                                transactionBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
+                                transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
                                 transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
                                 transactionBody.setResource(appointmentResources1);
 
@@ -137,25 +156,30 @@ public class StaffListAdapter extends BaseAdapter {
                                         intermediateAlertDialog = new IntermediateAlertDialog(context);
                                         deactivateStaff(transactionBody);
                                     } else {
-                                        Toast.makeText(context, "No internet connection!", Toast.LENGTH_SHORT).show();
-                                    }
+                                        context.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                new AlertDialogFailure(context, context.getResources().getString(R.string.no_internet_sub_title), "OK", context.getResources().getString(R.string.no_internet_title), context.getResources().getString(R.string.no_internet_Heading)) {
+                                                    @Override
+                                                    public void onButtonClick() {
+
+                                                    }
+                                                };
+                                            }
+                                        });                                    }
                                 } catch (ApiException e) {
                                     e.printStackTrace();
                                 }
+                            }
 
+                            @Override
+                            public void onCancelButtonClick() {
 
                             }
-                        });
 
-                alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+                        };
                     }
                 });
-
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
 
 
             }

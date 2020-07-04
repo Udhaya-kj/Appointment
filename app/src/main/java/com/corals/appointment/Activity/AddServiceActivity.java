@@ -57,7 +57,7 @@ public class AddServiceActivity extends AppCompatActivity {
     Switch aSwitch;
     int time_mins = 0;
     String showAmtCustomer = "0";
-    private TextView tv_ser_duration;
+    private TextView tv_ser_duration,textView_currency;
     String ser_id, ser_name, ser_dur, ser_amount, ser_desc, show_cust;
     private SharedPreferences sharedpreferences_sessionToken;
     private IntermediateAlertDialog intermediateAlertDialog;
@@ -87,7 +87,9 @@ public class AddServiceActivity extends AppCompatActivity {
         et_ser_amt = findViewById(R.id.et_ser_amount);
         button_continue = findViewById(R.id.button_res_continue);
         aSwitch = findViewById(R.id.switch_show_amount);
+        textView_currency = findViewById(R.id.text_currency);
 
+        textView_currency.setText(sharedpreferences_sessionToken.getString(LoginActivity.CURRENCY_SYMBOL, ""));
         tv_ser_duration.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + "00" + "</u>  </font>"));
         if (getIntent().getExtras() != null) {
             pageId = getIntent().getStringExtra("page_id");
@@ -100,7 +102,7 @@ public class AddServiceActivity extends AppCompatActivity {
                 ser_desc = getIntent().getStringExtra("description");
                 show_cust = getIntent().getStringExtra("show_cust");
                 tv_ser_duration.setEnabled(false);
-                toolbar.setTitle("UPDATE SERVICE");
+                toolbar.setTitle("Update Service");
                 button_continue.setText("UPDATE SERVICE");
             } else if (pageId.equals("003")) {
                 ser_name = sharedpreferences_service_data.getString(SER_NAME, "");
@@ -169,6 +171,7 @@ public class AddServiceActivity extends AppCompatActivity {
                         if (s_amt.length() > 0) {
                             if (s_desc.length() > 0) {
 
+
                                 if (pageId.equals("3")) {
                                     SharedPreferences.Editor editor = sharedpreferences_service_data.edit();
                                     editor.putString(SER_NAME, name);
@@ -180,7 +183,6 @@ public class AddServiceActivity extends AppCompatActivity {
 
                                     Intent in = new Intent(AddServiceActivity.this, AddServiceAvailTimeActivity.class);
                                     in.putExtra("ser_name", name);
-                                    in.putExtra("ser_name", name);
                                     in.putExtra("ser_dur", String.valueOf(time_mins));
                                     in.putExtra("ser_desc", s_desc);
                                     in.putExtra("page_id", pageId);
@@ -190,40 +192,10 @@ public class AddServiceActivity extends AppCompatActivity {
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                                 } else if (pageId.equals("03")) {
-                                    AppointmentService appointmentService = new AppointmentService();
-                                    appointmentService.setSerId(ser_id);
-                                    appointmentService.setSerName(name);
-                                    appointmentService.setSerDuration(ser_dur);
-                                    appointmentService.setSerPrice(s_amt);
-                                    appointmentService.setIsActive(true);
-                                    appointmentService.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
-                                    appointmentService.setSerDescription(s_desc);
-                                    if (!TextUtils.isEmpty(showAmtCustomer) && showAmtCustomer.equals("1")) {
-                                        appointmentService.setIsShowCust(true);
-                                    } else {
-                                        appointmentService.setIsShowCust(false);
-                                    }
 
-                                    ApptTransactionBody transactionBody = new ApptTransactionBody();
-                                    transactionBody.setReqType("T-S.U");
-                                    transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
-                                    transactionBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
-                                    transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
-                                    transactionBody.setService(appointmentService);
-                                    try {
-                                        Log.d("Token--->", "token: " + sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
-                                        boolean isConn = ConnectivityReceiver.isConnected();
-                                        if (isConn) {
-                                            intermediateAlertDialog = new IntermediateAlertDialog(AddServiceActivity.this);
-                                            apptUpdateService(transactionBody);
-                                        } else {
-                                            Toast.makeText(AddServiceActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
-                                        }
-                                    } catch (ApiException e) {
-                                        e.printStackTrace();
-                                    }
-
+                                    updateService(name, s_amt, s_desc);
                                 }
+
 
                             } else {
                                 et_ser_desc.setError("Enter service description");
@@ -246,6 +218,52 @@ public class AddServiceActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    void updateService(final String ser_name, final String ser_amt, final String ser_desc) {
+        AppointmentService appointmentService = new AppointmentService();
+        appointmentService.setSerId(ser_id);
+        appointmentService.setSerName(ser_name);
+        appointmentService.setSerDuration(ser_dur);
+        appointmentService.setSerPrice(ser_amt);
+        appointmentService.setIsActive(true);
+        appointmentService.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        appointmentService.setSerDescription(ser_desc);
+        if (!TextUtils.isEmpty(showAmtCustomer) && showAmtCustomer.equals("1")) {
+            appointmentService.setIsShowCust(true);
+        } else {
+            appointmentService.setIsShowCust(false);
+        }
+
+        ApptTransactionBody transactionBody = new ApptTransactionBody();
+        transactionBody.setReqType("T-S.U");
+        transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
+        transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+        transactionBody.setService(appointmentService);
+        try {
+            Log.d("Token--->", "token: " + sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+            boolean isConn = ConnectivityReceiver.isConnected();
+            if (isConn) {
+                intermediateAlertDialog = new IntermediateAlertDialog(AddServiceActivity.this);
+                apptUpdateService(transactionBody);
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(AddServiceActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                            @Override
+                            public void onButtonClick() {
+                                updateService(ser_name, ser_amt, ser_desc);
+                            }
+                        };
+                    }
+                });
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -352,20 +370,20 @@ public class AddServiceActivity extends AppCompatActivity {
     }
 
 
-    private void getDialog(String msg) {
+    private void getDialog(final String msg) {
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AddServiceActivity.this);
-        alertDialogBuilder.setMessage(msg);
-        alertDialogBuilder.setPositiveButton("OK",
-                new DialogInterface.OnClickListener() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new AlertDialogFailure(AddServiceActivity.this, msg, "OK", "", "Warning") {
                     @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        arg0.dismiss();
-                    }
-                });
+                    public void onButtonClick() {
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+                    }
+                };
+            }
+        });
+
     }
 
     private void apptUpdateService(ApptTransactionBody requestBody) throws ApiException {
@@ -384,7 +402,7 @@ public class AddServiceActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(AddServiceActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                        new AlertDialogFailure(AddServiceActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
                                 startActivity(new Intent(AddServiceActivity.this, SetupServiceActivity_Bottom.class));
@@ -403,11 +421,10 @@ public class AddServiceActivity extends AppCompatActivity {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(AddServiceActivity.this, "Service updated successfully!", "OK", "","Success") {
+                            new AlertDialogFailure(AddServiceActivity.this, "Service updated successfully!", "OK", "", "Success") {
                                 @Override
                                 public void onButtonClick() {
                                     startActivity(new Intent(AddServiceActivity.this, SetupServiceActivity_Bottom.class));
@@ -417,12 +434,11 @@ public class AddServiceActivity extends AppCompatActivity {
                             };
                         }
                     });
-
                 } else {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(AddServiceActivity.this, "Service update failed. Please try again later!", "OK", "","Failed") {
+                            new AlertDialogFailure(AddServiceActivity.this, "Please try again later!", "OK", "Service update failed", "Failed") {
                                 @Override
                                 public void onButtonClick() {
                                     startActivity(new Intent(AddServiceActivity.this, SetupServiceActivity_Bottom.class));
@@ -449,5 +465,13 @@ public class AddServiceActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (intermediateAlertDialog != null) {
+            intermediateAlertDialog.dismissAlertDialog();
+            intermediateAlertDialog = null;
+        }
+    }
 
 }

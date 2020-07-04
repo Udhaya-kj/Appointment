@@ -38,11 +38,10 @@ public class CalendarServicesActivity extends AppCompatActivity {
 
     ListView recyclerView_services;
     TextView textView_no_ser, textView_appt_dt;
-    private ArrayList<String> service_name_list, service_dur_list;
-    private SharedPreferences sharedpreferences_services;
     public static String cal_date = "", pageId;
     private IntermediateAlertDialog intermediateAlertDialog;
     private SharedPreferences sharedpreferences_sessionToken;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,49 +70,37 @@ public class CalendarServicesActivity extends AppCompatActivity {
             textView_appt_dt.setText(cal_date);
         }
 
-     /*   service_name_list = new ArrayList<>();
-        service_dur_list = new ArrayList<>();
-
-        sharedpreferences_services = getSharedPreferences(AddServiceAvailTimeActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
-        String nameList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_NAME, "");
-        String mobList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_DURATION, "");
-        if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
-            service_name_list = new Gson().fromJson(nameList, new TypeToken<ArrayList<String>>() {
-            }.getType());
-            service_dur_list = new Gson().fromJson(mobList, new TypeToken<ArrayList<String>>() {
-            }.getType());
-        }
-
-        Log.d("listsize---->", "onCreate: " + service_name_list + "," + service_dur_list);
-        if (service_name_list.size() != 0 && service_dur_list.size() != 0) {
-          *//*  servicesAdapter = new ServicesAdapter_Calender(MaterialDatePickerActivity.this, service_name_list, service_dur_list);
-            listView_services.setAdapter(servicesAdapter);*//*
-            textView_no_ser.setVisibility(View.GONE);
-            recyclerView_services.setVisibility(View.VISIBLE);
-
-            ServicesAdapter_Calender servicesAdapter_calender = new ServicesAdapter_Calender(CalendarServicesActivity.this, cal_date, service_name_list, service_dur_list);
-            recyclerView_services.setAdapter(servicesAdapter_calender);
-
-        } else {
-            textView_no_ser.setVisibility(View.VISIBLE);
-            recyclerView_services.setVisibility(View.GONE);
-        }*/
-
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
         enquiryBody.setReqType("E-S.");
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         enquiryBody.callerType("m");
-        enquiryBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
+        enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
         boolean isConn = ConnectivityReceiver.isConnected();
         if (isConn) {
             try {
+                intermediateAlertDialog = new IntermediateAlertDialog(CalendarServicesActivity.this);
                 fetchServices(enquiryBody);
             } catch (ApiException e) {
                 e.printStackTrace();
             }
         } else {
-            Toast.makeText(CalendarServicesActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialogFailure(CalendarServicesActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                        @Override
+                        public void onButtonClick() {
+                            Intent i = new Intent(CalendarServicesActivity.this, AppointmentActivity.class);
+                            startActivity(i);
+                            finish();
+                            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                        }
+                    };
+                }
+            });
+
         }
 
     }
@@ -135,8 +122,6 @@ public class CalendarServicesActivity extends AppCompatActivity {
     }
 
     private void fetchServices(AppointmentEnquiryBody requestBody) throws ApiException {
-
-        intermediateAlertDialog = new IntermediateAlertDialog(CalendarServicesActivity.this);
         Log.d("login---", "login: " + requestBody);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(CalendarServicesActivity.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();
@@ -153,7 +138,7 @@ public class CalendarServicesActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(CalendarServicesActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                        new AlertDialogFailure(CalendarServicesActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
                                 startActivity(new Intent(CalendarServicesActivity.this, DashboardActivity.class));
@@ -172,29 +157,14 @@ public class CalendarServicesActivity extends AppCompatActivity {
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
-                if(Integer.parseInt(result.getStatusCode())==200){
+                if (Integer.parseInt(result.getStatusCode()) == 200) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //Toast.makeText(AppointmentActivity.this, ""+result.getStatusMessage(), Toast.LENGTH_SHORT).show();
-                            List<AppointmentService> appointmentServices = new ArrayList<>();
-                            List<AppointmentService> appointmentServicesList = result.getServices();
-                            for (int t = 0; t < appointmentServicesList.size(); t++) {
-                                String ser_name = appointmentServicesList.get(t).getSerName();
-                                String ser_dur = appointmentServicesList.get(t).getSerDuration();
-                                String ser_Id = appointmentServicesList.get(t).getSerId();
-
-                                AppointmentService appointmentService = new AppointmentService();
-                                appointmentService.setSerId(ser_Id);
-                                appointmentService.setSerName(ser_name);
-                                appointmentService.setSerDuration(ser_dur);
-                                appointmentServices.add(appointmentService);
-
-                            }
-                            if (!appointmentServices.isEmpty()) {
+                            if (!result.getServices().isEmpty() && result.getServices() != null) {
                                 textView_no_ser.setVisibility(View.GONE);
                                 recyclerView_services.setVisibility(View.VISIBLE);
-                                ServicesAdapter_Calender servicesAdapter_calender = new ServicesAdapter_Calender(CalendarServicesActivity.this, cal_date, appointmentServices);
+                                ServicesAdapter_Calender servicesAdapter_calender = new ServicesAdapter_Calender(CalendarServicesActivity.this, cal_date, result.getServices());
                                 recyclerView_services.setAdapter(servicesAdapter_calender);
 
                             } else {
@@ -205,12 +175,11 @@ public class CalendarServicesActivity extends AppCompatActivity {
 
                         }
                     });
-                }
-                else {
+                } else {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(CalendarServicesActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                            new AlertDialogFailure(CalendarServicesActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
                                     startActivity(new Intent(CalendarServicesActivity.this, DashboardActivity.class));
@@ -234,5 +203,14 @@ public class CalendarServicesActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (intermediateAlertDialog != null) {
+            intermediateAlertDialog.dismissAlertDialog();
+            intermediateAlertDialog = null;
+        }
     }
 }

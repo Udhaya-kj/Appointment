@@ -1,26 +1,13 @@
 package com.corals.appointment.Activity;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.animation.ObjectAnimator;
-import android.app.ProgressDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Html;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -36,9 +23,13 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
-import com.corals.appointment.Adapters.ServiceAvailCustomTimeAdapter;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.corals.appointment.Client.ApiCallback;
 import com.corals.appointment.Client.ApiException;
 import com.corals.appointment.Client.OkHttpApiClient;
@@ -47,20 +38,15 @@ import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
 import com.corals.appointment.Client.model.AvailDay;
-import com.corals.appointment.Client.model.SecurityAPIBody;
-import com.corals.appointment.Client.model.SecurityAPIResponse;
 import com.corals.appointment.Client.model.TimeData;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -1129,504 +1115,478 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                 }
                 Log.d("sunday_list--->", "onClick: " + list_sun.size() + "," + list_mon.size() + "," + list_tue.size() + "," + list_wed.size() + "," + list_thu.size() + "," + list_fri.size() + "," + list_sat.size());
                 if (isSelected) {
-                    AvailDay availDay_sun = new AvailDay();
-                    AvailDay availDay_mon = new AvailDay();
-                    AvailDay availDay_tue = new AvailDay();
-                    AvailDay availDay_wed = new AvailDay();
-                    AvailDay availDay_thu = new AvailDay();
-                    AvailDay availDay_fri = new AvailDay();
-                    AvailDay availDay_sat = new AvailDay();
-
-                    List<TimeData> timeDataList_sun = new ArrayList<>();
-                    List<TimeData> timeDataList_mon = new ArrayList<>();
-                    List<TimeData> timeDataList_tue = new ArrayList<>();
-                    List<TimeData> timeDataList_wed = new ArrayList<>();
-                    List<TimeData> timeDataList_thu = new ArrayList<>();
-                    List<TimeData> timeDataList_fri = new ArrayList<>();
-                    List<TimeData> timeDataList_sat = new ArrayList<>();
-
-
-                    TimeData timeData_sun1 = new TimeData();
-                    TimeData timeData_sun2 = new TimeData();
-                    TimeData timeData_sun3 = new TimeData();
-
-                    TimeData timeData_mon1 = new TimeData();
-                    TimeData timeData_mon2 = new TimeData();
-                    TimeData timeData_mon3 = new TimeData();
-
-                    TimeData timeData_tue1 = new TimeData();
-                    TimeData timeData_tue2 = new TimeData();
-                    TimeData timeData_tue3 = new TimeData();
-
-                    TimeData timeData_wed1 = new TimeData();
-                    TimeData timeData_wed2 = new TimeData();
-                    TimeData timeData_wed3 = new TimeData();
-
-                    TimeData timeData_thu1 = new TimeData();
-                    TimeData timeData_thu2 = new TimeData();
-                    TimeData timeData_thu3 = new TimeData();
-
-                    TimeData timeData_fri1 = new TimeData();
-                    TimeData timeData_fri2 = new TimeData();
-                    TimeData timeData_fri3 = new TimeData();
-
-                    TimeData timeData_sat1 = new TimeData();
-                    TimeData timeData_sat2 = new TimeData();
-                    TimeData timeData_sat3 = new TimeData();
-
-                    //Sunday
-                    if (!list_sun.isEmpty()) {
-                        Log.d("sunday_list--->", "submit: " + list_sun);
-                        if (list_sun.size() > 0) {
-                            String[] strs = list_sun.get(0).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_sun1.setAvailId("");
-                            timeData_sun1.setStartTime(s_tm + ":00");
-                            timeData_sun1.setEndTime(e_tm + ":00");
-                            timeDataList_sun.add(timeData_sun1);
-                            Log.d("Sun--->", "onClick: >0" + " 1");
-                        }
-
-                        if (list_sun.size() > 1) {
-                            String[] strs = list_sun.get(1).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_sun2.setAvailId("");
-                            timeData_sun2.setStartTime(s_tm + ":00");
-                            timeData_sun2.setEndTime(e_tm + ":00");
-                            timeDataList_sun.add(timeData_sun2);
-                            Log.d("Sun--->", "onClick: > 1" + " 2");
-                        }
-
-                        if (list_sun.size() > 2) {
-                            String[] strs = list_sun.get(2).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_sun3.setAvailId("");
-                            timeData_sun3.setStartTime(s_tm + ":00");
-                            timeData_sun3.setEndTime(e_tm + ":00");
-                            timeDataList_sun.add(timeData_sun3);
-                            Log.d("Sun--->", "onClick: ==3" + " 3");
-                        }
-
-                        availDay_sun.setDay("1");
-                        availDay_sun.setTiming(timeDataList_sun);
-                    } else {
-                        timeData_sun1.setAvailId("");
-                        timeData_sun1.setStartTime("00:00:00");
-                        timeData_sun1.setEndTime("00:00:00");
-
-                        timeDataList_sun.add(timeData_sun1);
-
-                        availDay_sun.setDay("1");
-                        availDay_sun.setTiming(timeDataList_sun);
-                    }
-
-                    //Monday
-                    if (!list_mon.isEmpty()) {
-                        if (list_mon.size() > 0) {
-                            String[] strs = list_mon.get(0).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_mon1.setAvailId("");
-                            timeData_mon1.setStartTime(s_tm + ":00");
-                            timeData_mon1.setEndTime(e_tm + ":00");
-                            timeDataList_mon.add(timeData_mon1);
-                            Log.d("Mon--->", "onClick: >0" + " 1");
-                        }
-
-                        if (list_mon.size() > 1) {
-                            String[] strs = list_mon.get(1).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_mon2.setAvailId("");
-                            timeData_mon2.setStartTime(s_tm + ":00");
-                            timeData_mon2.setEndTime(e_tm + ":00");
-                            timeDataList_mon.add(timeData_mon2);
-                            Log.d("Mon--->", "onClick: > 1" + " 2");
-                        }
-
-                        if (list_mon.size() > 2) {
-                            String[] strs = list_mon.get(2).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_mon3.setAvailId("");
-                            timeData_mon3.setStartTime(s_tm + ":00");
-                            timeData_mon3.setEndTime(e_tm + ":00");
-                            timeDataList_mon.add(timeData_mon3);
-                            Log.d("Mon--->", "onClick: ==3" + " 3");
-                        }
-
-                        availDay_mon.setDay("2");
-                        availDay_mon.setTiming(timeDataList_mon);
-                    } else {
-                        timeData_mon1.setAvailId("");
-                        timeData_mon1.setStartTime("00:00:00");
-                        timeData_mon1.setEndTime("00:00:00");
-
-                        timeDataList_mon.add(timeData_mon1);
-                        availDay_mon.setDay("2");
-                        availDay_mon.setTiming(timeDataList_mon);
-                    }
-
-
-                    //Tuesday
-                    if (!list_tue.isEmpty()) {
-                        if (list_tue.size() > 0) {
-                            String[] strs = list_tue.get(0).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_tue1.setAvailId("");
-                            timeData_tue1.setStartTime(s_tm + ":00");
-                            timeData_tue1.setEndTime(e_tm + ":00");
-                            timeDataList_tue.add(timeData_tue1);
-                            Log.d("Tue--->", "onClick: >0" + " 1");
-                        }
-
-                        if (list_tue.size() > 1) {
-                            String[] strs = list_tue.get(1).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_tue2.setAvailId("");
-                            timeData_tue2.setStartTime(s_tm + ":00");
-                            timeData_tue2.setEndTime(e_tm + ":00");
-                            timeDataList_tue.add(timeData_tue2);
-                            Log.d("Tue--->", "onClick: > 1" + " 2");
-                        }
-
-                        if (list_tue.size() > 2) {
-                            String[] strs = list_tue.get(2).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_tue3.setAvailId("");
-                            timeData_tue3.setStartTime(s_tm + ":00");
-                            timeData_tue3.setEndTime(e_tm + ":00");
-                            timeDataList_tue.add(timeData_tue3);
-                            Log.d("Tue--->", "onClick: ==3" + " 3");
-                        }
-
-                        availDay_tue.setDay("3");
-                        availDay_tue.setTiming(timeDataList_tue);
-                    } else {
-                        timeData_tue1.setAvailId("");
-                        timeData_tue1.setStartTime("00:00:00");
-                        timeData_tue1.setEndTime("00:00:00");
-
-                        timeDataList_tue.add(timeData_tue1);
-
-                        availDay_tue.setDay("3");
-                        availDay_tue.setTiming(timeDataList_tue);
-                    }
-
-
-                    //Wednesday
-                    if (!list_wed.isEmpty()) {
-                        if (list_wed.size() > 0) {
-                            String[] strs = list_wed.get(0).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_wed1.setAvailId("");
-                            timeData_wed1.setStartTime(s_tm + ":00");
-                            timeData_wed1.setEndTime(e_tm + ":00");
-                            timeDataList_wed.add(timeData_wed1);
-                            Log.d("Wed--->", "onClick: >0" + " 1");
-                        }
-
-                        if (list_wed.size() > 1) {
-                            String[] strs = list_wed.get(1).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_wed2.setAvailId("");
-                            timeData_wed2.setStartTime(s_tm + ":00");
-                            timeData_wed2.setEndTime(e_tm + ":00");
-                            timeDataList_wed.add(timeData_wed2);
-                            Log.d("Wed--->", "onClick: > 1" + " 2");
-                        }
-
-                        if (list_wed.size() > 2) {
-                            String[] strs = list_wed.get(2).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_wed3.setAvailId("");
-                            timeData_wed3.setStartTime(s_tm + ":00");
-                            timeData_wed3.setEndTime(e_tm + ":00");
-                            timeDataList_wed.add(timeData_wed3);
-                            Log.d("Wed--->", "onClick: ==3" + " 3");
-                        }
-
-                        availDay_wed.setDay("4");
-                        availDay_wed.setTiming(timeDataList_wed);
-                    } else {
-                        timeData_wed1.setAvailId("");
-                        timeData_wed1.setStartTime("00:00:00");
-                        timeData_wed1.setEndTime("00:00:00");
-
-                        timeDataList_wed.add(timeData_wed1);
-
-                        availDay_wed.setDay("4");
-                        availDay_wed.setTiming(timeDataList_wed);
-                    }
-
-
-                    //Thursday
-                    if (!list_thu.isEmpty()) {
-                        if (list_thu.size() > 0) {
-                            String[] strs = list_thu.get(0).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_thu1.setAvailId("");
-                            timeData_thu1.setStartTime(s_tm + ":00");
-                            timeData_thu1.setEndTime(e_tm + ":00");
-                            timeDataList_thu.add(timeData_thu1);
-                            Log.d("Thu--->", "onClick: >0" + " 1");
-                        }
-
-                        if (list_thu.size() > 1) {
-                            String[] strs = list_thu.get(1).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_thu2.setAvailId("");
-                            timeData_thu2.setStartTime(s_tm + ":00");
-                            timeData_thu2.setEndTime(e_tm + ":00");
-                            timeDataList_thu.add(timeData_thu2);
-                            Log.d("Thu--->", "onClick: > 1" + " 2");
-                        }
-
-                        if (list_thu.size() > 2) {
-                            String[] strs = list_thu.get(2).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_thu3.setAvailId("");
-                            timeData_thu3.setStartTime(s_tm + ":00");
-                            timeData_thu3.setEndTime(e_tm + ":00");
-                            timeDataList_thu.add(timeData_thu3);
-                            Log.d("Thu--->", "onClick: ==3" + " 3");
-                        }
-
-                        availDay_thu.setDay("5");
-                        availDay_thu.setTiming(timeDataList_thu);
-                    } else {
-                        timeData_thu1.setAvailId("");
-                        timeData_thu1.setStartTime("00:00:00");
-                        timeData_thu1.setEndTime("00:00:00");
-
-                        timeDataList_thu.add(timeData_thu1);
-
-                        availDay_thu.setDay("5");
-                        availDay_thu.setTiming(timeDataList_thu);
-                    }
-
-
-                    //Friday
-                    if (!list_fri.isEmpty()) {
-                        if (list_fri.size() > 0) {
-                            String[] strs = list_fri.get(0).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_fri1.setAvailId("");
-                            timeData_fri1.setStartTime(s_tm + ":00");
-                            timeData_fri1.setEndTime(e_tm + ":00");
-                            timeDataList_fri.add(timeData_fri1);
-                            Log.d("Fri--->", "onClick: >0" + " 1");
-                        }
-
-                        if (list_fri.size() > 1) {
-                            String[] strs = list_fri.get(1).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_fri2.setAvailId("");
-                            timeData_fri2.setStartTime(s_tm + ":00");
-                            timeData_fri2.setEndTime(e_tm + ":00");
-                            timeDataList_fri.add(timeData_fri2);
-                            Log.d("Fri--->", "onClick: > 1" + " 2");
-                        }
-
-                        if (list_fri.size() > 2) {
-                            String[] strs = list_fri.get(2).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_fri3.setAvailId("");
-                            timeData_fri3.setStartTime(s_tm + ":00");
-                            timeData_fri3.setEndTime(e_tm + ":00");
-                            timeDataList_fri.add(timeData_fri3);
-                            Log.d("Fri--->", "onClick: ==3" + " 3");
-                        }
-
-
-                        availDay_fri.setDay("6");
-                        availDay_fri.setTiming(timeDataList_fri);
-                    } else {
-                        timeData_fri1.setAvailId("");
-                        timeData_fri1.setStartTime("00:00:00");
-                        timeData_fri1.setEndTime("00:00:00");
-
-                        timeDataList_fri.add(timeData_fri1);
-
-                        availDay_fri.setDay("6");
-                        availDay_fri.setTiming(timeDataList_fri);
-                    }
-
-
-                    //Saturday
-                    if (!list_sat.isEmpty()) {
-                        if (list_sat.size() > 0) {
-                            String[] strs = list_sat.get(0).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_sat1.setAvailId("");
-                            timeData_sat1.setStartTime(s_tm + ":00");
-                            timeData_sat1.setEndTime(e_tm + ":00");
-                            timeDataList_sat.add(timeData_sat1);
-                            Log.d("Sat--->", "onClick: >0" + " 1");
-                        }
-
-                        if (list_sat.size() > 1) {
-                            String[] strs = list_sat.get(1).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_sat2.setAvailId("");
-                            timeData_sat2.setStartTime(s_tm + ":00");
-                            timeData_sat2.setEndTime(e_tm + ":00");
-                            timeDataList_sat.add(timeData_sat2);
-                            Log.d("Sat--->", "onClick: > 1" + " 2");
-                        }
-
-                        if (list_sat.size() > 2) {
-                            String[] strs = list_sat.get(2).split(" - ");
-                            String s_tm = strs[0];
-                            String e_tm = strs[1];
-
-                            timeData_sat3.setAvailId("");
-                            timeData_sat3.setStartTime(s_tm + ":00");
-                            timeData_sat3.setEndTime(e_tm + ":00");
-                            timeDataList_sat.add(timeData_sat3);
-                            Log.d("Sat--->", "onClick: ==3" + " 3");
-                        }
-
-                        availDay_sat.setDay("7");
-                        availDay_sat.setTiming(timeDataList_sat);
-                    } else {
-                        timeData_sat1.setAvailId("");
-                        timeData_sat1.setStartTime("00:00:00");
-                        timeData_sat1.setEndTime("00:00:00");
-
-                        timeDataList_sat.add(timeData_sat1);
-
-                        availDay_sat.setDay("7");
-                        availDay_sat.setTiming(timeDataList_sat);
-                    }
-
-
-                    //Final avail list
-                    List<AvailDay> availDayList = new ArrayList<>();
-                    availDayList.add(availDay_sun);
-                    availDayList.add(availDay_mon);
-                    availDayList.add(availDay_tue);
-                    availDayList.add(availDay_wed);
-                    availDayList.add(availDay_thu);
-                    availDayList.add(availDay_fri);
-                    availDayList.add(availDay_sat);
-
-                    AppointmentService appointmentService = new AppointmentService();
-                    appointmentService.setSerName(ser_name);
-                    appointmentService.setSerDuration(ser_dur);
-                    appointmentService.setSerPrice(amount);
-                    appointmentService.setIsActive(true);
-                    appointmentService.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
-                    appointmentService.setSameBussTime(isSameBizHrs);
-                    if (showamount.equals("1")) {
-                        appointmentService.setIsShowCust(true);
-                    } else {
-                        appointmentService.setIsShowCust(false);
-                    }
-                    appointmentService.setSerDescription(ser_desc);
-                    appointmentService.availDays(availDayList);
-
-                    ApptTransactionBody transactionBody = new ApptTransactionBody();
-                    transactionBody.setReqType("T-S.C");
-                    transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
-                    transactionBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
-                    transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
-                    transactionBody.setService(appointmentService);
-                    try {
-                        Log.d("Token--->", "token: " + sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
-                        boolean isConn = ConnectivityReceiver.isConnected();
-                        if (isConn) {
-                            apptCreateService(transactionBody);
-                        } else {
-                            Toast.makeText(AddServiceAvailTimeActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (ApiException e) {
-                        e.printStackTrace();
-                    }
-
-                   /* String nameList = sharedpreferences_services.getString(SERVICE_NAME, "");
-                    String mobList = sharedpreferences_services.getString(SERVICE_DURATION, "");
-                    if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
-                        service_name_list = new Gson().fromJson(nameList, new TypeToken<ArrayList<String>>() {
-                        }.getType());
-                        service_dur_list = new Gson().fromJson(mobList, new TypeToken<ArrayList<String>>() {
-                        }.getType());
-                    }
-                    if (!TextUtils.isEmpty(page_id) && page_id.equals("3")) {
-                        service_name_list.add(ser_name);
-                        service_dur_list.add(ser_dur);
-                        String nameList1 = new Gson().toJson(service_name_list);
-                        String mobList1 = new Gson().toJson(service_dur_list);
-                        SharedPreferences.Editor editor = sharedpreferences_services.edit();
-                        editor.putString(SERVICE_NAME, nameList1);
-                        editor.putString(SERVICE_DURATION, mobList1);
-                        editor.commit();
-
-                        Intent in = new Intent(AddServiceAvailTimeActivity.this, SetupServiceActivity_Bottom.class);
-                        startActivity(in);
-                        finish();
-                        overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
-                    } else if (!TextUtils.isEmpty(page_id) && page_id.equals("03")) {
-                        service_name_list.set(Integer.parseInt(position), ser_name);
-                        service_dur_list.set(Integer.parseInt(position), ser_dur);
-                        String nameList1 = new Gson().toJson(service_name_list);
-                        String mobList1 = new Gson().toJson(service_dur_list);
-                        SharedPreferences.Editor editor = sharedpreferences_services.edit();
-                        editor.putString(SERVICE_NAME, nameList1);
-                        editor.putString(SERVICE_DURATION, mobList1);
-                        editor.commit();
-
-                        Intent in = new Intent(AddServiceAvailTimeActivity.this, SetupServiceActivity_Bottom.class);
-                        startActivity(in);
-                        finish();
-                        overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
-                    }
-*/
-
+                    createService();
                 } else {
-                    getDialog("Pick any one option");
+                    getDialog("Select any service availability time option");
                 }
             }
         });
     }
 
+    private void createService() {
+
+        AvailDay availDay_sun = new AvailDay();
+        AvailDay availDay_mon = new AvailDay();
+        AvailDay availDay_tue = new AvailDay();
+        AvailDay availDay_wed = new AvailDay();
+        AvailDay availDay_thu = new AvailDay();
+        AvailDay availDay_fri = new AvailDay();
+        AvailDay availDay_sat = new AvailDay();
+
+        List<TimeData> timeDataList_sun = new ArrayList<>();
+        List<TimeData> timeDataList_mon = new ArrayList<>();
+        List<TimeData> timeDataList_tue = new ArrayList<>();
+        List<TimeData> timeDataList_wed = new ArrayList<>();
+        List<TimeData> timeDataList_thu = new ArrayList<>();
+        List<TimeData> timeDataList_fri = new ArrayList<>();
+        List<TimeData> timeDataList_sat = new ArrayList<>();
+
+
+        TimeData timeData_sun1 = new TimeData();
+        TimeData timeData_sun2 = new TimeData();
+        TimeData timeData_sun3 = new TimeData();
+
+        TimeData timeData_mon1 = new TimeData();
+        TimeData timeData_mon2 = new TimeData();
+        TimeData timeData_mon3 = new TimeData();
+
+        TimeData timeData_tue1 = new TimeData();
+        TimeData timeData_tue2 = new TimeData();
+        TimeData timeData_tue3 = new TimeData();
+
+        TimeData timeData_wed1 = new TimeData();
+        TimeData timeData_wed2 = new TimeData();
+        TimeData timeData_wed3 = new TimeData();
+
+        TimeData timeData_thu1 = new TimeData();
+        TimeData timeData_thu2 = new TimeData();
+        TimeData timeData_thu3 = new TimeData();
+
+        TimeData timeData_fri1 = new TimeData();
+        TimeData timeData_fri2 = new TimeData();
+        TimeData timeData_fri3 = new TimeData();
+
+        TimeData timeData_sat1 = new TimeData();
+        TimeData timeData_sat2 = new TimeData();
+        TimeData timeData_sat3 = new TimeData();
+
+        //Sunday
+        if (!list_sun.isEmpty()) {
+            Log.d("sunday_list--->", "submit: " + list_sun);
+            if (list_sun.size() > 0) {
+                String[] strs = list_sun.get(0).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_sun1.setAvailId("");
+                timeData_sun1.setStartTime(s_tm + ":00");
+                timeData_sun1.setEndTime(e_tm + ":00");
+                timeDataList_sun.add(timeData_sun1);
+                Log.d("Sun--->", "onClick: >0" + " 1");
+            }
+
+            if (list_sun.size() > 1) {
+                String[] strs = list_sun.get(1).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_sun2.setAvailId("");
+                timeData_sun2.setStartTime(s_tm + ":00");
+                timeData_sun2.setEndTime(e_tm + ":00");
+                timeDataList_sun.add(timeData_sun2);
+                Log.d("Sun--->", "onClick: > 1" + " 2");
+            }
+
+            if (list_sun.size() > 2) {
+                String[] strs = list_sun.get(2).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_sun3.setAvailId("");
+                timeData_sun3.setStartTime(s_tm + ":00");
+                timeData_sun3.setEndTime(e_tm + ":00");
+                timeDataList_sun.add(timeData_sun3);
+                Log.d("Sun--->", "onClick: ==3" + " 3");
+            }
+
+            availDay_sun.setDay("1");
+            availDay_sun.setTiming(timeDataList_sun);
+        } else {
+            timeData_sun1.setAvailId("");
+            timeData_sun1.setStartTime("00:00:00");
+            timeData_sun1.setEndTime("00:00:00");
+
+            timeDataList_sun.add(timeData_sun1);
+
+            availDay_sun.setDay("1");
+            availDay_sun.setTiming(timeDataList_sun);
+        }
+
+        //Monday
+        if (!list_mon.isEmpty()) {
+            if (list_mon.size() > 0) {
+                String[] strs = list_mon.get(0).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_mon1.setAvailId("");
+                timeData_mon1.setStartTime(s_tm + ":00");
+                timeData_mon1.setEndTime(e_tm + ":00");
+                timeDataList_mon.add(timeData_mon1);
+                Log.d("Mon--->", "onClick: >0" + " 1");
+            }
+
+            if (list_mon.size() > 1) {
+                String[] strs = list_mon.get(1).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_mon2.setAvailId("");
+                timeData_mon2.setStartTime(s_tm + ":00");
+                timeData_mon2.setEndTime(e_tm + ":00");
+                timeDataList_mon.add(timeData_mon2);
+                Log.d("Mon--->", "onClick: > 1" + " 2");
+            }
+
+            if (list_mon.size() > 2) {
+                String[] strs = list_mon.get(2).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_mon3.setAvailId("");
+                timeData_mon3.setStartTime(s_tm + ":00");
+                timeData_mon3.setEndTime(e_tm + ":00");
+                timeDataList_mon.add(timeData_mon3);
+                Log.d("Mon--->", "onClick: ==3" + " 3");
+            }
+
+            availDay_mon.setDay("2");
+            availDay_mon.setTiming(timeDataList_mon);
+        } else {
+            timeData_mon1.setAvailId("");
+            timeData_mon1.setStartTime("00:00:00");
+            timeData_mon1.setEndTime("00:00:00");
+
+            timeDataList_mon.add(timeData_mon1);
+            availDay_mon.setDay("2");
+            availDay_mon.setTiming(timeDataList_mon);
+        }
+
+
+        //Tuesday
+        if (!list_tue.isEmpty()) {
+            if (list_tue.size() > 0) {
+                String[] strs = list_tue.get(0).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_tue1.setAvailId("");
+                timeData_tue1.setStartTime(s_tm + ":00");
+                timeData_tue1.setEndTime(e_tm + ":00");
+                timeDataList_tue.add(timeData_tue1);
+                Log.d("Tue--->", "onClick: >0" + " 1");
+            }
+
+            if (list_tue.size() > 1) {
+                String[] strs = list_tue.get(1).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_tue2.setAvailId("");
+                timeData_tue2.setStartTime(s_tm + ":00");
+                timeData_tue2.setEndTime(e_tm + ":00");
+                timeDataList_tue.add(timeData_tue2);
+                Log.d("Tue--->", "onClick: > 1" + " 2");
+            }
+
+            if (list_tue.size() > 2) {
+                String[] strs = list_tue.get(2).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_tue3.setAvailId("");
+                timeData_tue3.setStartTime(s_tm + ":00");
+                timeData_tue3.setEndTime(e_tm + ":00");
+                timeDataList_tue.add(timeData_tue3);
+                Log.d("Tue--->", "onClick: ==3" + " 3");
+            }
+
+            availDay_tue.setDay("3");
+            availDay_tue.setTiming(timeDataList_tue);
+        } else {
+            timeData_tue1.setAvailId("");
+            timeData_tue1.setStartTime("00:00:00");
+            timeData_tue1.setEndTime("00:00:00");
+
+            timeDataList_tue.add(timeData_tue1);
+
+            availDay_tue.setDay("3");
+            availDay_tue.setTiming(timeDataList_tue);
+        }
+
+
+        //Wednesday
+        if (!list_wed.isEmpty()) {
+            if (list_wed.size() > 0) {
+                String[] strs = list_wed.get(0).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_wed1.setAvailId("");
+                timeData_wed1.setStartTime(s_tm + ":00");
+                timeData_wed1.setEndTime(e_tm + ":00");
+                timeDataList_wed.add(timeData_wed1);
+                Log.d("Wed--->", "onClick: >0" + " 1");
+            }
+
+            if (list_wed.size() > 1) {
+                String[] strs = list_wed.get(1).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_wed2.setAvailId("");
+                timeData_wed2.setStartTime(s_tm + ":00");
+                timeData_wed2.setEndTime(e_tm + ":00");
+                timeDataList_wed.add(timeData_wed2);
+                Log.d("Wed--->", "onClick: > 1" + " 2");
+            }
+
+            if (list_wed.size() > 2) {
+                String[] strs = list_wed.get(2).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_wed3.setAvailId("");
+                timeData_wed3.setStartTime(s_tm + ":00");
+                timeData_wed3.setEndTime(e_tm + ":00");
+                timeDataList_wed.add(timeData_wed3);
+                Log.d("Wed--->", "onClick: ==3" + " 3");
+            }
+
+            availDay_wed.setDay("4");
+            availDay_wed.setTiming(timeDataList_wed);
+        } else {
+            timeData_wed1.setAvailId("");
+            timeData_wed1.setStartTime("00:00:00");
+            timeData_wed1.setEndTime("00:00:00");
+
+            timeDataList_wed.add(timeData_wed1);
+
+            availDay_wed.setDay("4");
+            availDay_wed.setTiming(timeDataList_wed);
+        }
+
+
+        //Thursday
+        if (!list_thu.isEmpty()) {
+            if (list_thu.size() > 0) {
+                String[] strs = list_thu.get(0).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_thu1.setAvailId("");
+                timeData_thu1.setStartTime(s_tm + ":00");
+                timeData_thu1.setEndTime(e_tm + ":00");
+                timeDataList_thu.add(timeData_thu1);
+                Log.d("Thu--->", "onClick: >0" + " 1");
+            }
+
+            if (list_thu.size() > 1) {
+                String[] strs = list_thu.get(1).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_thu2.setAvailId("");
+                timeData_thu2.setStartTime(s_tm + ":00");
+                timeData_thu2.setEndTime(e_tm + ":00");
+                timeDataList_thu.add(timeData_thu2);
+                Log.d("Thu--->", "onClick: > 1" + " 2");
+            }
+
+            if (list_thu.size() > 2) {
+                String[] strs = list_thu.get(2).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_thu3.setAvailId("");
+                timeData_thu3.setStartTime(s_tm + ":00");
+                timeData_thu3.setEndTime(e_tm + ":00");
+                timeDataList_thu.add(timeData_thu3);
+                Log.d("Thu--->", "onClick: ==3" + " 3");
+            }
+
+            availDay_thu.setDay("5");
+            availDay_thu.setTiming(timeDataList_thu);
+        } else {
+            timeData_thu1.setAvailId("");
+            timeData_thu1.setStartTime("00:00:00");
+            timeData_thu1.setEndTime("00:00:00");
+
+            timeDataList_thu.add(timeData_thu1);
+
+            availDay_thu.setDay("5");
+            availDay_thu.setTiming(timeDataList_thu);
+        }
+
+
+        //Friday
+        if (!list_fri.isEmpty()) {
+            if (list_fri.size() > 0) {
+                String[] strs = list_fri.get(0).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_fri1.setAvailId("");
+                timeData_fri1.setStartTime(s_tm + ":00");
+                timeData_fri1.setEndTime(e_tm + ":00");
+                timeDataList_fri.add(timeData_fri1);
+                Log.d("Fri--->", "onClick: >0" + " 1");
+            }
+
+            if (list_fri.size() > 1) {
+                String[] strs = list_fri.get(1).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_fri2.setAvailId("");
+                timeData_fri2.setStartTime(s_tm + ":00");
+                timeData_fri2.setEndTime(e_tm + ":00");
+                timeDataList_fri.add(timeData_fri2);
+                Log.d("Fri--->", "onClick: > 1" + " 2");
+            }
+
+            if (list_fri.size() > 2) {
+                String[] strs = list_fri.get(2).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_fri3.setAvailId("");
+                timeData_fri3.setStartTime(s_tm + ":00");
+                timeData_fri3.setEndTime(e_tm + ":00");
+                timeDataList_fri.add(timeData_fri3);
+                Log.d("Fri--->", "onClick: ==3" + " 3");
+            }
+
+
+            availDay_fri.setDay("6");
+            availDay_fri.setTiming(timeDataList_fri);
+        } else {
+            timeData_fri1.setAvailId("");
+            timeData_fri1.setStartTime("00:00:00");
+            timeData_fri1.setEndTime("00:00:00");
+
+            timeDataList_fri.add(timeData_fri1);
+
+            availDay_fri.setDay("6");
+            availDay_fri.setTiming(timeDataList_fri);
+        }
+
+
+        //Saturday
+        if (!list_sat.isEmpty()) {
+            if (list_sat.size() > 0) {
+                String[] strs = list_sat.get(0).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_sat1.setAvailId("");
+                timeData_sat1.setStartTime(s_tm + ":00");
+                timeData_sat1.setEndTime(e_tm + ":00");
+                timeDataList_sat.add(timeData_sat1);
+                Log.d("Sat--->", "onClick: >0" + " 1");
+            }
+
+            if (list_sat.size() > 1) {
+                String[] strs = list_sat.get(1).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_sat2.setAvailId("");
+                timeData_sat2.setStartTime(s_tm + ":00");
+                timeData_sat2.setEndTime(e_tm + ":00");
+                timeDataList_sat.add(timeData_sat2);
+                Log.d("Sat--->", "onClick: > 1" + " 2");
+            }
+
+            if (list_sat.size() > 2) {
+                String[] strs = list_sat.get(2).split(" - ");
+                String s_tm = strs[0];
+                String e_tm = strs[1];
+
+                timeData_sat3.setAvailId("");
+                timeData_sat3.setStartTime(s_tm + ":00");
+                timeData_sat3.setEndTime(e_tm + ":00");
+                timeDataList_sat.add(timeData_sat3);
+                Log.d("Sat--->", "onClick: ==3" + " 3");
+            }
+
+            availDay_sat.setDay("7");
+            availDay_sat.setTiming(timeDataList_sat);
+        } else {
+            timeData_sat1.setAvailId("");
+            timeData_sat1.setStartTime("00:00:00");
+            timeData_sat1.setEndTime("00:00:00");
+
+            timeDataList_sat.add(timeData_sat1);
+
+            availDay_sat.setDay("7");
+            availDay_sat.setTiming(timeDataList_sat);
+        }
+
+
+        //Final avail list
+        List<AvailDay> availDayList = new ArrayList<>();
+        availDayList.add(availDay_sun);
+        availDayList.add(availDay_mon);
+        availDayList.add(availDay_tue);
+        availDayList.add(availDay_wed);
+        availDayList.add(availDay_thu);
+        availDayList.add(availDay_fri);
+        availDayList.add(availDay_sat);
+
+        AppointmentService appointmentService = new AppointmentService();
+        appointmentService.setSerName(ser_name);
+        appointmentService.setSerDuration(ser_dur);
+        appointmentService.setSerPrice(amount);
+        appointmentService.setIsActive(true);
+        appointmentService.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        appointmentService.setSameBussTime(isSameBizHrs);
+        if (showamount.equals("1")) {
+            appointmentService.setIsShowCust(true);
+        } else {
+            appointmentService.setIsShowCust(false);
+        }
+        appointmentService.setSerDescription(ser_desc);
+        appointmentService.availDays(availDayList);
+
+        ApptTransactionBody transactionBody = new ApptTransactionBody();
+        transactionBody.setReqType("T-S.C");
+        transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
+        transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+        transactionBody.setService(appointmentService);
+        try {
+            Log.d("Token--->", "token: " + sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+            boolean isConn = ConnectivityReceiver.isConnected();
+            if (isConn) {
+                apptCreateService(transactionBody);
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(AddServiceAvailTimeActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                            @Override
+                            public void onButtonClick() {
+                                createService();
+                            }
+                        };
+                    }
+                });
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -1965,20 +1925,20 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
     }*/
 
-    private void getDialog(String msg) {
+    private void getDialog(final String msg) {
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AddServiceAvailTimeActivity.this);
-        alertDialogBuilder.setMessage(msg);
-        alertDialogBuilder.setPositiveButton("OK",
-                new DialogInterface.OnClickListener() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new AlertDialogFailure(AddServiceAvailTimeActivity.this, msg, "OK", "", "Warning") {
                     @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        arg0.dismiss();
-                    }
-                });
+                    public void onButtonClick() {
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+                    }
+                };
+            }
+        });
+
     }
 
     private String getStartTime(String time) {
@@ -2051,7 +2011,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(AddServiceAvailTimeActivity.this, "Service setup failed. Please try again later!", "OK", "", "Failed") {
+                            new AlertDialogFailure(AddServiceAvailTimeActivity.this, "Please try again later!", "OK", "Service setup failed", "Failed") {
                                 @Override
                                 public void onButtonClick() {
                                     startActivity(new Intent(AddServiceAvailTimeActivity.this, SetupServiceActivity_Bottom.class));
@@ -2141,5 +2101,14 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         list_thu.clear();
         list_fri.clear();
         list_sat.clear();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (intermediateAlertDialog != null) {
+            intermediateAlertDialog.dismissAlertDialog();
+            intermediateAlertDialog = null;
+        }
     }
 }

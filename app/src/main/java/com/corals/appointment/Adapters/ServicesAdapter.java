@@ -23,6 +23,8 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.corals.appointment.Activity.AddServiceActivity;
 import com.corals.appointment.Activity.LoginActivity;
+import com.corals.appointment.Activity.SerUnavailAskTimeActivity;
+import com.corals.appointment.Activity.SettingsActivity;
 import com.corals.appointment.Activity.SetupServiceActivity_Bottom;
 import com.corals.appointment.Client.ApiCallback;
 import com.corals.appointment.Client.ApiException;
@@ -32,6 +34,7 @@ import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
+import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
@@ -107,67 +110,57 @@ public class ServicesAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-                alertDialogBuilder.setMessage("Are you sure, You want to delete this service?");
-                alertDialogBuilder.setPositiveButton("Yes",
-                        new DialogInterface.OnClickListener() {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogYesNo(context, "Delete Service?", "Are you sure, You want to delete "+appointmentServiceArrayList.get(position).getSerName()+"?", "Yes", "No") {
                             @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                arg0.dismiss();
-                         /*       final ProgressDialog pd = new ProgressDialog(context);
-                                pd.setMessage("Deleting Service...");
-                                pd.show();
+                            public void onOKButtonClick() {
 
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        pd.dismiss();
-                                        Toast.makeText(context, "Service Successfully Deleted!", Toast.LENGTH_SHORT).show();
-                                    }
-                                }, 2000);*/
-
-                                sharedpreferences_sessionToken = context.getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
-                                AppointmentService appointmentService = new AppointmentService();
-                                appointmentService.setSerId(appointmentServiceArrayList.get(position).getSerId());
-                                appointmentService.setIsShowCust(appointmentServiceArrayList.get(position).isIsShowCust());
-                                appointmentService.setIsActive(false);
-                                appointmentService.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
-
-                                ApptTransactionBody transactionBody = new ApptTransactionBody();
-                                transactionBody.setReqType("T-S.U");
-                                transactionBody.setSerId(appointmentServiceArrayList.get(position).getSerId());
-                                transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
-                                transactionBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
-                                transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
-                                transactionBody.setService(appointmentService);
                                 try {
-                                    Log.d("Token--->", "token: " + sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
                                     boolean isConn = ConnectivityReceiver.isConnected();
                                     if (isConn) {
+                                        sharedpreferences_sessionToken = context.getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
+                                        AppointmentService appointmentService = new AppointmentService();
+                                        appointmentService.setSerId(appointmentServiceArrayList.get(position).getSerId());
+                                        appointmentService.setIsShowCust(appointmentServiceArrayList.get(position).isIsShowCust());
+                                        appointmentService.setIsActive(false);
+                                        appointmentService.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+
+                                        ApptTransactionBody transactionBody = new ApptTransactionBody();
+                                        transactionBody.setReqType("T-S.U");
+                                        transactionBody.setSerId(appointmentServiceArrayList.get(position).getSerId());
+                                        transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+                                        transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
+                                        transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+                                        transactionBody.setService(appointmentService);
                                         intermediateAlertDialog = new IntermediateAlertDialog(context);
                                         apptUpdateService(transactionBody);
                                     } else {
-                                        Toast.makeText(context, "No internet connection!", Toast.LENGTH_SHORT).show();
-                                    }
+                                        context.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                new AlertDialogFailure(context, context.getResources().getString(R.string.no_internet_sub_title), "OK", context.getResources().getString(R.string.no_internet_title), context.getResources().getString(R.string.no_internet_Heading)) {
+                                                    @Override
+                                                    public void onButtonClick() {
+
+                                                    }
+                                                };
+                                            }
+                                        });                                    }
                                 } catch (ApiException e) {
                                     e.printStackTrace();
                                 }
+                            }
+
+                            @Override
+                            public void onCancelButtonClick() {
 
                             }
-                        });
 
-                alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+                        };
                     }
                 });
-
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-
-
 
 
             }

@@ -25,6 +25,8 @@ import com.corals.appointment.Client.OkHttpApiClient;
 import com.corals.appointment.Client.api.MerchantApisApi;
 import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
+import com.corals.appointment.Dialogs.AlertDialogFailure;
+import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
@@ -36,8 +38,11 @@ import java.util.Map;
 public class ApptConfirmActivity extends AppCompatActivity {
 
     Button button_done;
-    TextView tv_n1, tv_m1;
+    TextView tv_n1, tv_m1, tv_ser_name, tv_time, tv_date,tv_res;
     private IntermediateAlertDialog intermediateAlertDialog;
+    private SharedPreferences sharedpreferences_sessionToken;
+    String name, mob, cus_id, service_id, date, slot_no, start_time, end_time, res_id, res, service,cus_email;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,72 +60,95 @@ public class ApptConfirmActivity extends AppCompatActivity {
             }
         });
 
-        tv_n1 = findViewById(R.id.tv_name);
-        tv_m1 = findViewById(R.id.tv_mob);
+        tv_n1 = findViewById(R.id.tv_cus_name);
+        tv_m1 = findViewById(R.id.tv_cus_mob);
+        tv_ser_name = findViewById(R.id.text_ser_name);
+        tv_time = findViewById(R.id.text_appt_time);
+        tv_date = findViewById(R.id.text_appt_date);
+        tv_res = findViewById(R.id.text_res_name);
 
         if (getIntent().getExtras() != null) {
-            String name = getIntent().getStringExtra("cus_name");
-            String mob = getIntent().getStringExtra("cus_mob");
+            name = getIntent().getStringExtra("cus_name");
+            mob = getIntent().getStringExtra("cus_mob");
+            cus_id = getIntent().getStringExtra("cus_id");
+            service_id = getIntent().getStringExtra("service_id");
+            date = getIntent().getStringExtra("date");
+            slot_no = getIntent().getStringExtra("slot_no");
+            start_time = getIntent().getStringExtra("start_time");
+            end_time = getIntent().getStringExtra("end_time");
+            res_id = getIntent().getStringExtra("res_id");
+            res = getIntent().getStringExtra("res");
+            service = getIntent().getStringExtra("service");
+            cus_email = getIntent().getStringExtra("cus_email");
             tv_n1.setText(name);
             tv_m1.setText(mob);
-            Log.d("Appn_Date---->", "onCreate: " + name + "," + mob);
+            tv_ser_name.setText(service);
+            tv_time.setText(start_time+"-"+end_time);
+            tv_date.setText(date);
+            tv_res.setText("w/ "+res);
+            Log.d("Appn_Date---->", "onCreate: " + name + "," + mob + "," + cus_id + "," + service_id + "," + date + "," + slot_no + "," + start_time + "," + end_time + "," + res_id + "," + res + "," + service+ "," + cus_email);
         }
-
+        sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
         button_done = findViewById(R.id.button_appt_done);
         button_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ApptConfirmActivity.this);
-                alertDialogBuilder.setMessage("Are you sure, You want to book this appointment?");
-                alertDialogBuilder.setPositiveButton("Yes",
-                        new DialogInterface.OnClickListener() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogYesNo(ApptConfirmActivity.this, "Book Appointment?", "Are you sure, You want to book appointment?", "Yes", "No") {
                             @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                arg0.dismiss();
-                                final ProgressDialog pd = new ProgressDialog(ApptConfirmActivity.this);
-                                pd.setMessage("Booking Appointment...");
-                                pd.show();
+                            public void onOKButtonClick() {
 
-                                Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        pd.dismiss();
-                                       // Toast.makeText(ApptConfirmActivity.this, "Appointment Successfully Booked!", Toast.LENGTH_SHORT).show();
-                                        Intent in = new Intent(ApptConfirmActivity.this, ApptSuccessActivity.class);
-                                        startActivity(in);
-                                        finish();
-                                    }
-                                }, 3000);
+                                try {
+                                    Log.d("Token--->", "token: " + sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+                                    boolean isConn = ConnectivityReceiver.isConnected();
+                                    if (isConn) {
+                                        ApptTransactionBody transactionBody = new ApptTransactionBody();
+                                        transactionBody.setReqType("T-A.C");
+                                        transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+                                        transactionBody.setSerId(service_id);
+                                        transactionBody.setDate(date); //date
+                                        transactionBody.setSlotNo(slot_no);
+                                        transactionBody.setStartTime(start_time);
+                                        transactionBody.setEndTime(end_time);
+                                        transactionBody.setCustId(cus_id);
+                                        transactionBody.setResId(res_id);
+                                        transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
+                                        transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+
+                                        intermediateAlertDialog = new IntermediateAlertDialog(ApptConfirmActivity.this);
+                                        bookAppointment(transactionBody);
+                                    } else {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                new AlertDialogFailure(ApptConfirmActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title),getResources().getString(R.string.no_internet_Heading)) {
+                                                    @Override
+                                                    public void onButtonClick() {
+
+                                                    }
+                                                };
+                                            }
+                                        });                                    }
+                                } catch (ApiException e) {
+                                    e.printStackTrace();
+                                }
+
 
                             }
-                        });
 
-                alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+                            @Override
+                            public void onCancelButtonClick() {
+
+                            }
+                        };
                     }
                 });
 
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
             }
         });
-
-     /*            ApptTransactionBody transactionBody = new ApptTransactionBody();
-        transactionBody.setReqType("TS-SR.CR");
-        try {
-            boolean isConn = ConnectivityReceiver.isConnected();
-            if (isConn) {
-                bookAppointment(transactionBody);
-            } else {
-                Toast.makeText(ApptConfirmActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
-            }
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }*/
 
 
     }
@@ -129,35 +157,30 @@ public class ApptConfirmActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ApptConfirmActivity.this);
-        alertDialogBuilder.setMessage("Are you sure, You want to cancel this appointment?");
-        alertDialogBuilder.setPositiveButton("Yes",
-                new DialogInterface.OnClickListener() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new AlertDialogYesNo(ApptConfirmActivity.this, "Cancel Book Appointment?", "Are you sure, You want to cancel this book appointment?", "Yes", "No") {
                     @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        arg0.dismiss();
+                    public void onOKButtonClick() {
                         Intent in = new Intent(ApptConfirmActivity.this, DashboardActivity.class);
                         startActivity(in);
                         finish();
+                    }
 
+                    @Override
+                    public void onCancelButtonClick() {
 
                     }
-                });
-
-        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+                };
             }
         });
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
     }
 
     private void bookAppointment(ApptTransactionBody requestBody) throws ApiException {
         Log.d("createStaff---", "createStaff: " + requestBody);
-        intermediateAlertDialog = new IntermediateAlertDialog(ApptConfirmActivity.this);
+
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(ApptConfirmActivity.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();
         webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
@@ -169,14 +192,58 @@ public class ApptConfirmActivity extends AppCompatActivity {
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(ApptConfirmActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                startActivity(new Intent(ApptConfirmActivity.this, AppointmentActivity.class));
+                                finish();
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                            }
+                        };
+                    }
+                });
             }
 
             @Override
             public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
-                Log.d("createStaff--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
+                Log.d("createStaff--->", "onSuccess-" + result.getStatusCode() + "," + result.getStatusMessage());
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
+
+                if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ApptConfirmActivity.this, "Appointment booked successfully!", "OK", "", "Success") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(ApptConfirmActivity.this, ApptSuccessActivity.class).putExtra("cus_email",cus_email));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                                }
+                            };
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ApptConfirmActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(ApptConfirmActivity.this, AppointmentActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
+                        }
+                    });
+                }
+
             }
 
             @Override
@@ -191,5 +258,12 @@ public class ApptConfirmActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (intermediateAlertDialog != null) {
+            intermediateAlertDialog.dismissAlertDialog();
+            intermediateAlertDialog = null;
+        }
+    }
 }

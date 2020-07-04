@@ -2,6 +2,8 @@ package com.corals.appointment.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,13 +12,12 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.corals.appointment.Adapters.ServicesAdapter;
-import com.corals.appointment.Adapters.StaffListAdapter;
+import com.corals.appointment.Adapters.ServicesAdapter_Calender;
+import com.corals.appointment.Adapters.StaffLeaveAdapter;
 import com.corals.appointment.Client.ApiCallback;
 import com.corals.appointment.Client.ApiException;
 import com.corals.appointment.Client.OkHttpApiClient;
@@ -30,30 +31,25 @@ import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SetupStaffActivity_Bottom extends AppCompatActivity {
-    private ListView listView_staffs;
-    private ArrayList<String> staff_name_list, staff_mob_list;
-    private SharedPreferences sharedpreferences_staffs;
-    StaffListAdapter staffListAdapter;
-    LinearLayout linearLayout_add_staff;
-    public String pageId = "";
-    private SharedPreferences sharedpreferences_sessionToken;
+public class BookingResourcesActivity extends AppCompatActivity {
+
+    RecyclerView recyclerView_services;
+    TextView textView_no_ser, textView_appt_dt, textView_appt_ser;
+    public static String cal_date = "", pageId, service_id, service;
     private IntermediateAlertDialog intermediateAlertDialog;
-    TextView textView_no_staff;
+    private SharedPreferences sharedpreferences_sessionToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_staff__bottom);
+        setContentView(R.layout.activity_booking_resources);
 
-        Toolbar toolbar = findViewById(R.id.toolbar_staffs);
+        Toolbar toolbar = findViewById(R.id.toolbar_select_res);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -66,44 +62,37 @@ public class SetupStaffActivity_Bottom extends AppCompatActivity {
         });
 
         sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
-        sharedpreferences_staffs = getSharedPreferences(AddStaffActivity.MyPREFERENCES_STAFFS, Context.MODE_PRIVATE);
-        textView_no_staff = findViewById(R.id.tv_no_staffs);
-        staff_name_list = new ArrayList<>();
-        staff_mob_list = new ArrayList<>();
-        listView_staffs = findViewById(R.id.listview_staffs);
-        linearLayout_add_staff = findViewById(R.id.layout_add_staff);
+        textView_appt_dt = findViewById(R.id.text_appn_dt);
+        textView_appt_ser = findViewById(R.id.text_appn_ser);
+        textView_no_ser = findViewById(R.id.tv_no_services);
+        recyclerView_services = findViewById(R.id.recyclerview_staff);
+        LinearLayoutManager lm = new LinearLayoutManager(this);
+        recyclerView_services.setLayoutManager(lm);
 
         if (getIntent().getExtras() != null) {
+            cal_date = getIntent().getStringExtra("date");
             pageId = getIntent().getStringExtra("page_id");
-
+            service_id = getIntent().getStringExtra("service_id");
+            service = getIntent().getStringExtra("service");
+            textView_appt_dt.setText(cal_date);
+            textView_appt_ser.setText(service);
         }
 
-        linearLayout_add_staff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent in = new Intent(SetupStaffActivity_Bottom.this, AddStaffActivity.class);
-                in.putExtra("page_id", "3");
-                startActivity(in);
-                finish();
-                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
-            }
-        });
-
-        callAPI_Staff();
-
+        callAPI();
     }
 
-    private void callAPI_Staff() {
+    private void callAPI() {
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
-        enquiryBody.setReqType("E-R.");
+        enquiryBody.setReqType("E-MS.");
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         enquiryBody.callerType("m");
+        enquiryBody.setSerId(service_id);
         enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
         boolean isConn = ConnectivityReceiver.isConnected();
         if (isConn) {
             try {
-                intermediateAlertDialog = new IntermediateAlertDialog(SetupStaffActivity_Bottom.this);
+                intermediateAlertDialog = new IntermediateAlertDialog(BookingResourcesActivity.this);
                 fetchStaff(enquiryBody);
             } catch (ApiException e) {
                 e.printStackTrace();
@@ -112,10 +101,10 @@ public class SetupStaffActivity_Bottom extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    new AlertDialogFailure(SetupStaffActivity_Bottom.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                    new AlertDialogFailure(BookingResourcesActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
                         @Override
                         public void onButtonClick() {
-                            callAPI_Staff();
+                            callAPI();
                         }
                     };
                 }
@@ -126,17 +115,17 @@ public class SetupStaffActivity_Bottom extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
-        Intent in = new Intent(SetupStaffActivity_Bottom.this, DashboardActivity.class);
-        startActivity(in);
+        Intent i = new Intent(BookingResourcesActivity.this, AppointmentActivity.class);
+        startActivity(i);
         finish();
         overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+
     }
 
     private void fetchStaff(AppointmentEnquiryBody requestBody) throws ApiException {
 
         Log.d("fetchService--->", "fetchService: " + requestBody);
-        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(SetupStaffActivity_Bottom.this);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(BookingResourcesActivity.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();
         webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
 
@@ -151,10 +140,10 @@ public class SetupStaffActivity_Bottom extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(SetupStaffActivity_Bottom.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                        new AlertDialogFailure(BookingResourcesActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                startActivity(new Intent(SetupStaffActivity_Bottom.this, DashboardActivity.class));
+                                startActivity(new Intent(BookingResourcesActivity.this, AppointmentActivity.class));
                                 finish();
                                 overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
                             }
@@ -174,28 +163,41 @@ public class SetupStaffActivity_Bottom extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+
                             if (!result.getResources().isEmpty() && result.getResources() != null) {
-                                textView_no_staff.setVisibility(View.GONE);
-                                listView_staffs.setVisibility(View.VISIBLE);
-                                staffListAdapter = new StaffListAdapter(SetupStaffActivity_Bottom.this, result.getResources());
-                                listView_staffs.setAdapter(staffListAdapter);
-
+                                StaffLeaveAdapter staffListAdapter = new StaffLeaveAdapter(BookingResourcesActivity.this, result.getResources(), "1", service_id, service, cal_date);
+                                recyclerView_services.setAdapter(staffListAdapter);
                             } else {
-                                textView_no_staff.setVisibility(View.VISIBLE);
-                                listView_staffs.setVisibility(View.GONE);
+                                textView_no_ser.setText("No staffs created");
+                                textView_no_ser.setVisibility(View.VISIBLE);
+                                recyclerView_services.setVisibility(View.GONE);
                             }
-
 
                         }
                     });
-                } else {
+                } else if (Integer.parseInt(result.getStatusCode()) == 400) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(SetupStaffActivity_Bottom.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                            new AlertDialogFailure(BookingResourcesActivity.this, "Staff not found for this service", "OK","", "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(SetupStaffActivity_Bottom.this, DashboardActivity.class));
+                                    startActivity(new Intent(BookingResourcesActivity.this, AppointmentActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
+                        }
+                    });
+                }
+                else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(BookingResourcesActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(BookingResourcesActivity.this, AppointmentActivity.class));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
                                 }
@@ -226,4 +228,5 @@ public class SetupStaffActivity_Bottom extends AppCompatActivity {
             intermediateAlertDialog = null;
         }
     }
+
 }

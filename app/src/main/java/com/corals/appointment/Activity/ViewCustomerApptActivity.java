@@ -1,34 +1,46 @@
 package com.corals.appointment.Activity;
 
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.corals.appointment.Adapters.ViewCustomersApptRecyclerAdapter;
+import com.corals.appointment.Client.ApiCallback;
+import com.corals.appointment.Client.ApiException;
+import com.corals.appointment.Client.OkHttpApiClient;
+import com.corals.appointment.Client.api.MerchantApisApi;
+import com.corals.appointment.Client.model.AppointmentEnquiryBody;
+import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
+import com.corals.appointment.Dialogs.AlertDialogFailure;
+import com.corals.appointment.Dialogs.AlertDialogYesNo;
+import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.receiver.ConnectivityReceiver;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 
 public class ViewCustomerApptActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    ArrayList<String> arrayList_slot_time, arrayList_slot_cus_name, arrayList_slot_cus_mob, arrayList_available;
     ImageView imageView_back, imageView_next;
-    TextView textView_date;
+    TextView textView_date, textView_no_appts;
     Calendar c;
-    String formattedDate,cus_name;
+    String formattedDate, cus_name, cus_mob, cus_id;
+    private SharedPreferences sharedpreferences_sessionToken;
+    private IntermediateAlertDialog intermediateAlertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,25 +60,15 @@ public class ViewCustomerApptActivity extends AppCompatActivity {
         });
 
         if (getIntent().getExtras() != null) {
+            cus_id = getIntent().getStringExtra("cus_id");
             cus_name = getIntent().getStringExtra("cus_name");
-            toolbar.setTitle(cus_name+"'s Appointments");
+            cus_mob = getIntent().getStringExtra("cus_mob");
+            toolbar.setTitle(cus_name + "'s Appointments");
         }
-        //Appt Slots
-        arrayList_slot_time = new ArrayList<>();
-        arrayList_slot_cus_name = new ArrayList<>();
-        arrayList_slot_cus_mob = new ArrayList<>();
-        arrayList_available = new ArrayList<>();
-
-        arrayList_slot_time.add("08:00 am - 08:30 am");
-        arrayList_slot_time.add("12:00 pm - 12:30 pm");
-        arrayList_slot_time.add("02:30 pm - 02:45 pm");
-        arrayList_slot_time.add("06:00 pm - 06:30 pm");
-        arrayList_slot_time.add("06:30 pm - 07:00 pm");
-        arrayList_slot_time.add("07:00 pm - 07:30 pm");
-        arrayList_slot_time.add("07:30 pm - 08:00 pm");
-        arrayList_slot_time.add("08:00 pm - 08:30 pm");
+        sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
 
 
+        textView_no_appts = findViewById(R.id.text_no_appts);
         imageView_back = findViewById(R.id.image_appt_back);
         imageView_next = findViewById(R.id.image_appt_next);
         textView_date = findViewById(R.id.text_appt_date);
@@ -74,98 +76,101 @@ public class ViewCustomerApptActivity extends AppCompatActivity {
         LinearLayoutManager lm = new LinearLayoutManager(ViewCustomerApptActivity.this);
         recyclerView.setLayoutManager(lm);
 
-        ViewCustomersApptRecyclerAdapter apptServiceSlotsAdapter = new ViewCustomersApptRecyclerAdapter(ViewCustomerApptActivity.this, arrayList_slot_time);
-        recyclerView.setAdapter(apptServiceSlotsAdapter);
-
         c = Calendar.getInstance();
         System.out.println("Current time => " + c.getTime());
-        final SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         formattedDate = df.format(c.getTime());
         textView_date.setText(formattedDate);
 
         imageView_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewCustomerApptActivity.this);
-                alertDialogBuilder.setMessage("Do you want to show previous day appointments?");
-                alertDialogBuilder.setPositiveButton("Yes",
-                        new DialogInterface.OnClickListener() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogYesNo(ViewCustomerApptActivity.this, "Show Appointment?", "Do you want to show previous day appointments?", "Yes", "No") {
                             @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                arg0.dismiss();
+                            public void onOKButtonClick() {
                                 c.add(Calendar.DATE, -1);
                                 formattedDate = df.format(c.getTime());
                                 Log.v("PREVIOUS DATE : ", formattedDate);
                                 textView_date.setText(formattedDate);
+                                callAPI(formattedDate);
                             }
-                        });
 
-                alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+                            @Override
+                            public void onCancelButtonClick() {
+
+                            }
+                        };
                     }
                 });
 
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
             }
         });
 
         imageView_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewCustomerApptActivity.this);
-                alertDialogBuilder.setMessage("Do you want to show next day appointments?");
-                alertDialogBuilder.setPositiveButton("Yes",
-                        new DialogInterface.OnClickListener() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogYesNo(ViewCustomerApptActivity.this, "Show Appointment?", "Do you want to show next day appointments?", "Yes", "No") {
                             @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                arg0.dismiss();
+                            public void onOKButtonClick() {
                                 c.add(Calendar.DATE, 1);
                                 formattedDate = df.format(c.getTime());
                                 Log.v("NEXT DATE : ", formattedDate);
                                 textView_date.setText(formattedDate);
+                                callAPI(formattedDate);
                             }
-                        });
 
-                alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+                            @Override
+                            public void onCancelButtonClick() {
+
+                            }
+                        };
                     }
                 });
-
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
 
 
             }
         });
 
-/*        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
+        callAPI(textView_date.getText().toString().trim());
 
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0) {
-                    System.out.println("Scrolled Downwards");
-                    Toast.makeText(ViewApptServiceActivity.this, "Scrolled Downwards", Toast.LENGTH_SHORT).show();
-                } else if (dy < 0) {
-                    System.out.println("Scrolled Upwards");
-                    Toast.makeText(ViewApptServiceActivity.this, "Scrolled Upwards", Toast.LENGTH_SHORT).show();
-                } else {
-                    System.out.println("No Vertical Scrolled");
-                    Toast.makeText(ViewApptServiceActivity.this, "No Vertical Scrolled", Toast.LENGTH_SHORT).show();
+    }
+
+    public void callAPI(final String date) {
+        AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+        enquiryBody.setReqType("E-A.MC");
+        enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        enquiryBody.callerType("m");
+        enquiryBody.setCustId(cus_id);
+        enquiryBody.setDate(date);
+        enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
+        enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+        boolean isConn = ConnectivityReceiver.isConnected();
+        if (isConn) {
+            try {
+                intermediateAlertDialog = new IntermediateAlertDialog(ViewCustomerApptActivity.this);
+                fetchAppointments(enquiryBody);
+            } catch (ApiException e) {
+                e.printStackTrace();
+            }
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialogFailure(ViewCustomerApptActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), "Failed") {
+                        @Override
+                        public void onButtonClick() {
+                            callAPI(date);
+                        }
+                    };
                 }
-            }
-        });*/
-
-
+            });
+        }
     }
 
     @Override
@@ -176,4 +181,112 @@ public class ViewCustomerApptActivity extends AppCompatActivity {
         finish();
         overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
     }
+
+    private void fetchAppointments(AppointmentEnquiryBody requestBody) throws ApiException {
+        Log.d("login---", "login: " + requestBody);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(ViewCustomerApptActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentEnquiryAsync(requestBody, new ApiCallback<AppointmentEnquiryResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("fetchService--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(ViewCustomerApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                startActivity(new Intent(ViewCustomerApptActivity.this, DashboardActivity.class));
+                                finish();
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                            }
+                        };
+                    }
+                });
+            }
+
+            @Override
+            public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+
+                Log.d("fetchService--->", "onSuccess-" + statusCode + "," + result);
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+                if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            if (!result.getAppointments().isEmpty()) {
+                                textView_no_appts.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
+                                ViewCustomersApptRecyclerAdapter apptServiceSlotsAdapter = new ViewCustomersApptRecyclerAdapter(ViewCustomerApptActivity.this, result.getAppointments());
+                                recyclerView.setAdapter(apptServiceSlotsAdapter);
+
+                            } else {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        textView_no_appts.setVisibility(View.VISIBLE);
+                                        recyclerView.setVisibility(View.GONE);
+                                    }
+                                });
+                            }
+
+
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 404) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            textView_no_appts.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                        }
+                    });
+
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ViewCustomerApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(ViewCustomerApptActivity.this, DashboardActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
+
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (intermediateAlertDialog != null) {
+            intermediateAlertDialog.dismissAlertDialog();
+            intermediateAlertDialog = null;
+        }
+    }
+
 }

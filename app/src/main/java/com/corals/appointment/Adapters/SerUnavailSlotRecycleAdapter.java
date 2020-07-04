@@ -18,20 +18,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.corals.appointment.Activity.ApptConfirmActivity;
 import com.corals.appointment.Activity.ApptSuccessActivity;
 import com.corals.appointment.Activity.ChangeApptActivity;
+import com.corals.appointment.Activity.SerUnavailAskTimeActivity;
+import com.corals.appointment.Client.model.AppointmentAvailableSlots;
+import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SerUnavailSlotRecycleAdapter extends RecyclerView.Adapter<SerUnavailSlotRecycleAdapter.MyViewHolder> {
-    ArrayList<String> arrayList1,arrayList2;
     Activity context;
     String code;
-    int row_index;
+    List<AppointmentAvailableSlots> appointmentAvailableSlots;
 
-    public SerUnavailSlotRecycleAdapter(Activity context, ArrayList<String> arrayList1, ArrayList<String> arrayList2, String code) {
+    public SerUnavailSlotRecycleAdapter(Activity context,String code, List<AppointmentAvailableSlots> appointmentAvailableSlots) {
         this.context = context;
-        this.arrayList1 = arrayList1;
-        this.arrayList2 = arrayList2;
+        this.appointmentAvailableSlots = appointmentAvailableSlots;
         this.code = code;
 
     }
@@ -45,33 +47,67 @@ public class SerUnavailSlotRecycleAdapter extends RecyclerView.Adapter<SerUnavai
 
     @Override
     public void onBindViewHolder(final SerUnavailSlotRecycleAdapter.MyViewHolder holder, final int position) {
-        // holder.linearLayout_color.setBackgroundResource(R.drawable.left_round_corners_blue);
-        holder.textView_slot.setText(arrayList1.get(position));
+        holder.textView_slot.setText(appointmentAvailableSlots.get(position).getSerStartTime() + " - " + appointmentAvailableSlots.get(position).getSerEndTime());
+        final int total_appt = Integer.parseInt(appointmentAvailableSlots.get(position).getAllowed());
+        final int booked_appt = Integer.parseInt(appointmentAvailableSlots.get(position).getBooked());
+
+
         holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (code.equals("1")) {
-
                     if (holder.textView_response.getVisibility() == View.GONE) {
-                        if(arrayList2.get(position).equals("1")){
-                            getSlotUnavailDialog("Appointment already available on this slot. Cannot make this slot unavailable");
-                        }
-                        else {
+                        if (booked_appt == 0) {
                             holder.linearLayout_bg.setBackgroundResource(R.drawable.corner_change_appt_slot_green);
                             holder.textView_response.setVisibility(View.VISIBLE);
                             holder.textView_response.setText("Unavailable");
+
+                            SerUnavailAskTimeActivity.arrayList_startTime.add(appointmentAvailableSlots.get(position).getSerStartTime());
+                            SerUnavailAskTimeActivity.arrayList_endTime.add(appointmentAvailableSlots.get(position).getSerEndTime());
+                            SerUnavailAskTimeActivity.arrayList_slotNo.add(appointmentAvailableSlots.get(position).getSlotNo());
+
+                        } else if (booked_appt > 0) {
+                            context.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new AlertDialogFailure(context, "Unable to make this slot unavailable", "OK", "Appointment already available on this slot", "Warning") {
+                                        @Override
+                                        public void onButtonClick() {
+
+                                        }
+                                    };
+                                }
+                            });
+
+                        } else if (total_appt == 0 && booked_appt == 0) {
+                            context.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new AlertDialogFailure(context, "Unable to make this slot unavailable", "OK", "Appointment not available for this slot", "Warning") {
+                                        @Override
+                                        public void onButtonClick() {
+
+                                        }
+                                    };
+                                }
+                            });
+
                         }
-                    } else {
+                    }
+                     else {
                         holder.textView_response.setVisibility(View.GONE);
                         holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
+
+                        SerUnavailAskTimeActivity.arrayList_startTime.remove(appointmentAvailableSlots.get(position).getSerStartTime());
+                        SerUnavailAskTimeActivity.arrayList_endTime.remove(appointmentAvailableSlots.get(position).getSerEndTime());
+                        SerUnavailAskTimeActivity.arrayList_slotNo.remove(appointmentAvailableSlots.get(position).getSlotNo());
                     }
-                } else if (code.equals("2")) {
+                }/* else if (code.equals("2")) {
                     if (holder.textView_response.getVisibility() == View.GONE) {
-                        if(arrayList2.get(position).equals("1")){
+                        if (total_appt == booked_appt) {
                             getSlotUnavailDialog("Appointment already available on this slot. Staff cannot absent on this time");
                         }
-                        else {
+                        else if (total_appt > booked_appt) {
                             holder.linearLayout_bg.setBackgroundResource(R.drawable.corner_change_appt_slot_green);
                             holder.textView_response.setVisibility(View.VISIBLE);
                             holder.textView_response.setText("Absent");
@@ -80,7 +116,7 @@ public class SerUnavailSlotRecycleAdapter extends RecyclerView.Adapter<SerUnavai
                         holder.textView_response.setVisibility(View.GONE);
                         holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
                     }
-                }
+                }*/
             }
         });
 
@@ -90,7 +126,7 @@ public class SerUnavailSlotRecycleAdapter extends RecyclerView.Adapter<SerUnavai
 
     @Override
     public int getItemCount() {
-        return arrayList1.size();
+        return appointmentAvailableSlots.size();
     }
 
 
@@ -107,22 +143,7 @@ public class SerUnavailSlotRecycleAdapter extends RecyclerView.Adapter<SerUnavai
         }
     }
 
-    private void getSlotUnavailDialog(String msg) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        alertDialogBuilder.setMessage(msg);
-        alertDialogBuilder.setPositiveButton("OK",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        arg0.dismiss();
 
-                    }
-                });
-
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
 }
 
 

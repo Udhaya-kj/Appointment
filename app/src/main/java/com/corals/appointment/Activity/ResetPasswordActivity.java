@@ -26,6 +26,7 @@ import com.corals.appointment.Client.OkHttpApiClient;
 import com.corals.appointment.Client.api.MerchantApisApi;
 import com.corals.appointment.Client.model.SecurityAPIBody;
 import com.corals.appointment.Client.model.SecurityAPIResponse;
+import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
@@ -42,6 +43,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
     MaterialButton button_submit;
     private IntermediateAlertDialog intermediateAlertDialog;
     private SharedPreferences sharedpreferences_sessionToken;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,9 +71,8 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
         if (getIntent().getExtras() != null) {
             mob = getIntent().getStringExtra("mobile");
-            mob="9090909090";
             editText_mob.setText(mob);
-            if (mob.length() > 0) {
+            if (mob.length() != 0) {
                 editText_mob.setSelection(mob.length());
             }
             Log.d("Mobile---->", "" + mob);
@@ -105,53 +106,65 @@ public class ResetPasswordActivity extends AppCompatActivity {
         button_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String mob = editText_mob.getText().toString().trim();
-                String new_pass = editText_new_pass.getText().toString().trim();
-                String confirm_pass = editText_confirm_pass.getText().toString().trim();
-
-                if (!TextUtils.isEmpty(mob)) {
-                    if (!TextUtils.isEmpty(new_pass) && new_pass.length() >= 8) {
-                        if (!TextUtils.isEmpty(confirm_pass) && confirm_pass.length() >= 8) {
-                            if (new_pass.equals(confirm_pass)){
-                                boolean isConn = ConnectivityReceiver.isConnected();
-                                if (isConn) {
-                                    SecurityAPIBody securityAPIBody = new SecurityAPIBody();
-                                    securityAPIBody.setReqType("S-RP.");
-                                    securityAPIBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
-                                    securityAPIBody.setMerId("119070138");
-                                    securityAPIBody.setUserMob("9998771");
-                                    securityAPIBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
-                                    securityAPIBody.setUserPass(confirm_pass);
-                                    try {
-                                        resetPassword(securityAPIBody);
-                                    } catch (ApiException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                                else {
-                                    Toast.makeText(ResetPasswordActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
-
-                                }
-
-                           // Toast.makeText(PasswordResetActivity.this, "Password has been changed successfully!", Toast.LENGTH_SHORT).show();
-
-                        } else {
-                                getDialog("Password does not match. Check your password");
-                        }
-                        } else {
-                            editText_confirm_pass.setError("Enter minimum 8 characters");
-                            editText_confirm_pass.requestFocus();
-                        }
-                    } else {
-                        editText_new_pass.setError("Enter minimum 8 characters");
-                        editText_new_pass.requestFocus();
-                    }
-                } else {
-                    editText_mob.setError("Enter mobile");
-                    editText_mob.requestFocus();
-                }
+                callAPI();
             }
         });
+    }
+
+    private void callAPI() {
+        String mob = editText_mob.getText().toString().trim();
+        String new_pass = editText_new_pass.getText().toString().trim();
+        String confirm_pass = editText_confirm_pass.getText().toString().trim();
+
+        if (!TextUtils.isEmpty(mob)) {
+            if (!TextUtils.isEmpty(new_pass) && new_pass.length() >= 8) {
+                if (!TextUtils.isEmpty(confirm_pass) && confirm_pass.length() >= 8) {
+                    if (new_pass.equals(confirm_pass)) {
+                        boolean isConn = ConnectivityReceiver.isConnected();
+                        if (isConn) {
+                            SecurityAPIBody securityAPIBody = new SecurityAPIBody();
+                            securityAPIBody.setReqType("S-RP.");
+                            securityAPIBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
+                            securityAPIBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+                            securityAPIBody.setUserMob(mob);
+                            securityAPIBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+                            securityAPIBody.setUserPass(confirm_pass);
+                            try {
+                                resetPassword(securityAPIBody);
+                            } catch (ApiException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new AlertDialogFailure(ResetPasswordActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                                        @Override
+                                        public void onButtonClick() {
+
+                                        }
+                                    };
+                                }
+                            });
+                        }
+
+                        // Toast.makeText(PasswordResetActivity.this, "Password has been changed successfully!", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        getDialog("Password does not match. Check your password");
+                    }
+                } else {
+                    editText_confirm_pass.setError("Enter minimum 8 characters");
+                    editText_confirm_pass.requestFocus();
+                }
+            } else {
+                editText_new_pass.setError("Enter minimum 8 characters");
+                editText_new_pass.requestFocus();
+            }
+        } else {
+            editText_mob.setError("Enter mobile");
+            editText_mob.requestFocus();
+        }
     }
 
     private void getDialog(String msg) {
@@ -204,13 +217,33 @@ public class ResetPasswordActivity extends AppCompatActivity {
                 Log.d("login--->", "onSuccess-" + statusCode + " , " + result);
 
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
-                    startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
-                    finish();
-                } else {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(ResetPasswordActivity.this, "Password reset Failed", Toast.LENGTH_SHORT).show();
+                            new AlertDialogFailure(ResetPasswordActivity.this, "Password reset successfully!", "OK", "", "Success") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                                }
+                            };
+                        }
+                    });
+
+                } else {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ResetPasswordActivity.this, "Please try again later!", "OK", "Password reset Failed", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(ResetPasswordActivity.this, SetupServiceActivity_Bottom.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                                }
+                            };
                         }
                     });
                 }
@@ -228,5 +261,14 @@ public class ResetPasswordActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (intermediateAlertDialog != null) {
+            intermediateAlertDialog.dismissAlertDialog();
+            intermediateAlertDialog = null;
+        }
     }
 }

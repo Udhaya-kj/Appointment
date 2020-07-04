@@ -1,49 +1,40 @@
 package com.corals.appointment.Adapters;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.corals.appointment.Activity.ApptConfirmActivity;
-import com.corals.appointment.Activity.CreateCustomerActivity;
 import com.corals.appointment.Client.model.InlineResponse20013Customersrec;
-import com.corals.appointment.Dialogs.CustomerBottomSheetDialog;
 import com.corals.appointment.Model.CustomersModel;
 import com.corals.appointment.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.MyViewHolder> implements Filterable {
-    private ArrayList<CustomersModel> customersModelArrayList;
-    private ArrayList<CustomersModel> mDisplayedValues;
-    private Context context;
-    private SharedPreferences preferences;
+public class CustomersAdapterMakeAppt_Recyclerview extends RecyclerView.Adapter<CustomersAdapterMakeAppt_Recyclerview.MyViewHolder> implements Filterable {
+    Activity context;
+
     String ser_id;
     String date;
     String slot_no;
     String startTime;
-    String endTime, res_id, res;
+    String endTime,res_id,res,service;
+    private ArrayList<CustomersModel> customersModelArrayList;
+    private ArrayList<CustomersModel> mDisplayedValues;
 
-    public CustomersAdapter(Context mCtx, ArrayList<CustomersModel> mCustomersValues, String ser_id, String date, String slot_no, String startTime, String endTime, String res_id, String res) {
-        this.context = mCtx;
+    public CustomersAdapterMakeAppt_Recyclerview(Activity context, ArrayList<CustomersModel> mCustomersValues, String ser_id, String date, String slot_no, String startTime, String endTime, String res_id, String res, String service) {
+        this.context = context;
         this.customersModelArrayList = mCustomersValues;
         this.mDisplayedValues = mCustomersValues;
         this.ser_id = ser_id;
@@ -53,66 +44,68 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.MyVi
         this.endTime = endTime;
         this.res_id = res_id;
         this.res = res;
-    }
-
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView name, mobile;
-        public ImageView imageView_popup;
-        LinearLayout layout;
-
-        private MyViewHolder(View view) {
-            super(view);
-            name = (TextView) view.findViewById(R.id.text_cus_name);
-            mobile = (TextView) view.findViewById(R.id.text_cus_mob);
-            imageView_popup = (ImageView) view.findViewById(R.id.image_menu_popup);
-            layout = (LinearLayout) view.findViewById(R.id.layout_row_customer);
-        }
-    }
-
-    @NonNull
-    @Override
-    public CustomersAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.layout_customers, parent, false);
-        return new CustomersAdapter.MyViewHolder(itemView);
+        this.service = service;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final CustomersAdapter.MyViewHolder holder, final int position) {
-        CustomersModel customersrec = mDisplayedValues.get(position);
+    public CustomersAdapterMakeAppt_Recyclerview.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_customers_make_appt, parent, false);
+        CustomersAdapterMakeAppt_Recyclerview.MyViewHolder myViewHolder = new CustomersAdapterMakeAppt_Recyclerview.MyViewHolder(v);
+        return myViewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(final CustomersAdapterMakeAppt_Recyclerview.MyViewHolder holder, final int position) {
+
+        CustomersModel customersrec=mDisplayedValues.get(position);
         holder.name.setText(customersrec.getName());
         holder.mobile.setText(customersrec.getMobile());
 
-
-        holder.imageView_popup.setOnClickListener(new View.OnClickListener() {
+        holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Creating the instance of PopupMenu
-                PopupMenu popup = new PopupMenu(context, holder.imageView_popup);
-                //Inflating the Popup using xml file
-                popup.getMenuInflater().inflate(R.menu.poupup_menu, popup.getMenu());
-                //registering popup with OnMenuItemClickListener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getTitle().equals("View")) {
-                            CustomerBottomSheetDialog coralsBottomSheetDialog = new CustomerBottomSheetDialog(context, mDisplayedValues.get(position).getCus_id(), mDisplayedValues.get(position).getName(), mDisplayedValues.get(position).getMobile(), mDisplayedValues.get(position).getEmail());
-                            coralsBottomSheetDialog.showBottomSheetDialog();
+                Intent i = new Intent(context, ApptConfirmActivity.class);
+                i.putExtra("cus_name", mDisplayedValues.get(position).getName());
+                i.putExtra("cus_mob", mDisplayedValues.get(position).getMobile());
+                i.putExtra("cus_id", mDisplayedValues.get(position).getCus_id());
+                i.putExtra("cus_email", mDisplayedValues.get(position).getEmail());
+                i.putExtra("service_id", ser_id);
+                i.putExtra("service", service);
+                i.putExtra("date", date);
+                i.putExtra("slot_no",slot_no);
+                i.putExtra("start_time", startTime);
+                i.putExtra("end_time", endTime);
+                i.putExtra("res_id", res_id);
+                i.putExtra("res", res);
+                context.startActivity(i);
+                ((Activity) context).finish();
+                ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
 
-                            //change customerList to mDisplayedValues
-                        }
-                        return true;
-                    }
-                });
-                popup.show();//showing popup menu
             }
         });
+
     }
+
 
     @Override
     public int getItemCount() {
         return mDisplayedValues.size();
     }
 
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView name, mobile;
+        LinearLayout linearLayout_bg;
+
+        public MyViewHolder(View itemView) {
+            super(itemView);
+            name = (TextView) itemView.findViewById(R.id.text_cus_name);
+            mobile = (TextView) itemView.findViewById(R.id.text_cus_mob);
+            linearLayout_bg = (LinearLayout) itemView.findViewById(R.id.layout_row_customer_make_appt);
+            // cardView = (cardView) itemView.findViewById(R.id.card_time_text);
+        }
+    }
 
     //Filterable
     @Override
@@ -121,12 +114,9 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.MyVi
             @SuppressWarnings("unchecked")
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-
-                    mDisplayedValues = (ArrayList<CustomersModel>) results.values; // has the filtered values
-                    notifyDataSetChanged();  // notifies the data with new filtered values
-
+                mDisplayedValues = (ArrayList<CustomersModel>) results.values; // has the filtered values
+                notifyDataSetChanged();  // notifies the data with new filtered values
             }
-
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();        // Holds the results of a filtering operation in values
@@ -144,18 +134,20 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.MyVi
                     for (int i = 0; i < customersModelArrayList.size(); i++) {
                         String data = customersModelArrayList.get(i).getName();
                         if (!TextUtils.isEmpty(data) && data.toLowerCase().startsWith(constraint.toString())) {
-                            FilteredArrList.add(new CustomersModel(customersModelArrayList.get(i).cus_id, customersModelArrayList.get(i).name, customersModelArrayList.get(i).mobile, ""));
+                            FilteredArrList.add(new CustomersModel(customersModelArrayList.get(i).cus_id,customersModelArrayList.get(i).name,customersModelArrayList.get(i).mobile,""));
                         }
                     }
                     // set the Filtered result to return
                     results.count = FilteredArrList.size();
                     results.values = FilteredArrList;
+
+
                     if (results.count == 0) {
                         constraint = constraint.toString().toLowerCase();
                         for (int i = 0; i < customersModelArrayList.size(); i++) {
                             String data = customersModelArrayList.get(i).getMobile();
                             if (!TextUtils.isEmpty(data) && data.toLowerCase().startsWith(constraint.toString())) {
-                                FilteredArrList.add(new CustomersModel(customersModelArrayList.get(i).cus_id, customersModelArrayList.get(i).name, customersModelArrayList.get(i).mobile, ""));
+                                FilteredArrList.add(new CustomersModel(customersModelArrayList.get(i).cus_id,customersModelArrayList.get(i).name,customersModelArrayList.get(i).mobile,""));
                             }
                         }
                         // set the Filtered result to return
@@ -168,4 +160,8 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.MyVi
         };
         return filter;
     }
+
 }
+
+
+

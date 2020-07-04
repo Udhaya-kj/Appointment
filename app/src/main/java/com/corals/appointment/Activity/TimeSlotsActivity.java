@@ -37,11 +37,11 @@ import java.util.Map;
 
 public class TimeSlotsActivity extends AppCompatActivity {
     RecyclerView recyclerView;
-    ArrayList<String> arrayList_s_time, arrayList_e_time;
     TextView textView_appn_dt, textView_res;
     private IntermediateAlertDialog intermediateAlertDialog;
-    String service_id, service, date;
+    String service_id, service, date, res_id, res;
     private SharedPreferences sharedpreferences_sessionToken;
+
     @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,69 +62,55 @@ public class TimeSlotsActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerview_time_slots);
         textView_res = findViewById(R.id.text_resource);
         textView_appn_dt = findViewById(R.id.text_appn_dt);
-        arrayList_s_time = new ArrayList<>();
-        arrayList_e_time = new ArrayList<>();
-
-        arrayList_s_time.add("8 AM  -  8:30 AM");
-        arrayList_s_time.add("8:30 AM  -  9 AM");
-        arrayList_s_time.add("9 AM  -  9:30 AM");
-        arrayList_s_time.add("9:30 AM  -  10 AM");
-        arrayList_s_time.add("10 AM  -  10:30 AM");
-        arrayList_s_time.add("10:30 AM  -  11 AM");
-        arrayList_s_time.add("11 AM  -  11:30 AM");
-        arrayList_s_time.add("11:30 AM  -  12 PM");
-        arrayList_s_time.add("12 PM  -  12:30 PM");
-        arrayList_s_time.add("12:30 PM  -  13 PM");
-        arrayList_s_time.add("13 PM  -  13:30 PM");
-        arrayList_s_time.add("13:30 PM  -  14 PM");
-
-        arrayList_e_time.add("0");
-        arrayList_e_time.add("1");
-        arrayList_e_time.add("0");
-        arrayList_e_time.add("1");
-        arrayList_e_time.add("2");
-        arrayList_e_time.add("1");
-        arrayList_e_time.add("0");
-        arrayList_e_time.add("2");
-        arrayList_e_time.add("0");
-        arrayList_e_time.add("1");
-        arrayList_e_time.add("0");
-        arrayList_e_time.add("1");
 
         LinearLayoutManager li = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(li);
-        /*RecyclerAdapter_TimeSlots recyclerAdapter_timeSlots = new RecyclerAdapter_TimeSlots(TimeSlotsActivity.this, arrayList_s_time, arrayList_e_time);
-        recyclerView.setAdapter(recyclerAdapter_timeSlots);*/
         sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
 
         if (getIntent().getExtras() != null) {
             service_id = getIntent().getStringExtra("service_id");
             service = getIntent().getStringExtra("service");
             date = getIntent().getStringExtra("date");
-            Log.d("Appn_Date---->", "onCreate: " + date + "," + service+ "," + service_id);
+            res_id = getIntent().getStringExtra("res_id");
+            res = getIntent().getStringExtra("res");
+            Log.d("Appn_Date---->", "onCreate: " + date + "," + service + "," + service_id + "," + res_id + "," + res);
             textView_appn_dt.setText(date);
             textView_res.setText(service);
         }
 
-        //printTimeSlots(LocalTime.parse("08:00"), LocalTime.parse("17:00"), 30);
+        callAPI();
 
-        AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
-        enquiryBody.setReqType("E-AA.");
-        enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
-        enquiryBody.callerType("m");
-        enquiryBody.setDate("2020-06-24");
-        enquiryBody.setSerId(service_id);
-        enquiryBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
-        enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+    }
+
+    private void callAPI() {
+
         boolean isConn = ConnectivityReceiver.isConnected();
         if (isConn) {
             try {
+                AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+                enquiryBody.setReqType("E-AA.");
+                enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+                enquiryBody.callerType("m");
+                enquiryBody.setDate(date);
+                enquiryBody.setSerId(service_id);
+                enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
+                enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
                 fetchApptAvailSlots(enquiryBody);
             } catch (ApiException e) {
                 e.printStackTrace();
             }
         } else {
-            Toast.makeText(TimeSlotsActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialogFailure(TimeSlotsActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                        @Override
+                        public void onButtonClick() {
+                            callAPI();
+                        }
+                    };
+                }
+            });
         }
     }
 
@@ -151,7 +137,6 @@ public class TimeSlotsActivity extends AppCompatActivity {
     private void fetchApptAvailSlots(AppointmentEnquiryBody requestBody) throws ApiException {
 
         intermediateAlertDialog = new IntermediateAlertDialog(TimeSlotsActivity.this);
-
         Log.d("fetchApptSlots---", "login: " + requestBody);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(TimeSlotsActivity.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();
@@ -168,7 +153,7 @@ public class TimeSlotsActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(TimeSlotsActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                        new AlertDialogFailure(TimeSlotsActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
                                 startActivity(new Intent(TimeSlotsActivity.this, DashboardActivity.class));
@@ -187,45 +172,38 @@ public class TimeSlotsActivity extends AppCompatActivity {
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
-                if(Integer.parseInt(result.getStatusCode())==200){
+                if (Integer.parseInt(result.getStatusCode()) == 200) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //Toast.makeText(AppointmentActivity.this, ""+result.getStatusMessage(), Toast.LENGTH_SHORT).show();
-                            List<AppointmentAvailableSlots> appointmentAvailableSlots = new ArrayList<>();
-                            List<AppointmentAvailableSlots> appointmentAvailableSlotsList = result.getAvailAppointments();
-                            for (int t = 0; t < appointmentAvailableSlotsList.size(); t++) {
-                                String startTime = appointmentAvailableSlotsList.get(t).getSerStartTime();
-                                String endTime = appointmentAvailableSlotsList.get(t).getSerEndTime();
-                                String serDuration = appointmentAvailableSlotsList.get(t).getSerDuration();
-                                String numOfSlots = appointmentAvailableSlotsList.get(t).getNumOfSlots();
-                                String currentSlot = appointmentAvailableSlotsList.get(t).getCurrentSlot();
-
-                                Log.d("Slots---", "run: "+startTime+","+endTime+","+numOfSlots+","+currentSlot);
-                                AppointmentAvailableSlots availableSlots = new AppointmentAvailableSlots();
-                                availableSlots.setSerStartTime(startTime);
-                                availableSlots.setSerEndTime(endTime);
-                                availableSlots.setSerDuration(serDuration);
-                                availableSlots.setNumOfSlots(numOfSlots);
-                                availableSlots.setCurrentSlot(currentSlot);
-                                appointmentAvailableSlots.add(availableSlots);
-
-                            }
-                            if (!appointmentAvailableSlots.isEmpty()) {
-                                RecyclerAdapter_TimeSlots recyclerAdapter_timeSlots = new RecyclerAdapter_TimeSlots(TimeSlotsActivity.this, arrayList_s_time, arrayList_e_time,appointmentAvailableSlots);
+                            if (!result.getAvailAppointments().isEmpty() && result.getAvailAppointments() != null) {
+                                RecyclerAdapter_TimeSlots recyclerAdapter_timeSlots = new RecyclerAdapter_TimeSlots(TimeSlotsActivity.this, result.getAvailAppointments(), service_id, service, date, res_id, res);
                                 recyclerView.setAdapter(recyclerAdapter_timeSlots);
                             }
                         }
                     });
-                }
-                else {
+                } else if (Integer.parseInt(result.getStatusCode()) == 404) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(TimeSlotsActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                            new AlertDialogFailure(TimeSlotsActivity.this, getResources().getString(R.string.no_avail_slots), "OK", "", "Warning") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(TimeSlotsActivity.this, DashboardActivity.class));
+                                    startActivity(new Intent(TimeSlotsActivity.this, AppointmentActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(TimeSlotsActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(TimeSlotsActivity.this, AppointmentActivity.class));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
                                 }
@@ -246,5 +224,14 @@ public class TimeSlotsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (intermediateAlertDialog != null) {
+            intermediateAlertDialog.dismissAlertDialog();
+            intermediateAlertDialog = null;
+        }
     }
 }

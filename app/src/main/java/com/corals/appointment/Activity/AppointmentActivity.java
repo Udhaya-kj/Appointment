@@ -128,11 +128,12 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
         enquiryBody.setReqType("E-S.");
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         enquiryBody.callerType("m");
-        enquiryBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
+        enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
         boolean isConn = ConnectivityReceiver.isConnected();
         if (isConn) {
             try {
+                intermediateAlertDialog = new IntermediateAlertDialog(AppointmentActivity.this);
                 fetchServices(enquiryBody);
             } catch (ApiException e) {
                 e.printStackTrace();
@@ -152,32 +153,6 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
                 }
             });
         }
-
-
-      /*  sharedpreferences_services = getSharedPreferences(AddServiceAvailTimeActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
-        String nameList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_NAME, "");
-        String mobList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_DURATION, "");
-        if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
-            service_name_list = new Gson().fromJson(nameList, new TypeToken<ArrayList<String>>() {
-            }.getType());
-            service_dur_list = new Gson().fromJson(mobList, new TypeToken<ArrayList<String>>() {
-            }.getType());
-        }
-
-        Log.d("listsize---->", "onCreate: " + service_name_list + "," + service_dur_list);*/
-    /*    if (service_name_list.size() != 0 && service_dur_list.size() != 0) {
-            servicesAdapter = new ServicesAdapter_Calender(AppointmentActivity.this, "", service_name_list, service_dur_list);
-            listView_services.setAdapter(servicesAdapter);
-            textView_no_ser.setVisibility(View.GONE);
-            recyclerView_services.setVisibility(View.VISIBLE);
-
-            ServicesRecyclerviewAdapter servicesRecyclerviewAdapter = new ServicesRecyclerviewAdapter(AppointmentActivity.this, service_name_list, service_dur_list);
-            recyclerView_services.setAdapter(servicesRecyclerviewAdapter);
-
-        } else {
-            textView_no_ser.setVisibility(View.VISIBLE);
-            recyclerView_services.setVisibility(View.GONE);
-        }*/
 
 
         final Button button_datepicker = (Button) findViewById(R.id.button_datepicker);
@@ -273,7 +248,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
         } else {
             month = String.valueOf(mnth);
         }
-        String date = year + "-" + (Integer.parseInt(month)) + "-" + dayOfMonth;
+        String date = year + "-" + month + "-" + dayOfMonth;
         Intent i = new Intent(AppointmentActivity.this, CalendarServicesActivity.class);
         i.putExtra("page_id", "1");
         i.putExtra("date", date);
@@ -383,7 +358,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
 
     private void fetchServices(AppointmentEnquiryBody requestBody) throws ApiException {
 
-        intermediateAlertDialog = new IntermediateAlertDialog(AppointmentActivity.this);
+
 
         Log.d("login---", "login: " + requestBody);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(AppointmentActivity.this);
@@ -424,25 +399,11 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //Toast.makeText(AppointmentActivity.this, ""+result.getStatusMessage(), Toast.LENGTH_SHORT).show();
-                            List<AppointmentService> appointmentServices = new ArrayList<>();
-                            List<AppointmentService> appointmentServicesList = result.getServices();
-                            for (int t = 0; t < appointmentServicesList.size(); t++) {
-                                String ser_name = appointmentServicesList.get(t).getSerName();
-                                String ser_dur = appointmentServicesList.get(t).getSerDuration();
-                                String ser_Id = appointmentServicesList.get(t).getSerId();
 
-                                AppointmentService appointmentService = new AppointmentService();
-                                appointmentService.setSerId(ser_Id);
-                                appointmentService.setSerName(ser_name);
-                                appointmentService.setSerDuration(ser_dur);
-                                appointmentServices.add(appointmentService);
-
-                            }
-                            if (!appointmentServices.isEmpty()) {
+                            if (!result.getServices().isEmpty() && result.getServices()!=null) {
                                 textView_no_ser.setVisibility(View.GONE);
                                 recyclerView_services.setVisibility(View.VISIBLE);
-                                ServicesRecyclerviewAdapter servicesRecyclerviewAdapter = new ServicesRecyclerviewAdapter(AppointmentActivity.this,"1", appointmentServices);
+                                ServicesRecyclerviewAdapter servicesRecyclerviewAdapter = new ServicesRecyclerviewAdapter(AppointmentActivity.this,"1", result.getServices());
                                 recyclerView_services.setAdapter(servicesRecyclerviewAdapter);
 
                             } else {
@@ -484,4 +445,12 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (intermediateAlertDialog != null) {
+            intermediateAlertDialog.dismissAlertDialog();
+            intermediateAlertDialog = null;
+        }
+    }
 }

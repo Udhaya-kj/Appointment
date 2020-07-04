@@ -12,7 +12,9 @@ import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.R;
+import com.corals.appointment.receiver.ConnectivityReceiver;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,8 +22,8 @@ import java.util.Calendar;
 public class ServiceUnavailCalendarActivity extends AppCompatActivity {
     CalendarView calendarView;
     Button button_next;
-    TextView textView_ser,textView_title;
-    String ser_id,ser, task, calendar_date;
+    TextView textView_ser, textView_title;
+    String ser_id, ser, task, calendar_date;
     Calendar c;
     ImageView imageView;
 
@@ -47,7 +49,7 @@ public class ServiceUnavailCalendarActivity extends AppCompatActivity {
         calendarView = findViewById(R.id.calendarView);
         textView_ser = findViewById(R.id.text_service);
         button_next = findViewById(R.id.button_ser_unavail_cal_next);
-        calendarView. setMinDate(System. currentTimeMillis() - 1000);
+        calendarView.setMinDate(System.currentTimeMillis() - 1000);
         if (getIntent().getExtras() != null) {
             task = getIntent().getStringExtra("task");
             ser_id = getIntent().getStringExtra("service_id");
@@ -71,8 +73,14 @@ public class ServiceUnavailCalendarActivity extends AppCompatActivity {
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-
-                calendar_date = dayOfMonth + "-" + (month + 1) + "-" + year;
+                int mnth = month + 1;
+                String mn = null;
+                if (String.valueOf(mnth).length() == 1) {
+                    mn = "0" + String.valueOf(mnth);
+                } else {
+                    mn = String.valueOf(mnth);
+                }
+                calendar_date = year + "-" + mn + "-" + dayOfMonth;
                 //textView_cal_next.setEnabled(true);
                 // Toast.makeText(MaterialDatePickerActivity.this, "" + dayOfMonth + "-" + (month + 1) + "-" + year, Toast.LENGTH_SHORT).show();
             }
@@ -82,15 +90,30 @@ public class ServiceUnavailCalendarActivity extends AppCompatActivity {
         button_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean isConn = ConnectivityReceiver.isConnected();
+                if (isConn) {
 
-                Intent in = new Intent(ServiceUnavailCalendarActivity.this, SerUnavailAskTimeActivity.class);
-                in.putExtra("task", task);
-                in.putExtra("service_id", ser_id);
-                in.putExtra("service", ser);
-                in.putExtra("date", calendar_date);
-                startActivity(in);
-                finish();
-                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                    Intent in = new Intent(ServiceUnavailCalendarActivity.this, SerUnavailAskTimeActivity.class);
+                    in.putExtra("task", task);
+                    in.putExtra("service_id", ser_id);
+                    in.putExtra("service", ser);
+                    in.putExtra("date", calendar_date);
+                    startActivity(in);
+                    finish();
+                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                } else {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ServiceUnavailCalendarActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                                @Override
+                                public void onButtonClick() {
+                                }
+                            };
+                        }
+                    });
+                }
             }
         });
 

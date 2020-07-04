@@ -3,6 +3,7 @@ package com.corals.appointment.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,24 +15,27 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.corals.appointment.Activity.ApptSlotDetailsActivity;
+import com.corals.appointment.Client.model.InlineResponse20013Customersrec;
 import com.corals.appointment.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Slot_Cus_BottomSheet_RecyclerAdapter extends RecyclerView.Adapter<Slot_Cus_BottomSheet_RecyclerAdapter.MyViewHolder> {
-    ArrayList<String> arrayList1, arrayList2, arrayList_val;
     Context context;
-    String time;
+    String date,service_id,service,time,appt_id;
     private BottomSheetDialog bottomSheetDialog;
-
-    public Slot_Cus_BottomSheet_RecyclerAdapter(Context context, ArrayList<String> arrayList1, ArrayList<String> arrayList2,String time,BottomSheetDialog bottomSheetDialog) {
-
+    List<InlineResponse20013Customersrec> inlineResponse20013Customersrecs;
+    public Slot_Cus_BottomSheet_RecyclerAdapter(Context context,String appt_id,String service_id,String service,String time,String date,BottomSheetDialog bottomSheetDialog,List<InlineResponse20013Customersrec> inlineResponse20013Customersrecs) {
         this.context = context;
-        this.arrayList1 = arrayList1;
-        this.arrayList2 = arrayList2;
+        this.date = date;
         this.time = time;
+        this.service_id = service_id;
+        this.service = service;
+        this.appt_id = appt_id;
         this.bottomSheetDialog = bottomSheetDialog;
+        this.inlineResponse20013Customersrecs = inlineResponse20013Customersrecs;
 
     }
 
@@ -45,8 +49,8 @@ public class Slot_Cus_BottomSheet_RecyclerAdapter extends RecyclerView.Adapter<S
     @Override
     public void onBindViewHolder(final Slot_Cus_BottomSheet_RecyclerAdapter.MyViewHolder holder, final int position) {
 
-        holder.textView_cus_name.setText(arrayList1.get(position));
-        holder.textView_cus_mob.setText(arrayList2.get(position));
+        holder.textView_cus_name.setText(inlineResponse20013Customersrecs.get(position).getCustName());
+        holder.textView_cus_mob.setText(inlineResponse20013Customersrecs.get(position).getCustMobile());
 
        /* holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,14 +69,21 @@ public class Slot_Cus_BottomSheet_RecyclerAdapter extends RecyclerView.Adapter<S
                 if (bottomSheetDialog != null &&bottomSheetDialog.isShowing()) {
                     bottomSheetDialog.dismiss();
                 }
-                
                 Intent i = new Intent(context, ApptSlotDetailsActivity.class);
-                i.putExtra("name",arrayList1.get(position));
-                i.putExtra("mob", arrayList2.get(position));
+                i.putExtra("cus_id",inlineResponse20013Customersrecs.get(position).getCustId());
+                i.putExtra("name",inlineResponse20013Customersrecs.get(position).getCustName());
+                i.putExtra("mob", inlineResponse20013Customersrecs.get(position).getCustMobile());
+                i.putExtra("res_name", inlineResponse20013Customersrecs.get(position).getResName());
                 i.putExtra("time", time);
+                i.putExtra("date", date);
+                i.putExtra("appt_id", appt_id);
+                i.putExtra("service_id", service_id);
+                i.putExtra("service", service);
                 context.startActivity(i);
                 ((Activity) context).finish();
                 ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+
+                Log.d("SerName---", "onClick: "+service);
             }
         });
 
@@ -95,7 +106,7 @@ public class Slot_Cus_BottomSheet_RecyclerAdapter extends RecyclerView.Adapter<S
 
     @Override
     public int getItemCount() {
-        return arrayList1.size();
+        return inlineResponse20013Customersrecs.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

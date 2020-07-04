@@ -10,19 +10,22 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.corals.appointment.Client.model.Appointments;
 import com.corals.appointment.Dialogs.ViewApptCustomersBottomSheetDialog;
 import com.corals.appointment.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ViewCustomersApptRecyclerAdapter extends RecyclerView.Adapter<ViewCustomersApptRecyclerAdapter.MyViewHolder> {
-    ArrayList<String> arrayList_time, arrayList_date;
-    Activity context;
 
-    public ViewCustomersApptRecyclerAdapter(Activity context, ArrayList<String> arrayList_time) {
+    Activity context;
+    List<Appointments> appointmentsList;
+
+    public ViewCustomersApptRecyclerAdapter(Activity context, List<Appointments> appointmentsList) {
         this.context = context;
-        this.arrayList_time = arrayList_time;
+        this.appointmentsList = appointmentsList;
 
     }
 
@@ -36,37 +39,30 @@ public class ViewCustomersApptRecyclerAdapter extends RecyclerView.Adapter<ViewC
     @Override
     public void onBindViewHolder(final ViewCustomersApptRecyclerAdapter.MyViewHolder holder, final int position) {
 
-        holder.textView_dt_time.setText(arrayList_time.get(position));
-
-        holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
+        holder.textView_dt_time.setText(appointmentsList.get(position).getStartTime() + "-" + appointmentsList.get(position).getEndTime());
+   /*     holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BottomSheetDialog bd = new BottomSheetDialog(context);
-                ViewApptCustomersBottomSheetDialog viewSlotCustomersBottomDialog = new ViewApptCustomersBottomSheetDialog(context);
+                ViewApptCustomersBottomSheetDialog viewSlotCustomersBottomDialog = new ViewApptCustomersBottomSheetDialog(context,appointmentsList);
                 viewSlotCustomersBottomDialog.showBottomSheetDialog();
 
-            /*    Intent i = new Intent(context, ApptSlotDetailsActivity.class);
-                i.putExtra("name", arrayList_cus_name.get(position));
-                i.putExtra("mob", arrayList_cus_mob.get(position));
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(i);*/
-                //((Activity)context).finish();
             }
         });
-
+*/
 
     }
 
 
     @Override
     public int getItemCount() {
-        return arrayList_time.size();
+        return appointmentsList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView textView_dt_time;
-        LinearLayout linearLayout_bg, linearLayout_color;
+        LinearLayout linearLayout_bg;
         ImageView imageView_avail;
 
         public MyViewHolder(View itemView) {

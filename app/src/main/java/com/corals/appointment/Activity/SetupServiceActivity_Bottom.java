@@ -44,7 +44,6 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
     LinearLayout linearLayout_add_resource;
     private ListView listView_services;
     private ArrayList<String> service_name_list, service_dur_list;
-    private SharedPreferences sharedpreferences_services;
     ServicesAdapter servicesAdapter;
     public String pageId = "";
     private SharedPreferences sharedpreferences_service_data;
@@ -86,66 +85,8 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
         editor.clear();
         editor.commit();
 
-   /*     sharedpreferences_services = getSharedPreferences(AddServiceAvailTimeActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
-        String nameList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_NAME, "");
-        String mobList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_DURATION, "");
-        if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
-            service_name_list = new Gson().fromJson(nameList, new TypeToken<ArrayList<String>>() {
-            }.getType());
-            service_dur_list = new Gson().fromJson(mobList, new TypeToken<ArrayList<String>>() {
-            }.getType());
-        }
+        callAPI_Service();
 
-        Log.d("listsize---->", "onCreate: " + service_name_list + "," + service_dur_list);
-        if (service_name_list.size() != 0 && service_dur_list.size() != 0) {
-            servicesAdapter = new ServicesAdapter(SetupServiceActivity_Bottom.this, service_name_list, service_dur_list);
-            listView_services.setAdapter(servicesAdapter);
-        }
-*/
-
-        AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
-        enquiryBody.setReqType("E-S.");
-        enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
-        enquiryBody.callerType("m");
-        enquiryBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
-        enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
-        boolean isConn = ConnectivityReceiver.isConnected();
-        if (isConn) {
-            try {
-                intermediateAlertDialog = new IntermediateAlertDialog(SetupServiceActivity_Bottom.this);
-                fetchServices(enquiryBody);
-            } catch (ApiException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Toast.makeText(SetupServiceActivity_Bottom.this, "No internet connection!", Toast.LENGTH_SHORT).show();
-        }
-
-      /*  linearLayout1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent in = new Intent(ResourceSetupActivity.this, MaterialDatePickerActivity.class);
-                startActivity(in);
-                finish();
-            }
-        });
-        linearLayout2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent in = new Intent(ResourceSetupActivity.this, MaterialDatePickerActivity.class);
-                startActivity(in);
-                finish();
-            }
-        });
-
-        linearLayout3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent in = new Intent(ResourceSetupActivity.this, MaterialDatePickerActivity.class);
-                startActivity(in);
-                finish();
-            }
-        });*/
 
         linearLayout_add_resource.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,6 +102,36 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
 
     }
 
+    private void callAPI_Service() {
+
+        boolean isConn = ConnectivityReceiver.isConnected();
+        if (isConn) {
+            try {
+                AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+                enquiryBody.setReqType("E-S.");
+                enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+                enquiryBody.callerType("m");
+                enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
+                enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+                fetchServices(enquiryBody);
+            } catch (ApiException e) {
+                e.printStackTrace();
+            }
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialogFailure(SetupServiceActivity_Bottom.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                        @Override
+                        public void onButtonClick() {
+                            callAPI_Service();
+                        }
+                    };
+                }
+            });
+        }
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -173,7 +144,7 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
     }
 
     private void fetchServices(AppointmentEnquiryBody requestBody) throws ApiException {
-
+        intermediateAlertDialog = new IntermediateAlertDialog(SetupServiceActivity_Bottom.this);
         Log.d("fetchService--->", "fetchService: " + requestBody);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(SetupServiceActivity_Bottom.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();
@@ -189,7 +160,7 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(SetupServiceActivity_Bottom.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                        new AlertDialogFailure(SetupServiceActivity_Bottom.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
                                 startActivity(new Intent(SetupServiceActivity_Bottom.this, DashboardActivity.class));
@@ -212,36 +183,11 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //Toast.makeText(AppointmentActivity.this, ""+result.getStatusMessage(), Toast.LENGTH_SHORT).show();
-                            List<AppointmentService> appointmentServices = new ArrayList<>();
-                            List<AppointmentService> appointmentServicesList = result.getServices();
-                            for (int t = 0; t < appointmentServicesList.size(); t++) {
-                                String ser_name = appointmentServicesList.get(t).getSerName();
-                                String ser_dur = appointmentServicesList.get(t).getSerDuration();
-                                String ser_desc = appointmentServicesList.get(t).getSerDescription();
-                                String ser_Id = appointmentServicesList.get(t).getSerId();
-                                String ser_price = appointmentServicesList.get(t).getSerPrice();
-                                boolean isIsShowCust = appointmentServicesList.get(t).isIsShowCust();
-                                Log.d("service_data---", "run: "+ser_Id+","+ser_name+","+ser_desc+","+ser_dur+","+ser_price+","+isIsShowCust);
-
-                                AppointmentService appointmentService = new AppointmentService();
-                                appointmentService.setSerId(ser_Id);
-                                appointmentService.setSerName(ser_name);
-                                appointmentService.setSerDuration(ser_dur);
-                                appointmentService.setSerDescription(ser_desc);
-                                appointmentService.setSerPrice(ser_price);
-                                appointmentService.setIsShowCust(isIsShowCust);
-                                appointmentServices.add(appointmentService);
-
-                            }
-                            if (appointmentServices.size() != 0) {
+                            if (!result.getServices().isEmpty() && result.getServices() != null) {
                                 textView_no_ser.setVisibility(View.GONE);
                                 listView_services.setVisibility(View.VISIBLE);
-                                servicesAdapter = new ServicesAdapter(SetupServiceActivity_Bottom.this, appointmentServices);
+                                servicesAdapter = new ServicesAdapter(SetupServiceActivity_Bottom.this, result.getServices());
                                 listView_services.setAdapter(servicesAdapter);
-
-                           /*     ServicesRecyclerviewAdapter servicesRecyclerviewAdapter = new ServicesRecyclerviewAdapter(SetupServiceActivity_Bottom.this, service_name_list, service_dur_list);
-                                recyclerView_services.setAdapter(servicesRecyclerviewAdapter);*/
 
                             } else {
                                 textView_no_ser.setVisibility(View.VISIBLE);
@@ -255,7 +201,7 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(SetupServiceActivity_Bottom.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                            new AlertDialogFailure(SetupServiceActivity_Bottom.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
                                     startActivity(new Intent(SetupServiceActivity_Bottom.this, DashboardActivity.class));
@@ -279,5 +225,14 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (intermediateAlertDialog != null) {
+            intermediateAlertDialog.dismissAlertDialog();
+            intermediateAlertDialog = null;
+        }
     }
 }

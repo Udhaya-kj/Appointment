@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.corals.appointment.Activity.CustomerActivity_Bottom;
 import com.corals.appointment.Activity.CustomersMakeApptActivity;
 import com.corals.appointment.Client.model.AppointmentAvailableSlots;
 import com.corals.appointment.R;
@@ -27,24 +28,20 @@ import java.util.List;
  */
 
 public class RecyclerAdapter_TimeSlots extends RecyclerView.Adapter<RecyclerAdapter_TimeSlots.MyViewHolder> {
-    ArrayList<String> arrayList1, arrayList2;
     Context context;
-    int i = 0;
     List<AppointmentAvailableSlots> appointmentAvailableSlots;
+    String ser_id, date,res_id,res,service;
 
-    public RecyclerAdapter_TimeSlots(Context context, ArrayList<String> arrayList1, ArrayList<String> arrayList2, List<AppointmentAvailableSlots> appointmentAvailableSlots) {
+    public RecyclerAdapter_TimeSlots(Context context, List<AppointmentAvailableSlots> appointmentAvailableSlots, String ser_id,String service, String date, String res_id, String res) {
 
         this.context = context;
-        this.arrayList1 = arrayList1;
-        this.arrayList2 = arrayList2;
         this.appointmentAvailableSlots = appointmentAvailableSlots;
+        this.ser_id = ser_id;
+        this.date = date;
+        this.res_id = res_id;
+        this.res = res;
+        this.service = service;
 
-      /*  arrayList_val = new ArrayList<>();
-
-        for (int k = 0; k <= 11; k++) {
-            arrayList_val.add("0");
-        }
-*/
     }
 
     @Override
@@ -59,8 +56,8 @@ public class RecyclerAdapter_TimeSlots extends RecyclerView.Adapter<RecyclerAdap
 
         holder.textView_ser_time.setText(appointmentAvailableSlots.get(position).getSerStartTime() + " - " + appointmentAvailableSlots.get(position).getSerEndTime());
 
-        int total_appt = Integer.parseInt(appointmentAvailableSlots.get(position).getNumOfSlots());
-        int booked_appt = Integer.parseInt(appointmentAvailableSlots.get(position).getCurrentSlot());
+        final int total_appt = Integer.parseInt(appointmentAvailableSlots.get(position).getAllowed());
+        final int booked_appt = Integer.parseInt(appointmentAvailableSlots.get(position).getBooked());
 
         if (total_appt == booked_appt) {
             holder.linearLayout_color.setBackgroundResource(R.drawable.left_round_corners_blue);
@@ -71,66 +68,31 @@ public class RecyclerAdapter_TimeSlots extends RecyclerView.Adapter<RecyclerAdap
             holder.imageView_avail.setBackgroundResource(R.drawable.add_green);
             holder.imageView_avail.setEnabled(true);
         }
-        /*else if (arrayList2.get(position).equals("2")) {
+     /*   else if (arrayList2.get(position).equals("2")) {
             holder.linearLayout_color.setBackgroundResource(R.drawable.left_round_corners_grey);
             holder.imageView_avail.setBackgroundResource(R.drawable.block);
             holder.imageView_avail.setEnabled(false);
-        }*/
-
+        }
+*/
         holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (String.valueOf(arrayList2.get(position)).equals("1")) {
+                if (total_appt > booked_appt) {
                     Intent in = new Intent(context, CustomersMakeApptActivity.class);
-                    in.putExtra("page_id", "1");
+                    in.putExtra("page_id", "02");
+                    in.putExtra("service_id", ser_id);
+                    in.putExtra("service", service);
+                    in.putExtra("date", date);
+                    in.putExtra("res_id", res_id);
+                    in.putExtra("res", res);
+                    in.putExtra("slot_no", appointmentAvailableSlots.get(position).getSlotNo());
+                    in.putExtra("start_time", appointmentAvailableSlots.get(position).getSerStartTime());
+                    in.putExtra("end_time", appointmentAvailableSlots.get(position).getSerEndTime());
                     context.startActivity(in);
                     ((Activity) context).finish();
                     ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
-
-   /*                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-                    alertDialogBuilder.setMessage("Are you sure, You want to book this appointment?");
-                    alertDialogBuilder.setPositiveButton("Yes",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface arg0, int arg1) {
-                                    arg0.dismiss();
-                               *//*     holder.imageView.setVisibility(View.VISIBLE);
-                                    holder.linearLayout_bg.setBackgroundColor(Color.parseColor("#EEEEEE"));
-                                    holder.textView_s_time.setTextColor(Color.parseColor("#000000"));
-                                    arrayList_val.set(position,"1");*//*
-
-                                    Intent in = new Intent(context, CustomersMakeApptActivity.class);
-                                    context.startActivity(in);
-                                    ((Activity)context).finish();
-
-                                }
-                            });
-
-                    alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();*/
-                } else if (String.valueOf(arrayList2.get(position)).equals("2")) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-                    alertDialogBuilder.setMessage("Appointment not available for this slot!");
-                    alertDialogBuilder.setPositiveButton("OK",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface arg0, int arg1) {
-                                    arg0.dismiss();
-                                }
-                            });
-
-
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
-
                 }
+
 
             }
         });

@@ -38,12 +38,13 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class LoginActivity extends AppCompatActivity {
 
     EditText editText_id, editText_password;
     TextView textView_fg_pass;
-    TextView textView,textView_title;
+    TextView textView, textView_title;
     ImageView imageView_logo;
     MaterialButton button_login;
     private SharedPreferences sharedpreferences_services;
@@ -55,6 +56,10 @@ public class LoginActivity extends AppCompatActivity {
     public static final String MyPREFERENCES_SESSIONTOKEN = "MyPREFERENCES_SESSIONTOKEN ";
     public static final String SESSIONTOKEN = "SESSIONTOKEN ";
     public static final String MERID = "MERID ";
+    public static final String DEVICEID = "DEVICEID ";
+    public static final String CURRENCY_SYMBOL = "CURRENCY_SYMBOL ";
+    public static final String COUNTRY_CODE = "COUNTRY_CODE ";
+    public static final String BIZ_NAME = "BIZ_NAME ";
     private IntermediateAlertDialog intermediateAlertDialog;
 
     @Override
@@ -62,32 +67,31 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-            boolean isConn = ConnectivityReceiver.isConnected();
-            if (!isConn) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        new AlertDialogFailure(LoginActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title),"Failed") {
-                            @Override
-                            public void onButtonClick() {
-                                finish();
-                            }
-                        };
-                    }
-                });
-            }
+        boolean isConn = ConnectivityReceiver.isConnected();
+        if (!isConn) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialogFailure(LoginActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), "Failed") {
+                        @Override
+                        public void onButtonClick() {
+                            finish();
+                        }
+                    };
+                }
+            });
+        }
+
+
         editText_id = findViewById(R.id.edit_userid);
         editText_password = findViewById(R.id.edit_password);
         button_login = findViewById(R.id.button_login);
         textView = findViewById(R.id.tv_signup);
         textView_fg_pass = findViewById(R.id.text_forgot_pass);
 
-        imageView_logo=findViewById(R.id.image_logo);
-        textView_title=findViewById(R.id.text_app_title);
+        imageView_logo = findViewById(R.id.image_logo);
+        textView_title = findViewById(R.id.text_app_title);
 
-       /* Animation animation= AnimationUtils.loadAnimation(this,R.anim.fadein_anim);
-        imageView_logo.startAnimation(animation);
-        textView_title.startAnimation(animation);*/
 
         service_name_list = new ArrayList<>();
         service_dur_list = new ArrayList<>();
@@ -136,25 +140,30 @@ public class LoginActivity extends AppCompatActivity {
         textView_fg_pass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
+                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
                 finish();
                 overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
         button_login.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
 
-          /*      startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
-                finish();
-                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);*/
+                callAPI();
 
-                String email = editText_id.getText().toString().trim();
-                String pass = editText_password.getText().toString().trim();
+            }
+        });
+    }
 
-                if (!email.isEmpty()) {
-                    if (!pass.isEmpty()) {
+    private void callAPI() {
+        String email = editText_id.getText().toString().trim();
+        String pass = editText_password.getText().toString().trim();
+
+        if (!email.isEmpty()) {
+            if (!pass.isEmpty()) {
+                try {
+                    boolean isConn = ConnectivityReceiver.isConnected();
+                    if (isConn) {
                         MessageDigest messageDigest = null;
                         try {
                             messageDigest = MessageDigest.getInstance("SHA-256");
@@ -166,68 +175,44 @@ public class LoginActivity extends AppCompatActivity {
                         String hashStr = noHash.toString(16);
                         Log.d("PASSWORD--->", "onClick: " + hashStr);
 
+                        String id = UUID.randomUUID().toString();
+                        Log.d("UUID--->", "onCreate: " + id);
                         SecurityAPIBody securityAPIBody = new SecurityAPIBody();
                         securityAPIBody.setReqType("S-L.M");
-                        securityAPIBody.setDeviceId("c43cbfe00b37ae6133ca023484869d2c489a8974ba48fb3286aa058292d08f0e");
+                        securityAPIBody.setDeviceId(id);
                         securityAPIBody.setUserEmail(editText_id.getText().toString());
                         securityAPIBody.setUserPass(hashStr);
-
-                        try {
-                            boolean isConn = ConnectivityReceiver.isConnected();
-                            if (isConn) {
-                                merchantApptLogin(securityAPIBody);
-                            } else {
-
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        new AlertDialogFailure(LoginActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title),"Failed") {
-                                            @Override
-                                            public void onButtonClick() {
-                                                finish();
-                                            }
-                                        };
-                                    }
-                                });
-                            }
-                        } catch (ApiException e) {
-                            e.printStackTrace();
-                        }
-
+                        merchantApptLogin(securityAPIBody);
                     } else {
-                        editText_password.setError("Enter valid password");
-                        editText_password.requestFocus();
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                new AlertDialogFailure(LoginActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                                    @Override
+                                    public void onButtonClick() {
+                                        callAPI();
+                                    }
+                                };
+                            }
+                        });
                     }
-                } else {
-                    editText_id.setError("Enter valid email");
-                    editText_id.requestFocus();
+                } catch (ApiException e) {
+                    e.printStackTrace();
                 }
 
-
-                //First created
-       /*         String id = editText_id.getText().toString().trim();
-                String pswd = editText_password.getText().toString().trim();
-                String value = sharedpreferences_ask_again.getString(StatusServiceStaffActivity.VALUE, "");
-                // Toast.makeText(LoginActivity.this, "Value :"+value, Toast.LENGTH_SHORT).show();
-                if (TextUtils.isEmpty(value)) {
-                    if (service_name_list.isEmpty() || staff_name_list.isEmpty()) {
-                        startActivity(new Intent(LoginActivity.this, StatusServiceStaffActivity.class));
-                        finish();
-                    } else {
-                        startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
-                        finish();
-                    }
-                } else {
-                    startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
-                    finish();
-                }*/
+            } else {
+                editText_password.setError("Enter valid password");
+                editText_password.requestFocus();
             }
-        });
+        } else {
+            editText_id.setError("Enter valid email");
+            editText_id.requestFocus();
+        }
+
     }
 
-    private void merchantApptLogin(SecurityAPIBody requestBody) throws ApiException {
-
-
+    private void merchantApptLogin(final SecurityAPIBody requestBody) throws ApiException {
         intermediateAlertDialog = new IntermediateAlertDialog(LoginActivity.this);
 
         Log.d("login---", "login: " + requestBody);
@@ -246,10 +231,10 @@ public class LoginActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(LoginActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                        new AlertDialogFailure(LoginActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                               // finish();
+                                // finish();
                             }
                         };
                     }
@@ -261,25 +246,42 @@ public class LoginActivity extends AppCompatActivity {
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
-                Log.d("login--->", "onSuccess-" + statusCode + " , " + result+ " , " + result.getUserId());
+                Log.d("login--->", "onSuccess-" + statusCode + " , " + result + " , " + result.getUserId() + "," + result.getBizDisplayName() + " , " + result.getCountryCode() + " , " + result.getMerCurSymbol());
 
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
                     SharedPreferences.Editor editor = sharedpreferences_sessionToken.edit();
                     editor.putString(SESSIONTOKEN, result.getSessionToken());
                     editor.putString(MERID, result.getUserId());
+                    editor.putString(CURRENCY_SYMBOL, result.getMerCurSymbol());
+                    editor.putString(COUNTRY_CODE, result.getCountryCode());
+                    editor.putString(BIZ_NAME, result.getBizDisplayName());
+                    editor.putString(DEVICEID, requestBody.getDeviceId());
                     editor.commit();
 
                     startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
                     finish();
+                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                } else if (Integer.parseInt(result.getStatusCode()) == 205) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(LoginActivity.this, "Email or password is incorrect", "OK", "", "Login Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    // finish();
+                                }
+                            };
+                        }
+                    });
                 } else {
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(LoginActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong),"Failed") {
+                            new AlertDialogFailure(LoginActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                   // finish();
+                                    // finish();
                                 }
                             };
                         }
@@ -301,5 +303,14 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (intermediateAlertDialog != null) {
+            intermediateAlertDialog.dismissAlertDialog();
+            intermediateAlertDialog = null;
+        }
     }
 }

@@ -3,7 +3,9 @@ package com.corals.appointment.Activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -12,10 +14,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,6 +36,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class OtpActivity extends AppCompatActivity {
@@ -47,16 +53,19 @@ public class OtpActivity extends AppCompatActivity {
 
     private ProgressBar progress;
     private FrameLayout linearLayout;
-
+    private LinearLayout imageView_back;
+    private SharedPreferences sharedpreferences_sessionToken;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otp);
 
+        sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
 
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
 
+        imageView_back = (LinearLayout) findViewById(R.id.image_back);
         linearLayout = (FrameLayout) findViewById(R.id.layout_otp);
         progress = findViewById(R.id.verify_otp_progress_bar);
         editTextCode = (EditText) findViewById(R.id.editText_Code);
@@ -66,9 +75,11 @@ public class OtpActivity extends AppCompatActivity {
         //textView_resend.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + "Resend OTP" + "</u>  </font>"));
         textView_resend.setEnabled(false);
 
+
+
         if (getIntent().getExtras() != null) {
             mob = getIntent().getStringExtra("mobile");
-            Log.d("Mobile---->", "" + mob );
+            Log.d("Mobile---->", "" + mob);
         }
 
         boolean isConn = ConnectivityReceiver.isConnected();
@@ -80,14 +91,38 @@ public class OtpActivity extends AppCompatActivity {
                 Toast.makeText(this, "Something went wrong.Please try again!", Toast.LENGTH_SHORT).show();
             }
         } else {
-            Snackbar snackbar = Snackbar
-                    .make(linearLayout, "Please check your connection and try again", Snackbar.LENGTH_LONG);
-            snackbar.show();
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialogFailure(OtpActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title),getResources().getString(R.string.no_internet_Heading)) {
+                        @Override
+                        public void onButtonClick() {
+                            Intent i = new Intent(OtpActivity.this, ForgotPasswordActivity.class);
+                            startActivity(i);
+                            finish();
+                            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                        }
+                    };
+                }
+            });
         }
 
 
         Timer();
 
+        imageView_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent in = new Intent(OtpActivity.this, ForgotPasswordActivity.class);
+                startActivity(in);
+                finish();
+                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+
+
+            }
+        });
         button_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,12 +162,11 @@ public class OtpActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
 
     private void sendVerificationCode(String mobile) {
-
+String code=sharedpreferences_sessionToken.getString(LoginActivity.COUNTRY_CODE, "");
         progress.setVisibility(View.VISIBLE);
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 "+" + 91 + "" + mobile,
@@ -204,7 +238,7 @@ public class OtpActivity extends AppCompatActivity {
                             progress.setVisibility(View.INVISIBLE);
 
                             Intent in = new Intent(getApplicationContext(), ResetPasswordActivity.class);
-                            in.putExtra("mobile",mob);
+                            in.putExtra("mobile", mob);
                             startActivity(in);
                             finish();
                             overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);

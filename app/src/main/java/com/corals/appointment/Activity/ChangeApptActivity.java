@@ -17,6 +17,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,12 +29,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.corals.appointment.Adapters.ChangeApptSlotRecycleAdapter;
+import com.corals.appointment.Adapters.CustomStaffSpinnerAdapter;
+import com.corals.appointment.Adapters.RecyclerAdapter_TimeSlots;
+import com.corals.appointment.Adapters.StaffListAdapter;
 import com.corals.appointment.Client.ApiCallback;
 import com.corals.appointment.Client.ApiException;
 import com.corals.appointment.Client.OkHttpApiClient;
 import com.corals.appointment.Client.api.MerchantApisApi;
+import com.corals.appointment.Client.model.AppointmentAvailableSlots;
+import com.corals.appointment.Client.model.AppointmentEnquiryBody;
+import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
+import com.corals.appointment.Client.model.AppointmentResources;
 import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
+import com.corals.appointment.Client.model.MapServiceResourceBody;
+import com.corals.appointment.Dialogs.AlertDialogFailure;
+import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
@@ -56,14 +67,19 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
     private SharedPreferences sharedpreferences_services, sharedpreferences_staffs;
     private ArrayList<String> service_name_list, service_dur_list;
     private ArrayList<String> staff_name_list, staff_mob_list;
-    private ArrayList<String> list_time_slot;
     DatePickerDialog datePickerDialog;
     int Year, Month, Day, Hour, Minute;
     Calendar calendar;
     RecyclerView recyclerView;
     TextView textView_ser, textView_staff, textView_date, textView_time;
-    LinearLayout linearLayout;
+    LinearLayout linearLayout, linearLayout_no_slots;
     private IntermediateAlertDialog intermediateAlertDialog;
+    private SharedPreferences sharedpreferences_sessionToken;
+    String service_id, service, staff, appt_date, appt_time, appt_id, cus_id;
+    public static String startTime = "", endTime = "", slotNo = "";
+    List<AppointmentResources> appointmentResources = new ArrayList<>();
+    String res_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +108,6 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
         service_dur_list = new ArrayList<>();
         staff_name_list = new ArrayList<>();
         staff_mob_list = new ArrayList<>();
-        list_time_slot = new ArrayList<>();
         recyclerView = findViewById(R.id.recyclerview_change_appt_slots);
         spinner_services = findViewById(R.id.spinner_services);
         spinner_staffs = findViewById(R.id.spinner_staff);
@@ -101,113 +116,40 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
         linearLayout = findViewById(R.id.layout_change_date);
         editText_comment = findViewById(R.id.et_comment);
         button_changes_appt = findViewById(R.id.button_apply_appt_changes);
+        linearLayout_no_slots = findViewById(R.id.layout_no_avail_slots);
 
         textView_ser = findViewById(R.id.text_service);
         textView_staff = findViewById(R.id.text_staff);
         textView_date = findViewById(R.id.text_appn_dt);
         textView_time = findViewById(R.id.text_appn_time);
+        sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
 
         if (getIntent().getExtras() != null) {
-            String service = getIntent().getStringExtra("service");
-            String staff = getIntent().getStringExtra("staff");
-            String appt_date = getIntent().getStringExtra("appt_date");
-            String appt_time = getIntent().getStringExtra("appt_time");
+            service_id = getIntent().getStringExtra("service_id");
+            service = getIntent().getStringExtra("service");
+            staff = getIntent().getStringExtra("staff");
+            cus_id = getIntent().getStringExtra("cus_id");
+            appt_date = getIntent().getStringExtra("appt_date");
+            appt_time = getIntent().getStringExtra("appt_time");
+            appt_id = getIntent().getStringExtra("appt_id");
             textView_ser.setText(service);
             textView_staff.setText(staff);
             textView_date.setText(appt_date);
             textView_time.setText(appt_time);
             textView_appt_date.setText(appt_date);
+
+            String[] strs = appt_time.split("-");
+            startTime = strs[0];
+            endTime = strs[1];
+
+            Log.d("ChangeAppt---", "onCreate: " + service_id + "," + service + "," + staff + "," + cus_id + "," + appt_date + "," + startTime + "," + endTime + "," + appt_id);
         }
         GridLayoutManager li = new GridLayoutManager(this, 2);
-        //recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(li);
         recyclerView.setFocusable(false);
         sharedpreferences_services = getSharedPreferences(AddServiceAvailTimeActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
         sharedpreferences_staffs = getSharedPreferences(AddStaffActivity.MyPREFERENCES_STAFFS, Context.MODE_PRIVATE);
-        String nameList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_NAME, "");
-        String mobList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_DURATION, "");
-        if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
-            service_name_list = new Gson().fromJson(nameList, new TypeToken<ArrayList<String>>() {
-            }.getType());
-            service_dur_list = new Gson().fromJson(mobList, new TypeToken<ArrayList<String>>() {
-            }.getType());
-        }
 
-        if (service_name_list != null && !service_name_list.isEmpty()) {
-            ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, service_name_list);
-            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner_services.setAdapter(arrayAdapter);
-        } else {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ChangeApptActivity.this);
-            alertDialogBuilder.setMessage("Set up service before reschedule appointment");
-            alertDialogBuilder.setCancelable(false);
-            alertDialogBuilder.setPositiveButton("OK",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            arg0.dismiss();
-                            Intent in = new Intent(ChangeApptActivity.this, AddServiceActivity.class);
-                            in.putExtra("page_id", "3");
-                            startActivity(in);
-                            finish();
-
-                        }
-                    });
-
-
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
-        }
-        String nameList_staff = sharedpreferences_staffs.getString(AddStaffActivity.NAME, "");
-        String mobList_staff = sharedpreferences_staffs.getString(AddStaffActivity.MOBILE, "");
-        if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
-            staff_name_list = new Gson().fromJson(nameList_staff, new TypeToken<ArrayList<String>>() {
-            }.getType());
-            staff_mob_list = new Gson().fromJson(mobList_staff, new TypeToken<ArrayList<String>>() {
-            }.getType());
-        }
-
-        //Log.d("staff_name_list--->", "onCreate: "+staff_name_list.size());
-        if (staff_name_list != null && !staff_name_list.isEmpty()) {
-            ArrayAdapter arrayAdapter_staff = new ArrayAdapter(this, android.R.layout.simple_spinner_item, staff_name_list);
-            arrayAdapter_staff.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner_staffs.setAdapter(arrayAdapter_staff);
-        } else {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ChangeApptActivity.this);
-            alertDialogBuilder.setMessage("Set up staff before reschedule appointment");
-            alertDialogBuilder.setCancelable(false);
-            alertDialogBuilder.setPositiveButton("OK",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            arg0.dismiss();
-                            Intent in = new Intent(ChangeApptActivity.this, AppointmentActivity.class);
-                            startActivity(in);
-                            finish();
-
-                        }
-                    });
-
-
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
-        }
-
-        list_time_slot.add("08:00 am - 08:30 am");
-        list_time_slot.add("12:00 pm - 12:30 pm");
-        list_time_slot.add("02:30 pm - 02:45 pm");
-        list_time_slot.add("06:00 pm - 06:30 pm");
-        list_time_slot.add("06:30 pm - 07:00 pm");
-        list_time_slot.add("07:00 pm - 07:30 pm");
-        list_time_slot.add("07:30 pm - 08:00 pm");
-        list_time_slot.add("08:00 pm - 08:30 pm");
-        list_time_slot.add("08:30 pm - 09:00 pm");
-        list_time_slot.add("09:00 pm - 09:30 pm");
-
-        ChangeApptSlotRecycleAdapter changeApptSlotGridviewAdapter = new ChangeApptSlotRecycleAdapter(ChangeApptActivity.this, list_time_slot, textView_time.getText().toString().trim());
-        recyclerView.setAdapter(changeApptSlotGridviewAdapter);
-
-        changeApptSlotGridviewAdapter.notifyDataSetChanged();
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,13 +163,10 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
                     // Setting Min Date to today date
                     Calendar min_date_c = Calendar.getInstance();
                     datePickerDialog.setMinDate(min_date_c);
-
                     // Setting Max Date to next 2 years
                     Calendar max_date_c = Calendar.getInstance();
                     max_date_c.set(Calendar.YEAR, Year + 2);
                     datePickerDialog.setMaxDate(max_date_c);
-
-
                     //Disable all SUNDAYS and SATURDAYS between Min and Max Dates
                     for (Calendar loopdate = min_date_c; min_date_c.before(max_date_c); min_date_c.add(Calendar.DATE, 1), loopdate = min_date_c) {
                         int dayOfWeek = loopdate.get(Calendar.DAY_OF_WEEK);
@@ -250,11 +189,9 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
 
                         @Override
                         public void onCancel(DialogInterface dialogInterface) {
-
                             //Toast.makeText(ChangeApptActivity.this, "Datepicker Canceled", Toast.LENGTH_SHORT).show();
                         }
                     });
-
                     datePickerDialog.show(getFragmentManager(), "DatePickerDialog");
 
                 } else {
@@ -266,35 +203,164 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
         button_changes_appt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog pd = new ProgressDialog(ChangeApptActivity.this);
-                pd.setMessage("Rescheduling Appointment...");
-                pd.show();
 
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        pd.dismiss();
-                        Intent i = new Intent(ChangeApptActivity.this, AppointmentActivity.class);
-                        startActivity(i);
-                        finish();
-                        overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
-                    }
-                }, 2000);
+                if (!TextUtils.isEmpty(startTime) && !TextUtils.isEmpty(endTime) && !TextUtils.isEmpty(slotNo)) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogYesNo(ChangeApptActivity.this, "Reschedule Appointment?", "Are you sure, You want to reschedule this appointment?", "Yes", "No") {
+                                @Override
+                                public void onOKButtonClick() {
+
+                                    Log.d("ChangeAppt---", "onClick: " + appt_id + "," + appt_date + "," + service_id + "," + cus_id + "," + startTime + "," + endTime + "," + slotNo);
+                                    ApptTransactionBody transactionBody = new ApptTransactionBody();
+                                    transactionBody.setReqType("T-A.U");
+                                    transactionBody.setApptId(appt_id);
+                                    transactionBody.setSerId(service_id);
+                                    transactionBody.setResId(res_id);
+                                    transactionBody.setCustId(cus_id);
+                                    transactionBody.setDate(appt_date);
+                                    transactionBody.setSlotNo(slotNo);
+                                    transactionBody.setStartTime(startTime);
+                                    transactionBody.setEndTime(endTime);
+                                    transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+                                    transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
+                                    transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+                                    try {
+                                        Log.d("Token--->", "token: " + sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+                                        boolean isConn = ConnectivityReceiver.isConnected();
+                                        if (isConn) {
+                                            intermediateAlertDialog = new IntermediateAlertDialog(ChangeApptActivity.this);
+                                            changeApptCustomer(transactionBody);
+                                        } else {
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    new AlertDialogFailure(ChangeApptActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                                                        @Override
+                                                        public void onButtonClick() {
+
+                                                        }
+                                                    };
+                                                }
+                                            });
+                                        }
+                                    } catch (ApiException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelButtonClick() {
+
+                                }
+                            };
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ChangeApptActivity.this, "Select appointment time", "OK", "", "Warning") {
+                                @Override
+                                public void onButtonClick() {
+
+                                }
+                            };
+                        }
+                    });
+                }
+
+
             }
         });
 
-       /*         ApptTransactionBody transactionBody = new ApptTransactionBody();
-        transactionBody.setReqType("TS-SR.CR");
-        try {
-            boolean isConn = ConnectivityReceiver.isConnected();
-            if (isConn) {
-                changeApptCustomer(transactionBody);
-            } else {
-                Toast.makeText(ChangeApptActivity.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+        callAPIFetchSlots(appt_date);
+
+        spinner_staffs.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                res_id = appointmentResources.get(position).getResId();
+                Log.d("res_id---", "onItemSelected: " + res_id);
             }
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }*/
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    public void callAPIFetchSlots(String date) {
+        AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+        enquiryBody.setReqType("E-AA.");
+        enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        enquiryBody.callerType("m");
+        enquiryBody.setDate(date);
+        enquiryBody.setSerId(service_id);
+        enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
+        enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+        boolean isConn = ConnectivityReceiver.isConnected();
+        if (isConn) {
+            try {
+                intermediateAlertDialog = new IntermediateAlertDialog(ChangeApptActivity.this);
+                fetchApptAvailSlots(enquiryBody);
+            } catch (ApiException e) {
+                e.printStackTrace();
+            }
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialogFailure(ChangeApptActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                        @Override
+                        public void onButtonClick() {
+                            Intent i = new Intent(ChangeApptActivity.this, AppointmentActivity.class);
+                            startActivity(i);
+                            finish();
+                            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                        }
+                    };
+                }
+            });
+        }
+    }
+
+    public void callAPIFetchStaff() {
+
+        AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+        enquiryBody.setReqType("E-MS.");
+        enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        enquiryBody.callerType("m");
+        enquiryBody.setSerId(service_id);
+        enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
+        enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+        boolean isConn = ConnectivityReceiver.isConnected();
+        if (isConn) {
+            try {
+                intermediateAlertDialog = new IntermediateAlertDialog(ChangeApptActivity.this);
+                fetchStaff(enquiryBody);
+            } catch (ApiException e) {
+                e.printStackTrace();
+            }
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialogFailure(ChangeApptActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                        @Override
+                        public void onButtonClick() {
+                            Intent i = new Intent(ChangeApptActivity.this, AppointmentActivity.class);
+                            startActivity(i);
+                            finish();
+                            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                        }
+                    };
+                }
+            });
+        }
+
 
     }
 
@@ -309,12 +375,25 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        String date = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
-        textView_appt_date.setText(date);
+        String month = "";
+        int mnth = monthOfYear + 1;
+        if (Integer.toString(mnth).length() == 1) {
+            month = "0" + mnth;
+        } else {
+            month = Integer.toString(mnth);
+        }
+        Log.d("month---", "createStaff: " + month);
+        appt_date = year + "-" + month + "-" + dayOfMonth;
+        textView_appt_date.setText(appt_date);
+
+        startTime = "";
+        endTime = "";
+        slotNo = "";
+        callAPIFetchSlots(appt_date);
     }
 
     private void changeApptCustomer(ApptTransactionBody requestBody) throws ApiException {
-        Log.d("createStaff---", "createStaff: " + requestBody);
+        Log.d("changeApptCustomer---", "createStaff: " + requestBody);
         intermediateAlertDialog = new IntermediateAlertDialog(ChangeApptActivity.this);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(ChangeApptActivity.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();
@@ -323,17 +402,59 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
         webMerchantApisApi.merchantAppointmentTransactionAsync(requestBody, new ApiCallback<ApptTransactionResponse>() {
             @Override
             public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
-                Log.d("createStaff--->", "onFailure-" + e.getMessage());
+                Log.d("changeApptCustomer--->", "onFailure-" + e.getMessage());
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(ChangeApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
+                                finish();
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                            }
+                        };
+                    }
+                });
             }
 
             @Override
             public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
-                Log.d("createStaff--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
+                Log.d("changeApptCustomer--->", "onSuccess-" + result.getStatusCode() + "," + result.getStatusMessage());
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
+                }
+                if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ChangeApptActivity.this, "Appointment rescheduled successfully!", "OK", "", "Success") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                                }
+                            };
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ChangeApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
+                        }
+                    });
                 }
             }
 
@@ -347,6 +468,205 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
 
             }
         });
+    }
+
+    private void fetchApptAvailSlots(AppointmentEnquiryBody requestBody) throws ApiException {
+        Log.d("fetchApptSlots---", "login: " + requestBody);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(ChangeApptActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentEnquiryAsync(requestBody, new ApiCallback<AppointmentEnquiryResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("fetchApptSlots--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(ChangeApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
+                                finish();
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                            }
+                        };
+                    }
+                });
+            }
+
+            @Override
+            public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+
+                Log.d("fetchApptSlots--->", "onSuccess-" + statusCode + "," + result);
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+                if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            if (!result.getAvailAppointments().isEmpty() && result.getAvailAppointments() != null) {
+                                recyclerView.setVisibility(View.VISIBLE);
+                                linearLayout_no_slots.setVisibility(View.GONE);
+                                ChangeApptSlotRecycleAdapter changeApptSlotGridviewAdapter = new ChangeApptSlotRecycleAdapter(ChangeApptActivity.this, appt_time, result.getAvailAppointments());
+                                recyclerView.setAdapter(changeApptSlotGridviewAdapter);
+                                changeApptSlotGridviewAdapter.notifyDataSetChanged();
+                                callAPIFetchStaff();
+                            } else {
+                                recyclerView.setVisibility(View.GONE);
+                                linearLayout_no_slots.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 404) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ChangeApptActivity.this, getResources().getString(R.string.no_avail_slots), "OK", "", "Warning") {
+                                @Override
+                                public void onButtonClick() {
+
+                                }
+                            };
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ChangeApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
+
+    }
+
+    private void fetchStaff(AppointmentEnquiryBody requestBody) throws ApiException {
+
+        Log.d("fetchService--->", "fetchService: " + requestBody);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(ChangeApptActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentEnquiryAsync(requestBody, new ApiCallback<AppointmentEnquiryResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("fetchStaff--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(ChangeApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
+                                finish();
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                            }
+                        };
+                    }
+                });
+            }
+
+            @Override
+            public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+
+                Log.d("fetchStaff--->", "onSuccess-" + statusCode + "," + result + "," + result.getResources());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+                if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            appointmentResources = result.getResources();
+                            if (!result.getResources().isEmpty() && result.getResources() != null) {
+                                CustomStaffSpinnerAdapter staffSpinnerAdapter = new CustomStaffSpinnerAdapter(ChangeApptActivity.this, result.getResources());
+                                spinner_staffs.setAdapter(staffSpinnerAdapter);
+                            } else {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        new AlertDialogFailure(ChangeApptActivity.this, "Setup staff before reschedule appointment", "OK", "", "Failed") {
+                                            @Override
+                                            public void onButtonClick() {
+                                                startActivity(new Intent(ChangeApptActivity.this, DashboardActivity.class));
+                                                finish();
+                                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                            }
+                                        };
+                                    }
+                                });
+                            }
+
+
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ChangeApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (intermediateAlertDialog != null) {
+            intermediateAlertDialog.dismissAlertDialog();
+            intermediateAlertDialog = null;
+        }
     }
 
 }

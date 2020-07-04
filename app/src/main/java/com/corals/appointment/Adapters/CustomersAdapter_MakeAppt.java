@@ -68,8 +68,6 @@ public class CustomersAdapter_MakeAppt extends BaseAdapter implements Filterable
                 ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
-
-
         return rowView;
 
     }
@@ -111,7 +109,7 @@ public class CustomersAdapter_MakeAppt extends BaseAdapter implements Filterable
                     for (int i = 0; i < mOriginalValues.size(); i++) {
                         String data = mOriginalValues.get(i).name;
                         if (data.toLowerCase().startsWith(constraint.toString())) {
-                            FilteredArrList.add(new CustomersModel(mOriginalValues.get(i).name,mOriginalValues.get(i).mobile,""));
+                            FilteredArrList.add(new CustomersModel(mOriginalValues.get(i).name,mOriginalValues.get(i).mobile,"",""));
                         }
                     }
                     // set the Filtered result to return
@@ -123,7 +121,7 @@ public class CustomersAdapter_MakeAppt extends BaseAdapter implements Filterable
                         for (int i = 0; i < mOriginalValues.size(); i++) {
                             String data = mOriginalValues.get(i).mobile;
                             if (data.toLowerCase().startsWith(constraint.toString())) {
-                                FilteredArrList.add(new CustomersModel(mOriginalValues.get(i).name,mOriginalValues.get(i).mobile,""));
+                                FilteredArrList.add(new CustomersModel(mOriginalValues.get(i).name,mOriginalValues.get(i).mobile,"",""));
                             }
                         }
                         // set the Filtered result to return
