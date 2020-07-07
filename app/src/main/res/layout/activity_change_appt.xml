@@ -38,7 +38,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/layout_bg_white"
+                    android:background="@drawable/layout_bg_grey"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -57,15 +57,14 @@
                             android:src="@drawable/order" />
 
                         <TextView
+                            android:fontFamily="@font/lato_medium"
                             android:id="@+id/text_service"
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:layout_weight="1.2"
                             android:gravity="center|start"
                             android:maxLines="1"
-                            android:singleLine="true"
-                            android:text="Hair Cut"
-                            android:textStyle="bold" />
+                            android:singleLine="true" />
 
                         <ImageView
                             android:layout_width="0dp"
@@ -76,15 +75,14 @@
                             android:src="@drawable/customer" />
 
                         <TextView
+                            android:fontFamily="@font/lato_medium"
                             android:id="@+id/text_staff"
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:layout_weight="1.8"
                             android:gravity="center|start"
                             android:maxLines="1"
-                            android:singleLine="true"
-                            android:text="Rahul"
-                            android:textStyle="bold" />
+                            android:singleLine="true" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -102,15 +100,14 @@
                             android:src="@drawable/calendar" />
 
                         <TextView
+                            android:fontFamily="@font/lato_medium"
                             android:id="@+id/text_appn_dt"
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:layout_weight="1.2"
                             android:gravity="center|start"
                             android:maxLines="1"
-                            android:singleLine="true"
-                            android:text="20-07-2020"
-                            android:textStyle="bold" />
+                            android:singleLine="true" />
 
                         <ImageView
                             android:layout_width="0dp"
@@ -121,19 +118,19 @@
                             android:src="@drawable/clock" />
 
                         <TextView
+                            android:fontFamily="@font/lato_medium"
                             android:id="@+id/text_appn_time"
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:layout_weight="1.8"
                             android:gravity="center|start"
                             android:maxLines="1"
-                            android:singleLine="true"
-                            android:text="11 am-11.30 am"
-                            android:textStyle="bold" />
+                            android:singleLine="true" />
                     </LinearLayout>
                 </LinearLayout>
 
                 <TextView
+                    android:fontFamily="@font/lato_medium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -156,6 +153,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:fontFamily="@font/lato_medium"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_marginTop="20dp"
@@ -166,32 +164,57 @@
                     android:id="@+id/layout_change_date"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:background="@drawable/layout_bg_white"
+                    android:background="@drawable/border_edittext"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:clickable="false"
                         android:id="@+id/image_calendar"
                         android:layout_width="40dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
+                        android:clickable="false"
                         android:padding="10dp"
                         android:src="@drawable/calendar"
                         android:tint="@color/app_blue" />
 
                     <TextView
-                        android:clickable="false"
+                        android:fontFamily="@font/lato_medium"
                         android:id="@+id/tv_appt_date"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:clickable="false"
                         android:gravity="center_vertical"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"
-                        android:text="02-06-2020"
                         android:textColor="@color/app_blue"
                         android:textStyle="bold" />
 
+                </LinearLayout>
+
+                <TextView
+                    android:fontFamily="@font/lato_medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_vertical"
+                    android:text="Select Appointment Time" />
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/layout_no_avail_slots"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/border_edittext"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:fontFamily="@font/lato_medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No available slots for this date" />
                 </LinearLayout>
 
 
@@ -204,6 +227,7 @@
                     />
 
                 <TextView
+                    android:fontFamily="@font/lato_medium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -213,7 +237,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/layout_bg_white"
+                    android:background="@drawable/border_edittext"
                     android:orientation="vertical">
 
                     <Spinner
@@ -227,14 +251,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="20dp"
-                    android:background="@drawable/layout_bg_white"
-                    android:orientation="vertical">
+                    android:background="@drawable/border_edittext"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <EditText
+                        android:fontFamily="@font/lato_medium"
                         android:id="@+id/et_comment"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="#FFFFFF"
+                        android:background="@drawable/border_edittext"
                         android:hint="Add your comment (optional)"
                         android:imeOptions="actionDone"
                         android:inputType="text"
@@ -243,12 +269,14 @@
 
                 </LinearLayout>
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_apply_appt_changes"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="50dp"
-                    android:background="@color/button_green"
+                    android:layout_marginBottom="30dp"
+                    android:backgroundTint="@color/button_green"
+                    android:fontFamily="@font/lato_medium"
                     android:text="@string/change_appt"
                     android:textColor="@color/white" />
 

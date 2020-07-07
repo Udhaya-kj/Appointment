@@ -22,7 +22,6 @@
             android:gravity="center"
             android:padding="7dp"
             android:text="Failed !"
-            android:textColor="@color/matt_black"
             android:textSize="18sp"
             android:textStyle="bold" />
 

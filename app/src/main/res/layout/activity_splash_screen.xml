@@ -26,5 +26,5 @@
         android:text="Corals Appointment"
         android:textSize="22sp"
         android:textColor="@color/white"
-        android:textStyle="bold" />
+        android:textAppearance="@style/textStylebold" />
 </LinearLayout>

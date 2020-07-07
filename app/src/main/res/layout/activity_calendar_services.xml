@@ -17,6 +17,7 @@
         android:gravity="center"
         android:textAlignment="center"
         app:elevation="4dp"
+        app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Select Services"
         app:titleTextColor="#FFFFFF" />
@@ -40,6 +41,7 @@
             android:src="@drawable/calendar" />
 
         <TextView
+            android:fontFamily="@font/lato_medium"
             android:id="@+id/text_appn_dt"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -62,6 +64,7 @@
         android:padding="10dp">
 
         <TextView
+            android:fontFamily="@font/lato_medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -72,6 +75,7 @@
             android:visibility="gone" />
 
         <TextView
+            android:fontFamily="@font/lato_medium"
             android:id="@+id/tv_no_services"
             android:layout_width="match_parent"
             android:layout_height="60dp"

@@ -39,7 +39,9 @@ import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
 import com.corals.appointment.Client.model.AvailDay;
 import com.corals.appointment.Client.model.TimeData;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
+import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
@@ -1115,9 +1117,29 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                 }
                 Log.d("sunday_list--->", "onClick: " + list_sun.size() + "," + list_mon.size() + "," + list_tue.size() + "," + list_wed.size() + "," + list_thu.size() + "," + list_fri.size() + "," + list_sat.size());
                 if (isSelected) {
-                    createService();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogYesNo(AddServiceAvailTimeActivity.this, "Create Service?", "Are you sure, You want to create "+ser_name+" service?", "Yes", "No") {
+                                @Override
+                                public void onOKButtonClick() {
+                                    createService();
+                                }
+
+                                @Override
+                                public void onCancelButtonClick() {
+
+                                }
+
+                            };
+                        }
+                    });
+
+
+
                 } else {
-                    getDialog("Select any service availability time option");
+                    getDialog("Select valid service availability time");
                 }
             }
         });
@@ -1560,7 +1582,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         appointmentService.availDays(availDayList);
 
         ApptTransactionBody transactionBody = new ApptTransactionBody();
-        transactionBody.setReqType("T-S.C");
+        transactionBody.setReqType(Constants.SERVICES_CREATE);
         transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
@@ -1577,7 +1599,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                         new AlertDialogFailure(AddServiceAvailTimeActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
                             @Override
                             public void onButtonClick() {
-                                createService();
+                                //createService();
                             }
                         };
                     }

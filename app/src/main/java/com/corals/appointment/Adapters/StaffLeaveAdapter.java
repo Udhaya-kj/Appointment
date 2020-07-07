@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.corals.appointment.Activity.CalendarViewActivity;
 import com.corals.appointment.Activity.ServiceUnavailCalendarActivity;
 import com.corals.appointment.Activity.TimeSlotsActivity;
 import com.corals.appointment.Client.model.AppointmentResources;
@@ -21,15 +22,17 @@ import java.util.List;
 
 public class StaffLeaveAdapter extends RecyclerView.Adapter<StaffLeaveAdapter.MyViewHolder> {
     Activity context;
-    String flag,service_id,service,date;
+    String flag,service_id,service, cus_id, cus,cus_email,cus_mob;
     List<AppointmentResources> appointmentResources;
-    public StaffLeaveAdapter(Activity context,  List<AppointmentResources> appointmentResources,String flag,String service_id,String service,String date) {
-
+    public StaffLeaveAdapter(Activity context,  List<AppointmentResources> appointmentResources,String flag,String service_id,String service,String cus_id,String cus,String cus_email,String cus_mob) {
         this.context = context;
         this.flag = flag;
         this.service_id = service_id;
         this.service = service;
-        this.date = date;
+        this.cus_id = cus_id;
+        this.cus = cus;
+        this.cus_mob = cus_mob;
+        this.cus_email = cus_email;
         this.appointmentResources = appointmentResources;
 
     }
@@ -59,13 +62,17 @@ public class StaffLeaveAdapter extends RecyclerView.Adapter<StaffLeaveAdapter.My
                     ((Activity) context).finish();
                     ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                 }
-                else  if (!TextUtils.isEmpty(flag) && flag.equals("1")) {
-                    Intent i = new Intent(context, TimeSlotsActivity.class);
-                    i.putExtra("date", date);
+                else  if (!TextUtils.isEmpty(flag)) {
+                    Intent i = new Intent(context, CalendarViewActivity.class);
+                    i.putExtra("page_id", flag);
                     i.putExtra("res_id", appointmentResources.get(position).getResId());
                     i.putExtra("res", appointmentResources.get(position).getResName());
                     i.putExtra("service_id", service_id);
                     i.putExtra("service",service );
+                    i.putExtra("cus_id", cus_id);
+                    i.putExtra("cus", cus);
+                    i.putExtra("cus_email",cus_email );
+                    i.putExtra("cus_mob",cus_mob );
                     context.startActivity(i);
                     ((Activity) context).finish();
                     ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);

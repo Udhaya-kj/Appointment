@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -25,8 +26,10 @@ import com.corals.appointment.Client.model.AppointmentAvailableSlots;
 import com.corals.appointment.Client.model.AppointmentEnquiryBody;
 import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
 import com.corals.appointment.Client.model.AppointmentService;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
+import com.corals.appointment.Model.TimeSlotDataModel;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 
@@ -39,8 +42,9 @@ public class TimeSlotsActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     TextView textView_appn_dt, textView_res;
     private IntermediateAlertDialog intermediateAlertDialog;
-    String service_id, service, date, res_id, res;
+    String service_id, service, date, res_id, res, cus_id, cus, cus_email, page_id,cus_mob;
     private SharedPreferences sharedpreferences_sessionToken;
+    TimeSlotDataModel timeSlotDataModel;
 
     @SuppressLint("NewApi")
     @Override
@@ -68,18 +72,35 @@ public class TimeSlotsActivity extends AppCompatActivity {
         sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
 
         if (getIntent().getExtras() != null) {
+            page_id = getIntent().getStringExtra("page_id");
             service_id = getIntent().getStringExtra("service_id");
             service = getIntent().getStringExtra("service");
             date = getIntent().getStringExtra("date");
             res_id = getIntent().getStringExtra("res_id");
             res = getIntent().getStringExtra("res");
-            Log.d("Appn_Date---->", "onCreate: " + date + "," + service + "," + service_id + "," + res_id + "," + res);
+            cus_id = getIntent().getStringExtra("cus_id");
+            cus = getIntent().getStringExtra("cus");
+            cus_email = getIntent().getStringExtra("cus_email");
+            cus_mob = getIntent().getStringExtra("cus_mob");
+            Log.d("Appn_Date-->", "onCreate: " + page_id+","+date + "," + service + "," + service_id + "," + res_id + "," + res + "," + cus_id + "," + cus + "," + cus_email+ "," + cus_mob);
             textView_appn_dt.setText(date);
             textView_res.setText(service);
+
+            timeSlotDataModel=new TimeSlotDataModel(page_id,cus_id,cus,cus_email,cus_mob,date,service_id,service,res_id,res);
+           /* timeSlotDataModel.setPage_id(page_id);
+            timeSlotDataModel.setCus_id(cus_id);
+            timeSlotDataModel.setCus(cus);
+            timeSlotDataModel.setCus_email(cus_email);
+            timeSlotDataModel.setDate(date);
+            timeSlotDataModel.setSer_id(service_id);
+            timeSlotDataModel.setSer(service);
+            timeSlotDataModel.setRes_id(res_id);
+            timeSlotDataModel.setRes(res);*/
+
+            Log.d("Appn_Date2--->", "onCreate: " + timeSlotDataModel.getPage_id()+","+timeSlotDataModel.getSer());
+
         }
-
         callAPI();
-
     }
 
     private void callAPI() {
@@ -88,7 +109,7 @@ public class TimeSlotsActivity extends AppCompatActivity {
         if (isConn) {
             try {
                 AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
-                enquiryBody.setReqType("E-AA.");
+                enquiryBody.setReqType(Constants.AVAILABLE_SLOTS);
                 enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
                 enquiryBody.callerType("m");
                 enquiryBody.setDate(date);
@@ -128,10 +149,7 @@ public class TimeSlotsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i = new Intent(TimeSlotsActivity.this, CalendarServicesActivity.class);
-        startActivity(i);
-        finish();
-        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+        failedIntent();
     }
 
     private void fetchApptAvailSlots(AppointmentEnquiryBody requestBody) throws ApiException {
@@ -156,9 +174,7 @@ public class TimeSlotsActivity extends AppCompatActivity {
                         new AlertDialogFailure(TimeSlotsActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                startActivity(new Intent(TimeSlotsActivity.this, DashboardActivity.class));
-                                finish();
-                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                failedIntent();
                             }
                         };
                     }
@@ -177,7 +193,7 @@ public class TimeSlotsActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             if (!result.getAvailAppointments().isEmpty() && result.getAvailAppointments() != null) {
-                                RecyclerAdapter_TimeSlots recyclerAdapter_timeSlots = new RecyclerAdapter_TimeSlots(TimeSlotsActivity.this, result.getAvailAppointments(), service_id, service, date, res_id, res);
+                                RecyclerAdapter_TimeSlots recyclerAdapter_timeSlots = new RecyclerAdapter_TimeSlots(TimeSlotsActivity.this, result.getAvailAppointments(), timeSlotDataModel);
                                 recyclerView.setAdapter(recyclerAdapter_timeSlots);
                             }
                         }
@@ -189,9 +205,7 @@ public class TimeSlotsActivity extends AppCompatActivity {
                             new AlertDialogFailure(TimeSlotsActivity.this, getResources().getString(R.string.no_avail_slots), "OK", "", "Warning") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(TimeSlotsActivity.this, AppointmentActivity.class));
-                                    finish();
-                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                    failedIntent();
                                 }
                             };
                         }
@@ -203,9 +217,7 @@ public class TimeSlotsActivity extends AppCompatActivity {
                             new AlertDialogFailure(TimeSlotsActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(TimeSlotsActivity.this, AppointmentActivity.class));
-                                    finish();
-                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                    failedIntent();
                                 }
                             };
                         }
@@ -232,6 +244,23 @@ public class TimeSlotsActivity extends AppCompatActivity {
         if (intermediateAlertDialog != null) {
             intermediateAlertDialog.dismissAlertDialog();
             intermediateAlertDialog = null;
+        }
+    }
+    private void failedIntent(){
+        if(!TextUtils.isEmpty(page_id) && page_id.equals("1")) {
+            startActivity(new Intent(TimeSlotsActivity.this, AppointmentActivity.class));
+            finish();
+            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+        }
+        else if(!TextUtils.isEmpty(page_id) && page_id.equals("2")) {
+            startActivity(new Intent(TimeSlotsActivity.this, CustomerActivity_Bottom.class));
+            finish();
+            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+        }
+        else {
+            startActivity(new Intent(TimeSlotsActivity.this, DashboardActivity.class));
+            finish();
+            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
         }
     }
 }

@@ -20,18 +20,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServicesAdapter_Calender extends BaseAdapter {
-
+    String cus_id, cus,cus_email,cus_mob;
     private final Activity context;
-    String date;
     List<AppointmentService> appointmentServices;
-    public ServicesAdapter_Calender(Activity context,String date,List<AppointmentService> appointmentServices) {
+
+    public ServicesAdapter_Calender(Activity context, List<AppointmentService> appointmentServices, String cus_id, String cus, String cus_email, String cus_mob) {
         // TODO Auto-generated constructor stub
 
         this.context = context;
-        this.date = date;
         this.appointmentServices = appointmentServices;
-
-
+        this.cus_id = cus_id;
+        this.cus = cus;
+        this.cus_email = cus_email;
+        this.cus_mob = cus_mob;
     }
 
     @Override
@@ -65,7 +66,11 @@ public class ServicesAdapter_Calender extends BaseAdapter {
                 Intent i = new Intent(context, BookingResourcesActivity.class);
                 i.putExtra("service_id", appointmentServices.get(position).getSerId());
                 i.putExtra("service", appointmentServices.get(position).getSerName());
-                i.putExtra("date", date);
+                i.putExtra("cus_id", cus_id);
+                i.putExtra("cus", cus);
+                i.putExtra("cus_email", cus_email);
+                i.putExtra("cus_mob", cus_mob);
+                i.putExtra("page_id", "2");
                 context.startActivity(i);
                 ((Activity) context).finish();
                 ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);

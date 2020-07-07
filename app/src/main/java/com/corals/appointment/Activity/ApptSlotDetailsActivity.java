@@ -31,6 +31,7 @@ import com.corals.appointment.Client.model.AppointmentEnquiryBody;
 import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
 import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
@@ -126,7 +127,7 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
                             @Override
                             public void onOKButtonClick() {
                                 ApptTransactionBody transactionBody = new ApptTransactionBody();
-                                transactionBody.setReqType("T-A.CL");
+                                transactionBody.setReqType(Constants.CANCEL_APPOINTMENT);
                                 transactionBody.setApptId(appt_id);
                                 transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
                                 transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));

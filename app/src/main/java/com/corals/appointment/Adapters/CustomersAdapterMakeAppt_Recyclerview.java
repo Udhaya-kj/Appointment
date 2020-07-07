@@ -60,7 +60,6 @@ public class CustomersAdapterMakeAppt_Recyclerview extends RecyclerView.Adapter<
         CustomersModel customersrec=mDisplayedValues.get(position);
         holder.name.setText(customersrec.getName());
         holder.mobile.setText(customersrec.getMobile());
-
         holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,13 +90,9 @@ public class CustomersAdapterMakeAppt_Recyclerview extends RecyclerView.Adapter<
     public int getItemCount() {
         return mDisplayedValues.size();
     }
-
-
     public class MyViewHolder extends RecyclerView.ViewHolder {
-
         public TextView name, mobile;
         LinearLayout linearLayout_bg;
-
         public MyViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.text_cus_name);

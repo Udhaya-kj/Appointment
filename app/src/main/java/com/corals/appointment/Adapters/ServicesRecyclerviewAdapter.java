@@ -46,7 +46,6 @@ public class ServicesRecyclerviewAdapter extends RecyclerView.Adapter<ServicesRe
 
         holder.textView_ser_name.setText(appointmentServices.get(position).getSerName());
         //holder.textView_ser_dur.setText(appointmentServices.get(position).getSerDuration());
-
         holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

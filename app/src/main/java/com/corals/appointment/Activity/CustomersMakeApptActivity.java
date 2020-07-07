@@ -30,9 +30,11 @@ import com.corals.appointment.Client.api.MerchantApisApi;
 import com.corals.appointment.Client.model.AppointmentEnquiryBody;
 import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
 import com.corals.appointment.Client.model.InlineResponse20013Customersrec;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.Model.CustomersModel;
+import com.corals.appointment.Model.TimeSlotDataModel;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.gson.Gson;
@@ -54,7 +56,7 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
     AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
     private SharedPreferences sharedpreferences_sessionToken;
     private IntermediateAlertDialog intermediateAlertDialog;
-
+    TimeSlotDataModel timeSlotDataModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,7 +151,7 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
 
     private void getRequestBody() {
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
-        enquiryBody.setReqType("E-CL.");
+        enquiryBody.setReqType(Constants.CUSTOMER_LIST);
         enquiryBody.setCallerType("m");
         enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
@@ -247,17 +249,6 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
         finish();
         overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
 
-   /*     if (!TextUtils.isEmpty(pageId) && pageId.equals("1")) {
-            Intent i = new Intent(CustomersMakeApptActivity.this, AppointmentActivity.class);
-            startActivity(i);
-            finish();
-            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
-        } else if (!TextUtils.isEmpty(pageId) && pageId.equals("2")) {
-            Intent i = new Intent(CustomersMakeApptActivity.this, ViewApptServiceActivity.class);
-            startActivity(i);
-            finish();
-            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
-        }*/
     }
 
     @Override

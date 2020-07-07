@@ -3,88 +3,114 @@
     package="com.corals.appointment">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <application
         android:name=".receiver.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher2"
-        android:roundIcon="@drawable/ic_launcher2"
         android:label="@string/app_name"
+        android:roundIcon="@drawable/ic_launcher2"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.SplashScreenActivity"
-            android:theme="@style/AppTheme.ActionBar.Transparent"
-            >
+        <activity android:name=".Activity.BookingResourcesActivity"
+            android:theme="@style/AppTheme.MaterialTheme"></activity>
+        <activity
+            android:name=".Activity.SplashScreenActivity"
+            android:theme="@style/AppTheme.ActionBar.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.ResetPasswordActivity"
-            android:windowSoftInputMode="stateHidden"
+        <activity
+            android:name=".Activity.ResetPasswordActivity"
             android:theme="@style/AppTheme.MaterialTheme"
-            />
-        <activity android:name=".Activity.OtpActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Activity.OtpActivity"
+            android:theme="@style/AppTheme.MaterialTheme" />
+        <activity
+            android:name=".Activity.ForgotPasswordActivity"
+            android:theme="@style/AppTheme.MaterialTheme" />
+        <activity
+            android:name=".Activity.SerUnavailAskTimeActivity"
+            android:theme="@style/AppTheme.MaterialTheme" />
+        <activity
+            android:name=".Activity.ServiceUnavailCalendarActivity"
+            android:theme="@style/AppTheme.MaterialTheme" />
+        <activity
+            android:name=".Activity.ServiceUnavailbleActivity"
+            android:theme="@style/AppTheme.MaterialTheme" />
+        <activity
+            android:name=".Activity.AddServiceAvailTimeActivity"
+            android:theme="@style/AppTheme.MaterialTheme"
+            android:windowSoftInputMode="stateHidden"></activity>
+        <activity
+            android:name=".Activity.ViewCustomerApptActivity"
+            android:theme="@style/AppTheme.MaterialTheme" />
+        <activity
+            android:name=".Activity.ViewApptServiceActivity"
+            android:theme="@style/AppTheme.MaterialTheme" />
+        <activity
+            android:name=".Activity.CalendarViewActivity"
+            android:theme="@style/AppTheme.MaterialTheme" />
+        <activity android:name=".Activity.StatusServiceStaffActivity"
             android:theme="@style/AppTheme.MaterialTheme"/>
-        <activity android:name=".Activity.ForgotPasswordActivity"
-            android:theme="@style/AppTheme.MaterialTheme"/>
-        <activity android:name=".Activity.SerUnavailAskTimeActivity"
-            android:theme="@style/AppTheme.MaterialTheme"/>
-        <activity android:name=".Activity.ServiceUnavailCalendarActivity"
-            android:theme="@style/AppTheme.MaterialTheme"/>
-        <activity android:name=".Activity.ServiceUnavailbleActivity"
-            android:theme="@style/AppTheme.MaterialTheme"/>
-        <activity android:name=".Activity.AddServiceAvailTimeActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/AppTheme.MaterialTheme">
-
-        </activity>
-        <activity android:name=".Activity.TimePickerActivity" />
-        <activity android:name=".Activity.ViewCustomerApptActivity"
-            android:theme="@style/AppTheme.MaterialTheme"/>
-        <activity android:name=".Activity.ViewApptServiceActivity"
-            android:theme="@style/AppTheme.MaterialTheme"/>
-        <activity android:name=".Activity.CalendarViewActivity"
-            android:theme="@style/AppTheme.MaterialTheme"/>
-        <activity android:name=".Activity.StatusServiceStaffActivity" />
         <activity
             android:name=".Activity.ChangeApptActivity"
+            android:theme="@style/AppTheme.MaterialTheme"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".Activity.ApptSlotDetailsActivity" />
-        <activity android:name=".Activity.CalendarServicesActivity" />
-        <activity android:name=".Activity.SetupServiceActivity_Bottom"
-            android:theme="@style/AppTheme.MaterialTheme"
-            />
-        <activity android:name=".Activity.SetupStaffActivity_Bottom"
-            android:theme="@style/AppTheme.MaterialTheme"
-            />
-        <activity android:name=".Activity.SettingsActivity"
-            android:theme="@style/AppTheme.MaterialTheme"/>
+        <activity
+            android:name=".Activity.ApptSlotDetailsActivity"
+            android:theme="@style/AppTheme.MaterialTheme" />
+        <activity
+            android:name=".Activity.CalendarServicesActivity"
+            android:theme="@style/AppTheme.MaterialTheme" />
+        <activity
+            android:name=".Activity.SetupServiceActivity_Bottom"
+            android:theme="@style/AppTheme.MaterialTheme" />
+        <activity
+            android:name=".Activity.SetupStaffActivity_Bottom"
+            android:theme="@style/AppTheme.MaterialTheme" />
+        <activity
+            android:name=".Activity.SettingsActivity"
+            android:theme="@style/AppTheme.MaterialTheme" />
         <activity
             android:name=".Activity.CustomerActivity_Bottom"
+            android:theme="@style/AppTheme.MaterialTheme"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".Activity.ApptSuccessActivity" />
-        <activity android:name=".Activity.SelectServiceProvidersActivity" />
+        <activity
+            android:name=".Activity.ApptSuccessActivity"
+            android:theme="@style/AppTheme.MaterialTheme" />
         <activity
             android:name=".Activity.AddStaffActivity"
-            android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppTheme.MaterialTheme"
-            />
-        <activity android:name=".Activity.CreateCustomerActivity" />
-        <activity android:name=".Activity.ApptConfirmActivity"
-            android:theme="@style/AppTheme.MaterialTheme"/>
-        <activity android:name=".Activity.CustomersMakeApptActivity" />
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Activity.CreateCustomerActivity"
+            android:theme="@style/AppTheme.MaterialTheme" />
+        <activity
+            android:name=".Activity.ApptConfirmActivity"
+            android:theme="@style/AppTheme.MaterialTheme" />
+        <activity
+            android:name=".Activity.CustomersMakeApptActivity"
+            android:theme="@style/AppTheme.MaterialTheme" />
         <activity
             android:name=".Activity.AddServiceActivity"
             android:theme="@style/AppTheme.MaterialTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".Activity.LoginActivity"
-            android:theme="@style/AppTheme.SplashNoActionBar"></activity>
-        <activity android:name=".Activity.AppointmentActivity"
-            android:theme="@style/AppTheme.MaterialTheme"/>
-        <activity android:name=".Activity.TimeSlotsActivity"
-            android:theme="@style/AppTheme.MaterialTheme"/>
-        <activity android:name=".Activity.DashboardActivity" />
+            android:theme="@style/AppTheme.SplashNoActionBar" />
+        <activity
+            android:name=".Activity.AppointmentActivity"
+            android:theme="@style/AppTheme.MaterialTheme" />
+        <activity
+            android:name=".Activity.TimeSlotsActivity"
+            android:theme="@style/AppTheme.MaterialTheme" />
+        <activity
+            android:name=".Activity.DashboardActivity"
+            android:theme="@style/AppTheme.MaterialTheme" />
 
         <receiver
             android:name=".receiver.ConnectivityReceiver"

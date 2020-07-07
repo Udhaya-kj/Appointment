@@ -42,6 +42,7 @@ import com.corals.appointment.Client.model.ApptTransactionResponse;
 import com.corals.appointment.Client.model.MapServiceResourceBody;
 import com.corals.appointment.Client.model.ServiceResourceUnavailBody;
 import com.corals.appointment.Client.model.UnavailSlotBody;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
@@ -318,7 +319,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity {
             }
 
             ApptTransactionBody transactionBody = new ApptTransactionBody();
-            transactionBody.setReqType("T-UA.S");
+            transactionBody.setReqType(Constants.SERVICE_UNAVAILABLE);
             transactionBody.setSerId(ser_id);
             transactionBody.setSerResUnavail(serviceResourceUnavailBodyList);
             transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
@@ -354,7 +355,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity {
             serviceResourceUnavailBodyList.add(serviceResourceUnavailBody);
 
             ApptTransactionBody transactionBody = new ApptTransactionBody();
-            transactionBody.setReqType("T-UA.S");
+            transactionBody.setReqType(Constants.SERVICE_UNAVAILABLE);
             transactionBody.setSerId(ser_id);
             transactionBody.setSerResUnavail(serviceResourceUnavailBodyList);
             transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
@@ -393,7 +394,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity {
 
         Log.d("ResUnavailTime---", "onClick: " + text_start_time.getText().toString() + "," + text_end_time.getText().toString());
         ApptTransactionBody transactionBody = new ApptTransactionBody();
-        transactionBody.setReqType("T-UA.R");
+        transactionBody.setReqType(Constants.RESOURCE_UNAVAILABLE);
         transactionBody.setResId(ser_id);
         transactionBody.serResUnavail(serviceResourceUnavailBodyList);
         transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
@@ -425,7 +426,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity {
 
     public void callFetchSlotAPI() {
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
-        enquiryBody.setReqType("E-AA.");
+        enquiryBody.setReqType(Constants.AVAILABLE_SLOTS);
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         enquiryBody.callerType("m");
         enquiryBody.setSerId(ser_id);

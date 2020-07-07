@@ -23,6 +23,7 @@ import com.corals.appointment.Client.api.MerchantApisApi;
 import com.corals.appointment.Client.model.AppointmentEnquiryBody;
 import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
 import com.corals.appointment.Client.model.AppointmentService;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
@@ -38,7 +39,7 @@ public class CalendarServicesActivity extends AppCompatActivity {
 
     ListView recyclerView_services;
     TextView textView_no_ser, textView_appt_dt;
-    public static String cal_date = "", pageId;
+    public String cus_id,cus,cus_email,cus_mob;
     private IntermediateAlertDialog intermediateAlertDialog;
     private SharedPreferences sharedpreferences_sessionToken;
 
@@ -65,13 +66,16 @@ public class CalendarServicesActivity extends AppCompatActivity {
         recyclerView_services = findViewById(R.id.recyclerview_services);
 
         if (getIntent().getExtras() != null) {
-            cal_date = getIntent().getStringExtra("date");
-            pageId = getIntent().getStringExtra("page_id");
-            textView_appt_dt.setText(cal_date);
+            cus_id = getIntent().getStringExtra("cus_id");
+            cus = getIntent().getStringExtra("cus");
+            cus_email = getIntent().getStringExtra("cus_email");
+            cus_mob = getIntent().getStringExtra("cus_mob");
+            Log.d("CalServices---->", "onCreate: " + cus_id + "," + cus + "," + cus_email+ "," + cus_mob);
+
         }
 
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
-        enquiryBody.setReqType("E-S.");
+        enquiryBody.setReqType(Constants.SERVICES_LIST_API);
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         enquiryBody.callerType("m");
         enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
@@ -108,7 +112,12 @@ public class CalendarServicesActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (!TextUtils.isEmpty(pageId) && pageId.equals("1")) {
+        Intent i = new Intent(CalendarServicesActivity.this, CustomerActivity_Bottom.class);
+        startActivity(i);
+        finish();
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+
+   /*     if (!TextUtils.isEmpty(pageId) && pageId.equals("1")) {
             Intent i = new Intent(CalendarServicesActivity.this, AppointmentActivity.class);
             startActivity(i);
             finish();
@@ -118,7 +127,7 @@ public class CalendarServicesActivity extends AppCompatActivity {
             startActivity(i);
             finish();
             overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
-        }
+        }*/
     }
 
     private void fetchServices(AppointmentEnquiryBody requestBody) throws ApiException {
@@ -164,7 +173,7 @@ public class CalendarServicesActivity extends AppCompatActivity {
                             if (!result.getServices().isEmpty() && result.getServices() != null) {
                                 textView_no_ser.setVisibility(View.GONE);
                                 recyclerView_services.setVisibility(View.VISIBLE);
-                                ServicesAdapter_Calender servicesAdapter_calender = new ServicesAdapter_Calender(CalendarServicesActivity.this, cal_date, result.getServices());
+                                ServicesAdapter_Calender servicesAdapter_calender = new ServicesAdapter_Calender(CalendarServicesActivity.this, result.getServices(),cus_id,cus,cus_email,cus_mob);
                                 recyclerView_services.setAdapter(servicesAdapter_calender);
 
                             } else {
@@ -213,4 +222,6 @@ public class CalendarServicesActivity extends AppCompatActivity {
             intermediateAlertDialog = null;
         }
     }
+
+
 }

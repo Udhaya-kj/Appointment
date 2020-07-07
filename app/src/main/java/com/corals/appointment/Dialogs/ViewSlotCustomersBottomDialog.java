@@ -9,22 +9,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.corals.appointment.Adapters.Slot_Cus_BottomSheet_RecyclerAdapter;
+import com.corals.appointment.Client.model.InlineResponse20013Customersrec;
 import com.corals.appointment.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ViewSlotCustomersBottomDialog {
     private Context mCtx;
     private BottomSheetDialog bottomSheetDialog;
-    ArrayList<String> arrayList_name, arrayList_mob;
     String time;
-    public ViewSlotCustomersBottomDialog(Context mCtx,String time, ArrayList<String> arrayList_name,ArrayList<String> arrayList_mob,BottomSheetDialog bottomSheetDialog) {
+    String date,service_id,service,appt_id;
+    List<InlineResponse20013Customersrec> inlineResponse20013Customersrecs;
+    public ViewSlotCustomersBottomDialog(Context mCtx, String appt_id, String time, String date, String service_id, String service,BottomSheetDialog bottomSheetDialog,List<InlineResponse20013Customersrec> inlineResponse20013Customersrecs) {
         this.mCtx = mCtx;
         this.time = time;
-        this.arrayList_name = arrayList_name;
-        this.arrayList_mob = arrayList_mob;
-        this.bottomSheetDialog = bottomSheetDialog  ;
+        this.date = date;
+        this.appt_id = appt_id;
+        this.service_id = service_id;
+        this.service = service;
+        this.bottomSheetDialog = bottomSheetDialog;
+        this.inlineResponse20013Customersrecs = inlineResponse20013Customersrecs;
         setUpDialog();
     }
 
@@ -42,7 +47,7 @@ public class ViewSlotCustomersBottomDialog {
         LinearLayoutManager lm = new LinearLayoutManager(mCtx);
         recyclerView.setLayoutManager(lm);
 
-        Slot_Cus_BottomSheet_RecyclerAdapter adapter=new Slot_Cus_BottomSheet_RecyclerAdapter(mCtx,arrayList_name,arrayList_mob,time,bottomSheetDialog);
+        Slot_Cus_BottomSheet_RecyclerAdapter adapter=new Slot_Cus_BottomSheet_RecyclerAdapter(mCtx,appt_id,service_id,service,time,date,bottomSheetDialog,inlineResponse20013Customersrecs);
         recyclerView.setAdapter(adapter);
     }
 

@@ -38,18 +38,7 @@ public class ViewCustomersApptRecyclerAdapter extends RecyclerView.Adapter<ViewC
 
     @Override
     public void onBindViewHolder(final ViewCustomersApptRecyclerAdapter.MyViewHolder holder, final int position) {
-
         holder.textView_dt_time.setText(appointmentsList.get(position).getStartTime() + "-" + appointmentsList.get(position).getEndTime());
-   /*     holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BottomSheetDialog bd = new BottomSheetDialog(context);
-                ViewApptCustomersBottomSheetDialog viewSlotCustomersBottomDialog = new ViewApptCustomersBottomSheetDialog(context,appointmentsList);
-                viewSlotCustomersBottomDialog.showBottomSheetDialog();
-
-            }
-        });
-*/
 
     }
 

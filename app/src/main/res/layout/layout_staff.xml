@@ -28,7 +28,7 @@
         android:maxLines="1"
         android:gravity="center_vertical"
         android:text="Udhayakumar"
-        android:textSize="18sp" />
+        />
 
     <ImageView
         android:id="@+id/image_edit"
@@ -36,7 +36,7 @@
         android:layout_height="60dp"
         android:layout_weight="1.5"
         android:clickable="false"
-        android:padding="17dp"
+        android:padding="19dp"
         android:src="@drawable/edit" />
 
     <ImageView
@@ -45,6 +45,6 @@
         android:layout_height="60dp"
         android:layout_weight="1.5"
         android:clickable="false"
-        android:padding="17dp"
+        android:padding="19dp"
         android:src="@drawable/trash" />
 </LinearLayout>

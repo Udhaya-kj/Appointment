@@ -19,6 +19,7 @@ import com.corals.appointment.Activity.DashboardActivity;
 import com.corals.appointment.Activity.SetupServiceActivity_Bottom;
 import com.corals.appointment.Client.model.AppointmentAvailableSlots;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
+import com.corals.appointment.Interface.ChangeApptCallback;
 import com.corals.appointment.R;
 
 import java.util.ArrayList;
@@ -30,11 +31,13 @@ public class ChangeApptSlotRecycleAdapter extends RecyclerView.Adapter<ChangeApp
     int index = -1;
     int selecteTimePos = -1;
     List<AppointmentAvailableSlots> appointmentAvailableSlots;
+    ChangeApptCallback changeApptCallback;
 
     public ChangeApptSlotRecycleAdapter(Activity context, String time, List<AppointmentAvailableSlots> appointmentAvailableSlots) {
         this.context = context;
         this.time = time;
         this.appointmentAvailableSlots = appointmentAvailableSlots;
+        changeApptCallback = (ChangeApptCallback) context;
     }
 
     @Override
@@ -65,9 +68,10 @@ public class ChangeApptSlotRecycleAdapter extends RecyclerView.Adapter<ChangeApp
                 if (total_appt > booked_appt) {
                     index = position;
                     notifyDataSetChanged();
-                    ChangeApptActivity.startTime = appointmentAvailableSlots.get(position).getSerStartTime();
+                    changeApptCallback.slot_onClick(appointmentAvailableSlots.get(position).getSlotNo(),appointmentAvailableSlots.get(position).getSerStartTime(),appointmentAvailableSlots.get(position).getSerEndTime());
+                   /* ChangeApptActivity.startTime = appointmentAvailableSlots.get(position).getSerStartTime();
                     ChangeApptActivity.endTime = appointmentAvailableSlots.get(position).getSerEndTime();
-                    ChangeApptActivity.slotNo = appointmentAvailableSlots.get(position).getSlotNo();
+                    ChangeApptActivity.slotNo = appointmentAvailableSlots.get(position).getSlotNo();*/
 
                     Log.d("index---", "onClick: Yes :" + position);
                 } else {
@@ -98,17 +102,15 @@ public class ChangeApptSlotRecycleAdapter extends RecyclerView.Adapter<ChangeApp
                 holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_change_appt_blue);
                 holder.linearLayout_bg.setEnabled(true);
             }
-
         }
-
-
         String tm = (appointmentAvailableSlots.get(position).getSerStartTime() + "-" + appointmentAvailableSlots.get(position).getSerEndTime());
         if (tm.equals(time)) {
-            ChangeApptActivity.slotNo = appointmentAvailableSlots.get(position).getSlotNo();
+            changeApptCallback.slot_onClick(appointmentAvailableSlots.get(position).getSlotNo(),appointmentAvailableSlots.get(position).getSerStartTime(),appointmentAvailableSlots.get(position).getSerEndTime());
+            //ChangeApptActivity.slotNo = appointmentAvailableSlots.get(position).getSlotNo();
             holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_change_slot_selected);
             holder.textView_slot.setTextColor(Color.parseColor("#FFFFFF"));
-            selecteTimePos=position;
-            Log.d("selecteTimePos---", "onBindViewHolder: "+selecteTimePos);
+            selecteTimePos = position;
+            Log.d("selecteTimePos---", "onBindViewHolder: " + selecteTimePos);
         }
 
     /*    if(selecteTimePos==selecteTimePos){
@@ -123,17 +125,15 @@ public class ChangeApptSlotRecycleAdapter extends RecyclerView.Adapter<ChangeApp
 
     }
 
-
     @Override
     public int getItemCount() {
         return appointmentAvailableSlots.size();
     }
 
-
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView textView_slot;
-         //CardView cardView;
+        //CardView cardView;
         LinearLayout linearLayout_bg;
 
         public MyViewHolder(View itemView) {

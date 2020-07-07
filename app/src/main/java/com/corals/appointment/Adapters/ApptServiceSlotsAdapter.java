@@ -29,6 +29,7 @@ import com.corals.appointment.Client.model.AppointmentResources;
 import com.corals.appointment.Client.model.Appointments;
 import com.corals.appointment.Client.model.InlineResponse20013Customersrec;
 import com.corals.appointment.Client.model.MapServiceResourceBody;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.Dialogs.ViewSlotCustomersBottomDialog;
@@ -53,7 +54,6 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
         this.service_id = service_id;
         this.service = service;
         this.appointmentAvailableSlots = appointmentAvailableSlots;
-
     }
 
     @Override
@@ -129,7 +129,7 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
             try {
                 sharedpreferences_sessionToken = context.getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
                 AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
-                enquiryBody.setReqType("E-A.BC");
+                enquiryBody.setReqType(Constants.FETCH_CUSTOMER_LIST_SLOT);
                 enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
                 enquiryBody.callerType("m");
                 enquiryBody.setDate(date);

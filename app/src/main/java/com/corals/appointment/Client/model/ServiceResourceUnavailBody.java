@@ -15,15 +15,16 @@ package com.corals.appointment.Client.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-
 /**
  * ServiceResourceUnavailBody
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-13T07:13:20.960Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-01T09:27:04.227Z")
 public class ServiceResourceUnavailBody {
   @SerializedName("date")
   private String date = null;
@@ -31,30 +32,18 @@ public class ServiceResourceUnavailBody {
   @SerializedName("is_full_day")
   private Boolean isFullDay = null;
 
-  @SerializedName("slot_no")
-  private String slotNo = null;
-
-  @SerializedName("start_slot")
-  private String startSlot = null;
-
-  @SerializedName("end_slot")
-  private String endSlot = null;
-
-  @SerializedName("start_time")
-  private String startTime = null;
-
-  @SerializedName("end_time")
-  private String endTime = null;
+  @SerializedName("slot_body")
+  private List<UnavailSlotBody> slotBody = null;
 
   public ServiceResourceUnavailBody date(String date) {
     this.date = date;
     return this;
   }
 
-   /**
+  /**
    * Get date
    * @return date
-  **/
+   **/
   @Schema(description = "")
   public String getDate() {
     return date;
@@ -69,10 +58,10 @@ public class ServiceResourceUnavailBody {
     return this;
   }
 
-   /**
+  /**
    * Get isFullDay
    * @return isFullDay
-  **/
+   **/
   @Schema(description = "")
   public Boolean isIsFullDay() {
     return isFullDay;
@@ -82,99 +71,35 @@ public class ServiceResourceUnavailBody {
     this.isFullDay = isFullDay;
   }
 
-  public ServiceResourceUnavailBody slotNo(String slotNo) {
-    this.slotNo = slotNo;
+  public ServiceResourceUnavailBody slotBody(List<UnavailSlotBody> slotBody) {
+    this.slotBody = slotBody;
     return this;
   }
 
-   /**
-   * Get slotNo
-   * @return slotNo
-  **/
-  @Schema(description = "")
-  public String getSlotNo() {
-    return slotNo;
-  }
-
-  public void setSlotNo(String slotNo) {
-    this.slotNo = slotNo;
-  }
-
-  public ServiceResourceUnavailBody startSlot(String startSlot) {
-    this.startSlot = startSlot;
+  public ServiceResourceUnavailBody addSlotBodyItem(UnavailSlotBody slotBodyItem) {
+    if (this.slotBody == null) {
+      this.slotBody = new ArrayList<UnavailSlotBody>();
+    }
+    this.slotBody.add(slotBodyItem);
     return this;
   }
 
-   /**
-   * Get startSlot
-   * @return startSlot
-  **/
+  /**
+   * Get slotBody
+   * @return slotBody
+   **/
   @Schema(description = "")
-  public String getStartSlot() {
-    return startSlot;
+  public List<UnavailSlotBody> getSlotBody() {
+    return slotBody;
   }
 
-  public void setStartSlot(String startSlot) {
-    this.startSlot = startSlot;
-  }
-
-  public ServiceResourceUnavailBody endSlot(String endSlot) {
-    this.endSlot = endSlot;
-    return this;
-  }
-
-   /**
-   * Get endSlot
-   * @return endSlot
-  **/
-  @Schema(description = "")
-  public String getEndSlot() {
-    return endSlot;
-  }
-
-  public void setEndSlot(String endSlot) {
-    this.endSlot = endSlot;
-  }
-
-  public ServiceResourceUnavailBody startTime(String startTime) {
-    this.startTime = startTime;
-    return this;
-  }
-
-   /**
-   * Get startTime
-   * @return startTime
-  **/
-  @Schema(description = "")
-  public String getStartTime() {
-    return startTime;
-  }
-
-  public void setStartTime(String startTime) {
-    this.startTime = startTime;
-  }
-
-  public ServiceResourceUnavailBody endTime(String endTime) {
-    this.endTime = endTime;
-    return this;
-  }
-
-   /**
-   * Get endTime
-   * @return endTime
-  **/
-  @Schema(description = "")
-  public String getEndTime() {
-    return endTime;
-  }
-
-  public void setEndTime(String endTime) {
-    this.endTime = endTime;
+  public void setSlotBody(List<UnavailSlotBody> slotBody) {
+    this.slotBody = slotBody;
   }
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -183,17 +108,13 @@ public class ServiceResourceUnavailBody {
     }
     ServiceResourceUnavailBody serviceResourceUnavailBody = (ServiceResourceUnavailBody) o;
     return Objects.equals(this.date, serviceResourceUnavailBody.date) &&
-        Objects.equals(this.isFullDay, serviceResourceUnavailBody.isFullDay) &&
-        Objects.equals(this.slotNo, serviceResourceUnavailBody.slotNo) &&
-        Objects.equals(this.startSlot, serviceResourceUnavailBody.startSlot) &&
-        Objects.equals(this.endSlot, serviceResourceUnavailBody.endSlot) &&
-        Objects.equals(this.startTime, serviceResourceUnavailBody.startTime) &&
-        Objects.equals(this.endTime, serviceResourceUnavailBody.endTime);
+            Objects.equals(this.isFullDay, serviceResourceUnavailBody.isFullDay) &&
+            Objects.equals(this.slotBody, serviceResourceUnavailBody.slotBody);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(date, isFullDay, slotNo, startSlot, endSlot, startTime, endTime);
+    return Objects.hash(date, isFullDay, slotBody);
   }
 
 
@@ -201,14 +122,10 @@ public class ServiceResourceUnavailBody {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ServiceResourceUnavailBody {\n");
-    
+
     sb.append("    date: ").append(toIndentedString(date)).append("\n");
     sb.append("    isFullDay: ").append(toIndentedString(isFullDay)).append("\n");
-    sb.append("    slotNo: ").append(toIndentedString(slotNo)).append("\n");
-    sb.append("    startSlot: ").append(toIndentedString(startSlot)).append("\n");
-    sb.append("    endSlot: ").append(toIndentedString(endSlot)).append("\n");
-    sb.append("    startTime: ").append(toIndentedString(startTime)).append("\n");
-    sb.append("    endTime: ").append(toIndentedString(endTime)).append("\n");
+    sb.append("    slotBody: ").append(toIndentedString(slotBody)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -217,7 +134,7 @@ public class ServiceResourceUnavailBody {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

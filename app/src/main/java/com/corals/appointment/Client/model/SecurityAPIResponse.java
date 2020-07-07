@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * SecurityAPIResponse
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-24T14:51:36.154Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-03T07:40:49.972Z")
 public class SecurityAPIResponse {
   @SerializedName("status_code")
   private String statusCode = null;
@@ -36,15 +36,24 @@ public class SecurityAPIResponse {
   @SerializedName("user_id")
   private String userId = null;
 
+  @SerializedName("mer_cur_symbol")
+  private String merCurSymbol = null;
+
+  @SerializedName("country_code")
+  private String countryCode = null;
+
+  @SerializedName("biz_display_name")
+  private String bizDisplayName = null;
+
   public SecurityAPIResponse statusCode(String statusCode) {
     this.statusCode = statusCode;
     return this;
   }
 
-   /**
+  /**
    * Get statusCode
    * @return statusCode
-  **/
+   **/
   @Schema(description = "")
   public String getStatusCode() {
     return statusCode;
@@ -59,11 +68,11 @@ public class SecurityAPIResponse {
     return this;
   }
 
-   /**
+  /**
    * Get statusMessage
    * @return statusMessage
-  **/
-   @Schema(description = "")
+   **/
+  @Schema(description = "")
   public String getStatusMessage() {
     return statusMessage;
   }
@@ -77,11 +86,11 @@ public class SecurityAPIResponse {
     return this;
   }
 
-   /**
+  /**
    * Get sessionToken
    * @return sessionToken
-  **/
-   @Schema(description = "")
+   **/
+  @Schema(description = "")
   public String getSessionToken() {
     return sessionToken;
   }
@@ -95,11 +104,11 @@ public class SecurityAPIResponse {
     return this;
   }
 
-   /**
+  /**
    * Get userId
    * @return userId
-  **/
-   @Schema(description = "")
+   **/
+  @Schema(description = "")
   public String getUserId() {
     return userId;
   }
@@ -108,9 +117,63 @@ public class SecurityAPIResponse {
     this.userId = userId;
   }
 
+  public SecurityAPIResponse merCurSymbol(String merCurSymbol) {
+    this.merCurSymbol = merCurSymbol;
+    return this;
+  }
+
+  /**
+   * Get merCurSymbol
+   * @return merCurSymbol
+   **/
+  @Schema(description = "")
+  public String getMerCurSymbol() {
+    return merCurSymbol;
+  }
+
+  public void setMerCurSymbol(String merCurSymbol) {
+    this.merCurSymbol = merCurSymbol;
+  }
+
+  public SecurityAPIResponse countryCode(String countryCode) {
+    this.countryCode = countryCode;
+    return this;
+  }
+
+  /**
+   * Get countryCode
+   * @return countryCode
+   **/
+  @Schema(description = "")
+  public String getCountryCode() {
+    return countryCode;
+  }
+
+  public void setCountryCode(String countryCode) {
+    this.countryCode = countryCode;
+  }
+
+  public SecurityAPIResponse bizDisplayName(String bizDisplayName) {
+    this.bizDisplayName = bizDisplayName;
+    return this;
+  }
+
+  /**
+   * Get bizDisplayName
+   * @return bizDisplayName
+   **/
+  @Schema(description = "")
+  public String getBizDisplayName() {
+    return bizDisplayName;
+  }
+
+  public void setBizDisplayName(String bizDisplayName) {
+    this.bizDisplayName = bizDisplayName;
+  }
+
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -119,14 +182,17 @@ public class SecurityAPIResponse {
     }
     SecurityAPIResponse securityAPIResponse = (SecurityAPIResponse) o;
     return Objects.equals(this.statusCode, securityAPIResponse.statusCode) &&
-        Objects.equals(this.statusMessage, securityAPIResponse.statusMessage) &&
-        Objects.equals(this.sessionToken, securityAPIResponse.sessionToken) &&
-        Objects.equals(this.userId, securityAPIResponse.userId);
+            Objects.equals(this.statusMessage, securityAPIResponse.statusMessage) &&
+            Objects.equals(this.sessionToken, securityAPIResponse.sessionToken) &&
+            Objects.equals(this.userId, securityAPIResponse.userId) &&
+            Objects.equals(this.merCurSymbol, securityAPIResponse.merCurSymbol) &&
+            Objects.equals(this.countryCode, securityAPIResponse.countryCode) &&
+            Objects.equals(this.bizDisplayName, securityAPIResponse.bizDisplayName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(statusCode, statusMessage, sessionToken, userId);
+    return Objects.hash(statusCode, statusMessage, sessionToken, userId, merCurSymbol, countryCode, bizDisplayName);
   }
 
 
@@ -134,11 +200,14 @@ public class SecurityAPIResponse {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SecurityAPIResponse {\n");
-    
+
     sb.append("    statusCode: ").append(toIndentedString(statusCode)).append("\n");
     sb.append("    statusMessage: ").append(toIndentedString(statusMessage)).append("\n");
     sb.append("    sessionToken: ").append(toIndentedString(sessionToken)).append("\n");
     sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
+    sb.append("    merCurSymbol: ").append(toIndentedString(merCurSymbol)).append("\n");
+    sb.append("    countryCode: ").append(toIndentedString(countryCode)).append("\n");
+    sb.append("    bizDisplayName: ").append(toIndentedString(bizDisplayName)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -147,7 +216,7 @@ public class SecurityAPIResponse {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

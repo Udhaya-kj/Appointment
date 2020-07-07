@@ -36,6 +36,7 @@ import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
 import com.corals.appointment.Client.model.MapServiceResourceBody;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
@@ -87,6 +88,10 @@ public class StaffListAdapter extends BaseAdapter {
         LinearLayout linearLayout = (LinearLayout) rowView.findViewById(R.id.layout_staff);
         titleText.setText(appointmentResources.get(position).getResName());
 
+        if(appointmentResources.get(position).isIsActive()==false){
+            linearLayout.setEnabled(false);
+        }
+
         imageView_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +113,6 @@ public class StaffListAdapter extends BaseAdapter {
         imageView_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -143,7 +147,7 @@ public class StaffListAdapter extends BaseAdapter {
                                 //appointmentResources.availDays(availDayList);
 
                                 ApptTransactionBody transactionBody = new ApptTransactionBody();
-                                transactionBody.setReqType("T-R.U");
+                                transactionBody.setReqType(Constants.RESOURCE_UPDATE);
                                 transactionBody.setResId(appointmentResources.get(position).getResId());
                                 transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
                                 transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));

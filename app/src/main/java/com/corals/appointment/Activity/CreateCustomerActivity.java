@@ -22,7 +22,9 @@ import com.corals.appointment.Client.api.MerchantApisApi;
 import com.corals.appointment.Client.model.AppointmentEnquiryBody;
 import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
+import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
@@ -125,15 +127,33 @@ public class CreateCustomerActivity extends AppCompatActivity {
                     Body.setName(name);
                     Body.setMail(mail);
                     Body.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
-                    Body.setReqType("T-CC.");
+                    Body.setReqType(Constants.CUSTOMER_CREATE);
                     Body.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
                     Body.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
 
-                    try {
-                        createCustomer(Body);
-                    } catch (ApiException e) {
-                        e.printStackTrace();
-                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogYesNo(CreateCustomerActivity.this, "Create Customer?", "Are you sure, You want to create "+name+"?", "Yes", "No") {
+                                @Override
+                                public void onOKButtonClick() {
+                                    try {
+                                        createCustomer(Body);
+                                    } catch (ApiException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelButtonClick() {
+
+                                }
+
+                            };
+                        }
+                    });
+
+
                 } else {
                     editText_cus_mail.setError("Enter valid email");
                     editText_cus_mail.requestFocus();

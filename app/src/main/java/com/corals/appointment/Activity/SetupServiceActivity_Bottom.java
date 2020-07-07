@@ -28,6 +28,7 @@ import com.corals.appointment.Client.api.MerchantApisApi;
 import com.corals.appointment.Client.model.AppointmentEnquiryBody;
 import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
 import com.corals.appointment.Client.model.AppointmentService;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
@@ -108,7 +109,7 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
         if (isConn) {
             try {
                 AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
-                enquiryBody.setReqType("E-S.");
+                enquiryBody.setReqType(Constants.SERVICES_LIST_API);
                 enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
                 enquiryBody.callerType("m");
                 enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));

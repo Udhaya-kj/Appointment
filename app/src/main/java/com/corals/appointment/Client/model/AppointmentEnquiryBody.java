@@ -13,20 +13,16 @@
 
 package com.corals.appointment.Client.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.IOException;
+import java.util.Objects;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * AppointmentEnquiryBody
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-13T07:13:20.960Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-30T06:35:05.370Z")
 public class AppointmentEnquiryBody {
   @SerializedName("session_token")
   private String sessionToken = null;
@@ -52,6 +48,12 @@ public class AppointmentEnquiryBody {
   @SerializedName("date")
   private String date = null;
 
+  @SerializedName("start_time")
+  private String startTime = null;
+
+  @SerializedName("end_time")
+  private String endTime = null;
+
   @SerializedName("caller_type")
   private String callerType = null;
 
@@ -63,11 +65,11 @@ public class AppointmentEnquiryBody {
     return this;
   }
 
-   /**
+  /**
    * Get sessionToken
    * @return sessionToken
-  **/
-   @Schema(description = "")
+   **/
+  @Schema(description = "")
   public String getSessionToken() {
     return sessionToken;
   }
@@ -81,10 +83,10 @@ public class AppointmentEnquiryBody {
     return this;
   }
 
-   /**
+  /**
    * Get reqType
    * @return reqType
-  **/
+   **/
   @Schema(description = "")
   public String getReqType() {
     return reqType;
@@ -99,10 +101,10 @@ public class AppointmentEnquiryBody {
     return this;
   }
 
-   /**
+  /**
    * Get serId
    * @return serId
-  **/
+   **/
   @Schema(description = "")
   public String getSerId() {
     return serId;
@@ -117,10 +119,10 @@ public class AppointmentEnquiryBody {
     return this;
   }
 
-   /**
+  /**
    * Get custId
    * @return custId
-  **/
+   **/
   @Schema(description = "")
   public String getCustId() {
     return custId;
@@ -135,10 +137,10 @@ public class AppointmentEnquiryBody {
     return this;
   }
 
-   /**
+  /**
    * Get resId
    * @return resId
-  **/
+   **/
   @Schema(description = "")
   public String getResId() {
     return resId;
@@ -153,10 +155,10 @@ public class AppointmentEnquiryBody {
     return this;
   }
 
-   /**
+  /**
    * Get apptId
    * @return apptId
-  **/
+   **/
   @Schema(description = "")
   public String getApptId() {
     return apptId;
@@ -171,10 +173,10 @@ public class AppointmentEnquiryBody {
     return this;
   }
 
-   /**
+  /**
    * Get merId
    * @return merId
-  **/
+   **/
   @Schema(description = "")
   public String getMerId() {
     return merId;
@@ -189,10 +191,10 @@ public class AppointmentEnquiryBody {
     return this;
   }
 
-   /**
+  /**
    * Get date
    * @return date
-  **/
+   **/
   @Schema(description = "")
   public String getDate() {
     return date;
@@ -202,15 +204,51 @@ public class AppointmentEnquiryBody {
     this.date = date;
   }
 
+  public AppointmentEnquiryBody startTime(String startTime) {
+    this.startTime = startTime;
+    return this;
+  }
+
+  /**
+   * Get startTime
+   * @return startTime
+   **/
+  @Schema(description = "")
+  public String getStartTime() {
+    return startTime;
+  }
+
+  public void setStartTime(String startTime) {
+    this.startTime = startTime;
+  }
+
+  public AppointmentEnquiryBody endTime(String endTime) {
+    this.endTime = endTime;
+    return this;
+  }
+
+  /**
+   * Get endTime
+   * @return endTime
+   **/
+  @Schema(description = "")
+  public String getEndTime() {
+    return endTime;
+  }
+
+  public void setEndTime(String endTime) {
+    this.endTime = endTime;
+  }
+
   public AppointmentEnquiryBody callerType(String callerType) {
     this.callerType = callerType;
     return this;
   }
 
-   /**
+  /**
    * Get callerType
    * @return callerType
-  **/
+   **/
   @Schema(description = "")
   public String getCallerType() {
     return callerType;
@@ -225,10 +263,10 @@ public class AppointmentEnquiryBody {
     return this;
   }
 
-   /**
+  /**
    * Get deviceId
    * @return deviceId
-  **/
+   **/
   @Schema(description = "")
   public String getDeviceId() {
     return deviceId;
@@ -240,7 +278,7 @@ public class AppointmentEnquiryBody {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -249,20 +287,22 @@ public class AppointmentEnquiryBody {
     }
     AppointmentEnquiryBody appointmentEnquiryBody = (AppointmentEnquiryBody) o;
     return Objects.equals(this.sessionToken, appointmentEnquiryBody.sessionToken) &&
-        Objects.equals(this.reqType, appointmentEnquiryBody.reqType) &&
-        Objects.equals(this.serId, appointmentEnquiryBody.serId) &&
-        Objects.equals(this.custId, appointmentEnquiryBody.custId) &&
-        Objects.equals(this.resId, appointmentEnquiryBody.resId) &&
-        Objects.equals(this.apptId, appointmentEnquiryBody.apptId) &&
-        Objects.equals(this.merId, appointmentEnquiryBody.merId) &&
-        Objects.equals(this.date, appointmentEnquiryBody.date) &&
-        Objects.equals(this.callerType, appointmentEnquiryBody.callerType) &&
-        Objects.equals(this.deviceId, appointmentEnquiryBody.deviceId);
+            Objects.equals(this.reqType, appointmentEnquiryBody.reqType) &&
+            Objects.equals(this.serId, appointmentEnquiryBody.serId) &&
+            Objects.equals(this.custId, appointmentEnquiryBody.custId) &&
+            Objects.equals(this.resId, appointmentEnquiryBody.resId) &&
+            Objects.equals(this.apptId, appointmentEnquiryBody.apptId) &&
+            Objects.equals(this.merId, appointmentEnquiryBody.merId) &&
+            Objects.equals(this.date, appointmentEnquiryBody.date) &&
+            Objects.equals(this.startTime, appointmentEnquiryBody.startTime) &&
+            Objects.equals(this.endTime, appointmentEnquiryBody.endTime) &&
+            Objects.equals(this.callerType, appointmentEnquiryBody.callerType) &&
+            Objects.equals(this.deviceId, appointmentEnquiryBody.deviceId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sessionToken, reqType, serId, custId, resId, apptId, merId, date, callerType, deviceId);
+    return Objects.hash(sessionToken, reqType, serId, custId, resId, apptId, merId, date, startTime, endTime, callerType, deviceId);
   }
 
 
@@ -270,7 +310,7 @@ public class AppointmentEnquiryBody {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AppointmentEnquiryBody {\n");
-    
+
     sb.append("    sessionToken: ").append(toIndentedString(sessionToken)).append("\n");
     sb.append("    reqType: ").append(toIndentedString(reqType)).append("\n");
     sb.append("    serId: ").append(toIndentedString(serId)).append("\n");
@@ -279,6 +319,8 @@ public class AppointmentEnquiryBody {
     sb.append("    apptId: ").append(toIndentedString(apptId)).append("\n");
     sb.append("    merId: ").append(toIndentedString(merId)).append("\n");
     sb.append("    date: ").append(toIndentedString(date)).append("\n");
+    sb.append("    startTime: ").append(toIndentedString(startTime)).append("\n");
+    sb.append("    endTime: ").append(toIndentedString(endTime)).append("\n");
     sb.append("    callerType: ").append(toIndentedString(callerType)).append("\n");
     sb.append("    deviceId: ").append(toIndentedString(deviceId)).append("\n");
     sb.append("}");
@@ -289,7 +331,7 @@ public class AppointmentEnquiryBody {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

@@ -30,6 +30,7 @@ import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
 import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
 import com.corals.appointment.Client.model.InlineResponse20013Customersrec;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.Model.CustomersModel;
@@ -148,7 +149,7 @@ public class CustomerActivity_Bottom extends AppCompatActivity {
 
     private void getRequestBody() {
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
-        enquiryBody.setReqType("E-CL.");
+        enquiryBody.setReqType(Constants.CUSTOMER_LIST);
         enquiryBody.setCallerType("m");
         enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));

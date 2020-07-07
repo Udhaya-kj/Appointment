@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_change_slot"
     android:layout_width="match_parent"
     android:layout_height="70dp"
-    android:layout_margin="8dp"
-    android:orientation="vertical">
-
-    <LinearLayout
-        android:id="@+id/layout_change_slot"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:orientation="horizontal"
-        android:background="@drawable/layout_bg_time_slots">
-
-    </LinearLayout>
+    android:layout_margin="10dp"
+    android:background="@drawable/layout_bg_change_appt_blue"
+    android:orientation="horizontal">
 
     <TextView
-        android:layout_gravity="center"
         android:id="@+id/text_slot_change_appt"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@null"
         android:gravity="center"
-        android:layout_margin="5dp"
         android:text="9:30 am - 10:30 am" />
-</FrameLayout>
+
+</LinearLayout>
+

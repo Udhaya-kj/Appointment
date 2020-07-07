@@ -57,6 +57,19 @@
             android:src="@drawable/next"
             />
     </LinearLayout>
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/text_no_appts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No appointment booked"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:layout_marginTop="30dp"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

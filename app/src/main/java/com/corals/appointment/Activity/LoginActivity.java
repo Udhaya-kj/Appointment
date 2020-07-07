@@ -23,8 +23,10 @@ import com.corals.appointment.Client.OkHttpApiClient;
 import com.corals.appointment.Client.api.MerchantApisApi;
 import com.corals.appointment.Client.model.SecurityAPIBody;
 import com.corals.appointment.Client.model.SecurityAPIResponse;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
+import com.corals.appointment.Model.ParamProperties;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.android.material.button.MaterialButton;
@@ -39,6 +41,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import static com.corals.appointment.Model.ParamProperties.MOBILE_CODE;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -178,7 +182,7 @@ public class LoginActivity extends AppCompatActivity {
                         String id = UUID.randomUUID().toString();
                         Log.d("UUID--->", "onCreate: " + id);
                         SecurityAPIBody securityAPIBody = new SecurityAPIBody();
-                        securityAPIBody.setReqType("S-L.M");
+                        securityAPIBody.setReqType(Constants.LOGIN_API);
                         securityAPIBody.setDeviceId(id);
                         securityAPIBody.setUserEmail(editText_id.getText().toString());
                         securityAPIBody.setUserPass(hashStr);
@@ -214,7 +218,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void merchantApptLogin(final SecurityAPIBody requestBody) throws ApiException {
         intermediateAlertDialog = new IntermediateAlertDialog(LoginActivity.this);
-
         Log.d("login---", "login: " + requestBody);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(LoginActivity.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();
@@ -262,6 +265,18 @@ public class LoginActivity extends AppCompatActivity {
                     finish();
                     overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                 } else if (Integer.parseInt(result.getStatusCode()) == 205) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(LoginActivity.this, "Email or password is incorrect", "OK", "", "Login Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    // finish();
+                                }
+                            };
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 412) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

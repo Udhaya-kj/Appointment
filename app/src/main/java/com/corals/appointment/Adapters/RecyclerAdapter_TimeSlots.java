@@ -15,9 +15,11 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.corals.appointment.Activity.ApptConfirmActivity;
 import com.corals.appointment.Activity.CustomerActivity_Bottom;
 import com.corals.appointment.Activity.CustomersMakeApptActivity;
 import com.corals.appointment.Client.model.AppointmentAvailableSlots;
+import com.corals.appointment.Model.TimeSlotDataModel;
 import com.corals.appointment.R;
 
 import java.util.ArrayList;
@@ -30,18 +32,11 @@ import java.util.List;
 public class RecyclerAdapter_TimeSlots extends RecyclerView.Adapter<RecyclerAdapter_TimeSlots.MyViewHolder> {
     Context context;
     List<AppointmentAvailableSlots> appointmentAvailableSlots;
-    String ser_id, date,res_id,res,service;
-
-    public RecyclerAdapter_TimeSlots(Context context, List<AppointmentAvailableSlots> appointmentAvailableSlots, String ser_id,String service, String date, String res_id, String res) {
-
+    TimeSlotDataModel timeSlotDataModel;
+    public RecyclerAdapter_TimeSlots(Context context, List<AppointmentAvailableSlots> appointmentAvailableSlots, TimeSlotDataModel timeSlotDataModel) {
         this.context = context;
         this.appointmentAvailableSlots = appointmentAvailableSlots;
-        this.ser_id = ser_id;
-        this.date = date;
-        this.res_id = res_id;
-        this.res = res;
-        this.service = service;
-
+        this.timeSlotDataModel = timeSlotDataModel;
     }
 
     @Override
@@ -68,29 +63,44 @@ public class RecyclerAdapter_TimeSlots extends RecyclerView.Adapter<RecyclerAdap
             holder.imageView_avail.setBackgroundResource(R.drawable.add_green);
             holder.imageView_avail.setEnabled(true);
         }
-     /*   else if (arrayList2.get(position).equals("2")) {
-            holder.linearLayout_color.setBackgroundResource(R.drawable.left_round_corners_grey);
-            holder.imageView_avail.setBackgroundResource(R.drawable.block);
-            holder.imageView_avail.setEnabled(false);
-        }
-*/
+
         holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (total_appt > booked_appt) {
-                    Intent in = new Intent(context, CustomersMakeApptActivity.class);
-                    in.putExtra("page_id", "02");
-                    in.putExtra("service_id", ser_id);
-                    in.putExtra("service", service);
-                    in.putExtra("date", date);
-                    in.putExtra("res_id", res_id);
-                    in.putExtra("res", res);
-                    in.putExtra("slot_no", appointmentAvailableSlots.get(position).getSlotNo());
-                    in.putExtra("start_time", appointmentAvailableSlots.get(position).getSerStartTime());
-                    in.putExtra("end_time", appointmentAvailableSlots.get(position).getSerEndTime());
-                    context.startActivity(in);
-                    ((Activity) context).finish();
-                    ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                    if( timeSlotDataModel.getPage_id().equals("1")) {
+                        Intent in = new Intent(context, CustomersMakeApptActivity.class);
+                        in.putExtra("page_id", "02");
+                        in.putExtra("service_id", timeSlotDataModel.getSer_id());
+                        in.putExtra("service", timeSlotDataModel.getSer());
+                        in.putExtra("date", timeSlotDataModel.getDate());
+                        in.putExtra("res_id", timeSlotDataModel.getRes_id());
+                        in.putExtra("res", timeSlotDataModel.getRes());
+                        in.putExtra("slot_no", appointmentAvailableSlots.get(position).getSlotNo());
+                        in.putExtra("start_time", appointmentAvailableSlots.get(position).getSerStartTime());
+                        in.putExtra("end_time", appointmentAvailableSlots.get(position).getSerEndTime());
+                        context.startActivity(in);
+                        ((Activity) context).finish();
+                        ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                    }
+                    else if( timeSlotDataModel.getPage_id().equals("2")) {
+                        Intent in = new Intent(context, ApptConfirmActivity.class);
+                        in.putExtra("service_id", timeSlotDataModel.getSer_id());
+                        in.putExtra("service", timeSlotDataModel.getSer());
+                        in.putExtra("date", timeSlotDataModel.getDate());
+                        in.putExtra("res_id", timeSlotDataModel.getRes_id());
+                        in.putExtra("res", timeSlotDataModel.getRes());
+
+                        in.putExtra("cus_id", timeSlotDataModel.getCus_id());
+                        in.putExtra("cus", timeSlotDataModel.getCus());
+                        in.putExtra("cus_email", timeSlotDataModel.getCus_email());
+                        in.putExtra("slot_no", appointmentAvailableSlots.get(position).getSlotNo());
+                        in.putExtra("start_time", appointmentAvailableSlots.get(position).getSerStartTime());
+                        in.putExtra("end_time", appointmentAvailableSlots.get(position).getSerEndTime());
+                        context.startActivity(in);
+                        ((Activity) context).finish();
+                        ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                    }
                 }
 
 

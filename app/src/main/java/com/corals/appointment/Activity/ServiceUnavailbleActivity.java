@@ -29,6 +29,7 @@ import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
 import com.corals.appointment.Client.model.AppointmentResources;
 import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.Client.model.MapServiceResourceBody;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
@@ -104,7 +105,7 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
 
     private void callAPI() {
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
-        enquiryBody.setReqType("E-S.");
+        enquiryBody.setReqType(Constants.SERVICES_LIST_API);
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         enquiryBody.callerType("m");
         enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
@@ -134,7 +135,7 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
 
     private void callAPI_Staff() {
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
-        enquiryBody.setReqType("E-R.");
+        enquiryBody.setReqType(Constants.ALL_RESOURCE_LIST);
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         enquiryBody.callerType("m");
         enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
@@ -305,7 +306,7 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
                         public void run() {
 
                             if (!result.getResources().isEmpty() && result.getResources() != null) {
-                                StaffLeaveAdapter staffListAdapter = new StaffLeaveAdapter(ServiceUnavailbleActivity.this, result.getResources(), "01", "", "", "");
+                                StaffLeaveAdapter staffListAdapter = new StaffLeaveAdapter(ServiceUnavailbleActivity.this, result.getResources(), "01", "", "", "","","","");
                                 recyclerView.setAdapter(staffListAdapter);
                             } else {
                                 textView_no_ser.setText("No staffs created");

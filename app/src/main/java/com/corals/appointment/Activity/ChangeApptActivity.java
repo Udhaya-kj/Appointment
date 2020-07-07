@@ -43,9 +43,11 @@ import com.corals.appointment.Client.model.AppointmentResources;
 import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
 import com.corals.appointment.Client.model.MapServiceResourceBody;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
+import com.corals.appointment.Interface.ChangeApptCallback;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.gson.Gson;
@@ -57,7 +59,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-public class ChangeApptActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class ChangeApptActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, ChangeApptCallback {
 
     Spinner spinner_services, spinner_staffs;
     ImageView imageView_calendar;
@@ -76,7 +78,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
     private IntermediateAlertDialog intermediateAlertDialog;
     private SharedPreferences sharedpreferences_sessionToken;
     String service_id, service, staff, appt_date, appt_time, appt_id, cus_id;
-    public static String startTime = "", endTime = "", slotNo = "";
+    public String startTime = "", endTime = "", slotNo = "";
     List<AppointmentResources> appointmentResources = new ArrayList<>();
     String res_id;
 
@@ -138,9 +140,9 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
             textView_time.setText(appt_time);
             textView_appt_date.setText(appt_date);
 
-            String[] strs = appt_time.split("-");
+          /*  String[] strs = appt_time.split("-");
             startTime = strs[0];
-            endTime = strs[1];
+            endTime = strs[1];*/
 
             Log.d("ChangeAppt---", "onCreate: " + service_id + "," + service + "," + staff + "," + cus_id + "," + appt_date + "," + startTime + "," + endTime + "," + appt_id);
         }
@@ -214,7 +216,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
 
                                     Log.d("ChangeAppt---", "onClick: " + appt_id + "," + appt_date + "," + service_id + "," + cus_id + "," + startTime + "," + endTime + "," + slotNo);
                                     ApptTransactionBody transactionBody = new ApptTransactionBody();
-                                    transactionBody.setReqType("T-A.U");
+                                    transactionBody.setReqType(Constants.UPDATE_APPOINTMENT);
                                     transactionBody.setApptId(appt_id);
                                     transactionBody.setSerId(service_id);
                                     transactionBody.setResId(res_id);
@@ -294,7 +296,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
 
     public void callAPIFetchSlots(String date) {
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
-        enquiryBody.setReqType("E-AA.");
+        enquiryBody.setReqType(Constants.AVAILABLE_SLOTS);
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         enquiryBody.callerType("m");
         enquiryBody.setDate(date);
@@ -330,7 +332,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
     public void callAPIFetchStaff() {
 
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
-        enquiryBody.setReqType("E-MS.");
+        enquiryBody.setReqType(Constants.RESOURCE_LIST_API);
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         enquiryBody.callerType("m");
         enquiryBody.setSerId(service_id);
@@ -669,4 +671,13 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
         }
     }
 
+    @Override
+    public void slot_onClick(String slot_no, String start_time, String end_time) {
+        slotNo=slot_no;
+        startTime=start_time;
+        endTime=end_time;
+
+        Log.d("ChangeSlot--->", "slot_onClick: "+slotNo+","+startTime+","+endTime);
+
+    }
 }

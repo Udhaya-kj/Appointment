@@ -52,17 +52,6 @@ public class Slot_Cus_BottomSheet_RecyclerAdapter extends RecyclerView.Adapter<S
         holder.textView_cus_name.setText(inlineResponse20013Customersrecs.get(position).getCustName());
         holder.textView_cus_mob.setText(inlineResponse20013Customersrecs.get(position).getCustMobile());
 
-       /* holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(context, TimeSlotsActivity.class);
-                i.putExtra("resource", res);
-                i.putExtra("date", CalendarServicesActivity.cal_date);
-                context.startActivity(i);
-                ((Activity) context).finish();
-            }
-        });*/
-
         holder.textView_cus_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,19 +75,6 @@ public class Slot_Cus_BottomSheet_RecyclerAdapter extends RecyclerView.Adapter<S
                 Log.d("SerName---", "onClick: "+service);
             }
         });
-
-/*        holder.imageView_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                res = arrayList1.get(position);
-                Intent i = new Intent(context, TimeSlotsActivity.class);
-                i.putExtra("resource", res);
-                i.putExtra("date", CalendarServicesActivity.cal_date);
-                context.startActivity(i);
-                ((Activity) context).finish();
-            }
-        });*/
 
 
     }

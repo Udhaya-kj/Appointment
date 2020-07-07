@@ -18,8 +18,10 @@
     <string name="went_wrong">Something went wrong</string>
     <string name="try_again">Please try again later!</string>
     <string name="success">Success</string>
+    <string name="no_internet_heading">Connection Failed</string>
     <string name="no_internet_title">No internet connection</string>
     <string name="no_internet_sub_title">Check your internet connection and try again!</string>
-
+    <string name="no_internet_Heading">Connection Failed</string>
+    <string name="no_avail_slots">No available slots found for this date</string>
 
 </resources>

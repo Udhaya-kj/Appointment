@@ -27,6 +27,7 @@ import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
 import com.corals.appointment.Client.model.AppointmentResources;
 import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.Client.model.MapServiceResourceBody;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
@@ -40,7 +41,7 @@ public class BookingResourcesActivity extends AppCompatActivity {
 
     RecyclerView recyclerView_services;
     TextView textView_no_ser, textView_appt_dt, textView_appt_ser;
-    public static String cal_date = "", pageId, service_id, service;
+    private String pageId, service_id, service, cus_id, cus, cus_email, cus_mob;
     private IntermediateAlertDialog intermediateAlertDialog;
     private SharedPreferences sharedpreferences_sessionToken;
 
@@ -70,12 +71,16 @@ public class BookingResourcesActivity extends AppCompatActivity {
         recyclerView_services.setLayoutManager(lm);
 
         if (getIntent().getExtras() != null) {
-            cal_date = getIntent().getStringExtra("date");
             pageId = getIntent().getStringExtra("page_id");
             service_id = getIntent().getStringExtra("service_id");
             service = getIntent().getStringExtra("service");
-            textView_appt_dt.setText(cal_date);
+            cus_id = getIntent().getStringExtra("cus_id");
+            cus = getIntent().getStringExtra("cus");
+            cus_mob = getIntent().getStringExtra("cus_mob");
+            cus_email = getIntent().getStringExtra("cus_email");
+            //textView_appt_dt.setText(cal_date);
             textView_appt_ser.setText(service);
+            Log.d("BookResource---->", "onCreate: " + pageId + "," + service_id + "," + service + "," + cus_id + "," + cus + "," + cus_email + "," + cus_mob);
         }
 
         callAPI();
@@ -83,7 +88,7 @@ public class BookingResourcesActivity extends AppCompatActivity {
 
     private void callAPI() {
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
-        enquiryBody.setReqType("E-MS.");
+        enquiryBody.setReqType(Constants.RESOURCE_MERCHANT);
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         enquiryBody.callerType("m");
         enquiryBody.setSerId(service_id);
@@ -115,10 +120,24 @@ public class BookingResourcesActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i = new Intent(BookingResourcesActivity.this, AppointmentActivity.class);
-        startActivity(i);
-        finish();
-        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+
+        if (!TextUtils.isEmpty(pageId) && pageId.equals("1")) {
+            Intent i = new Intent(BookingResourcesActivity.this, AppointmentActivity.class);
+            startActivity(i);
+            finish();
+            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+        } else if (!TextUtils.isEmpty(pageId) && pageId.equals("2")) {
+            Intent i = new Intent(BookingResourcesActivity.this, CustomerActivity_Bottom.class);
+            startActivity(i);
+            finish();
+            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+        }
+        else {
+            Intent i = new Intent(BookingResourcesActivity.this, DashboardActivity.class);
+            startActivity(i);
+            finish();
+            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+        }
 
     }
 
@@ -143,9 +162,7 @@ public class BookingResourcesActivity extends AppCompatActivity {
                         new AlertDialogFailure(BookingResourcesActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                startActivity(new Intent(BookingResourcesActivity.this, AppointmentActivity.class));
-                                finish();
-                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                failedIntent();
                             }
                         };
                     }
@@ -163,10 +180,9 @@ public class BookingResourcesActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
                             if (!result.getResources().isEmpty() && result.getResources() != null) {
-                                StaffLeaveAdapter staffListAdapter = new StaffLeaveAdapter(BookingResourcesActivity.this, result.getResources(), "1", service_id, service, cal_date);
-                                recyclerView_services.setAdapter(staffListAdapter);
+                                StaffLeaveAdapter staffLeaveAdapter = new StaffLeaveAdapter(BookingResourcesActivity.this, result.getResources(), pageId, service_id, service, cus_id, cus, cus_email, cus_mob);
+                                recyclerView_services.setAdapter(staffLeaveAdapter);
                             } else {
                                 textView_no_ser.setText("No staffs created");
                                 textView_no_ser.setVisibility(View.VISIBLE);
@@ -179,27 +195,22 @@ public class BookingResourcesActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(BookingResourcesActivity.this, "Staff not found for this service", "OK","", "Failed") {
+                            new AlertDialogFailure(BookingResourcesActivity.this, "Staff not found for this service", "OK", "", "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(BookingResourcesActivity.this, AppointmentActivity.class));
-                                    finish();
-                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                    failedIntent();
                                 }
                             };
                         }
                     });
-                }
-                else {
+                } else {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             new AlertDialogFailure(BookingResourcesActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(BookingResourcesActivity.this, AppointmentActivity.class));
-                                    finish();
-                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                    failedIntent();
                                 }
                             };
                         }
@@ -229,4 +240,21 @@ public class BookingResourcesActivity extends AppCompatActivity {
         }
     }
 
+    private void failedIntent(){
+        if(!TextUtils.isEmpty(pageId) && pageId.equals("1")) {
+            startActivity(new Intent(BookingResourcesActivity.this, AppointmentActivity.class));
+            finish();
+            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+        }
+        else if(!TextUtils.isEmpty(pageId) && pageId.equals("2")) {
+            startActivity(new Intent(BookingResourcesActivity.this, CustomerActivity_Bottom.class));
+            finish();
+            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+        }
+        else {
+            startActivity(new Intent(BookingResourcesActivity.this, DashboardActivity.class));
+            finish();
+            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+        }
+    }
 }

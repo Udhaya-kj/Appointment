@@ -26,6 +26,7 @@ import com.corals.appointment.Client.OkHttpApiClient;
 import com.corals.appointment.Client.api.MerchantApisApi;
 import com.corals.appointment.Client.model.SecurityAPIBody;
 import com.corals.appointment.Client.model.SecurityAPIResponse;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
@@ -123,7 +124,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                         boolean isConn = ConnectivityReceiver.isConnected();
                         if (isConn) {
                             SecurityAPIBody securityAPIBody = new SecurityAPIBody();
-                            securityAPIBody.setReqType("S-RP.");
+                            securityAPIBody.setReqType(Constants.RESET_PASSWORD);
                             securityAPIBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
                             securityAPIBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
                             securityAPIBody.setUserMob(mob);

@@ -31,7 +31,7 @@
             android:layout_marginStart="10dp"
             android:gravity="center_vertical"
             android:text="Hair Cut"
-            android:textSize="17sp" />
+            />
 
         <TextView
             android:visibility="gone"

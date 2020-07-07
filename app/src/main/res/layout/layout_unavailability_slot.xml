@@ -1,46 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_change_slot"
     android:layout_width="match_parent"
     android:layout_height="70dp"
-    android:layout_margin="8dp"
+    android:layout_margin="10dp"
+    android:background="@drawable/layout_bg_change_appt_blue"
+    android:gravity="center"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/layout_change_slot"
+    <TextView
+        android:id="@+id/text_slot_change_appt"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/layout_bg_time_slots">
+        android:background="@null"
+        android:gravity="center" />
 
-    </LinearLayout>
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/text_response"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:orientation="vertical"
-        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
         android:gravity="center"
-        android:layout_gravity="center"
-        >
-        <TextView
-            android:layout_gravity="center"
-            android:id="@+id/text_slot_change_appt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="9:30 am - 10:30 am" />
+        android:text="Unavailable"
+        android:textColor="@color/red"
+        android:visibility="gone" />
 
-        <TextView
-            android:textColor="@color/red"
-            android:visibility="gone"
-            android:layout_gravity="center"
-            android:id="@+id/text_response"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="5dp"
-            android:text="Unavailable" />
-    </LinearLayout>
+</LinearLayout>
 
-</FrameLayout>

@@ -7,13 +7,6 @@
     android:orientation="vertical"
     android:padding="20dp">
 
-<!--    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:background="@drawable/login_bg"
-        >
-
-    </LinearLayout>-->
 
     <ImageView
         android:id="@+id/image_logo"
@@ -29,6 +22,7 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="Corals Appointment"
+        android:textAppearance="@style/textStylebold"
         android:textSize="22sp"
         android:textStyle="bold" />
 
@@ -42,6 +36,7 @@
         android:hint="Email"
         android:imeOptions="actionNext"
         android:inputType="textEmailAddress"
+        android:fontFamily="@font/lato_medium"
         android:singleLine="true" />
 
     <EditText
@@ -53,6 +48,7 @@
         android:gravity="center"
         android:hint="Password"
         android:imeOptions="actionDone"
+        android:fontFamily="@font/lato_medium"
         android:inputType="text"
         android:singleLine="true" />
 
@@ -62,6 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_marginTop="15dp"
+        android:fontFamily="@font/lato_medium"
         android:text="Forgot Password?" />
 
 
@@ -73,6 +70,7 @@
         android:layout_marginTop="40dp"
         android:text="LOGIN"
         android:textColor="@color/white"
+        android:fontFamily="@font/lato_medium"
         app:cornerRadius="25dp" />
 
 
@@ -88,6 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
+            android:fontFamily="@font/lato_medium"
             android:text="New user?" />
 
         <TextView
@@ -96,7 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:gravity="center_horizontal"
-
+            android:fontFamily="@font/lato_medium"
             android:textColor="@color/app_blue"
             android:textStyle="bold" />
     </LinearLayout>

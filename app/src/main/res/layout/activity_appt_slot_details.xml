@@ -16,6 +16,7 @@
         android:gravity="center"
         android:textAlignment="center"
         app:elevation="4dp"
+        app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Appointment Details"
         app:titleTextColor="#FFFFFF" />
@@ -45,14 +46,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Name"
+                    android:fontFamily="@font/lato_medium"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_appt_det_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="John" />
+                    android:fontFamily="@font/lato_medium"
+                    android:layout_marginStart="10dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -68,14 +70,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Mobile"
+                    android:fontFamily="@font/lato_medium"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_appt_det_mob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="9999999999" />
+                    android:fontFamily="@font/lato_medium"
+                    android:layout_marginStart="10dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -91,14 +94,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Service Name"
+                    android:fontFamily="@font/lato_medium"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_appt_det_ser_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="Hair Cut" />
+                    android:fontFamily="@font/lato_medium"
+                    android:layout_marginStart="10dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -114,6 +118,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Staff"
+                    android:fontFamily="@font/lato_medium"
                     android:textStyle="bold" />
 
                 <TextView
@@ -121,6 +126,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
+                    android:fontFamily="@font/lato_medium"
                     android:text="Virat" />
             </LinearLayout>
 
@@ -137,14 +143,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Booking Date"
+                    android:fontFamily="@font/lato_medium"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_appt_det_booking_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="02-June-2020" />
+                    android:fontFamily="@font/lato_medium"
+                    android:layout_marginStart="10dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -160,14 +167,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Booking Time"
+                    android:fontFamily="@font/lato_medium"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_appt_det_booking_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="02-June-2020" />
+                    android:fontFamily="@font/lato_medium"
+                    android:layout_marginStart="10dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -202,6 +210,7 @@
                         android:paddingStart="8dp"
                         android:paddingEnd="0dp"
                         android:text="Call"
+                        android:fontFamily="@font/lato_medium"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -228,6 +237,7 @@
                         android:gravity="center_vertical"
                         android:paddingStart="8dp"
                         android:paddingEnd="0dp"
+                        android:fontFamily="@font/lato_medium"
                         android:text="Send Reminder"
                         android:textStyle="bold" />
 
@@ -238,64 +248,53 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:weightSum="2">
 
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    app:cardCornerRadius="7dp"
-                    app:cardBackgroundColor="@color/white"
-                    android:layout_marginEnd="10dp"
-                    android:minHeight="55dp"
-                    app:cardElevation="4dp"
-                    android:layout_weight="1">
 
-                <LinearLayout
-                    android:id="@+id/layout_cancel_appt"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:clickable="true"
-                    android:padding="8dp">
+                    <LinearLayout
+                        android:id="@+id/layout_cancel_appt"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:minHeight="55dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/layout_bg_white"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:padding="8dp">
 
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/travel"
-                        android:tint="#4DBDF1" />
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/travel"
+                            android:tint="#4DBDF1" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="0dp"
-                        android:text="Cancel Appointment"
-                        android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="0dp"
+                            android:fontFamily="@font/lato_medium"
+                            android:text="Cancel Appointment"
+                            android:textStyle="bold" />
 
-                </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="7dp"
-                    app:cardElevation="4dp"
-                    app:cardBackgroundColor="@color/white"
-                    android:layout_weight="1">
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/layout_change_appt"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_weight="1"
+                        android:minHeight="55dp"
+
+                        android:background="@drawable/layout_bg_white"
                         android:clickable="true"
                         android:gravity="center_vertical"
-                        android:minHeight="55dp"
                         android:padding="8dp">
 
                         <ImageView
@@ -305,6 +304,7 @@
                             android:tint="#4DBDF1" />
 
                         <TextView
+                            android:fontFamily="@font/lato_medium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
@@ -314,7 +314,6 @@
                             android:textStyle="bold" />
 
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
             </LinearLayout>
 
 

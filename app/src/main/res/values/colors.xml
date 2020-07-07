@@ -16,4 +16,5 @@
     <color name="matt_black">#333333</color>
     <color name="LightGrey">#D3D3D3</color>
     <color name="mtrl_textinput_default_box_stroke_color">#4DBDF1</color>
+    <color name="change_slot_selecting">#4EDBFA</color>
 </resources>

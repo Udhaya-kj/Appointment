@@ -28,6 +28,7 @@ import com.corals.appointment.Client.model.AppointmentEnquiryBody;
 import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
 import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.Client.model.Appointments;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
@@ -153,7 +154,7 @@ public class ViewApptServiceActivity extends AppCompatActivity {
 
     public void callAPI(final String date) {
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
-        enquiryBody.setReqType("E-A.MS");
+        enquiryBody.setReqType(Constants.SERVICE_BOOKED_APPOINTMENT);
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         enquiryBody.callerType("m");
         enquiryBody.setSerId(service_id);

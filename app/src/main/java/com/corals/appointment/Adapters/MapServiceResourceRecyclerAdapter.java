@@ -28,6 +28,7 @@ public class MapServiceResourceRecyclerAdapter extends RecyclerView.Adapter<MapS
     String flag;
 
     ArrayList<String> ser_list;
+    boolean loadData=false;
 
     public MapServiceResourceRecyclerAdapter(Activity context, String flag, List<AppointmentService> appointmentServiceArrayList, List<MapServiceResourceBody> mapServiceResourceBodies) {
         this.context = context;
@@ -38,29 +39,6 @@ public class MapServiceResourceRecyclerAdapter extends RecyclerView.Adapter<MapS
         ser_list = new ArrayList<String>();
 
 
-        if (!appointmentServiceArrayList.isEmpty() && !mapServiceResourceBodies.isEmpty() && appointmentServiceArrayList!=null && mapServiceResourceBodies!=null) {
-            for (int i = 0; i < appointmentServiceArrayList.size(); i++) {
-                AddStaffActivity.positionArray.add(false);
-                ser_list.add(appointmentServiceArrayList.get(i).getSerId());
-            }
-
-            int add_count = ser_list.size() - mapServiceResourceBodies.size();
-            for (int i = 0; i < add_count; i++) {
-                MapServiceResourceBody mapServiceResourceBody = new MapServiceResourceBody();
-                mapServiceResourceBody.setSerId("0");
-                mapServiceResourceBodies.add(mapServiceResourceBody);
-            }
-
-            Log.d("apptSerArrayList--->", "" + appointmentServiceArrayList.size() + "," + ser_list+","+mapServiceResourceBodies);
-            for (int i = 0; i < ser_list.size(); i++) {
-                if (ser_list.contains(mapServiceResourceBodies.get(i).getSerId())) {
-                    int pos = ser_list.indexOf(mapServiceResourceBodies.get(i).getSerId());
-                    Log.d("positionArray--->", "Pos :" + pos);
-                    AddStaffActivity.positionArray.set(pos, true);
-                }
-            }
-            Log.d("positionArray--->", "" + AddStaffActivity.positionArray);
-        }
 
     }
 
@@ -73,6 +51,8 @@ public class MapServiceResourceRecyclerAdapter extends RecyclerView.Adapter<MapS
 
     @Override
     public void onBindViewHolder(final MapServiceResourceRecyclerAdapter.MyViewHolder holder, final int position) {
+
+        Log.d("positionArray--->", "Flag :"+flag );
 
 
         if (flag.equals("0")) {
@@ -105,6 +85,33 @@ public class MapServiceResourceRecyclerAdapter extends RecyclerView.Adapter<MapS
             });
         } else if (flag.equals("1")) {
             //Resource update
+            if(!loadData) {
+               // if (!appointmentServiceArrayList.isEmpty() && !mapServiceResourceBodies.isEmpty() && appointmentServiceArrayList != null && mapServiceResourceBodies != null) {
+                if (!appointmentServiceArrayList.isEmpty() && appointmentServiceArrayList != null) {
+                    for (int i = 0; i < appointmentServiceArrayList.size(); i++) {
+                        AddStaffActivity.positionArray.add(false);
+                        ser_list.add(appointmentServiceArrayList.get(i).getSerId());
+                    }
+                    int add_count = ser_list.size() - mapServiceResourceBodies.size();
+                    for (int i = 0; i < add_count; i++) {
+                        MapServiceResourceBody mapServiceResourceBody = new MapServiceResourceBody();
+                        mapServiceResourceBody.setSerId("0");
+                        mapServiceResourceBodies.add(mapServiceResourceBody);
+                    }
+                    Log.d("apptSerArrayList--->", "" + appointmentServiceArrayList.size() + "," + ser_list + "," + mapServiceResourceBodies);
+                    for (int i = 0; i < ser_list.size(); i++) {
+                        if (ser_list.contains(mapServiceResourceBodies.get(i).getSerId())) {
+                            int pos = ser_list.indexOf(mapServiceResourceBodies.get(i).getSerId());
+                            Log.d("positionArray--->", "Pos :" + pos);
+                            AddStaffActivity.positionArray.set(pos, true);
+                        }
+                    }
+                    loadData=true;
+                    Log.d("positionArray--->", "" + AddStaffActivity.positionArray);
+                } else {
+                    Log.d("positionArray--->", "Data empty");
+                }
+            }
 
             if (!ser_list.isEmpty()) {
                 holder.checkBox.setChecked(AddStaffActivity.positionArray.get(position));

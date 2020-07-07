@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.provider.SyncStateContract;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
@@ -54,7 +55,9 @@ import com.corals.appointment.Client.model.ApptTransactionResponse;
 import com.corals.appointment.Client.model.AvailDay;
 import com.corals.appointment.Client.model.MapServiceResourceBody;
 import com.corals.appointment.Client.model.TimeData;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
+import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
@@ -1119,9 +1122,9 @@ public class AddStaffActivity extends AppCompatActivity {
         button_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = et_staff_name.getText().toString();
-                String mob = et_staff_mob.getText().toString();
-                String staff_load = et_staff_load.getText().toString();
+                final String name = et_staff_name.getText().toString();
+                final String mob = et_staff_mob.getText().toString();
+                final String staff_load = et_staff_load.getText().toString();
 
                 if (!TextUtils.isEmpty(pageId) && pageId.equals("3")) {
                     if (name.length() > 0) {
@@ -1130,14 +1133,33 @@ public class AddStaffActivity extends AppCompatActivity {
                                 if (!arrayList_map_service.isEmpty()) {
                                     Log.d("sunday_list--->", "onClick: " + list_sun.size() + "," + list_mon.size() + "," + list_tue.size() + "," + list_wed.size() + "," + list_thu.size() + "," + list_fri.size() + "," + list_sat.size());
                                     if (isSelected) {
-                                        createMerStaff(name, mob, staff_load);
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                new AlertDialogYesNo(AddStaffActivity.this, "Create  Staff?", "Are you sure, You want to create "+name+" staff?", "Yes", "No") {
+                                                    @Override
+                                                    public void onOKButtonClick() {
+                                                        createMerStaff(name, mob, staff_load);
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelButtonClick() {
+
+                                                    }
+
+                                                };
+                                            }
+                                        });
+
+
 
                                     } else {
                                         getDialog("Staff working hours is not valid");
                                     }
 
                                 } else {
-                                    getDialog("Must select atleast one service");
+                                    getDialog("Must select one service for staff");
                                 }
 
                             } else {
@@ -1163,9 +1185,27 @@ public class AddStaffActivity extends AppCompatActivity {
                         if (mob.length() > 0 && mob.length() >= 8) {
                             if (staff_load.length() > 0) {
                                 if (isMapSelectedUpdate) {
-                                    resourceUpdate(res_id, name, mob, staff_load);
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new AlertDialogYesNo(AddStaffActivity.this, "Update  Staff?", "Are you sure, You want to update "+name+" staff?", "Yes", "No") {
+                                                @Override
+                                                public void onOKButtonClick() {
+                                                    resourceUpdate(res_id, name, mob, staff_load);
+                                                }
+
+                                                @Override
+                                                public void onCancelButtonClick() {
+
+                                                }
+
+                                            };
+                                        }
+                                    });
+
+
                                 } else {
-                                    getDialog("Must select atleast one service for staff");
+                                    getDialog("Must select one service for staff");
                                 }
 
                             } else {
@@ -1813,17 +1853,19 @@ public class AddStaffActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             if (!result.getServices().isEmpty() && result.getServices() != null) {
+                                layout_services.setVisibility(View.VISIBLE);
+                                appointmentServices = result.getServices();
                                 MapServiceResourceRecyclerAdapter mapServiceResourceRecyclerAdapter = new MapServiceResourceRecyclerAdapter(AddStaffActivity.this, flag, result.getServices(), mapServiceResourceBodyList_update);
                                 recyclerView_services.setAdapter(mapServiceResourceRecyclerAdapter);
                             } else {
-
+                                layout_services.setVisibility(View.GONE);
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         new AlertDialogFailure(AddStaffActivity.this, "Set up service before adding staff", "OK", "", "Warning") {
                                             @Override
                                             public void onButtonClick() {
-                                                Intent in = new Intent(AddStaffActivity.this, DashboardActivity.class);
+                                                Intent in = new Intent(AddStaffActivity.this, SetupStaffActivity_Bottom.class);
                                                 startActivity(in);
                                                 finish();
                                                 overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
@@ -1849,7 +1891,7 @@ public class AddStaffActivity extends AppCompatActivity {
                             new AlertDialogFailure(AddStaffActivity.this, "Set up service before adding staff", "OK", "", "Warning") {
                                 @Override
                                 public void onButtonClick() {
-                                    Intent in = new Intent(AddStaffActivity.this, DashboardActivity.class);
+                                    Intent in = new Intent(AddStaffActivity.this, SetupStaffActivity_Bottom.class);
                                     startActivity(in);
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
@@ -2314,12 +2356,12 @@ public class AddStaffActivity extends AppCompatActivity {
 
         List<MapServiceResourceBody> mapServiceResourceBodyList = new ArrayList<>();
         MapServiceResourceBody mapServiceResourceBody = null;
-        for (int j = 0; j < mapServiceResourceBodyList_update.size(); j++) {
+        for (int j = 0; j < appointmentServices.size(); j++) {
             mapServiceResourceBody = new MapServiceResourceBody();
-            mapServiceResourceBody.setSerId(mapServiceResourceBodyList_update.get(j).getSerId());
+            mapServiceResourceBody.setSerId(appointmentServices.get(j).getSerId());
             mapServiceResourceBody.setDelete(!positionArray.get(j));
             mapServiceResourceBodyList.add(mapServiceResourceBody);
-            Log.d("MappingUpdate---", "resourceUpdate: " + mapServiceResourceBodyList_update.get(j).getSerId() + "," + !positionArray.get(j));
+            Log.d("MappingUpdate---", "resourceUpdate: " + appointmentServices.get(j).getSerId() + "," + !positionArray.get(j));
         }
         //mapServiceResourceBody.setSerId("42005271232");
         AppointmentResources appointmentResources = new AppointmentResources();
@@ -2334,7 +2376,7 @@ public class AddStaffActivity extends AppCompatActivity {
         appointmentResources.availDays(availDayList);
 
         ApptTransactionBody transactionBody = new ApptTransactionBody();
-        transactionBody.setReqType("T-R.U");
+        transactionBody.setReqType(Constants.RESOURCE_UPDATE);
         transactionBody.setResId(resid);
         transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
@@ -2438,7 +2480,7 @@ public class AddStaffActivity extends AppCompatActivity {
 
     private void fetchMerServices(String flag) {
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
-        enquiryBody.setReqType("E-S.");
+        enquiryBody.setReqType(Constants.SERVICE_MERCHANT);
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         enquiryBody.callerType("m");
         enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
@@ -2916,7 +2958,7 @@ public class AddStaffActivity extends AppCompatActivity {
         appointmentResources.availDays(availDayList);
 
         ApptTransactionBody transactionBody = new ApptTransactionBody();
-        transactionBody.setReqType("T-R.C");
+        transactionBody.setReqType(Constants.RESOURCE_CREATE);
         transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));

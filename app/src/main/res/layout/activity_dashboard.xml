@@ -18,6 +18,7 @@
         app:elevation="4dp"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Corals Appointment"
+        app:titleTextAppearance="@style/headerTextStyle1"
         app:titleTextColor="#FFFFFF" />
 
     <LinearLayout
@@ -29,32 +30,34 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:orientation="horizontal"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            android:orientation="horizontal"
             android:weightSum="2">
 
             <TextView
-                android:elevation="4dp"
                 android:id="@+id/text_appointments"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/layout_bg_white"
+                android:elevation="4dp"
+                android:fontFamily="@font/lato_bold"
                 android:gravity="center"
                 android:text="Appointments"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:elevation="4dp"
                 android:id="@+id/text_customers"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/layout_bg_white"
+                android:elevation="4dp"
+                android:fontFamily="@font/lato_bold"
                 android:gravity="center"
                 android:text="Customers"
                 android:textSize="17sp"
@@ -66,32 +69,34 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:orientation="horizontal"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            android:orientation="horizontal"
             android:weightSum="2">
 
             <TextView
-                android:elevation="4dp"
                 android:id="@+id/text_services"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/layout_bg_white"
+                android:elevation="4dp"
+                android:fontFamily="@font/lato_bold"
                 android:gravity="center"
                 android:text="Services"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:elevation="4dp"
                 android:id="@+id/text_staff"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/layout_bg_white"
+                android:elevation="4dp"
+                android:fontFamily="@font/lato_bold"
                 android:gravity="center"
                 android:text="Staff"
                 android:textSize="17sp"
@@ -102,24 +107,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:orientation="horizontal"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            android:orientation="horizontal"
             android:weightSum="2">
 
             <TextView
-                android:elevation="4dp"
                 android:id="@+id/text_settings"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="0.95"
                 android:background="@drawable/layout_bg_white"
+                android:elevation="4dp"
+                android:fontFamily="@font/lato_bold"
                 android:gravity="center"
                 android:text="Settings"
                 android:textSize="17sp"
                 android:textStyle="bold" />
-
 
 
         </LinearLayout>

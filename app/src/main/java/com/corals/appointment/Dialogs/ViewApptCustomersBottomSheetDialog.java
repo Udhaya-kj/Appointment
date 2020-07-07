@@ -5,17 +5,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.corals.appointment.Client.model.Appointments;
 import com.corals.appointment.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ViewApptCustomersBottomSheetDialog {
     private Context mCtx;
     private BottomSheetDialog bottomSheetDialog;
-    ArrayList<String> arrayList_name, arrayList_mob;
+    List<Appointments> appointmentsList;
 
-    public ViewApptCustomersBottomSheetDialog(Context mCtx) {
+    public ViewApptCustomersBottomSheetDialog(Context mCtx, List<Appointments> appointmentsList) {
         this.mCtx = mCtx;
         setUpDialog();
     }
@@ -33,6 +35,9 @@ public class ViewApptCustomersBottomSheetDialog {
         TextView textView_dur = sheetView.findViewById(R.id.tv_cus_duration);
         TextView textView_appt_dt = sheetView.findViewById(R.id.tv_appt_dt);
 
+        for(int k=0;k<appointmentsList.size();k++) {
+            textView_service.setText(appointmentsList.get(k).getStartTime());
+        }
     }
 
     public void showBottomSheetDialog() {

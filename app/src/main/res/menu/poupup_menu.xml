@@ -4,12 +4,5 @@
     android:id="@+id/one"
     android:icon="@drawable/edit"
     android:title="View" />
-<item
-    android:id="@+id/two"
-    android:icon="@drawable/edit"
-    android:title="Edit"/>
-<item
-    android:id="@+id/three"
-    android:icon="@drawable/trash"
-    android:title="Delete"/>
+
 </menu>

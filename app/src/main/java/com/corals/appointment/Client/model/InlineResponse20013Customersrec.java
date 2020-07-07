@@ -12,18 +12,16 @@
 
 
 package com.corals.appointment.Client.model;
-
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Objects;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-
 /**
  * InlineResponse20013Customersrec
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-13T07:13:20.960Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-02T15:41:39.578Z")
 public class InlineResponse20013Customersrec {
   @SerializedName("cust_cb_points_balance")
   private String custCbPointsBalance = null;
@@ -64,6 +62,12 @@ public class InlineResponse20013Customersrec {
   @SerializedName("cust_wallet_exp_dt")
   private String custWalletExpDt = null;
 
+  @SerializedName("res_name")
+  private String resName = null;
+
+  @SerializedName("mail_id")
+  private String mailId = null;
+
   @SerializedName("sessiontoken")
   private String sessiontoken = null;
 
@@ -72,10 +76,10 @@ public class InlineResponse20013Customersrec {
     return this;
   }
 
-   /**
+  /**
    * Get custCbPointsBalance
    * @return custCbPointsBalance
-  **/
+   **/
   @Schema(description = "")
   public String getCustCbPointsBalance() {
     return custCbPointsBalance;
@@ -90,10 +94,10 @@ public class InlineResponse20013Customersrec {
     return this;
   }
 
-   /**
+  /**
    * Get custCbPointsExpdt
    * @return custCbPointsExpdt
-  **/
+   **/
   @Schema(description = "")
   public String getCustCbPointsExpdt() {
     return custCbPointsExpdt;
@@ -108,10 +112,10 @@ public class InlineResponse20013Customersrec {
     return this;
   }
 
-   /**
+  /**
    * Get custCountryCode
    * @return custCountryCode
-  **/
+   **/
   @Schema(description = "")
   public String getCustCountryCode() {
     return custCountryCode;
@@ -126,10 +130,10 @@ public class InlineResponse20013Customersrec {
     return this;
   }
 
-   /**
+  /**
    * Get custGender
    * @return custGender
-  **/
+   **/
   @Schema(description = "")
   public String getCustGender() {
     return custGender;
@@ -144,10 +148,10 @@ public class InlineResponse20013Customersrec {
     return this;
   }
 
-   /**
+  /**
    * Get custId
    * @return custId
-  **/
+   **/
   @Schema(description = "")
   public String getCustId() {
     return custId;
@@ -162,10 +166,10 @@ public class InlineResponse20013Customersrec {
     return this;
   }
 
-   /**
+  /**
    * Get custJoinDt
    * @return custJoinDt
-  **/
+   **/
   @Schema(description = "")
   public String getCustJoinDt() {
     return custJoinDt;
@@ -180,10 +184,10 @@ public class InlineResponse20013Customersrec {
     return this;
   }
 
-   /**
+  /**
    * Get custLastTopUp
    * @return custLastTopUp
-  **/
+   **/
   @Schema(description = "")
   public String getCustLastTopUp() {
     return custLastTopUp;
@@ -198,10 +202,10 @@ public class InlineResponse20013Customersrec {
     return this;
   }
 
-   /**
+  /**
    * Get custLastVisitDt
    * @return custLastVisitDt
-  **/
+   **/
   @Schema(description = "")
   public String getCustLastVisitDt() {
     return custLastVisitDt;
@@ -216,10 +220,10 @@ public class InlineResponse20013Customersrec {
     return this;
   }
 
-   /**
+  /**
    * Get custMobile
    * @return custMobile
-  **/
+   **/
   @Schema(description = "")
   public String getCustMobile() {
     return custMobile;
@@ -234,10 +238,10 @@ public class InlineResponse20013Customersrec {
     return this;
   }
 
-   /**
+  /**
    * Get custName
    * @return custName
-  **/
+   **/
   @Schema(description = "")
   public String getCustName() {
     return custName;
@@ -252,10 +256,10 @@ public class InlineResponse20013Customersrec {
     return this;
   }
 
-   /**
+  /**
    * Get custNotificationId
    * @return custNotificationId
-  **/
+   **/
   @Schema(description = "")
   public String getCustNotificationId() {
     return custNotificationId;
@@ -270,10 +274,10 @@ public class InlineResponse20013Customersrec {
     return this;
   }
 
-   /**
+  /**
    * Get custWalletBal
    * @return custWalletBal
-  **/
+   **/
   @Schema(description = "")
   public String getCustWalletBal() {
     return custWalletBal;
@@ -288,10 +292,10 @@ public class InlineResponse20013Customersrec {
     return this;
   }
 
-   /**
+  /**
    * Get custWalletExpDt
    * @return custWalletExpDt
-  **/
+   **/
   @Schema(description = "")
   public String getCustWalletExpDt() {
     return custWalletExpDt;
@@ -301,15 +305,51 @@ public class InlineResponse20013Customersrec {
     this.custWalletExpDt = custWalletExpDt;
   }
 
+  public InlineResponse20013Customersrec resName(String resName) {
+    this.resName = resName;
+    return this;
+  }
+
+  /**
+   * Get resName
+   * @return resName
+   **/
+  @Schema(description = "")
+  public String getResName() {
+    return resName;
+  }
+
+  public void setResName(String resName) {
+    this.resName = resName;
+  }
+
+  public InlineResponse20013Customersrec mailId(String mailId) {
+    this.mailId = mailId;
+    return this;
+  }
+
+  /**
+   * Get mailId
+   * @return mailId
+   **/
+  @Schema(description = "")
+  public String getMailId() {
+    return mailId;
+  }
+
+  public void setMailId(String mailId) {
+    this.mailId = mailId;
+  }
+
   public InlineResponse20013Customersrec sessiontoken(String sessiontoken) {
     this.sessiontoken = sessiontoken;
     return this;
   }
 
-   /**
+  /**
    * Get sessiontoken
    * @return sessiontoken
-  **/
+   **/
   @Schema(description = "")
   public String getSessiontoken() {
     return sessiontoken;
@@ -321,7 +361,7 @@ public class InlineResponse20013Customersrec {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -330,24 +370,26 @@ public class InlineResponse20013Customersrec {
     }
     InlineResponse20013Customersrec inlineResponse20013Customersrec = (InlineResponse20013Customersrec) o;
     return Objects.equals(this.custCbPointsBalance, inlineResponse20013Customersrec.custCbPointsBalance) &&
-        Objects.equals(this.custCbPointsExpdt, inlineResponse20013Customersrec.custCbPointsExpdt) &&
-        Objects.equals(this.custCountryCode, inlineResponse20013Customersrec.custCountryCode) &&
-        Objects.equals(this.custGender, inlineResponse20013Customersrec.custGender) &&
-        Objects.equals(this.custId, inlineResponse20013Customersrec.custId) &&
-        Objects.equals(this.custJoinDt, inlineResponse20013Customersrec.custJoinDt) &&
-        Objects.equals(this.custLastTopUp, inlineResponse20013Customersrec.custLastTopUp) &&
-        Objects.equals(this.custLastVisitDt, inlineResponse20013Customersrec.custLastVisitDt) &&
-        Objects.equals(this.custMobile, inlineResponse20013Customersrec.custMobile) &&
-        Objects.equals(this.custName, inlineResponse20013Customersrec.custName) &&
-        Objects.equals(this.custNotificationId, inlineResponse20013Customersrec.custNotificationId) &&
-        Objects.equals(this.custWalletBal, inlineResponse20013Customersrec.custWalletBal) &&
-        Objects.equals(this.custWalletExpDt, inlineResponse20013Customersrec.custWalletExpDt) &&
-        Objects.equals(this.sessiontoken, inlineResponse20013Customersrec.sessiontoken);
+            Objects.equals(this.custCbPointsExpdt, inlineResponse20013Customersrec.custCbPointsExpdt) &&
+            Objects.equals(this.custCountryCode, inlineResponse20013Customersrec.custCountryCode) &&
+            Objects.equals(this.custGender, inlineResponse20013Customersrec.custGender) &&
+            Objects.equals(this.custId, inlineResponse20013Customersrec.custId) &&
+            Objects.equals(this.custJoinDt, inlineResponse20013Customersrec.custJoinDt) &&
+            Objects.equals(this.custLastTopUp, inlineResponse20013Customersrec.custLastTopUp) &&
+            Objects.equals(this.custLastVisitDt, inlineResponse20013Customersrec.custLastVisitDt) &&
+            Objects.equals(this.custMobile, inlineResponse20013Customersrec.custMobile) &&
+            Objects.equals(this.custName, inlineResponse20013Customersrec.custName) &&
+            Objects.equals(this.custNotificationId, inlineResponse20013Customersrec.custNotificationId) &&
+            Objects.equals(this.custWalletBal, inlineResponse20013Customersrec.custWalletBal) &&
+            Objects.equals(this.custWalletExpDt, inlineResponse20013Customersrec.custWalletExpDt) &&
+            Objects.equals(this.resName, inlineResponse20013Customersrec.resName) &&
+            Objects.equals(this.mailId, inlineResponse20013Customersrec.mailId) &&
+            Objects.equals(this.sessiontoken, inlineResponse20013Customersrec.sessiontoken);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(custCbPointsBalance, custCbPointsExpdt, custCountryCode, custGender, custId, custJoinDt, custLastTopUp, custLastVisitDt, custMobile, custName, custNotificationId, custWalletBal, custWalletExpDt, sessiontoken);
+    return Objects.hash(custCbPointsBalance, custCbPointsExpdt, custCountryCode, custGender, custId, custJoinDt, custLastTopUp, custLastVisitDt, custMobile, custName, custNotificationId, custWalletBal, custWalletExpDt, resName, mailId, sessiontoken);
   }
 
 
@@ -355,7 +397,7 @@ public class InlineResponse20013Customersrec {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class InlineResponse20013Customersrec {\n");
-    
+
     sb.append("    custCbPointsBalance: ").append(toIndentedString(custCbPointsBalance)).append("\n");
     sb.append("    custCbPointsExpdt: ").append(toIndentedString(custCbPointsExpdt)).append("\n");
     sb.append("    custCountryCode: ").append(toIndentedString(custCountryCode)).append("\n");
@@ -369,6 +411,8 @@ public class InlineResponse20013Customersrec {
     sb.append("    custNotificationId: ").append(toIndentedString(custNotificationId)).append("\n");
     sb.append("    custWalletBal: ").append(toIndentedString(custWalletBal)).append("\n");
     sb.append("    custWalletExpDt: ").append(toIndentedString(custWalletExpDt)).append("\n");
+    sb.append("    resName: ").append(toIndentedString(resName)).append("\n");
+    sb.append("    mailId: ").append(toIndentedString(mailId)).append("\n");
     sb.append("    sessiontoken: ").append(toIndentedString(sessiontoken)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -378,7 +422,7 @@ public class InlineResponse20013Customersrec {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

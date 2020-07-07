@@ -26,6 +26,7 @@ import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
 import com.corals.appointment.Client.model.AppointmentResources;
 import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.Client.model.MapServiceResourceBody;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
@@ -95,7 +96,7 @@ public class SetupStaffActivity_Bottom extends AppCompatActivity {
 
     private void callAPI_Staff() {
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
-        enquiryBody.setReqType("E-R.");
+        enquiryBody.setReqType(Constants.ALL_RESOURCE_LIST);
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         enquiryBody.callerType("m");
         enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
@@ -134,7 +135,6 @@ public class SetupStaffActivity_Bottom extends AppCompatActivity {
     }
 
     private void fetchStaff(AppointmentEnquiryBody requestBody) throws ApiException {
-
         Log.d("fetchService--->", "fetchService: " + requestBody);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(SetupStaffActivity_Bottom.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();

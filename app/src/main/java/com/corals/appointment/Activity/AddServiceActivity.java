@@ -32,7 +32,9 @@ import com.corals.appointment.Client.api.MerchantApisApi;
 import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
+import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
@@ -104,6 +106,7 @@ public class AddServiceActivity extends AppCompatActivity {
                 tv_ser_duration.setEnabled(false);
                 toolbar.setTitle("Update Service");
                 button_continue.setText("UPDATE SERVICE");
+                button_continue.setBackgroundColor(getResources().getColor(R.color.button_green));
             } else if (pageId.equals("003")) {
                 ser_name = sharedpreferences_service_data.getString(SER_NAME, "");
                 ser_dur = sharedpreferences_service_data.getString(SER_DURATION, "");
@@ -162,10 +165,10 @@ public class AddServiceActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     // TODO: handle exception
                 }
-                String name = et_ser_name.getText().toString().trim();
+                final String name = et_ser_name.getText().toString().trim();
                 String duration = tv_ser_duration.getText().toString();
-                String s_desc = et_ser_desc.getText().toString().trim();
-                String s_amt = et_ser_amt.getText().toString().trim();
+                final String s_desc = et_ser_desc.getText().toString().trim();
+                final String s_amt = et_ser_amt.getText().toString().trim();
                 if (name.length() > 0) {
                     if (time_mins != 0) {
                         if (s_amt.length() > 0) {
@@ -192,8 +195,23 @@ public class AddServiceActivity extends AppCompatActivity {
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                                 } else if (pageId.equals("03")) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new AlertDialogYesNo(AddServiceActivity.this, "Update Service?", "Are you sure, You want to update "+name+" service?", "Yes", "No") {
+                                                @Override
+                                                public void onOKButtonClick() {
+                                                    updateService(name, s_amt, s_desc);
+                                                }
 
-                                    updateService(name, s_amt, s_desc);
+                                                @Override
+                                                public void onCancelButtonClick() {
+
+                                                }
+
+                                            };
+                                        }
+                                    });
                                 }
 
 
@@ -237,7 +255,7 @@ public class AddServiceActivity extends AppCompatActivity {
         }
 
         ApptTransactionBody transactionBody = new ApptTransactionBody();
-        transactionBody.setReqType("T-S.U");
+        transactionBody.setReqType(Constants.SERVICES_UPDATE);
         transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
@@ -255,7 +273,7 @@ public class AddServiceActivity extends AppCompatActivity {
                         new AlertDialogFailure(AddServiceActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
                             @Override
                             public void onButtonClick() {
-                                updateService(ser_name, ser_amt, ser_desc);
+                                //updateService(ser_name, ser_amt, ser_desc);
                             }
                         };
                     }

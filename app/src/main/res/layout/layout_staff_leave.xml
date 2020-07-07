@@ -36,7 +36,7 @@
             android:paddingEnd="0dp"
             android:singleLine="true"
             android:text="Udhayakumar"
-            android:textSize="18sp" />
+            />
 
         <ImageView
             android:layout_width="0dp"

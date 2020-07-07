@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.corals.appointment.Dialogs.AlertDialogFailure;
+import com.corals.appointment.Model.ParamProperties;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,6 +40,8 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import static com.corals.appointment.Model.ParamProperties.MOBILE_CODE;
+
 public class OtpActivity extends AppCompatActivity {
 
     private MaterialButton button_next;
@@ -55,6 +58,7 @@ public class OtpActivity extends AppCompatActivity {
     private FrameLayout linearLayout;
     private LinearLayout imageView_back;
     private SharedPreferences sharedpreferences_sessionToken;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,8 +79,6 @@ public class OtpActivity extends AppCompatActivity {
         //textView_resend.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + "Resend OTP" + "</u>  </font>"));
         textView_resend.setEnabled(false);
 
-
-
         if (getIntent().getExtras() != null) {
             mob = getIntent().getStringExtra("mobile");
             Log.d("Mobile---->", "" + mob);
@@ -95,7 +97,7 @@ public class OtpActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    new AlertDialogFailure(OtpActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title),getResources().getString(R.string.no_internet_Heading)) {
+                    new AlertDialogFailure(OtpActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
                         @Override
                         public void onButtonClick() {
                             Intent i = new Intent(OtpActivity.this, ForgotPasswordActivity.class);
@@ -166,10 +168,12 @@ public class OtpActivity extends AppCompatActivity {
 
 
     private void sendVerificationCode(String mobile) {
-String code=sharedpreferences_sessionToken.getString(LoginActivity.COUNTRY_CODE, "");
+        String code = sharedpreferences_sessionToken.getString(LoginActivity.COUNTRY_CODE, "");
+        ParamProperties paramProperties = new ParamProperties();
+        String mob_code = paramProperties.getProperty(code, MOBILE_CODE);
         progress.setVisibility(View.VISIBLE);
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                "+" + 91 + "" + mobile,
+                "+" + mob_code + "" + mobile,
                 120,
                 TimeUnit.SECONDS,
                 TaskExecutors.MAIN_THREAD,

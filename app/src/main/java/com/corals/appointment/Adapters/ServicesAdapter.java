@@ -33,6 +33,7 @@ import com.corals.appointment.Client.api.MerchantApisApi;
 import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
@@ -128,7 +129,7 @@ public class ServicesAdapter extends BaseAdapter {
                                         appointmentService.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
 
                                         ApptTransactionBody transactionBody = new ApptTransactionBody();
-                                        transactionBody.setReqType("T-S.U");
+                                        transactionBody.setReqType(Constants.SERVICES_UPDATE);
                                         transactionBody.setSerId(appointmentServiceArrayList.get(position).getSerId());
                                         transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
                                         transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));

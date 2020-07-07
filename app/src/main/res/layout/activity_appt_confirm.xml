@@ -14,6 +14,7 @@
         android:elevation="4dp"
         android:textAlignment="center"
         app:elevation="4dp"
+        app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Review &amp; Confirm"
         app:titleTextColor="@color/white" />
@@ -27,7 +28,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.92"
+            android:layout_weight="0.9"
             android:orientation="vertical">
 
 
@@ -53,6 +54,8 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:fontFamily="@font/lato_medium"
+                        android:id="@+id/text_ser_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -60,11 +63,16 @@
                         android:text="Hair Cut" />
 
                     <TextView
+                        android:fontFamily="@font/lato_medium"
+                        android:layout_marginTop="8dp"
+                        android:id="@+id/text_res_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:gravity="center_vertical"
-                        android:text="1 hour" />
+                        android:textSize="13sp"
+                        android:text="UK" />
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -88,6 +96,7 @@
                         android:src="@drawable/add" />
 
                     <TextView
+                        android:fontFamily="@font/lato_medium"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
@@ -122,25 +131,24 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:gravity="center_vertical"
-                            android:text="Appointment date &amp; time" />
-
-                        <TextView
+                            android:fontFamily="@font/lato_medium"
+                            android:id="@+id/text_appt_date"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:gravity="center_vertical"
                             android:text="22-May-2020 " />
-
                         <TextView
+                            android:fontFamily="@font/lato_medium"
+                            android:layout_marginTop="8dp"
+                            android:textSize="13sp"
+                            android:id="@+id/text_appt_time"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:gravity="center_vertical"
-                            android:text="2 pm - 3 pm " />
+                            android:text="1 hour" />
+
                     </LinearLayout>
 
                 </LinearLayout>
@@ -171,7 +179,8 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/tv_name"
+                            android:fontFamily="@font/lato_medium"
+                            android:id="@+id/tv_cus_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
@@ -179,7 +188,10 @@
                             android:text="Gokul" />
 
                         <TextView
-                            android:id="@+id/tv_mob"
+                            android:fontFamily="@font/lato_medium"
+                            android:textSize="13sp"
+                            android:layout_marginTop="8dp"
+                            android:id="@+id/tv_cus_mob"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
@@ -191,14 +203,22 @@
             </LinearLayout>
         </LinearLayout>
 
-        <Button
-            android:id="@+id/button_appt_done"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_margin="8dp"
-            android:layout_weight="0.08"
-            android:background="@color/button_green"
-            android:text="@string/book_appt"
-            android:textColor="@color/white"></Button>
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="0.1"
+            android:gravity="center">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_appt_done"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/button_green"
+                android:text="@string/book_appt"
+                android:fontFamily="@font/lato_medium"
+                android:textColor="@color/white"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

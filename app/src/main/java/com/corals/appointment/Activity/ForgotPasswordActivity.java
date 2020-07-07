@@ -14,9 +14,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.corals.appointment.Dialogs.AlertDialogFailure;
+import com.corals.appointment.Model.ParamProperties;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.android.material.button.MaterialButton;
+
+import static com.corals.appointment.Model.ParamProperties.MOBILE_CODE;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 
@@ -46,8 +49,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         textView_country_code = findViewById(R.id.text_dial_code);
         editText_mob = findViewById(R.id.edit_otp_mobile);
         button_forgot_continue = findViewById(R.id.button_otp_continue);
-
-        textView_country_code.setText(sharedpreferences_sessionToken.getString(LoginActivity.COUNTRY_CODE, ""));
+        String code = sharedpreferences_sessionToken.getString(LoginActivity.COUNTRY_CODE, "");
+        ParamProperties paramProperties = new ParamProperties();
+        String mob_code = paramProperties.getProperty(code, MOBILE_CODE);
+        textView_country_code.setText(mob_code);
 
         button_forgot_continue.setOnClickListener(new View.OnClickListener() {
             @Override

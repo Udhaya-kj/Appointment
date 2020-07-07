@@ -25,6 +25,7 @@ import com.corals.appointment.Client.OkHttpApiClient;
 import com.corals.appointment.Client.api.MerchantApisApi;
 import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
@@ -106,7 +107,7 @@ public class ApptConfirmActivity extends AppCompatActivity {
                                     boolean isConn = ConnectivityReceiver.isConnected();
                                     if (isConn) {
                                         ApptTransactionBody transactionBody = new ApptTransactionBody();
-                                        transactionBody.setReqType("T-A.C");
+                                        transactionBody.setReqType(Constants.BOOK_APPOINTMENT);
                                         transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
                                         transactionBody.setSerId(service_id);
                                         transactionBody.setDate(date); //date

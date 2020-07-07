@@ -13,8 +13,11 @@
 
 package com.corals.appointment.Client.model;
 
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,7 +26,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * MapServiceResourceBody
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-24T14:51:36.154Z")
-public class MapServiceResourceBody {
+public class MapServiceResourceBody implements Serializable {
   @SerializedName("ser_id")
   private String serId = null;
 

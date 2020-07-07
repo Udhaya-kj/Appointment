@@ -31,7 +31,7 @@ public class SerUnavailSlotRecycleAdapter extends RecyclerView.Adapter<SerUnavai
     String code;
     List<AppointmentAvailableSlots> appointmentAvailableSlots;
 
-    public SerUnavailSlotRecycleAdapter(Activity context,String code, List<AppointmentAvailableSlots> appointmentAvailableSlots) {
+    public SerUnavailSlotRecycleAdapter(Activity context, String code, List<AppointmentAvailableSlots> appointmentAvailableSlots) {
         this.context = context;
         this.appointmentAvailableSlots = appointmentAvailableSlots;
         this.code = code;
@@ -51,6 +51,18 @@ public class SerUnavailSlotRecycleAdapter extends RecyclerView.Adapter<SerUnavai
         final int total_appt = Integer.parseInt(appointmentAvailableSlots.get(position).getAllowed());
         final int booked_appt = Integer.parseInt(appointmentAvailableSlots.get(position).getBooked());
 
+        if (total_appt == booked_appt) {
+            holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
+        }
+       else if (booked_appt == 0) {
+            holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_change_appt_blue);
+        } else if (booked_appt > 0) {
+            holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
+
+        } else if (total_appt == 0 && booked_appt == 0) {
+            holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
+        }
+
 
         holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,7 +70,7 @@ public class SerUnavailSlotRecycleAdapter extends RecyclerView.Adapter<SerUnavai
                 if (code.equals("1")) {
                     if (holder.textView_response.getVisibility() == View.GONE) {
                         if (booked_appt == 0) {
-                            holder.linearLayout_bg.setBackgroundResource(R.drawable.corner_change_appt_slot_green);
+                            holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_change_slot_selecting);
                             holder.textView_response.setVisibility(View.VISIBLE);
                             holder.textView_response.setText("Unavailable");
 
@@ -93,30 +105,29 @@ public class SerUnavailSlotRecycleAdapter extends RecyclerView.Adapter<SerUnavai
                             });
 
                         }
-                    }
-                     else {
+                    } else {
                         holder.textView_response.setVisibility(View.GONE);
-                        holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
+                       // holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
 
                         SerUnavailAskTimeActivity.arrayList_startTime.remove(appointmentAvailableSlots.get(position).getSerStartTime());
                         SerUnavailAskTimeActivity.arrayList_endTime.remove(appointmentAvailableSlots.get(position).getSerEndTime());
                         SerUnavailAskTimeActivity.arrayList_slotNo.remove(appointmentAvailableSlots.get(position).getSlotNo());
-                    }
-                }/* else if (code.equals("2")) {
-                    if (holder.textView_response.getVisibility() == View.GONE) {
+
                         if (total_appt == booked_appt) {
-                            getSlotUnavailDialog("Appointment already available on this slot. Staff cannot absent on this time");
+                            holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
                         }
-                        else if (total_appt > booked_appt) {
-                            holder.linearLayout_bg.setBackgroundResource(R.drawable.corner_change_appt_slot_green);
-                            holder.textView_response.setVisibility(View.VISIBLE);
-                            holder.textView_response.setText("Absent");
+                        else if (booked_appt == 0) {
+                            holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_change_appt_blue);
+                        } else if (booked_appt > 0) {
+                            holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
+
+                        } else if (total_appt == 0 && booked_appt == 0) {
+                            holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
                         }
-                    } else {
-                        holder.textView_response.setVisibility(View.GONE);
-                        holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
+
+
                     }
-                }*/
+                }
             }
         });
 
