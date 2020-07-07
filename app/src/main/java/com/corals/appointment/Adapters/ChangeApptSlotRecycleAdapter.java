@@ -32,6 +32,7 @@ public class ChangeApptSlotRecycleAdapter extends RecyclerView.Adapter<ChangeApp
     int selecteTimePos = -1;
     List<AppointmentAvailableSlots> appointmentAvailableSlots;
     ChangeApptCallback changeApptCallback;
+    boolean isSlotSelected = false;
 
     public ChangeApptSlotRecycleAdapter(Activity context, String time, List<AppointmentAvailableSlots> appointmentAvailableSlots) {
         this.context = context;
@@ -68,7 +69,7 @@ public class ChangeApptSlotRecycleAdapter extends RecyclerView.Adapter<ChangeApp
                 if (total_appt > booked_appt) {
                     index = position;
                     notifyDataSetChanged();
-                    changeApptCallback.slot_onClick(appointmentAvailableSlots.get(position).getSlotNo(),appointmentAvailableSlots.get(position).getSerStartTime(),appointmentAvailableSlots.get(position).getSerEndTime());
+                    changeApptCallback.slot_onClick(appointmentAvailableSlots.get(position).getSlotNo(), appointmentAvailableSlots.get(position).getSerStartTime(), appointmentAvailableSlots.get(position).getSerEndTime());
                    /* ChangeApptActivity.startTime = appointmentAvailableSlots.get(position).getSerStartTime();
                     ChangeApptActivity.endTime = appointmentAvailableSlots.get(position).getSerEndTime();
                     ChangeApptActivity.slotNo = appointmentAvailableSlots.get(position).getSlotNo();*/
@@ -104,13 +105,16 @@ public class ChangeApptSlotRecycleAdapter extends RecyclerView.Adapter<ChangeApp
             }
         }
         String tm = (appointmentAvailableSlots.get(position).getSerStartTime() + "-" + appointmentAvailableSlots.get(position).getSerEndTime());
-        if (tm.equals(time)) {
-            changeApptCallback.slot_onClick(appointmentAvailableSlots.get(position).getSlotNo(),appointmentAvailableSlots.get(position).getSerStartTime(),appointmentAvailableSlots.get(position).getSerEndTime());
-            //ChangeApptActivity.slotNo = appointmentAvailableSlots.get(position).getSlotNo();
-            holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_change_slot_selected);
-            holder.textView_slot.setTextColor(Color.parseColor("#FFFFFF"));
-            selecteTimePos = position;
-            Log.d("selecteTimePos---", "onBindViewHolder: " + selecteTimePos);
+        if(!isSlotSelected) {
+            if (time.equals(tm)) {
+                isSlotSelected=true;
+                changeApptCallback.slot_onClick(appointmentAvailableSlots.get(position).getSlotNo(), appointmentAvailableSlots.get(position).getSerStartTime(), appointmentAvailableSlots.get(position).getSerEndTime());
+                //ChangeApptActivity.slotNo = appointmentAvailableSlots.get(position).getSlotNo();
+                holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_change_slot_selected);
+                holder.textView_slot.setTextColor(Color.parseColor("#FFFFFF"));
+                selecteTimePos = position;
+                Log.d("selecteTimePos---", "onBindViewHolder: " + selecteTimePos + "," + time);
+            }
         }
 
     /*    if(selecteTimePos==selecteTimePos){
