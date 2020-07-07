@@ -35,7 +35,7 @@
             android:paddingStart="10dp"
             android:paddingEnd="0dp"
             android:singleLine="true"
-            android:text="Udhayakumar"
+            android:fontFamily="@font/lato_medium"
             />
 
         <ImageView

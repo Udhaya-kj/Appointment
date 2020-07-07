@@ -10,13 +10,14 @@
         android:id="@+id/toolbar_staffs"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#4DBDF1"
+        android:background="@color/app_blue"
         android:elevation="4dp"
         android:textAlignment="center"
         app:elevation="4dp"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Setup Staff"
-        app:titleTextColor="#FFFFFF" />
+        app:titleTextAppearance="@style/headerTextStyle1"
+        app:titleTextColor="@color/white" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,6 +41,7 @@
                 android:src="@drawable/add" />
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
@@ -56,6 +58,7 @@
             android:background="#DDD"></View>
 
         <TextView
+            android:fontFamily="@font/lato_medium"
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="50dp"

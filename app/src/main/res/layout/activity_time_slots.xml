@@ -11,10 +11,11 @@
         android:id="@+id/toolbar_biz_new_appt"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#4DBDF1"
+        android:background="@color/app_blue"
         android:elevation="4dp"
         android:textAlignment="center"
         app:elevation="4dp"
+        app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Select Time"
         app:titleTextColor="@color/white" />
@@ -25,7 +26,7 @@
         android:layout_height="50dp"
         android:paddingStart="10dp"
         android:paddingEnd="0dp"
-        android:background="#EEEEEE"
+        android:background="@color/light_grey"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -37,6 +38,7 @@
             android:src="@drawable/order" />
 
         <TextView
+            android:fontFamily="@font/lato_medium"
             android:id="@+id/text_resource"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
@@ -55,6 +57,7 @@
             android:src="@drawable/calendar" />
 
         <TextView
+            android:fontFamily="@font/lato_medium"
             android:id="@+id/text_appn_dt"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

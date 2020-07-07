@@ -9,13 +9,14 @@
     android:orientation="horizontal">
 
     <TextView
+        android:fontFamily="@font/lato_medium"
         android:id="@+id/text_slot_change_appt"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:background="@null"
         android:gravity="center"
-        android:text="9:30 am - 10:30 am" />
+         />
 
 </LinearLayout>
 

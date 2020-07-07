@@ -30,7 +30,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="0dp"
             android:gravity="center_vertical"
-            android:text="09:00 - 12:00"
+            android:fontFamily="@font/lato_medium"
             android:singleLine="true"
             android:maxLines="1"
             android:textStyle="bold" />
@@ -39,7 +39,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#DDDDDD"
+        android:background="@color/dark_grey"
         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_bottomsheet_dialog"

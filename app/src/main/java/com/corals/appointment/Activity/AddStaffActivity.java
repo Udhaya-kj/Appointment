@@ -59,6 +59,7 @@ import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
+import com.corals.appointment.Interface.MappedServicesCallback;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.android.material.button.MaterialButton;
@@ -74,7 +75,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class AddStaffActivity extends AppCompatActivity {
+public class AddStaffActivity extends AppCompatActivity implements MappedServicesCallback {
     EditText et_staff_name, et_staff_mob, et_staff_load;
     MaterialButton button_continue, button_add_time;
     private SharedPreferences sharedpreferences_staffs;
@@ -87,7 +88,7 @@ public class AddStaffActivity extends AppCompatActivity {
     private int mYear, mMonth, mDay, mHour, mMinute, mSeconds;
 
     RecyclerView recyclerView_services;
-    public static ArrayList<String> arrayList_map_service;
+    public  ArrayList<String> arrayList_map_service;
     public static ArrayList<Boolean> positionArray;
     public static String map_services = "";
 
@@ -2995,6 +2996,18 @@ public class AddStaffActivity extends AppCompatActivity {
         if (intermediateAlertDialog != null) {
             intermediateAlertDialog.dismissAlertDialog();
             intermediateAlertDialog = null;
+        }
+    }
+
+    @Override
+    public void mappedServicesList(String flag, String value) {
+        if(flag.equals("1")){
+            arrayList_map_service.add(value);
+            Log.d("List_map_ser--->", "arrayList_map_service: "+arrayList_map_service);
+        }
+        else if(flag.equals("0")){
+            arrayList_map_service.remove(value);
+            Log.d("List_map_ser--->", "arrayList_map_service: "+arrayList_map_service);
         }
     }
 }

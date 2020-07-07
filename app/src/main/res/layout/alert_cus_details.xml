@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EEEEEE"
+    android:background="@color/light_grey"
     android:orientation="vertical"
     >
 
@@ -25,6 +25,7 @@
             android:padding="8dp">
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Name"
@@ -35,7 +36,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="John" />
+                android:fontFamily="@font/lato_medium"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -48,17 +50,19 @@
             android:padding="8dp">
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Mobile"
                 android:textStyle="bold" />
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:id="@+id/tv_cus_alert_mob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="9999999999" />
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -71,17 +75,19 @@
             android:padding="8dp">
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Email"
                 android:textStyle="bold" />
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:id="@+id/tv_cus_alert_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="xyz@gmail.com" />
+                 />
         </LinearLayout>
 
         <LinearLayout
@@ -102,6 +108,7 @@
                 android:tint="#4DBDF1" />
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:clickable="false"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -131,6 +138,7 @@
                 android:tint="#4DBDF1" />
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:clickable="false"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -160,6 +168,7 @@
                 android:tint="#4DBDF1" />
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:clickable="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

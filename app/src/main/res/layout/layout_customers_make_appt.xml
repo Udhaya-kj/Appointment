@@ -53,7 +53,7 @@
                 android:gravity="start|bottom"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:text="Selva Kumar"
+                android:fontFamily="@font/lato_medium"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
@@ -63,7 +63,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="0.5"
                 android:gravity="start|center"
-                android:text="9999999999" />
+                android:fontFamily="@font/lato_medium" />
 
         </LinearLayout>
     </LinearLayout>

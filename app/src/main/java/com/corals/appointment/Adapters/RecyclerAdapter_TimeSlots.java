@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +54,7 @@ public class RecyclerAdapter_TimeSlots extends RecyclerView.Adapter<RecyclerAdap
 
         final int total_appt = Integer.parseInt(appointmentAvailableSlots.get(position).getAllowed());
         final int booked_appt = Integer.parseInt(appointmentAvailableSlots.get(position).getBooked());
-
+        Log.d("TimeSlots--->", "onBindViewHolder: "+total_appt+","+booked_appt);
         if (total_appt == booked_appt) {
             holder.linearLayout_color.setBackgroundResource(R.drawable.left_round_corners_blue);
             holder.imageView_avail.setBackgroundResource(R.drawable.tick);
@@ -90,7 +91,6 @@ public class RecyclerAdapter_TimeSlots extends RecyclerView.Adapter<RecyclerAdap
                         in.putExtra("date", timeSlotDataModel.getDate());
                         in.putExtra("res_id", timeSlotDataModel.getRes_id());
                         in.putExtra("res", timeSlotDataModel.getRes());
-
                         in.putExtra("cus_id", timeSlotDataModel.getCus_id());
                         in.putExtra("cus", timeSlotDataModel.getCus());
                         in.putExtra("cus_email", timeSlotDataModel.getCus_email());

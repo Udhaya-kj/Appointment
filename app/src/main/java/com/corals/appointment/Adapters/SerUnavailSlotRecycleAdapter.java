@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.corals.appointment.Activity.ChangeApptActivity;
 import com.corals.appointment.Activity.SerUnavailAskTimeActivity;
 import com.corals.appointment.Client.model.AppointmentAvailableSlots;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
+import com.corals.appointment.Interface.UnavailCallback;
 import com.corals.appointment.R;
 
 import java.util.ArrayList;
@@ -30,11 +32,13 @@ public class SerUnavailSlotRecycleAdapter extends RecyclerView.Adapter<SerUnavai
     Activity context;
     String code;
     List<AppointmentAvailableSlots> appointmentAvailableSlots;
+    UnavailCallback unavailCallback;
 
     public SerUnavailSlotRecycleAdapter(Activity context, String code, List<AppointmentAvailableSlots> appointmentAvailableSlots) {
         this.context = context;
         this.appointmentAvailableSlots = appointmentAvailableSlots;
         this.code = code;
+        unavailCallback= (UnavailCallback) context;
 
     }
 
@@ -50,15 +54,13 @@ public class SerUnavailSlotRecycleAdapter extends RecyclerView.Adapter<SerUnavai
         holder.textView_slot.setText(appointmentAvailableSlots.get(position).getSerStartTime() + " - " + appointmentAvailableSlots.get(position).getSerEndTime());
         final int total_appt = Integer.parseInt(appointmentAvailableSlots.get(position).getAllowed());
         final int booked_appt = Integer.parseInt(appointmentAvailableSlots.get(position).getBooked());
-
+        Log.d("Slots--->", "onBindViewHolder: " + total_appt + "," + booked_appt);
         if (total_appt == booked_appt) {
             holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
-        }
-       else if (booked_appt == 0) {
+        } else if (booked_appt == 0) {
             holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_change_appt_blue);
         } else if (booked_appt > 0) {
             holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
-
         } else if (total_appt == 0 && booked_appt == 0) {
             holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
         }
@@ -67,67 +69,81 @@ public class SerUnavailSlotRecycleAdapter extends RecyclerView.Adapter<SerUnavai
         holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (code.equals("1")) {
-                    if (holder.textView_response.getVisibility() == View.GONE) {
-                        if (booked_appt == 0) {
-                            holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_change_slot_selecting);
-                            holder.textView_response.setVisibility(View.VISIBLE);
-                            holder.textView_response.setText("Unavailable");
+                if (holder.textView_response.getVisibility() == View.GONE) {
+                    if (total_appt == 0) {
+                        context.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                new AlertDialogFailure(context, "Appointment not available for this slot", "OK", "", "Warning") {
+                                    @Override
+                                    public void onButtonClick() {
 
-                            SerUnavailAskTimeActivity.arrayList_startTime.add(appointmentAvailableSlots.get(position).getSerStartTime());
-                            SerUnavailAskTimeActivity.arrayList_endTime.add(appointmentAvailableSlots.get(position).getSerEndTime());
-                            SerUnavailAskTimeActivity.arrayList_slotNo.add(appointmentAvailableSlots.get(position).getSlotNo());
+                                    }
+                                };
+                            }
+                        });
 
-                        } else if (booked_appt > 0) {
-                            context.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    new AlertDialogFailure(context, "Unable to make this slot unavailable", "OK", "Appointment already available on this slot", "Warning") {
-                                        @Override
-                                        public void onButtonClick() {
+                    }   else if (booked_appt == 0) {
+                        holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_change_slot_selecting);
+                        holder.textView_slot.setTextColor(context.getResources().getColor(R.color.white));
+                        holder.textView_response.setVisibility(View.VISIBLE);
+                        holder.textView_response.setText("Unavailable");
 
-                                        }
-                                    };
-                                }
-                            });
+                        unavailCallback.unavailList("1",appointmentAvailableSlots.get(position).getSlotNo(),appointmentAvailableSlots.get(position).getSerStartTime(),appointmentAvailableSlots.get(position).getSerEndTime());
+                       /* SerUnavailAskTimeActivity.arrayList_startTime.add(appointmentAvailableSlots.get(position).getSerStartTime());
+                        SerUnavailAskTimeActivity.arrayList_endTime.add(appointmentAvailableSlots.get(position).getSerEndTime());
+                        SerUnavailAskTimeActivity.arrayList_slotNo.add(appointmentAvailableSlots.get(position).getSlotNo());*/
 
-                        } else if (total_appt == 0 && booked_appt == 0) {
-                            context.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    new AlertDialogFailure(context, "Unable to make this slot unavailable", "OK", "Appointment not available for this slot", "Warning") {
-                                        @Override
-                                        public void onButtonClick() {
+                    } else if (booked_appt > 0) {
+                        context.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                new AlertDialogFailure(context, "Appointment not available for this slot", "OK", "", "Warning") {
+                                    @Override
+                                    public void onButtonClick() {
 
-                                        }
-                                    };
-                                }
-                            });
+                                    }
+                                };
+                            }
+                        });
 
-                        }
-                    } else {
-                        holder.textView_response.setVisibility(View.GONE);
-                       // holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
+                    } else if (total_appt == 0 && booked_appt == 0) {
+                        context.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                new AlertDialogFailure(context, "Appointment not available for this slot", "OK", "", "Warning") {
+                                    @Override
+                                    public void onButtonClick() {
 
-                        SerUnavailAskTimeActivity.arrayList_startTime.remove(appointmentAvailableSlots.get(position).getSerStartTime());
-                        SerUnavailAskTimeActivity.arrayList_endTime.remove(appointmentAvailableSlots.get(position).getSerEndTime());
-                        SerUnavailAskTimeActivity.arrayList_slotNo.remove(appointmentAvailableSlots.get(position).getSlotNo());
-
-                        if (total_appt == booked_appt) {
-                            holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
-                        }
-                        else if (booked_appt == 0) {
-                            holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_change_appt_blue);
-                        } else if (booked_appt > 0) {
-                            holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
-
-                        } else if (total_appt == 0 && booked_appt == 0) {
-                            holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
-                        }
-
+                                    }
+                                };
+                            }
+                        });
 
                     }
+                } else {
+                    holder.textView_response.setVisibility(View.GONE);
+                    holder.textView_slot.setTextColor(context.getResources().getColor(R.color.black));
+                    unavailCallback.unavailList("0",appointmentAvailableSlots.get(position).getSlotNo(),appointmentAvailableSlots.get(position).getSerStartTime(),appointmentAvailableSlots.get(position).getSerEndTime());
+
+                   /* SerUnavailAskTimeActivity.arrayList_startTime.remove(appointmentAvailableSlots.get(position).getSerStartTime());
+                    SerUnavailAskTimeActivity.arrayList_endTime.remove(appointmentAvailableSlots.get(position).getSerEndTime());
+                    SerUnavailAskTimeActivity.arrayList_slotNo.remove(appointmentAvailableSlots.get(position).getSlotNo());*/
+
+                    if (total_appt == booked_appt) {
+                        holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
+                    } else if (booked_appt == 0) {
+                        holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_change_appt_blue);
+                    } else if (booked_appt > 0) {
+                        holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
+
+                    } else if (total_appt == 0 && booked_appt == 0) {
+                        holder.linearLayout_bg.setBackgroundResource(R.drawable.layout_bg_time_slots);
+                    }
+
+
                 }
+
             }
         });
 

@@ -68,8 +68,6 @@ public class ServiceUnavailCalendarActivity extends AppCompatActivity {
         System.out.println("Current time => " + c.getTime());
         final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         calendar_date = df.format(c.getTime());
-
-
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {

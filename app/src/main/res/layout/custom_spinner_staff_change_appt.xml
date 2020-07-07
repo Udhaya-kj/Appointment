@@ -5,13 +5,14 @@
     android:orientation="horizontal">
 
     <TextView
+        android:fontFamily="@font/lato_medium"
         android:id="@+id/textView"
         android:layout_width="fill_parent"
         android:layout_height="40dp"
         android:layout_gravity="center"
         android:paddingStart="15dp"
         android:paddingEnd="0dp"
-        android:text="Demo"
+
         android:gravity="center_vertical"
         android:textColor="#000" />
 </LinearLayout>

@@ -34,7 +34,7 @@
             android:gravity="start|bottom"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="Jayanth"
+            android:fontFamily="@font/lato_medium"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -45,7 +45,7 @@
             android:layout_weight="1"
             android:gravity="start|center"
             android:singleLine="true"
-            android:text="9999999999" />
+            android:fontFamily="@font/lato_medium" />
 
 
     </LinearLayout>
@@ -54,6 +54,7 @@
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:layout_weight="1.5"
+        android:visibility="gone"
         >
 
         <ImageView

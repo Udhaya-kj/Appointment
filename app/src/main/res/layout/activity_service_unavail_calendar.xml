@@ -16,6 +16,7 @@
         android:gravity="center"
         android:textAlignment="center"
         app:elevation="4dp"
+        app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Service unavailability"
         app:titleTextColor="@color/white" />
@@ -45,6 +46,7 @@
                  />
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:id="@+id/text_service"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
@@ -57,6 +59,7 @@
         </LinearLayout>
 
         <TextView
+            android:fontFamily="@font/lato_medium"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.1"
@@ -88,6 +91,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/app_blue"
                 android:text="Next"
+                android:fontFamily="@font/lato_medium"
                 android:textColor="@color/white"
 
                 />

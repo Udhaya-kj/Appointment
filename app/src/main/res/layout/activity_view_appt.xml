@@ -11,16 +11,17 @@
         android:id="@+id/toolbar_view_appt"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#4DBDF1"
+        android:background="@color/app_blue"
         android:elevation="4dp"
         android:gravity="center"
         android:textAlignment="center"
         app:elevation="4dp"
+        app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:title="John"
-        app:titleTextColor="#FFFFFF" />
+        app:titleTextColor="@color/white" />
 
     <TextView
+        android:fontFamily="@font/lato_medium"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center"
@@ -39,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-
+        android:fontFamily="@font/lato_medium"
         android:backgroundTint="@color/app_blue"
         android:textColor="@color/white"
         android:gravity="center"

@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@null"
+        android:fontFamily="@font/lato_medium"
         android:gravity="center" />
 
     <TextView
@@ -25,6 +26,7 @@
         android:layout_marginTop="5dp"
         android:gravity="center"
         android:text="Unavailable"
+        android:fontFamily="@font/lato_medium"
         android:textColor="@color/red"
         android:visibility="gone" />
 

@@ -23,4 +23,5 @@ public class Constants {
     public static final String SERVICE_UNAVAILABLE="T-UA.S";
     public static final String RESOURCE_UNAVAILABLE="T-UA.R";
     public static final String ALL_RESOURCE_LIST="E-R.";
+    public static final String SERVICE_ACTIVE_DAYS="E-SS.";
 }

@@ -83,8 +83,15 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.MyVi
         holder.name.setText(customersrec.getName());
         holder.mobile.setText(customersrec.getMobile());
 
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomerBottomSheetDialog coralsBottomSheetDialog = new CustomerBottomSheetDialog(context, mDisplayedValues.get(position).getCus_id(), mDisplayedValues.get(position).getName(), mDisplayedValues.get(position).getMobile(), mDisplayedValues.get(position).getEmail());
+                coralsBottomSheetDialog.showBottomSheetDialog();
+            }
+        });
 
-        holder.imageView_popup.setOnClickListener(new View.OnClickListener() {
+      /*  holder.imageView_popup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Creating the instance of PopupMenu
@@ -105,7 +112,7 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.MyVi
                 });
                 popup.show();//showing popup menu
             }
-        });
+        });*/
     }
 
     @Override

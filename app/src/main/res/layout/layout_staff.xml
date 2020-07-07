@@ -27,7 +27,7 @@
         android:singleLine="true"
         android:maxLines="1"
         android:gravity="center_vertical"
-        android:text="Udhayakumar"
+        android:fontFamily="@font/lato_medium"
         />
 
     <ImageView

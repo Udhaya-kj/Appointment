@@ -16,11 +16,13 @@
         android:gravity="center"
         android:textAlignment="center"
         app:elevation="4dp"
+        app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Service unavailability"
         app:titleTextColor="#FFFFFF" />
 
     <TextView
+        android:fontFamily="@font/lato_medium"
         android:id="@+id/text_ser_staff"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -31,6 +33,7 @@
         android:textSize="16sp"
         android:visibility="visible" />
     <TextView
+        android:fontFamily="@font/lato_medium"
         android:id="@+id/tv_no_services"
         android:layout_width="match_parent"
         android:layout_height="60dp"

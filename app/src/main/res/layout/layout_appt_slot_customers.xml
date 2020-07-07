@@ -12,6 +12,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:fontFamily="@font/lato_medium"
             android:id="@+id/tv_slot_cus_name"
             android:layout_width="0dp"
             android:layout_height="50dp"
@@ -21,10 +22,10 @@
             android:paddingEnd="0dp"
             android:maxLines="1"
             android:gravity="center_vertical"
-            android:text="Selva Kumar"
             android:textStyle="bold" />
 
         <TextView
+            android:fontFamily="@font/lato_medium"
             android:id="@+id/tv_slot_cus_mob"
             android:layout_width="0dp"
             android:layout_height="50dp"
@@ -32,9 +33,10 @@
             android:gravity="center"
             android:singleLine="true"
             android:maxLines="1"
-            android:text="9788909099" />
+            />
 
         <TextView
+            android:fontFamily="@font/lato_medium"
             android:id="@+id/tv_slot_cus_view"
             android:layout_width="0dp"
             android:layout_height="50dp"

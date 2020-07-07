@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.corals.appointment.Activity.AddStaffActivity;
 import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.Client.model.MapServiceResourceBody;
+import com.corals.appointment.Interface.MappedServicesCallback;
+import com.corals.appointment.Interface.MappedServicesPositionCallback;
 import com.corals.appointment.R;
 
 import java.util.ArrayList;
@@ -26,18 +28,19 @@ public class MapServiceResourceRecyclerAdapter extends RecyclerView.Adapter<MapS
     List<AppointmentService> appointmentServiceArrayList;
     List<MapServiceResourceBody> mapServiceResourceBodies;
     String flag;
-
     ArrayList<String> ser_list;
-    boolean loadData=false;
+    boolean loadData = false;
+    MappedServicesCallback mappedServicesCallback;
+    //MappedServicesPositionCallback mappedServicesPositionCallback;
 
     public MapServiceResourceRecyclerAdapter(Activity context, String flag, List<AppointmentService> appointmentServiceArrayList, List<MapServiceResourceBody> mapServiceResourceBodies) {
         this.context = context;
         this.flag = flag;
         this.appointmentServiceArrayList = appointmentServiceArrayList;
         this.mapServiceResourceBodies = mapServiceResourceBodies;
-
+        mappedServicesCallback = (MappedServicesCallback) context;
+//        mappedServicesPositionCallback = (MappedServicesPositionCallback) context;
         ser_list = new ArrayList<String>();
-
 
 
     }
@@ -52,7 +55,7 @@ public class MapServiceResourceRecyclerAdapter extends RecyclerView.Adapter<MapS
     @Override
     public void onBindViewHolder(final MapServiceResourceRecyclerAdapter.MyViewHolder holder, final int position) {
 
-        Log.d("positionArray--->", "Flag :"+flag );
+        Log.d("positionArray--->", "Flag :" + flag);
 
 
         if (flag.equals("0")) {
@@ -62,11 +65,13 @@ public class MapServiceResourceRecyclerAdapter extends RecyclerView.Adapter<MapS
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (!isChecked) {
-                        AddStaffActivity.arrayList_map_service.remove(appointmentServiceArrayList.get(position).getSerId());
-                        Log.d("list_map_service--->", "onCheckedChanged: " + AddStaffActivity.arrayList_map_service);
+                        mappedServicesCallback.mappedServicesList("0",appointmentServiceArrayList.get(position).getSerId());
+                       // AddStaffActivity.arrayList_map_service.remove(appointmentServiceArrayList.get(position).getSerId());
+                        //Log.d("list_map_service--->", "onCheckedChanged: " + AddStaffActivity.arrayList_map_service);
                     } else {
-                        AddStaffActivity.arrayList_map_service.add(appointmentServiceArrayList.get(position).getSerId());
-                        Log.d("list_map_service--->", "onCheckedChanged: " + AddStaffActivity.arrayList_map_service);
+                        mappedServicesCallback.mappedServicesList("1",appointmentServiceArrayList.get(position).getSerId());
+                        //AddStaffActivity.arrayList_map_service.add(appointmentServiceArrayList.get(position).getSerId());
+                        //Log.d("list_map_service--->", "onCheckedChanged: " + AddStaffActivity.arrayList_map_service);
                     }
                 }
             });
@@ -76,17 +81,18 @@ public class MapServiceResourceRecyclerAdapter extends RecyclerView.Adapter<MapS
                 public void onClick(View v) {
                     if (holder.checkBox.isChecked()) {
                         holder.checkBox.setChecked(false);
-                        AddStaffActivity.arrayList_map_service.remove(appointmentServiceArrayList.get(position).getSerId());
+                        mappedServicesCallback.mappedServicesList("0",appointmentServiceArrayList.get(position).getSerId());
+                        //AddStaffActivity.arrayList_map_service.remove(appointmentServiceArrayList.get(position).getSerId());
                     } else {
-                        AddStaffActivity.arrayList_map_service.add(appointmentServiceArrayList.get(position).getSerId());
+                        mappedServicesCallback.mappedServicesList("1",appointmentServiceArrayList.get(position).getSerId());
+                        //AddStaffActivity.arrayList_map_service.add(appointmentServiceArrayList.get(position).getSerId());
                         holder.checkBox.setChecked(true);
                     }
                 }
             });
         } else if (flag.equals("1")) {
             //Resource update
-            if(!loadData) {
-               // if (!appointmentServiceArrayList.isEmpty() && !mapServiceResourceBodies.isEmpty() && appointmentServiceArrayList != null && mapServiceResourceBodies != null) {
+            if (!loadData) {
                 if (!appointmentServiceArrayList.isEmpty() && appointmentServiceArrayList != null) {
                     for (int i = 0; i < appointmentServiceArrayList.size(); i++) {
                         AddStaffActivity.positionArray.add(false);
@@ -106,7 +112,7 @@ public class MapServiceResourceRecyclerAdapter extends RecyclerView.Adapter<MapS
                             AddStaffActivity.positionArray.set(pos, true);
                         }
                     }
-                    loadData=true;
+                    loadData = true;
                     Log.d("positionArray--->", "" + AddStaffActivity.positionArray);
                 } else {
                     Log.d("positionArray--->", "Data empty");
@@ -121,16 +127,12 @@ public class MapServiceResourceRecyclerAdapter extends RecyclerView.Adapter<MapS
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (!isChecked) {
-                        //AddStaffActivity.arrayList_map_service.remove(appointmentServiceArrayList.get(position).getSerId());
-                        //Log.d("list_map_service--->", "onCheckedChanged: " + AddStaffActivity.arrayList_map_service);
                         if (ser_list.contains(appointmentServiceArrayList.get(position).getSerId())) {
                             int pos = ser_list.indexOf(appointmentServiceArrayList.get(position).getSerId());
                             Log.d("positionArray--->", "uncheck :" + pos);
                             AddStaffActivity.positionArray.set(pos, false);
                         }
                     } else {
-                        //AddStaffActivity.arrayList_map_service.add(appointmentServiceArrayList.get(position).getSerId());
-                       // Log.d("list_map_service--->", "onCheckedChanged: " + AddStaffActivity.arrayList_map_service);
                         if (ser_list.contains(appointmentServiceArrayList.get(position).getSerId())) {
                             int pos = ser_list.indexOf(appointmentServiceArrayList.get(position).getSerId());
                             Log.d("positionArray--->", "check :" + pos);

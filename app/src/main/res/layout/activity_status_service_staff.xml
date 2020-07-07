@@ -136,7 +136,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_weight="0.5"
-                android:background="@color/red"
+                android:backgroundTint="@color/red"
                 android:minWidth="150dp"
                 android:fontFamily="@font/lato_medium"
                 android:text="Don't ask again"
@@ -150,7 +150,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_weight="0.5"
                 android:fontFamily="@font/lato_medium"
-                android:background="@color/button_green"
+                android:backgroundTint="@color/button_green"
                 android:minWidth="150dp"
                 android:text="OK"
                 android:textColor="@color/white" />

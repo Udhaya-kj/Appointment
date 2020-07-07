@@ -15,6 +15,7 @@
 
 
         <TextView
+            android:fontFamily="@font/lato_medium"
             android:id="@+id/text_alert_response"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -41,6 +42,7 @@
             android:paddingEnd="20dp">
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:id="@+id/oops"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,6 +53,7 @@
                />
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:id="@+id/alert_diolog_msg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -75,6 +78,7 @@
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
                     android:text="OK"
+                    android:fontFamily="@font/lato_medium"
                     android:textSize="14sp"
                     android:singleLine="true"
                     android:textAllCaps="false"

@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -25,17 +23,19 @@
             android:padding="8dp">
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Service"
                 android:textStyle="bold" />
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:id="@+id/tv_cus_service"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="Hair Cut" />
+                 />
         </LinearLayout>
 
         <LinearLayout
@@ -48,17 +48,19 @@
             android:padding="8dp">
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Staff"
                 android:textStyle="bold" />
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:id="@+id/tv_cus_staff"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="Udhaya" />
+                 />
         </LinearLayout>
 
         <LinearLayout
@@ -71,17 +73,19 @@
             android:padding="8dp">
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Duration"
                 android:textStyle="bold" />
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:id="@+id/tv_cus_duration"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="30 mins" />
+                 />
         </LinearLayout>
 
         <LinearLayout
@@ -94,17 +98,19 @@
             android:padding="8dp">
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Appointment Date"
                 android:textStyle="bold" />
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:id="@+id/tv_appt_dt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="08-06-2020" />
+                 />
         </LinearLayout>
 
 

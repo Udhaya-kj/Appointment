@@ -16,6 +16,7 @@
         android:gravity="center"
         android:textAlignment="center"
         app:elevation="4dp"
+        app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Service unavailability"
         app:titleTextColor="@color/white" />
@@ -48,6 +49,7 @@
                     android:padding="5dp" />
 
                 <TextView
+                    android:fontFamily="@font/lato_medium"
                     android:id="@+id/text_resource"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
@@ -66,6 +68,7 @@
                     android:src="@drawable/calendar" />
 
                 <TextView
+                    android:fontFamily="@font/lato_medium"
                     android:id="@+id/text_appn_dt"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -86,6 +89,7 @@
                 android:visibility="visible">
 
                 <TextView
+                    android:fontFamily="@font/lato_medium"
                     android:id="@+id/text_full_day_hint"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -102,6 +106,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:fontFamily="@font/lato_medium"
                         android:id="@+id/text_time_no"
                         android:layout_width="70dp"
                         android:layout_height="match_parent"
@@ -111,6 +116,7 @@
                         android:textColor="@color/black" />
 
                     <TextView
+                        android:fontFamily="@font/lato_medium"
                         android:id="@+id/text_time_yes"
                         android:layout_width="70dp"
                         android:layout_height="match_parent"
@@ -135,6 +141,7 @@
                 android:visibility="gone">
 
                 <TextView
+                    android:fontFamily="@font/lato_medium"
                     android:id="@+id/text_time_title"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
@@ -161,12 +168,14 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:fontFamily="@font/lato_medium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="Start Time" />
 
                         <TextView
+                            android:fontFamily="@font/lato_medium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
@@ -182,6 +191,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:fontFamily="@font/lato_medium"
                             android:id="@+id/text_start_time"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -192,6 +202,7 @@
                             android:textColor="#3B91CD" />
 
                         <TextView
+                            android:fontFamily="@font/lato_medium"
                             android:id="@+id/text_end_time"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -211,6 +222,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:fontFamily="@font/lato_medium"
                             android:id="@+id/text_start_time_am_pm"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -218,6 +230,7 @@
                             android:text="am" />
 
                         <TextView
+                            android:fontFamily="@font/lato_medium"
                             android:id="@+id/text_end_time_am_pm"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -240,12 +253,14 @@
                             android:layout_margin="10dp"
                             android:background="#4DBDF1"
                             android:text="ADD"
+                            android:fontFamily="@font/lato_medium"
                             android:textColor="@color/white" />
                     </LinearLayout>
 
                 </LinearLayout>
 
                 <TextView
+                    android:fontFamily="@font/lato_medium"
                     android:id="@+id/text_validation_time"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
@@ -269,6 +284,7 @@
                     android:visibility="gone">
 
                     <TextView
+                        android:fontFamily="@font/lato_medium"
                         android:id="@+id/text_unavail_time_dt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -296,6 +312,7 @@
                             android:src="@drawable/clock" />
 
                         <TextView
+                            android:fontFamily="@font/lato_medium"
                             android:id="@+id/text_ser_unavail_time1"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -304,6 +321,7 @@
                             android:gravity="center" />
 
                         <TextView
+                            android:fontFamily="@font/lato_medium"
                             android:id="@+id/text_ser_unavail_time1_picker1"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -334,6 +352,7 @@
                             android:src="@drawable/clock" />
 
                         <TextView
+                            android:fontFamily="@font/lato_medium"
                             android:id="@+id/text_ser_unavail_time2"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -342,6 +361,7 @@
                             android:gravity="center" />
 
                         <TextView
+                            android:fontFamily="@font/lato_medium"
                             android:id="@+id/text_ser_unavail_time2_picker2"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -367,6 +387,7 @@
                 android:visibility="gone">
 
                 <TextView
+                    android:fontFamily="@font/lato_medium"
                     android:id="@+id/text_res"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
@@ -400,6 +421,7 @@
                 android:layout_marginBottom="8dp"
                 android:backgroundTint="@color/button_green"
                 android:text="SUBMIT"
+                android:fontFamily="@font/lato_medium"
                 android:textColor="@color/white"
 
                 />

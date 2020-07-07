@@ -45,6 +45,7 @@ import com.corals.appointment.Client.model.UnavailSlotBody;
 import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
+import com.corals.appointment.Interface.UnavailCallback;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 
@@ -55,7 +56,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class SerUnavailAskTimeActivity extends AppCompatActivity {
+public class SerUnavailAskTimeActivity extends AppCompatActivity implements UnavailCallback {
 
     TextView text_start_time, text_end_time, textView_appn_dt, textView_res, textView_time_title, text_st_am_pm, text_et_am_pm;
     LinearLayout linearLayout, linearLayout_show_time, layout_show_time1, layout_show_time2, layout_slots;
@@ -71,7 +72,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity {
     String ser_id, ser, dt;
     private SharedPreferences sharedpreferences_sessionToken;
     boolean isFullDay = true, isValidUnavailTime = false;
-    public static ArrayList<String> arrayList_startTime, arrayList_endTime, arrayList_slotNo;
+    public  ArrayList<String> arrayList_startTime, arrayList_endTime, arrayList_slotNo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -985,6 +986,22 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity {
         if (intermediateAlertDialog != null) {
             intermediateAlertDialog.dismissAlertDialog();
             intermediateAlertDialog = null;
+        }
+    }
+
+    @Override
+    public void unavailList(String flag, String slot_no, String start_time, String end_time) {
+        if(flag.equals("1")){
+            arrayList_slotNo.add(slot_no);
+            arrayList_startTime.add(start_time);
+            arrayList_endTime.add(end_time);
+            Log.d("unavailList--->", "unavailList: "+arrayList_slotNo+","+arrayList_startTime+","+arrayList_endTime);
+        }
+        else if(flag.equals("0")){
+            arrayList_slotNo.remove(slot_no);
+            arrayList_startTime.remove(start_time);
+            arrayList_endTime.remove(end_time);
+            Log.d("unavailList--->", "unavailList: "+arrayList_slotNo+","+arrayList_startTime+","+arrayList_endTime);
         }
     }
 }

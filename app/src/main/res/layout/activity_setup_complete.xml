@@ -16,6 +16,7 @@
     ></ImageView>
 
     <TextView
+        android:fontFamily="@font/lato_medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Appointment Successfully Booked!"
@@ -26,6 +27,7 @@
         />
 
     <TextView
+        android:fontFamily="@font/lato_medium"
         android:id="@+id/text_confirm_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,6 +44,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="OK"
+        android:fontFamily="@font/lato_medium"
         android:layout_marginTop="50dp"
         />
 </LinearLayout>

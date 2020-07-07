@@ -31,8 +31,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:padding="4dp"
-                    android:text="Title "
-
+                    android:fontFamily="@font/lato_medium"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -61,8 +60,8 @@
                 android:layout_marginTop="5dp"
                 android:gravity="center"
                 android:padding="10dp"
+                android:fontFamily="@font/lato_medium"
                 android:lineSpacingMultiplier="1.2"
-                android:text="CONTENT 1"
                 android:textAlignment="center"
                 android:textSize="14sp" />
 
@@ -89,6 +88,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:text="No"
+                    android:fontFamily="@font/lato_medium"
                     android:singleLine="true"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
@@ -110,6 +110,7 @@
                     android:focusable="true"
                     android:padding="2dp"
                     android:text="Yes"
+                    android:fontFamily="@font/lato_medium"
                     android:singleLine="true"
                     android:textAllCaps="false"
                     android:textColor="@color/white"

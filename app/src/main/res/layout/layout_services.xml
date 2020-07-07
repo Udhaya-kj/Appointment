@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:gravity="center_vertical"
-            android:text="Hair Cut"
+            android:fontFamily="@font/lato_medium"
             />
 
         <TextView
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:gravity="center_vertical"
-            android:text="30 mins"
+            android:fontFamily="@font/lato_medium"
             />
     </LinearLayout>
 

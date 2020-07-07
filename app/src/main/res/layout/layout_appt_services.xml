@@ -35,12 +35,12 @@
             android:orientation="vertical">
 
             <TextView
+                android:fontFamily="@font/lato_medium"
                 android:id="@+id/text_service_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:gravity="center_vertical"
-                android:text="Hair Cut"
                 android:textSize="16sp"
                />
 

@@ -6,7 +6,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,12 +17,23 @@ import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.TextView;
 
+import com.corals.appointment.Adapters.RecyclerAdapter_TimeSlots;
+import com.corals.appointment.Client.ApiCallback;
+import com.corals.appointment.Client.ApiException;
+import com.corals.appointment.Client.OkHttpApiClient;
+import com.corals.appointment.Client.api.MerchantApisApi;
+import com.corals.appointment.Client.model.AppointmentEnquiryBody;
+import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
+import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
+import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 
 public class CalendarViewActivity extends AppCompatActivity {
 
@@ -28,7 +41,8 @@ public class CalendarViewActivity extends AppCompatActivity {
     String calendar_date, cus_name, cus_id, cus_email, cus_mob, page_id, ser, ser_id, res, res_id;
     Button textView_cal_next;
     Calendar c;
-
+    private SharedPreferences sharedpreferences_sessionToken;
+    private IntermediateAlertDialog intermediateAlertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +59,7 @@ public class CalendarViewActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
 
         if (getIntent().getExtras() != null) {
             page_id = getIntent().getStringExtra("page_id");
@@ -100,22 +115,6 @@ public class CalendarViewActivity extends AppCompatActivity {
                     finish();
                     overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
 
-                 /*   if (!TextUtils.isEmpty(page_id) && page_id.equals("1")) {
-                        Intent i = new Intent(CalendarViewActivity.this, TimeSlotsActivity.class);
-                        i.putExtra("page_id", "2");
-                        i.putExtra("date", calendar_date);
-                        startActivity(i);
-                        finish();
-                        overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
-                    } else {
-                        Log.d("calendar_date--->", "onClick: " + calendar_date);
-                        Intent i = new Intent(CalendarViewActivity.this, CalendarServicesActivity.class);
-                        i.putExtra("page_id", "2");
-                        i.putExtra("date", calendar_date);
-                        startActivity(i);
-                        finish();
-                        overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
-                    }*/
                 } else {
 
                     runOnUiThread(new Runnable() {
@@ -135,10 +134,140 @@ public class CalendarViewActivity extends AppCompatActivity {
 
     }
 
+    private void callAPI() {
+
+        boolean isConn = ConnectivityReceiver.isConnected();
+        if (isConn) {
+            try {
+                AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+                enquiryBody.setReqType(Constants.SERVICE_ACTIVE_DAYS);
+                enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+                enquiryBody.callerType("m");
+                enquiryBody.setSerId(ser_id);
+                enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
+                enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+                fetchActiveDays(enquiryBody);
+            } catch (ApiException e) {
+                e.printStackTrace();
+            }
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialogFailure(CalendarViewActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                        @Override
+                        public void onButtonClick() {
+                            callAPI();
+                        }
+                    };
+                }
+            });
+        }
+    }
+
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
 
+    failedIntent();
+
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (intermediateAlertDialog != null) {
+            intermediateAlertDialog.dismissAlertDialog();
+            intermediateAlertDialog = null;
+        }
+    }
+
+    private void fetchActiveDays(AppointmentEnquiryBody requestBody) throws ApiException {
+
+        intermediateAlertDialog = new IntermediateAlertDialog(CalendarViewActivity.this);
+        Log.d("fetchApptSlots---", "login: " + requestBody);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(CalendarViewActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentEnquiryAsync(requestBody, new ApiCallback<AppointmentEnquiryResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("fetchApptSlots--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(CalendarViewActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                failedIntent();
+                            }
+                        };
+                    }
+                });
+            }
+
+            @Override
+            public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+
+                Log.d("fetchApptSlots--->", "onSuccess-" + statusCode + "," + result);
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+                if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!result.getAvailAppointments().isEmpty() && result.getAvailAppointments() != null) {
+                              /*  RecyclerAdapter_TimeSlots recyclerAdapter_timeSlots = new RecyclerAdapter_TimeSlots(TimeSlotsActivity.this, result.getAvailAppointments(), timeSlotDataModel);
+                                recyclerView.setAdapter(recyclerAdapter_timeSlots);*/
+                            }
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 404) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(CalendarViewActivity.this, getResources().getString(R.string.no_avail_slots), "OK", "", "Warning") {
+                                @Override
+                                public void onButtonClick() {
+                                    failedIntent();
+                                }
+                            };
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(CalendarViewActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    failedIntent();
+                                }
+                            };
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
+
+    }
+    private void failedIntent(){
         if (!TextUtils.isEmpty(page_id) && page_id.equals("1")) {
             Intent i = new Intent(CalendarViewActivity.this, AppointmentActivity.class);
             startActivity(i);
@@ -155,6 +284,5 @@ public class CalendarViewActivity extends AppCompatActivity {
             finish();
             overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
         }
-
     }
 }
