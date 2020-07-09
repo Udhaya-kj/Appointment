@@ -1,5 +1,6 @@
 package com.corals.appointment.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -9,6 +10,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -43,7 +47,6 @@ public class SetupStaffActivity_Bottom extends AppCompatActivity {
     private ArrayList<String> staff_name_list, staff_mob_list;
     private SharedPreferences sharedpreferences_staffs;
     StaffListAdapter staffListAdapter;
-    LinearLayout linearLayout_add_staff;
     public String pageId = "";
     private SharedPreferences sharedpreferences_sessionToken;
     private IntermediateAlertDialog intermediateAlertDialog;
@@ -58,7 +61,7 @@ public class SetupStaffActivity_Bottom extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_left);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,23 +75,12 @@ public class SetupStaffActivity_Bottom extends AppCompatActivity {
         staff_name_list = new ArrayList<>();
         staff_mob_list = new ArrayList<>();
         listView_staffs = findViewById(R.id.listview_staffs);
-        linearLayout_add_staff = findViewById(R.id.layout_add_staff);
 
         if (getIntent().getExtras() != null) {
             pageId = getIntent().getStringExtra("page_id");
 
         }
 
-        linearLayout_add_staff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent in = new Intent(SetupStaffActivity_Bottom.this, AddStaffActivity.class);
-                in.putExtra("page_id", "3");
-                startActivity(in);
-                finish();
-                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
-            }
-        });
 
         callAPI_Staff();
 
@@ -226,4 +218,24 @@ public class SetupStaffActivity_Bottom extends AppCompatActivity {
             intermediateAlertDialog = null;
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.add_new_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_add_new) {
+            Intent in = new Intent(SetupStaffActivity_Bottom.this, AddStaffActivity.class);
+            in.putExtra("page_id", "3");
+            startActivity(in);
+            finish();
+            overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

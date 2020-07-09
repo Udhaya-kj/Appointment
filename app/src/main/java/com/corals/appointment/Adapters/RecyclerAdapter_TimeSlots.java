@@ -20,6 +20,7 @@ import com.corals.appointment.Activity.ApptConfirmActivity;
 import com.corals.appointment.Activity.CustomerActivity_Bottom;
 import com.corals.appointment.Activity.CustomersMakeApptActivity;
 import com.corals.appointment.Client.model.AppointmentAvailableSlots;
+import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Model.TimeSlotDataModel;
 import com.corals.appointment.R;
 
@@ -55,10 +56,16 @@ public class RecyclerAdapter_TimeSlots extends RecyclerView.Adapter<RecyclerAdap
         final int total_appt = Integer.parseInt(appointmentAvailableSlots.get(position).getAllowed());
         final int booked_appt = Integer.parseInt(appointmentAvailableSlots.get(position).getBooked());
         Log.d("TimeSlots--->", "onBindViewHolder: "+total_appt+","+booked_appt);
-        if (total_appt == booked_appt) {
+        if (total_appt == 0) {
+            holder.linearLayout_color.setBackgroundResource(R.drawable.left_round_corners_grey);
+            holder.imageView_avail.setBackgroundResource(R.drawable.warning);
+            holder.imageView_avail.setColorFilter(context.getResources().getColor(R.color.red));
+           // holder.imageView_avail.setEnabled(false);
+        }
+        else if (total_appt == booked_appt) {
             holder.linearLayout_color.setBackgroundResource(R.drawable.left_round_corners_blue);
             holder.imageView_avail.setBackgroundResource(R.drawable.tick);
-            holder.imageView_avail.setEnabled(false);
+            //holder.imageView_avail.setEnabled(false);
         } else if (total_appt > booked_appt) {
             holder.linearLayout_color.setBackgroundResource(R.drawable.left_round_corners_green);
             holder.imageView_avail.setBackgroundResource(R.drawable.add_green);
@@ -68,7 +75,35 @@ public class RecyclerAdapter_TimeSlots extends RecyclerView.Adapter<RecyclerAdap
         holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (total_appt > booked_appt) {
+                if (total_appt == 0) {
+                    ((Activity)context).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(context, "Appointment not available for this slot!", "OK", "", "Warning") {
+                                @Override
+                                public void onButtonClick() {
+
+                                }
+                            };
+                        }
+                    });
+
+                }
+                else if (total_appt == booked_appt) {
+                    ((Activity)context).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(context, "All appointments are booked for this slot!", "OK", "", "Warning") {
+                                @Override
+                                public void onButtonClick() {
+
+                                }
+                            };
+                        }
+                    });
+
+                }
+               else if (total_appt > booked_appt) {
                     if( timeSlotDataModel.getPage_id().equals("1")) {
                         Intent in = new Intent(context, CustomersMakeApptActivity.class);
                         in.putExtra("page_id", "02");

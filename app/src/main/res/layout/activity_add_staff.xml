@@ -10,14 +10,14 @@
         android:id="@+id/toolbar_add_staff"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#4DBDF1"
+        android:background="@android:color/background_light"
         android:elevation="4dp"
         android:textAlignment="center"
         app:elevation="4dp"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Add New Staff"
         app:titleTextAppearance="@style/headerTextStyle1"
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="@color/matt_black" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,12 +43,10 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="30dp"
                     android:orientation="vertical">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="10dp"
@@ -68,8 +66,7 @@
 
 
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="20dp"
@@ -89,8 +86,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="20dp"
@@ -394,7 +390,12 @@
                                         android:textColor="@color/white"
                                         android:textSize="10sp" />
                                 </LinearLayout>
-
+                            <LinearLayout
+                                android:id="@+id/layout_weekdays"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="visible"
+                                android:orientation="vertical">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -1588,6 +1589,8 @@
                                 </LinearLayout>
 
                             </LinearLayout>
+
+                            </LinearLayout>
                         </androidx.cardview.widget.CardView>
 
 
@@ -1595,6 +1598,7 @@
                 </LinearLayout>
 
                 <com.google.android.material.button.MaterialButton
+                    android:visibility="gone"
                     android:id="@+id/button_add_staff_continue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -1604,7 +1608,7 @@
                     android:backgroundTint="@color/button_green"
                     android:text="CREATE STAFF"
                     android:fontFamily="@font/lato_medium"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="@color/white" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </LinearLayout>

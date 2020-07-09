@@ -36,7 +36,7 @@ public class ServiceUnavailCalendarActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_left);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +78,14 @@ public class ServiceUnavailCalendarActivity extends AppCompatActivity {
                 } else {
                     mn = String.valueOf(mnth);
                 }
-                calendar_date = year + "-" + mn + "-" + dayOfMonth;
+
+                String day = null;
+                if (String.valueOf(dayOfMonth).length() == 1) {
+                    day = "0" + dayOfMonth;
+                } else {
+                    day = String.valueOf(dayOfMonth);
+                }
+                calendar_date = year + "-" + mn + "-" + day;
                 //textView_cal_next.setEnabled(true);
                 // Toast.makeText(MaterialDatePickerActivity.this, "" + dayOfMonth + "-" + (month + 1) + "-" + year, Toast.LENGTH_SHORT).show();
             }

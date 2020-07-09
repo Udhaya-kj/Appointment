@@ -1,34 +1,57 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/app_blue</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/hint_blue</item>
         <item name="windowNoTitle">true</item>
-
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
+        <item name="android:statusBarColor" tools:ignore="NewApi">@android:color/background_light
+        </item>
+        <item name="actionBarTheme">@style/actionBarStyle</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:windowBackground">@null</item>
     </style>
 
-    <style name="AppTheme.ActionBar.Transparent" parent="AppTheme">
+    <style name="actionBarStyle">
+        <item name="android:background">@android:color/background_light</item>
+    </style>
+
+
+    <style name="noActionbar" parent="AppTheme">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
+        <item name="actionBarTheme">@style/actionBarStyle</item>
+        <item name="android:statusBarColor" tools:ignore="NewApi">@android:color/background_light
+        </item>
     </style>
 
     <style name="AppTheme.SplashNoActionBar" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/hint_blue</item>
+        <item name="actionBarTheme">@style/actionBarStyle</item>
         <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
+        <item name="android:statusBarColor" tools:ignore="NewApi">@android:color/background_light
+        </item>
     </style>
 
     <style name="AppTheme.MaterialTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="windowNoTitle">true</item>
-        <item name="colorPrimary">@color/app_blue</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/hint_blue</item>
+        <item name="actionBarTheme">@style/actionBarStyle</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
+        <item name="android:statusBarColor" tools:ignore="NewApi">@android:color/background_light
+        </item>
     </style>
 
     <style name="MtButtonStyle" parent="Widget.MaterialComponents.Button">
@@ -36,7 +59,7 @@
     </style>
 
     <style name="MtButtonStyle_blue" parent="Widget.MaterialComponents.Button">
-        <item name="android:backgroundTint">@color/app_blue</item>
+        <item name="android:backgroundTint">@color/primary_blue</item>
     </style>
 
     <style name="subHeaderTextStyle">
@@ -61,4 +84,16 @@
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">@font/quicksand_bold</item>
     </style>
+
+    <style name="SheetDialog" parent="Theme.MaterialComponents.BottomSheetDialog">
+        <!--<item name="android:windowCloseOnTouchOutside">false</item>-->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.5</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
 </resources>

@@ -47,6 +47,7 @@
         android:background="@drawable/capsule_field_bg"
         android:gravity="center"
         android:hint="Password"
+        android:text="jayanth"
         android:imeOptions="actionDone"
         android:fontFamily="@font/lato_medium"
         android:inputType="text"
@@ -70,7 +71,7 @@
         android:layout_marginTop="40dp"
         android:text="LOGIN"
         android:textColor="@color/white"
-        android:fontFamily="@font/lato_medium"
+        android:fontFamily="@font/lato_bold"
         app:cornerRadius="25dp" />
 
 

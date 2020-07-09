@@ -4,131 +4,170 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EEEEEE"
+    android:background="@android:color/background_light"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_biz_appt_date"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#4DBDF1"
+        android:background="@android:color/background_light"
         android:elevation="4dp"
         android:gravity="center"
         android:textAlignment="center"
         app:elevation="4dp"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:title="Corals Appointment"
+        app:title="Home"
         app:titleTextAppearance="@style/headerTextStyle1"
-        app:titleTextColor="#FFFFFF" />
+        app:titleTextColor="@android:color/primary_text_light" />
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/height_30dp"
+            android:paddingBottom="@dimen/height_30dp">
+
+            <CalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible" />
 
             <TextView
-                android:id="@+id/text_appointments"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/layout_bg_white"
-                android:elevation="4dp"
-                android:fontFamily="@font/lato_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="@dimen/height_30dp"
+                android:background="@drawable/menu_decor"
                 android:gravity="center"
-                android:text="Appointments"
+                android:paddingStart="28dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="28dp"
+                android:paddingBottom="8dp"
+                android:text="Menu"
+                android:textColor="@color/matt_black"
                 android:textSize="17sp"
-                android:textStyle="bold" />
+                app:titleTextAppearance="@style/headerTextStyle1" />
 
-            <TextView
-                android:id="@+id/text_customers"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/layout_bg_white"
-                android:elevation="4dp"
-                android:fontFamily="@font/lato_bold"
-                android:gravity="center"
-                android:text="Customers"
-                android:textSize="17sp"
-                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="@dimen/height_30dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/text_appointments"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:elevation="4dp"
+                    app:cardBackgroundColor="@color/primary_green"
+                    app:cardCornerRadius="@dimen/radius_small">
+
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/lato_bold"
+                        android:gravity="center"
+                        android:text="Appointments"
+                        android:textColor="@android:color/primary_text_dark"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/text_customers"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:elevation="4dp"
+                    app:cardBackgroundColor="@color/primary_yellow"
+                    app:cardCornerRadius="@dimen/radius_small">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/lato_bold"
+                        android:gravity="center"
+                        android:text="Customers"
+                        android:textColor="@android:color/primary_text_dark"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/text_services"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:elevation="4dp"
+                    app:cardBackgroundColor="@color/primary_orange"
+                    app:cardCornerRadius="@dimen/radius_small">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/lato_bold"
+                        android:gravity="center"
+                        android:text="Services"
+                        android:textColor="@android:color/primary_text_dark"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/text_staff"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:elevation="4dp"
+                    app:cardBackgroundColor="@color/primary_blue"
+                    app:cardCornerRadius="@dimen/radius_small">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:elevation="4dp"
+                        android:fontFamily="@font/lato_bold"
+                        android:gravity="center"
+                        android:text="Staff"
+                        android:textColor="@android:color/primary_text_dark"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
 
         </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <TextView
-                android:id="@+id/text_services"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/layout_bg_white"
-                android:elevation="4dp"
-                android:fontFamily="@font/lato_bold"
-                android:gravity="center"
-                android:text="Services"
-                android:textSize="17sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/text_staff"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/layout_bg_white"
-                android:elevation="4dp"
-                android:fontFamily="@font/lato_bold"
-                android:gravity="center"
-                android:text="Staff"
-                android:textSize="17sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <TextView
-                android:id="@+id/text_settings"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="0.95"
-                android:background="@drawable/layout_bg_white"
-                android:elevation="4dp"
-                android:fontFamily="@font/lato_bold"
-                android:gravity="center"
-                android:text="Settings"
-                android:textSize="17sp"
-                android:textStyle="bold" />
-
-
-        </LinearLayout>
-
-
-    </LinearLayout>
 </LinearLayout>

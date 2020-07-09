@@ -4,18 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/background_light"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@drawable/gradient_bg"
     tools:context=".Activity.SplashScreenActivity">
 
     <ImageView
         android:id="@+id/image_logo"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:tint="@color/white"
-        android:src="@drawable/ic_launcher2"
-         />
+        android:tint="@color/app_blue"
+        android:src="@drawable/ic_corals" />
 
     <TextView
         android:id="@+id/text_app_title"
@@ -24,7 +23,7 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="Corals Appointment"
-        android:textSize="22sp"
-        android:textColor="@color/white"
-        android:textAppearance="@style/textStylebold" />
+        android:textAppearance="@style/headerTextStyle"
+        android:textColor="@color/matt_black"
+        android:textSize="17sp" />
 </LinearLayout>

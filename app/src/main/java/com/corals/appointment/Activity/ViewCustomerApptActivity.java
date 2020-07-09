@@ -52,7 +52,7 @@ public class ViewCustomerApptActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_left);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -203,7 +203,7 @@ public class ViewCustomerApptActivity extends AppCompatActivity {
                         new AlertDialogFailure(ViewCustomerApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                startActivity(new Intent(ViewCustomerApptActivity.this, DashboardActivity.class));
+                                startActivity(new Intent(ViewCustomerApptActivity.this, CustomerActivity_Bottom.class));
                                 finish();
                                 overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
                             }
@@ -259,7 +259,7 @@ public class ViewCustomerApptActivity extends AppCompatActivity {
                             new AlertDialogFailure(ViewCustomerApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(ViewCustomerApptActivity.this, DashboardActivity.class));
+                                    startActivity(new Intent(ViewCustomerApptActivity.this, CustomerActivity_Bottom.class));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
                                 }

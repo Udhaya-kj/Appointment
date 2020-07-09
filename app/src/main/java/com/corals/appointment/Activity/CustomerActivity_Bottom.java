@@ -8,12 +8,16 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -49,7 +53,7 @@ public class CustomerActivity_Bottom extends AppCompatActivity {
     private SharedPreferences sharedpreferences_customers;
     CustomersAdapter customersAdapter_filter;
     Button button_continue;
-    LinearLayout linearLayout_add_customer;
+
     private ArrayList<CustomersModel> mCustomersArrayList = new ArrayList<CustomersModel>();
     EditText editText_search;
     private IntermediateAlertDialog intermediateAlertDialog;
@@ -62,12 +66,11 @@ public class CustomerActivity_Bottom extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer__bottom);
         sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
-        linearLayout_add_customer = findViewById(R.id.layout_new_cust);
         Toolbar toolbar = findViewById(R.id.toolbar_customers);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_left);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +88,6 @@ public class CustomerActivity_Bottom extends AppCompatActivity {
             res = getIntent().getStringExtra("res");
         }
         sharedpreferences_customers = getSharedPreferences(CreateCustomerActivity.MyPREFERENCES_CUSTOMERS, Context.MODE_PRIVATE);
-        linearLayout_add_customer = findViewById(R.id.layout_new_cust);
         cus_name_list = new ArrayList<>();
         cus_mob_list = new ArrayList<>();
         editText_search = findViewById(R.id.et_search_customer);
@@ -94,16 +96,7 @@ public class CustomerActivity_Bottom extends AppCompatActivity {
         list_customers.setLayoutManager(mLayoutManager);
         list_customers.setItemAnimator(new DefaultItemAnimator());
         list_customers.setItemAnimator(new DefaultItemAnimator());
-        linearLayout_add_customer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(CustomerActivity_Bottom.this, CreateCustomerActivity.class);
-                i.putExtra("page_id", "2");
-                startActivity(i);
-                finish();
-                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
-            }
-        });
+
 
         editText_search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -168,6 +161,19 @@ public class CustomerActivity_Bottom extends AppCompatActivity {
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(CustomerActivity_Bottom.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                startActivity(new Intent(CustomerActivity_Bottom.this, DashboardActivity.class));
+                                finish();
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                            }
+                        };
+                    }
+                });
             }
 
             @Override
@@ -255,4 +261,25 @@ public class CustomerActivity_Bottom extends AppCompatActivity {
             intermediateAlertDialog = null;
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.add_new_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_add_new) {
+            Intent i = new Intent(CustomerActivity_Bottom.this, CreateCustomerActivity.class);
+            i.putExtra("page_id", "02");
+            startActivity(i);
+            finish();
+            overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }

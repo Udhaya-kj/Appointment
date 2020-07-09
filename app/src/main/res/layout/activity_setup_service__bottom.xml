@@ -3,79 +3,45 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/background_light"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_service_offer"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/app_blue"
-        android:elevation="4dp"
+        android:background="@android:color/background_light"
+        android:elevation="0dp"
         android:textAlignment="center"
-        app:elevation="4dp"
+        app:elevation="0dp"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Setup Service"
-        app:titleTextAppearance="@style/headerTextStyle1"
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="@color/matt_black" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="1"
         android:layout_marginBottom="10dp"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:id="@+id/layout_add_resource"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.1"
-            android:background="#FFF">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/add" />
-
-            <TextView
-                android:fontFamily="@font/lato_medium"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:gravity="center_vertical"
-                android:text="Add Service"
-                android:textSize="18sp" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.001"
-            android:background="#DDD"></View>
+        android:orientation="vertical"
+        android:weightSum="1">
 
         <TextView
-            android:fontFamily="@font/lato_medium"
-            android:visibility="gone"
+            android:id="@+id/tv_no_services"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="No services created"
             android:gravity="center"
-            android:id="@+id/tv_no_services"
-            />
+            android:text="No services created"
+            android:visibility="gone" />
 
         <ListView
-            android:visibility="gone"
             android:id="@+id/listview_services"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.9"
             android:layout_margin="10dp"
-            android:divider="#DDDDDD"
-            android:dividerHeight="1dp" />
-
+            android:layout_weight="0.9"
+            android:divider="#ffffff"
+            android:dividerHeight="0dp"
+            android:visibility="gone" />
 
 
     </LinearLayout>

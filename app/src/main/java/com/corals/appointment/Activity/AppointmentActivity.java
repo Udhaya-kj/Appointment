@@ -81,7 +81,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_left);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,7 +104,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
 
         LinearLayoutManager li = new LinearLayoutManager(AppointmentActivity.this);
         recyclerView_services.setLayoutManager(li);
-        recyclerView_services.addItemDecoration(new DividerItemDecoration(recyclerView_services.getContext(), li.getOrientation()));
+        //recyclerView_services.addItemDecoration(new DividerItemDecoration(recyclerView_services.getContext(), li.getOrientation()));
 
         textView_no_ser = findViewById(R.id.tv_no_services);
 
@@ -384,7 +384,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
                                 recyclerView_services.setAdapter(servicesRecyclerviewAdapter);
 
                             } else {
-                                menu.findItem(R.id.action_calendar).setEnabled(false);
+                                //menu.findItem(R.id.action_calendar).setEnabled(false);
                                 textView_no_ser.setVisibility(View.VISIBLE);
                                 recyclerView_services.setVisibility(View.GONE);
                             }

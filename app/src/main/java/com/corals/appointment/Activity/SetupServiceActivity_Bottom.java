@@ -1,5 +1,6 @@
 package com.corals.appointment.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -11,6 +12,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -42,7 +46,6 @@ import java.util.Map;
 
 public class SetupServiceActivity_Bottom extends AppCompatActivity {
     TextView textView_no_ser;
-    LinearLayout linearLayout_add_resource;
     private ListView listView_services;
     private ArrayList<String> service_name_list, service_dur_list;
     ServicesAdapter servicesAdapter;
@@ -60,7 +63,7 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_left);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +81,6 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
 
         service_name_list = new ArrayList<>();
         service_dur_list = new ArrayList<>();
-        linearLayout_add_resource = findViewById(R.id.layout_add_resource);
         listView_services = findViewById(R.id.listview_services);
 
         SharedPreferences preferences = getSharedPreferences(AddServiceActivity.MyPREFERENCES_SERVICE_DATA, Context.MODE_PRIVATE);
@@ -89,16 +91,6 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
         callAPI_Service();
 
 
-        linearLayout_add_resource.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent in = new Intent(SetupServiceActivity_Bottom.this, AddServiceActivity.class);
-                in.putExtra("page_id", "3");
-                startActivity(in);
-                finish();
-                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
-            }
-        });
 
 
     }
@@ -235,5 +227,24 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
             intermediateAlertDialog.dismissAlertDialog();
             intermediateAlertDialog = null;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.add_new_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_add_new) {
+            Intent in = new Intent(SetupServiceActivity_Bottom.this, AddServiceActivity.class);
+            in.putExtra("page_id", "3");
+            startActivity(in);
+            finish();
+            overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

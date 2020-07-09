@@ -57,14 +57,13 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.MyVi
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView name, mobile;
-        public ImageView imageView_popup;
+
         LinearLayout layout;
 
         private MyViewHolder(View view) {
             super(view);
             name = (TextView) view.findViewById(R.id.text_cus_name);
             mobile = (TextView) view.findViewById(R.id.text_cus_mob);
-            imageView_popup = (ImageView) view.findViewById(R.id.image_menu_popup);
             layout = (LinearLayout) view.findViewById(R.id.layout_row_customer);
         }
     }
@@ -82,7 +81,6 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.MyVi
         CustomersModel customersrec = mDisplayedValues.get(position);
         holder.name.setText(customersrec.getName());
         holder.mobile.setText(customersrec.getMobile());
-
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

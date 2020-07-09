@@ -11,14 +11,14 @@
         android:id="@+id/toolbar_view_appt"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/app_blue"
-        android:elevation="4dp"
+        android:background="@android:color/background_light"
         android:gravity="center"
         android:textAlignment="center"
-        app:elevation="4dp"
+        app:elevation="0dp"
+        app:title="Select Date"
         app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="@color/matt_black" />
 
     <TextView
         android:fontFamily="@font/lato_medium"

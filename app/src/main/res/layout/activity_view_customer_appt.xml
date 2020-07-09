@@ -11,52 +11,58 @@
         android:id="@+id/toolbar_view_service_appt"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/app_blue"
-        android:elevation="4dp"
+        android:background="@android:color/background_light"
         android:gravity="center"
         android:textAlignment="center"
-        app:elevation="4dp"
+        app:elevation="0dp"
         app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="@color/matt_black" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:weightSum="10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/height_30dp"
+        android:layout_marginEnd="@dimen/height_70dp"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:background="#EEEEEE"
-        >
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:weightSum="10">
 
         <ImageView
-            android:layout_width="0dp"
+            android:id="@+id/image_appt_back"
+            android:layout_width="20dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:padding="12dp"
             android:src="@drawable/back"
-            android:id="@+id/image_appt_back"
-            />
+            android:tint="@color/hint_blue" />
 
         <TextView
-            android:fontFamily="@font/lato_medium"
             android:id="@+id/text_appt_date"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="8"
-            android:text="Appointments for 02-06-2020"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/date_selector_bg_decor"
             android:gravity="center"
-            android:textStyle="bold"
+            android:minWidth="80dp"
+            android:minHeight="36dp"
+            android:paddingStart="18dp"
+            android:paddingEnd="18dp"
             android:textSize="17sp"
-            />
+            android:textStyle="bold" />
+
         <ImageView
             android:id="@+id/image_appt_next"
-            android:layout_width="0dp"
+            android:layout_width="20dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:padding="12dp"
             android:src="@drawable/next"
-            />
+            android:tint="@color/hint_blue" />
     </LinearLayout>
+
 
     <TextView
         android:fontFamily="@font/lato_medium"

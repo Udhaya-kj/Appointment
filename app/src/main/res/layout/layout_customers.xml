@@ -2,71 +2,65 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_row_customer"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:padding="10dp"
-    android:layout_marginTop="8dp"
-    android:background="@drawable/layout_bg_white"
-    android:weightSum="10">
-
-    <ImageView
-        android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:layout_weight="1.5"
-        android:padding="8dp"
-        android:src="@drawable/customers" />
+    android:orientation="horizontal">
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="0dp"
-        android:layout_weight="7"
-        android:orientation="vertical"
-        android:weightSum="2">
-
-        <TextView
-            android:id="@+id/text_cus_name"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="start|bottom"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:fontFamily="@font/lato_medium"
-            android:textSize="17sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/text_cus_mob"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="start|center"
-            android:singleLine="true"
-            android:fontFamily="@font/lato_medium" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:layout_weight="1.5"
-        android:visibility="gone"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/list_item_decor"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
 
         <ImageView
-            android:padding="18dp"
-            android:id="@+id/image_menu_popup"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/menu" />
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_weight="1.5"
+            android:padding="8dp"
+            android:src="@drawable/customers"
+            android:tint="@color/primary_blue" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="0dp"
+            android:layout_weight="7"
+            android:orientation="vertical"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/text_cus_name"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="start|bottom"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/matt_black"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_cus_mob"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="start|center"
+                android:singleLine="true"
+                android:textColor="@color/matt_black" />
+
+
+        </LinearLayout>
+
 
     </LinearLayout>
-
-
 </LinearLayout>
 
 

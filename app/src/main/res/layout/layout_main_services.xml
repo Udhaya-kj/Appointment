@@ -2,27 +2,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_ser_calender"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:gravity="center_vertical"
-    android:background="?attr/selectableItemBackgroundBorderless"
+    android:layout_height="wrap_content"
     android:clickable="true"
-    android:paddingStart="15dp"
-    android:paddingEnd="0dp"
+    android:gravity="center_vertical"
     android:orientation="horizontal">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/list_item_decor"
+        android:gravity="center">
 
         <ImageView
             android:id="@+id/image_tick"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="60dp"
             android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
             android:layout_weight="0.1"
+            android:padding="2dp"
             android:src="@drawable/tick"
-            android:tint="#A5D1FE" />
+            android:tint="@color/light_grey" />
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="0dp"
             android:layout_weight="0.8"
@@ -34,19 +42,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:gravity="center_vertical"
-                android:fontFamily="@font/lato_medium"
-                android:textSize="16sp"
-                />
+                android:text="Hair Cut"
+                android:textSize="16sp" />
 
             <TextView
-                android:visibility="gone"
                 android:id="@+id/text_ser_dur"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:gravity="center_vertical"
-                android:fontFamily="@font/lato_medium" />
+                android:text="30 mins"
+                android:visibility="gone" />
         </LinearLayout>
 
         <ImageView
@@ -54,8 +62,9 @@
             android:layout_height="match_parent"
             android:layout_weight="0.1"
             android:padding="10dp"
-            android:src="@drawable/right_arrow" />
-
+            android:src="@drawable/right_arrow"
+            android:tint="@color/dark_grey" />
+    </LinearLayout>
 </LinearLayout>
 
 

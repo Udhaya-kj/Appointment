@@ -10,90 +10,82 @@
         android:id="@+id/toolbar_create_customer"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#4DBDF1"
-        android:elevation="4dp"
+        android:background="@android:color/background_light"
+        android:elevation="0dp"
         android:textAlignment="center"
-        app:elevation="4dp"
+        app:elevation="0dp"
         app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Add New Customer"
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="@color/matt_black" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="@dimen/height_30dp"
         android:orientation="vertical"
-        android:weightSum="1">
+        android:paddingStart="@dimen/height_30dp"
+        android:paddingTop="18dp"
+        android:paddingEnd="@dimen/height_30dp"
+        android:paddingBottom="18dp">
 
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.9"
-            android:orientation="vertical"
-            android:padding="15dp">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:hint="Customer Name"
+            app:startIconDrawable="@drawable/ic_user">
 
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_cus_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:hint="Customer Name"
-                app:boxStrokeColor="@color/mtrl_textinput_default_box_stroke_color">
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:paddingStart="10dp"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_cus_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:fontFamily="@font/lato_medium"
-                    android:paddingStart="10dp"
-                    android:singleLine="true" />
-            </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:hint="Customer Mobile"
+            app:startIconDrawable="@drawable/ic_contact_number">
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_cus_mob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:hint="Customer Mobile"
-                app:boxStrokeColor="@color/mtrl_textinput_default_box_stroke_color">
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLength="12"
+                android:paddingStart="10dp"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_cus_mob"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionNext"
-                    android:inputType="phone"
-                    android:maxLength="12"
-                    android:fontFamily="@font/lato_medium"
-                    android:paddingStart="10dp"
-                    android:singleLine="true" />
-            </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:hint="Customer Email"
+            app:startIconDrawable="@drawable/ic_email_address">
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_cus_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:hint="Customer Email"
-                app:boxStrokeColor="@color/mtrl_textinput_default_box_stroke_color">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_cus_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:inputType="textEmailAddress"
-                    android:paddingStart="10dp"
-                    android:fontFamily="@font/lato_medium"
-                    android:singleLine="true" />
-            </com.google.android.material.textfield.TextInputLayout>
+                android:imeOptions="actionDone"
+                android:inputType="textEmailAddress"
+                android:paddingStart="10dp"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
         </LinearLayout>
@@ -103,7 +95,7 @@
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_weight="0.1"
+            android:layout_weight="0.12"
             android:gravity="center">
 
             <com.google.android.material.button.MaterialButton
@@ -115,6 +107,6 @@
                 android:fontFamily="@font/lato_medium"
                 android:textColor="@color/white" />
         </LinearLayout>
-    </LinearLayout>
+
 
 </LinearLayout>

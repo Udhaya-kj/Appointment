@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -24,6 +27,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -57,7 +61,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
     RadioButton radioButton_biz_hrs, radioButton_custom_time;
     Spinner spinner_weekdays;
-    LinearLayout layout_custom_time, layout_add_time;
+    LinearLayout layout_custom_time, layout_add_time, layout_weekday;
     RecyclerView recyclerView;
     private IntermediateAlertDialog intermediateAlertDialog;
     TextView btn_yes_sday_p, btn_yes_mnday_p, btn_yes_tsday_p, btn_yes_wedday_p, btn_yes_trsday_p, btn_yes_fdday_p, btn_yes_strday_p, button_add_time, button_add_ser;
@@ -65,10 +69,9 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
     TextView text_start_time, text_end_time, text_weekday;
     ArrayList<String> list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat;
     String start_time, end_time, time_update_id = "";
-    boolean isSelected = false;
+    boolean isBizTimeSelected = false, isCustomTimeSelected = false;
     StringBuilder weekdays = new StringBuilder("yyyyyyy");
     int hour = 0, minute = 0;
-
     private SharedPreferences sharedpreferences_sessionToken;
     private SharedPreferences sharedpreferences_services;
     public static final String MyPREFERENCES_SERVICES = "MyPrefs_Services";
@@ -89,6 +92,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
     Switch aSwitch_all_days;
     String all_days_time1 = "00:00 - 00:00", all_days_time2 = "00:00 - 00:00", all_days_time3 = "00:00 - 00:00";
     boolean isSameBizHrs = false;
+    boolean isTimeSelected = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +103,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_left);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,6 +143,8 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         button_add_ser = findViewById(R.id.button_add_service);
         scrollView = findViewById(R.id.scrollview_avail_time);
         aSwitch_all_days = findViewById(R.id.switch_all_days);
+
+        layout_weekday = findViewById(R.id.layout_weekdays);
 
         textView_sun_time1 = (TextView) findViewById(R.id.text_sunday_time1);
         textView_sun_time2 = (TextView) findViewById(R.id.text_sunday_time2);
@@ -238,7 +244,8 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     layout_custom_time.setVisibility(View.GONE);
                     isSameBizHrs = true;
                 }
-                isSelected = true;
+                isBizTimeSelected = true;
+                isCustomTimeSelected = false;
             }
         });
 
@@ -251,7 +258,9 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     layout_custom_time.setVisibility(View.VISIBLE);
                     isSameBizHrs = false;
                 }
-                isSelected = true;
+                isCustomTimeSelected = true;
+                isBizTimeSelected = false;
+
             }
         });
 
@@ -1116,12 +1125,11 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     // TODO: handle exception
                 }
                 Log.d("sunday_list--->", "onClick: " + list_sun.size() + "," + list_mon.size() + "," + list_tue.size() + "," + list_wed.size() + "," + list_thu.size() + "," + list_fri.size() + "," + list_sat.size());
-                if (isSelected) {
-
+                if (isBizTimeSelected) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogYesNo(AddServiceAvailTimeActivity.this, "Create Service?", "Are you sure, You want to create "+ser_name+" service?", "Yes", "No") {
+                            new AlertDialogYesNo(AddServiceAvailTimeActivity.this, "Create Service?", "Are you sure, You want to create " + ser_name + " service?", "Yes", "No") {
                                 @Override
                                 public void onOKButtonClick() {
                                     createService();
@@ -1136,7 +1144,28 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                         }
                     });
 
+                } else if (isCustomTimeSelected) {
+                    if(isTimeSelected) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                new AlertDialogYesNo(AddServiceAvailTimeActivity.this, "Create Service?", "Are you sure, You want to create " + ser_name + " service?", "Yes", "No") {
+                                    @Override
+                                    public void onOKButtonClick() {
+                                        createService();
+                                    }
 
+                                    @Override
+                                    public void onCancelButtonClick() {
+
+                                    }
+
+                                };
+                            }
+                        });
+                    }else {
+                        getDialog("Select valid service active days");
+                    }
 
                 } else {
                     getDialog("Select valid service availability time");
@@ -1665,51 +1694,66 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
     }
 
     public void getWeekDaysLayout(String weekday) {
-
-        if (String.valueOf(weekday.charAt(0)).equals("n")) {
-            linearLayout__sun.setVisibility(View.GONE);
+        Log.d("weekday--->", "getWeekDaysLayout: " + weekday);
+        if (weekday.equals("nnnnnnn")) {
+            layout_weekday.setVisibility(View.GONE);
+            aSwitch_all_days.setChecked(false);
+            isTimeSelected = false;
             list_sun.clear();
-        } else {
-            linearLayout__sun.setVisibility(View.VISIBLE);
-        }
-        if (String.valueOf(weekday.charAt(1)).equals("n")) {
-            linearLayout__mon.setVisibility(View.GONE);
             list_mon.clear();
-        } else {
-            linearLayout__mon.setVisibility(View.VISIBLE);
-        }
-
-        if (String.valueOf(weekday.charAt(2)).equals("n")) {
-            linearLayout__tue.setVisibility(View.GONE);
             list_tue.clear();
-        } else {
-            linearLayout__tue.setVisibility(View.VISIBLE);
-        }
-
-        if (String.valueOf(weekday.charAt(3)).equals("n")) {
-            linearLayout__wed.setVisibility(View.GONE);
             list_wed.clear();
-        } else {
-            linearLayout__wed.setVisibility(View.VISIBLE);
-        }
-        if (String.valueOf(weekday.charAt(4)).equals("n")) {
-            linearLayout__thur.setVisibility(View.GONE);
             list_thu.clear();
-        } else {
-            linearLayout__thur.setVisibility(View.VISIBLE);
-        }
-        if (String.valueOf(weekday.charAt(5)).equals("n")) {
-            linearLayout__fri.setVisibility(View.GONE);
             list_fri.clear();
-        } else {
-            linearLayout__fri.setVisibility(View.VISIBLE);
-        }
-
-        if (String.valueOf(weekday.charAt(6)).equals("n")) {
-            linearLayout__sat.setVisibility(View.GONE);
             list_sat.clear();
         } else {
-            linearLayout__sat.setVisibility(View.VISIBLE);
+            isTimeSelected = true;
+            layout_weekday.setVisibility(View.VISIBLE);
+            if (String.valueOf(weekday.charAt(0)).equals("n")) {
+                linearLayout__sun.setVisibility(View.GONE);
+                list_sun.clear();
+            } else {
+                linearLayout__sun.setVisibility(View.VISIBLE);
+            }
+            if (String.valueOf(weekday.charAt(1)).equals("n")) {
+                linearLayout__mon.setVisibility(View.GONE);
+                list_mon.clear();
+            } else {
+                linearLayout__mon.setVisibility(View.VISIBLE);
+            }
+
+            if (String.valueOf(weekday.charAt(2)).equals("n")) {
+                linearLayout__tue.setVisibility(View.GONE);
+                list_tue.clear();
+            } else {
+                linearLayout__tue.setVisibility(View.VISIBLE);
+            }
+
+            if (String.valueOf(weekday.charAt(3)).equals("n")) {
+                linearLayout__wed.setVisibility(View.GONE);
+                list_wed.clear();
+            } else {
+                linearLayout__wed.setVisibility(View.VISIBLE);
+            }
+            if (String.valueOf(weekday.charAt(4)).equals("n")) {
+                linearLayout__thur.setVisibility(View.GONE);
+                list_thu.clear();
+            } else {
+                linearLayout__thur.setVisibility(View.VISIBLE);
+            }
+            if (String.valueOf(weekday.charAt(5)).equals("n")) {
+                linearLayout__fri.setVisibility(View.GONE);
+                list_fri.clear();
+            } else {
+                linearLayout__fri.setVisibility(View.VISIBLE);
+            }
+
+            if (String.valueOf(weekday.charAt(6)).equals("n")) {
+                linearLayout__sat.setVisibility(View.GONE);
+                list_sat.clear();
+            } else {
+                linearLayout__sat.setVisibility(View.VISIBLE);
+            }
         }
 
     }
@@ -2132,5 +2176,71 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
             intermediateAlertDialog.dismissAlertDialog();
             intermediateAlertDialog = null;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.finish_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_finish) {
+            try {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+            Log.d("sunday_list--->", "onClick: " + list_sun.size() + "," + list_mon.size() + "," + list_tue.size() + "," + list_wed.size() + "," + list_thu.size() + "," + list_fri.size() + "," + list_sat.size());
+            if (isBizTimeSelected) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogYesNo(AddServiceAvailTimeActivity.this, "Create Service?", "Are you sure, You want to create " + ser_name + " service?", "Yes", "No") {
+                            @Override
+                            public void onOKButtonClick() {
+                                createService();
+                            }
+
+                            @Override
+                            public void onCancelButtonClick() {
+
+                            }
+
+                        };
+                    }
+                });
+
+            } else if (isCustomTimeSelected) {
+                if(isTimeSelected) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogYesNo(AddServiceAvailTimeActivity.this, "Create Service?", "Are you sure, You want to create " + ser_name + " service?", "Yes", "No") {
+                                @Override
+                                public void onOKButtonClick() {
+                                    createService();
+                                }
+
+                                @Override
+                                public void onCancelButtonClick() {
+
+                                }
+
+                            };
+                        }
+                    });
+                }else {
+                    getDialog("Select valid service active days");
+                }
+
+            } else {
+                getDialog("Select valid service availability time");
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

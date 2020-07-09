@@ -11,15 +11,15 @@
         android:id="@+id/toolbar_service_unavail"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#4DBDF1"
-        android:elevation="4dp"
+        android:background="@android:color/background_light"
+        android:elevation="0dp"
         android:gravity="center"
         android:textAlignment="center"
-        app:elevation="4dp"
+        app:elevation="0dp"
         app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Service unavailability"
-        app:titleTextColor="#FFFFFF" />
+        app:titleTextColor="@color/matt_black" />
 
     <TextView
         android:fontFamily="@font/lato_medium"

@@ -4,22 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EEEEEE"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_appt_details"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#4DBDF1"
-        android:elevation="4dp"
+        android:background="@android:color/background_light"
         android:gravity="center"
         android:textAlignment="center"
-        app:elevation="4dp"
+        app:elevation="0dp"
         app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Appointment Details"
-        app:titleTextColor="#FFFFFF" />
+        app:titleTextColor="@color/matt_black" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -127,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:fontFamily="@font/lato_medium"
-                    android:text="Virat" />
+                     />
             </LinearLayout>
 
             <LinearLayout

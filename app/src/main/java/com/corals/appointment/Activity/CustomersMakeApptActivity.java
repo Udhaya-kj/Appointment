@@ -1,5 +1,6 @@
 package com.corals.appointment.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,6 +14,9 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,7 +53,6 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
 
     private RecyclerView listView_customers;
     CustomersAdapterMakeAppt_Recyclerview customersAdapter_makeAppt;
-    LinearLayout linearLayout_add_customer;
     EditText editText_search;
     String pageId, ser_id, date, res_id, res, service, slot_no, start_time, end_time;
     private ArrayList<CustomersModel> mCustomersArrayList = new ArrayList<CustomersModel>();
@@ -66,7 +69,7 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_left);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,7 +77,6 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
             }
         });
         sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
-        linearLayout_add_customer = findViewById(R.id.layout_new_cust);
         listView_customers = findViewById(R.id.listview_customers);
         editText_search = findViewById(R.id.et_search_customer);
 
@@ -91,17 +93,9 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
             slot_no = getIntent().getStringExtra("slot_no");
             start_time = getIntent().getStringExtra("start_time");
             end_time = getIntent().getStringExtra("end_time");
+
+            Log.d("Data---", "onCreate: "+pageId+","+ser_id+","+service+","+res_id+","+res+","+date+","+slot_no+","+start_time+","+end_time);
         }
-        linearLayout_add_customer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(CustomersMakeApptActivity.this, CreateCustomerActivity.class);
-                i.putExtra("page_id", "02");
-                startActivity(i);
-                finish();
-                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
-            }
-        });
 
         editText_search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -259,5 +253,33 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
             intermediateAlertDialog = null;
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.add_new_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_add_new) {
+            Intent i = new Intent(CustomersMakeApptActivity.this, CreateCustomerActivity.class);
+            i.putExtra("page_id", "2");
+            i.putExtra("service_id", ser_id);
+            i.putExtra("service", service);
+            i.putExtra("res_id", res_id);
+            i.putExtra("res", res);
+            i.putExtra("date", date);
+            i.putExtra("slot_no", slot_no);
+            i.putExtra("start_time", start_time);
+            i.putExtra("end_time", end_time);
+            startActivity(i);
+            finish();
+            overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
 }

@@ -10,6 +10,9 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -21,6 +24,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -73,7 +77,7 @@ public class AddServiceActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_left);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,6 +122,9 @@ public class AddServiceActivity extends AppCompatActivity {
             Log.d("AddService--->", "onCreate: " + pageId + "," + ser_name + "," + ser_dur + "," + ser_amount + "," + ser_id + "," + ser_desc + "," + show_cust);
             if (!TextUtils.isEmpty(ser_name)) {
                 et_ser_name.setText(ser_name);
+                if(!TextUtils.isEmpty(ser_name)){
+                    et_ser_name.setSelection(ser_name.length());
+                }
             }
             if (!TextUtils.isEmpty(ser_dur)) {
                 tv_ser_duration.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + ser_dur + "</u>  </font>"));
@@ -142,6 +149,13 @@ public class AddServiceActivity extends AppCompatActivity {
         tv_ser_duration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
+
                 timepicker_dialog();
             }
         });
@@ -155,87 +169,84 @@ public class AddServiceActivity extends AppCompatActivity {
                 }
             }
         });
-        button_continue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                try {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                } catch (Exception e) {
-                    // TODO: handle exception
-                }
-                final String name = et_ser_name.getText().toString().trim();
-                String duration = tv_ser_duration.getText().toString();
-                final String s_desc = et_ser_desc.getText().toString().trim();
-                final String s_amt = et_ser_amt.getText().toString().trim();
-                if (name.length() > 0) {
-                    if (time_mins != 0) {
-                        if (s_amt.length() > 0) {
-                            if (s_desc.length() > 0) {
 
 
-                                if (pageId.equals("3")) {
-                                    SharedPreferences.Editor editor = sharedpreferences_service_data.edit();
-                                    editor.putString(SER_NAME, name);
-                                    editor.putString(SER_DURATION, String.valueOf(time_mins));
-                                    editor.putString(SER_DESCRIPTION, s_desc);
-                                    editor.putString(SER_AMOUNT, s_amt);
-                                    editor.putString(SER_SHOW_AMOUNT, showAmtCustomer);
-                                    editor.commit();
 
-                                    Intent in = new Intent(AddServiceActivity.this, AddServiceAvailTimeActivity.class);
-                                    in.putExtra("ser_name", name);
-                                    in.putExtra("ser_dur", String.valueOf(time_mins));
-                                    in.putExtra("ser_desc", s_desc);
-                                    in.putExtra("page_id", pageId);
-                                    in.putExtra("amount", s_amt);
-                                    in.putExtra("show_amount", showAmtCustomer);
-                                    startActivity(in);
-                                    finish();
-                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
-                                } else if (pageId.equals("03")) {
-                                    runOnUiThread(new Runnable() {
+
+
+
+    }
+
+    private void okButtonProcess(){
+        try {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        final String name = et_ser_name.getText().toString().trim();
+        String duration = tv_ser_duration.getText().toString();
+        final String s_desc = et_ser_desc.getText().toString().trim();
+        final String s_amt = et_ser_amt.getText().toString().trim();
+        if (name.length() > 0) {
+            if (time_mins != 0) {
+                if (s_amt.length() > 0) {
+                    if (s_desc.length() > 0) {
+                        if (pageId.equals("3")) {
+                            SharedPreferences.Editor editor = sharedpreferences_service_data.edit();
+                            editor.putString(SER_NAME, name);
+                            editor.putString(SER_DURATION, String.valueOf(time_mins));
+                            editor.putString(SER_DESCRIPTION, s_desc);
+                            editor.putString(SER_AMOUNT, s_amt);
+                            editor.putString(SER_SHOW_AMOUNT, showAmtCustomer);
+                            editor.commit();
+                            Intent in = new Intent(AddServiceActivity.this, AddServiceAvailTimeActivity.class);
+                            in.putExtra("ser_name", name);
+                            in.putExtra("ser_dur", String.valueOf(time_mins));
+                            in.putExtra("ser_desc", s_desc);
+                            in.putExtra("page_id", pageId);
+                            in.putExtra("amount", s_amt);
+                            in.putExtra("show_amount", showAmtCustomer);
+                            startActivity(in);
+                            finish();
+                            overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                        } else if (pageId.equals("03")) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new AlertDialogYesNo(AddServiceActivity.this, "Update Service?", "Are you sure, You want to update "+name+" service?", "Yes", "No") {
                                         @Override
-                                        public void run() {
-                                            new AlertDialogYesNo(AddServiceActivity.this, "Update Service?", "Are you sure, You want to update "+name+" service?", "Yes", "No") {
-                                                @Override
-                                                public void onOKButtonClick() {
-                                                    updateService(name, s_amt, s_desc);
-                                                }
-
-                                                @Override
-                                                public void onCancelButtonClick() {
-
-                                                }
-
-                                            };
+                                        public void onOKButtonClick() {
+                                            updateService(name, s_amt, s_desc);
                                         }
-                                    });
+
+                                        @Override
+                                        public void onCancelButtonClick() {
+
+                                        }
+
+                                    };
                                 }
-
-
-                            } else {
-                                et_ser_desc.setError("Enter service description");
-                                et_ser_desc.requestFocus();
-                            }
-                        } else {
-                            et_ser_amt.setError("Enter service amount");
-                            et_ser_amt.requestFocus();
+                            });
                         }
+
+
                     } else {
-                        getDialog("Select valid service duration");
+                        et_ser_desc.setError("Enter service description");
+                        et_ser_desc.requestFocus();
                     }
-
                 } else {
-                    et_ser_name.setError("Enter service name");
-                    et_ser_name.requestFocus();
+                    et_ser_amt.setError("Enter service amount");
+                    et_ser_amt.requestFocus();
                 }
-
-
+            } else {
+                getDialog("Select valid service duration");
             }
-        });
 
+        } else {
+            et_ser_name.setError("Enter service name");
+            et_ser_name.requestFocus();
+        }
 
     }
 
@@ -492,4 +503,18 @@ public class AddServiceActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.finish_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_finish) {
+            okButtonProcess();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

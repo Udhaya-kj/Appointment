@@ -1,5 +1,6 @@
 package com.corals.appointment.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -16,6 +17,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -91,7 +95,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_left);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -424,7 +428,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
             }
 
             @Override
-            public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+            public void onSuccess(final ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
                 Log.d("changeApptCustomer--->", "onSuccess-" + result.getStatusCode() + "," + result.getStatusMessage());
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
@@ -447,7 +451,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(ChangeApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                            new AlertDialogFailure(ChangeApptActivity.this, result.getStatusMessage(), "OK","", "Failed") {
                                 @Override
                                 public void onButtonClick() {
                                     startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
@@ -679,5 +683,90 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
 
         Log.d("ChangeSlot--->", "slot_onClick: "+slotNo+","+startTime+","+endTime);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.finish_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_finish) {
+            okButtonProcess();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void okButtonProcess(){
+        if (!TextUtils.isEmpty(startTime) && !TextUtils.isEmpty(endTime) && !TextUtils.isEmpty(slotNo)) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialogYesNo(ChangeApptActivity.this, "Reschedule Appointment?", "Are you sure, You want to reschedule this appointment?", "Yes", "No") {
+                        @Override
+                        public void onOKButtonClick() {
+
+                            Log.d("ChangeAppt---", "onClick: " + appt_id + "," + appt_date + "," + service_id + "," + cus_id + "," + startTime + "," + endTime + "," + slotNo);
+                            ApptTransactionBody transactionBody = new ApptTransactionBody();
+                            transactionBody.setReqType(Constants.UPDATE_APPOINTMENT);
+                            transactionBody.setApptId(appt_id);
+                            transactionBody.setSerId(service_id);
+                            transactionBody.setResId(res_id);
+                            transactionBody.setCustId(cus_id);
+                            transactionBody.setDate(appt_date);
+                            transactionBody.setSlotNo(slotNo);
+                            transactionBody.setStartTime(startTime);
+                            transactionBody.setEndTime(endTime);
+                            transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+                            transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
+                            transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+                            try {
+                                Log.d("Token--->", "token: " + sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+                                boolean isConn = ConnectivityReceiver.isConnected();
+                                if (isConn) {
+                                    intermediateAlertDialog = new IntermediateAlertDialog(ChangeApptActivity.this);
+                                    changeApptCustomer(transactionBody);
+                                } else {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new AlertDialogFailure(ChangeApptActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                                                @Override
+                                                public void onButtonClick() {
+
+                                                }
+                                            };
+                                        }
+                                    });
+                                }
+                            } catch (ApiException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelButtonClick() {
+
+                        }
+                    };
+                }
+            });
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialogFailure(ChangeApptActivity.this, "Select appointment time", "OK", "", "Warning") {
+                        @Override
+                        public void onButtonClick() {
+
+                        }
+                    };
+                }
+            });
+        }
     }
 }

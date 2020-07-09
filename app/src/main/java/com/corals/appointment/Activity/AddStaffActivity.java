@@ -13,6 +13,9 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -32,6 +35,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -88,7 +92,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
     private int mYear, mMonth, mDay, mHour, mMinute, mSeconds;
 
     RecyclerView recyclerView_services;
-    public  ArrayList<String> arrayList_map_service;
+    public ArrayList<String> arrayList_map_service;
     public static ArrayList<Boolean> positionArray;
     public static String map_services = "";
 
@@ -105,8 +109,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
     boolean isSameBizHrs = false;
     RadioButton radioButton_biz_hrs, radioButton_custom_time;
     Spinner spinner_weekdays;
-    LinearLayout layout_custom_time, layout_add_time;
-    boolean isSelected = false;
+    LinearLayout layout_custom_time, layout_add_time,layout_weekday;
     TextView text_start_time, text_end_time, text_weekday;
     ArrayList<String> list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat;
     StringBuilder weekdays = new StringBuilder("yyyyyyy");
@@ -124,7 +127,8 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
     List<MapServiceResourceBody> mapServiceResourceBodyList_update;
     List<AppointmentService> appointmentServices = new ArrayList<>();
     boolean isMapSelectedUpdate = false;
-
+    boolean isBizTimeSelected = false, isCustomTimeSelected = false;
+    boolean isTimeSelected = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,7 +139,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_left);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,7 +160,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
 
         layout_services = findViewById(R.id.layout_select_services);
         layout_wrk_hrs = findViewById(R.id.layout_staff_wrk_hrs);
-
+        layout_weekday = findViewById(R.id.layout_weekdays);
         btn_yes_sday_p = findViewById(R.id.btn_yes_sunday_P);
         btn_yes_mnday_p = findViewById(R.id.btn_yes_monday_P);
         btn_yes_tsday_p = findViewById(R.id.btn_yes_tuesday_P);
@@ -277,10 +281,15 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
             mapServiceResourceBodyList_update = (List<MapServiceResourceBody>) getIntent().getSerializableExtra("mapSerRes");
             Log.d("AddStaff--->", "onCreate: " + pageId + "," + res_id + "," + isSameBizHrs + "," + name + "," + mobile + "," + mng_load + "," + mapServiceResourceBodyList_update);
             et_staff_name.setText(name);
+
             et_staff_mob.setText(mobile);
             et_staff_load.setText(mng_load);
+            et_staff_load.setEnabled(false);
 
             if (pageId.equals("03")) {
+                if (name.length() > 0) {
+                    et_staff_name.setSelection(name.length());
+                }
                 toolbar.setTitle("Update Staff");
                 button_continue.setText("UPDATE STAFF");
                 layout_wrk_hrs.setVisibility(View.GONE);
@@ -444,7 +453,8 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                     layout_custom_time.setVisibility(View.GONE);
                     isSameBizHrs = true;
                 }
-                isSelected = true;
+                isBizTimeSelected = true;
+                isCustomTimeSelected = false;
             }
         });
 
@@ -457,7 +467,8 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                     layout_custom_time.setVisibility(View.VISIBLE);
                     isSameBizHrs = false;
                 }
-                isSelected = true;
+                isCustomTimeSelected = true;
+                isBizTimeSelected = false;
             }
         });
 
@@ -1133,12 +1144,11 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                             if (staff_load.length() > 0) {
                                 if (!arrayList_map_service.isEmpty()) {
                                     Log.d("sunday_list--->", "onClick: " + list_sun.size() + "," + list_mon.size() + "," + list_tue.size() + "," + list_wed.size() + "," + list_thu.size() + "," + list_fri.size() + "," + list_sat.size());
-                                    if (isSelected) {
-
+                                    if (isBizTimeSelected) {
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                new AlertDialogYesNo(AddStaffActivity.this, "Create  Staff?", "Are you sure, You want to create "+name+" staff?", "Yes", "No") {
+                                                new AlertDialogYesNo(AddStaffActivity.this, "Create  Staff?", "Are you sure, You want to create " + name + " staff?", "Yes", "No") {
                                                     @Override
                                                     public void onOKButtonClick() {
                                                         createMerStaff(name, mob, staff_load);
@@ -1154,9 +1164,34 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                                         });
 
 
+                                    }
+                                else if (isCustomTimeSelected) {
+                                        if(isTimeSelected) {
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    new AlertDialogYesNo(AddStaffActivity.this, "Create  Staff?", "Are you sure, You want to create " + name + " staff?", "Yes", "No") {
+                                                        @Override
+                                                        public void onOKButtonClick() {
+                                                            createMerStaff(name, mob, staff_load);
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelButtonClick() {
+
+                                                        }
+
+                                                    };
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            getDialog("Select valid staff active days");
+                                        }
+
 
                                     } else {
-                                        getDialog("Staff working hours is not valid");
+                                        getDialog("Select valid staff availability time");
                                     }
 
                                 } else {
@@ -1189,7 +1224,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            new AlertDialogYesNo(AddStaffActivity.this, "Update  Staff?", "Are you sure, You want to update "+name+" staff?", "Yes", "No") {
+                                            new AlertDialogYesNo(AddStaffActivity.this, "Update  Staff?", "Are you sure, You want to update " + name + " staff?", "Yes", "No") {
                                                 @Override
                                                 public void onOKButtonClick() {
                                                     resourceUpdate(res_id, name, mob, staff_load);
@@ -1549,53 +1584,66 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
     }
 
     public void getWeekDaysLayout(String weekday) {
-
-        if (String.valueOf(weekday.charAt(0)).equals("n")) {
-            linearLayout__sun.setVisibility(View.GONE);
+        if (weekday.equals("nnnnnnn")) {
+            layout_weekday.setVisibility(View.GONE);
+            aSwitch_all_days.setChecked(false);
+            isTimeSelected = false;
             list_sun.clear();
-        } else {
-            linearLayout__sun.setVisibility(View.VISIBLE);
-        }
-        if (String.valueOf(weekday.charAt(1)).equals("n")) {
-            linearLayout__mon.setVisibility(View.GONE);
             list_mon.clear();
-        } else {
-            linearLayout__mon.setVisibility(View.VISIBLE);
-        }
-
-        if (String.valueOf(weekday.charAt(2)).equals("n")) {
-            linearLayout__tue.setVisibility(View.GONE);
             list_tue.clear();
-        } else {
-            linearLayout__tue.setVisibility(View.VISIBLE);
-        }
-
-        if (String.valueOf(weekday.charAt(3)).equals("n")) {
-            linearLayout__wed.setVisibility(View.GONE);
             list_wed.clear();
-        } else {
-            linearLayout__wed.setVisibility(View.VISIBLE);
-        }
-        if (String.valueOf(weekday.charAt(4)).equals("n")) {
-            linearLayout__thur.setVisibility(View.GONE);
             list_thu.clear();
-        } else {
-            linearLayout__thur.setVisibility(View.VISIBLE);
-        }
-        if (String.valueOf(weekday.charAt(5)).equals("n")) {
-            linearLayout__fri.setVisibility(View.GONE);
             list_fri.clear();
-        } else {
-            linearLayout__fri.setVisibility(View.VISIBLE);
-        }
-
-        if (String.valueOf(weekday.charAt(6)).equals("n")) {
-            linearLayout__sat.setVisibility(View.GONE);
             list_sat.clear();
         } else {
-            linearLayout__sat.setVisibility(View.VISIBLE);
-        }
+            isTimeSelected = true;
+            layout_weekday.setVisibility(View.VISIBLE);
+            if (String.valueOf(weekday.charAt(0)).equals("n")) {
+                linearLayout__sun.setVisibility(View.GONE);
+                list_sun.clear();
+            } else {
+                linearLayout__sun.setVisibility(View.VISIBLE);
+            }
+            if (String.valueOf(weekday.charAt(1)).equals("n")) {
+                linearLayout__mon.setVisibility(View.GONE);
+                list_mon.clear();
+            } else {
+                linearLayout__mon.setVisibility(View.VISIBLE);
+            }
 
+            if (String.valueOf(weekday.charAt(2)).equals("n")) {
+                linearLayout__tue.setVisibility(View.GONE);
+                list_tue.clear();
+            } else {
+                linearLayout__tue.setVisibility(View.VISIBLE);
+            }
+
+            if (String.valueOf(weekday.charAt(3)).equals("n")) {
+                linearLayout__wed.setVisibility(View.GONE);
+                list_wed.clear();
+            } else {
+                linearLayout__wed.setVisibility(View.VISIBLE);
+            }
+            if (String.valueOf(weekday.charAt(4)).equals("n")) {
+                linearLayout__thur.setVisibility(View.GONE);
+                list_thu.clear();
+            } else {
+                linearLayout__thur.setVisibility(View.VISIBLE);
+            }
+            if (String.valueOf(weekday.charAt(5)).equals("n")) {
+                linearLayout__fri.setVisibility(View.GONE);
+                list_fri.clear();
+            } else {
+                linearLayout__fri.setVisibility(View.VISIBLE);
+            }
+
+            if (String.valueOf(weekday.charAt(6)).equals("n")) {
+                linearLayout__sat.setVisibility(View.GONE);
+                list_sat.clear();
+            } else {
+                linearLayout__sat.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     public void getCopyTimeAllDays(String weekday, String time1, String time2, String time3) {
@@ -1934,6 +1982,13 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
     }
 
     private void resourceUpdate(String resid, String name, String mob, String staff_load) {
+
+        try {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
 
         AvailDay availDay_sun = new AvailDay();
         AvailDay availDay_mon = new AvailDay();
@@ -3001,13 +3056,153 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
 
     @Override
     public void mappedServicesList(String flag, String value) {
-        if(flag.equals("1")){
+        if (flag.equals("1")) {
             arrayList_map_service.add(value);
-            Log.d("List_map_ser--->", "arrayList_map_service: "+arrayList_map_service);
-        }
-        else if(flag.equals("0")){
+            Log.d("List_map_ser--->", "arrayList_map_service: " + arrayList_map_service);
+        } else if (flag.equals("0")) {
             arrayList_map_service.remove(value);
-            Log.d("List_map_ser--->", "arrayList_map_service: "+arrayList_map_service);
+            Log.d("List_map_ser--->", "arrayList_map_service: " + arrayList_map_service);
         }
+    }
+    private void okButtonProcess() {
+        final String name = et_staff_name.getText().toString();
+        final String mob = et_staff_mob.getText().toString();
+        final String staff_load = et_staff_load.getText().toString();
+
+        if (!TextUtils.isEmpty(pageId) && pageId.equals("3")) {
+            if (name.length() > 0) {
+                if (mob.length() > 0 && mob.length() >= 8) {
+                    if (staff_load.length() > 0) {
+                        if (!arrayList_map_service.isEmpty()) {
+                            Log.d("sunday_list--->", "onClick: " + list_sun.size() + "," + list_mon.size() + "," + list_tue.size() + "," + list_wed.size() + "," + list_thu.size() + "," + list_fri.size() + "," + list_sat.size());
+                            if (isBizTimeSelected) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        new AlertDialogYesNo(AddStaffActivity.this, "Create  Staff?", "Are you sure, You want to create " + name + " staff?", "Yes", "No") {
+                                            @Override
+                                            public void onOKButtonClick() {
+                                                createMerStaff(name, mob, staff_load);
+                                            }
+
+                                            @Override
+                                            public void onCancelButtonClick() {
+
+                                            }
+
+                                        };
+                                    }
+                                });
+
+
+                            }
+                            else if (isCustomTimeSelected) {
+                                if(isTimeSelected) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new AlertDialogYesNo(AddStaffActivity.this, "Create  Staff?", "Are you sure, You want to create " + name + " staff?", "Yes", "No") {
+                                                @Override
+                                                public void onOKButtonClick() {
+                                                    createMerStaff(name, mob, staff_load);
+                                                }
+
+                                                @Override
+                                                public void onCancelButtonClick() {
+
+                                                }
+
+                                            };
+                                        }
+                                    });
+                                }
+                                else {
+                                    getDialog("Select valid staff active days");
+                                }
+
+
+                            } else {
+                                getDialog("Select valid staff availability time");
+                            }
+
+                        } else {
+                            getDialog("Must select one service for staff");
+                        }
+
+                    } else {
+                        et_staff_load.setError("Enter valid appointment");
+                        et_staff_load.requestFocus();
+                    }
+                } else {
+                    et_staff_mob.setError("Enter valid mobile");
+                    et_staff_mob.requestFocus();
+                }
+            } else {
+                et_staff_name.setError("Enter valid name");
+                et_staff_name.requestFocus();
+            }
+        } else if (!TextUtils.isEmpty(pageId) && pageId.equals("03")) {
+
+            for (int y = 0; y < positionArray.size(); y++) {
+                if (positionArray.get(y) == true) {
+                    isMapSelectedUpdate = true;
+                }
+            }
+            if (name.length() > 0) {
+                if (mob.length() > 0 && mob.length() >= 8) {
+                    if (staff_load.length() > 0) {
+                        if (isMapSelectedUpdate) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new AlertDialogYesNo(AddStaffActivity.this, "Update  Staff?", "Are you sure, You want to update " + name + " staff?", "Yes", "No") {
+                                        @Override
+                                        public void onOKButtonClick() {
+                                            resourceUpdate(res_id, name, mob, staff_load);
+                                        }
+
+                                        @Override
+                                        public void onCancelButtonClick() {
+
+                                        }
+
+                                    };
+                                }
+                            });
+
+
+                        } else {
+                            getDialog("Must select one service for staff");
+                        }
+
+                    } else {
+                        et_staff_load.setError("Enter valid appointment");
+                        et_staff_load.requestFocus();
+                    }
+                } else {
+                    et_staff_mob.setError("Enter valid mobile");
+                    et_staff_mob.requestFocus();
+                }
+            } else {
+                et_staff_name.setError("Enter valid name");
+                et_staff_name.requestFocus();
+            }
+        }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.finish_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_finish) {
+            okButtonProcess();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

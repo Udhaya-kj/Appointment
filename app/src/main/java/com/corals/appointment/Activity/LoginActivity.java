@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final String CURRENCY_SYMBOL = "CURRENCY_SYMBOL ";
     public static final String COUNTRY_CODE = "COUNTRY_CODE ";
     public static final String BIZ_NAME = "BIZ_NAME ";
+    public static final String USER_MAIL = "USER_MAIL ";
     private IntermediateAlertDialog intermediateAlertDialog;
 
     @Override
@@ -93,9 +94,9 @@ public class LoginActivity extends AppCompatActivity {
         textView = findViewById(R.id.tv_signup);
         textView_fg_pass = findViewById(R.id.text_forgot_pass);
 
+
         imageView_logo = findViewById(R.id.image_logo);
         textView_title = findViewById(R.id.text_app_title);
-
 
         service_name_list = new ArrayList<>();
         service_dur_list = new ArrayList<>();
@@ -107,6 +108,11 @@ public class LoginActivity extends AppCompatActivity {
         sharedpreferences_services = getSharedPreferences(AddServiceAvailTimeActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
         sharedpreferences_staffs = getSharedPreferences(AddStaffActivity.MyPREFERENCES_STAFFS, Context.MODE_PRIVATE);
 
+        if (!TextUtils.isEmpty(sharedpreferences_sessionToken.getString(LoginActivity.USER_MAIL, ""))) {
+            editText_id.setText(sharedpreferences_sessionToken.getString(LoginActivity.USER_MAIL, ""));
+            editText_id.setSelection(sharedpreferences_sessionToken.getString(LoginActivity.USER_MAIL, "").length());
+            editText_password.requestFocus();
+        }
        /* SharedPreferences.Editor editor = sharedpreferences_ask_again.edit();
         editor.putString(StatusServiceStaffActivity.VALUE, "0");
         editor.commit();*/
@@ -259,6 +265,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString(COUNTRY_CODE, result.getCountryCode());
                     editor.putString(BIZ_NAME, result.getBizDisplayName());
                     editor.putString(DEVICEID, requestBody.getDeviceId());
+                    editor.putString(USER_MAIL, editText_id.getText().toString().trim());
                     editor.commit();
 
                     startActivity(new Intent(LoginActivity.this, DashboardActivity.class));

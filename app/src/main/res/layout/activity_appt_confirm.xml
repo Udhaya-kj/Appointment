@@ -10,14 +10,14 @@
         android:id="@+id/toolbar_appt_confirm"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/app_blue"
-        android:elevation="4dp"
+        android:background="@android:color/background_light"
+        android:elevation="0dp"
         android:textAlignment="center"
-        app:elevation="4dp"
+        app:elevation="0dp"
         app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Review &amp; Confirm"
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="@color/matt_black" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,7 +60,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:gravity="center_vertical"
-                        android:text="Hair Cut" />
+                         />
 
                     <TextView
                         android:fontFamily="@font/lato_medium"
@@ -70,8 +70,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:gravity="center_vertical"
-                        android:textSize="13sp"
-                        android:text="UK" />
+                        android:textSize="12sp"
+                         />
 
                 </LinearLayout>
 
@@ -82,28 +82,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:background="#FFF"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="10dp"
-                        android:src="@drawable/add" />
-
-                    <TextView
-                        android:fontFamily="@font/lato_medium"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="10dp"
-                        android:gravity="center_vertical"
-                        android:text="Create new customer"
-                        android:textSize="18sp" />
-                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -113,7 +91,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:background="#FFF"
+                    android:background="@color/white"
                     android:paddingStart="20dp">
 
                     <ImageView
@@ -137,17 +115,17 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:gravity="center_vertical"
-                            android:text="22-May-2020 " />
+                            />
                         <TextView
                             android:fontFamily="@font/lato_medium"
                             android:layout_marginTop="8dp"
-                            android:textSize="13sp"
+                            android:textSize="12sp"
                             android:id="@+id/text_appt_time"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:gravity="center_vertical"
-                            android:text="1 hour" />
+                             />
 
                     </LinearLayout>
 
@@ -185,18 +163,18 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:gravity="center_vertical"
-                            android:text="Gokul" />
+                           />
 
                         <TextView
                             android:fontFamily="@font/lato_medium"
-                            android:textSize="13sp"
+                            android:textSize="12sp"
                             android:layout_marginTop="8dp"
                             android:id="@+id/tv_cus_mob"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:gravity="center_vertical"
-                            android:text="9090909090" />
+                             />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -204,6 +182,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"

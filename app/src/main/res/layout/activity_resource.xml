@@ -10,14 +10,13 @@
         android:id="@+id/toolbar_new_resource"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#4DBDF1"
         android:elevation="4dp"
         android:textAlignment="center"
-        app:elevation="4dp"
+        app:elevation="0dp"
         app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Add New Service"
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="@color/matt_black" />
 
 
     <LinearLayout
@@ -38,13 +37,13 @@
                 android:padding="15dp">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
                     android:hint="Service Name"
-                    app:boxStrokeColor="@color/mtrl_textinput_default_box_stroke_color">
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_res_name"
@@ -170,25 +169,26 @@
                         android:layout_marginEnd="0dp" />
                 </LinearLayout>
 
-
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
+                    android:gravity="start|top"
                     android:hint="Service Description"
-                    app:boxStrokeColor="@color/mtrl_textinput_default_box_stroke_color">
+                    android:textAlignment="viewStart">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_service_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="start|top"
                         android:inputType="textMultiLine"
-                        android:minHeight="80dp"
-                        android:fontFamily="@font/lato_medium"
-                        android:paddingStart="10dp"
-                        android:singleLine="false" />
+                        android:maxHeight="@dimen/height_100dp"
+                        android:minHeight="180dp"
+                        android:singleLine="false"
+                        android:textAlignment="viewStart" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -199,6 +199,7 @@
                     android:layout_marginTop="80dp"
                     android:backgroundTint="@color/app_blue"
                     android:text="Next"
+                    android:visibility="gone"
                     android:fontFamily="@font/lato_medium"
                     android:textColor="@color/white" />
 

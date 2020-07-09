@@ -24,6 +24,9 @@ import com.corals.appointment.Client.OkHttpApiClient;
 import com.corals.appointment.Client.api.MerchantApisApi;
 import com.corals.appointment.Client.model.AppointmentEnquiryBody;
 import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
+import com.corals.appointment.Client.model.AppointmentService;
+import com.corals.appointment.Client.model.AvailDay;
+import com.corals.appointment.Client.model.TimeData;
 import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
@@ -43,6 +46,7 @@ public class CalendarViewActivity extends AppCompatActivity {
     Calendar c;
     private SharedPreferences sharedpreferences_sessionToken;
     private IntermediateAlertDialog intermediateAlertDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +56,7 @@ public class CalendarViewActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_left);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,7 +95,23 @@ public class CalendarViewActivity extends AppCompatActivity {
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                calendar_date = year + "-" + (month + 1) + "-" + dayOfMonth;
+
+                String month_ = null;
+                if (String.valueOf(month + 1).length() == 1) {
+                    month_ = "0" + (month + 1);
+                } else {
+                    month_ = String.valueOf(month + 1);
+                }
+
+                String day = null;
+                if (String.valueOf(dayOfMonth).length() == 1) {
+                    day = "0" + dayOfMonth;
+                } else {
+                    day = String.valueOf(dayOfMonth);
+                }
+                calendar_date= year + "-" + month_ + "-" + day;
+
+                //calendar_date = year + "-" + (month + 1) + "-" + dayOfMonth;
             }
         });
 
@@ -132,6 +152,7 @@ public class CalendarViewActivity extends AppCompatActivity {
             }
         });
 
+        callAPI();
     }
 
     private void callAPI() {
@@ -170,9 +191,10 @@ public class CalendarViewActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-    failedIntent();
+        failedIntent();
 
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -222,7 +244,20 @@ public class CalendarViewActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (!result.getAvailAppointments().isEmpty() && result.getAvailAppointments() != null) {
+                            if (result.getService() != null) {
+                                AppointmentService appointmentService = result.getService();
+                                List<AvailDay> availDayList = appointmentService.getAvailDays();
+
+                                String day = availDayList.get(0).getDay();
+                                List<TimeData> timing = availDayList.get(0).getTiming();
+                                for (int y = 0; y < timing.size(); y++) {
+                                    String id = timing.get(y).getAvailId();
+                                    String st = timing.get(y).getStartTime();
+                                    String et = timing.get(y).getEndTime();
+                                    Log.d("Time--->", "run: "+id+","+st+","+et);
+                                }
+                                Log.d("Day--->", "run: " + day + "," + availDayList);
+
                               /*  RecyclerAdapter_TimeSlots recyclerAdapter_timeSlots = new RecyclerAdapter_TimeSlots(TimeSlotsActivity.this, result.getAvailAppointments(), timeSlotDataModel);
                                 recyclerView.setAdapter(recyclerAdapter_timeSlots);*/
                             }
@@ -267,7 +302,8 @@ public class CalendarViewActivity extends AppCompatActivity {
         });
 
     }
-    private void failedIntent(){
+
+    private void failedIntent() {
         if (!TextUtils.isEmpty(page_id) && page_id.equals("1")) {
             Intent i = new Intent(CalendarViewActivity.this, AppointmentActivity.class);
             startActivity(i);

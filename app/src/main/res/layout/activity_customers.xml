@@ -4,109 +4,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/background_light"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_customers"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#4DBDF1"
-        android:elevation="4dp"
-        android:textAlignment="center"
-        app:elevation="4dp"
-        app:titleTextAppearance="@style/headerTextStyle1"
+        android:background="@android:color/background_light"
+        android:elevation="0dp"
+        app:elevation="0dp"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:title="Select Customer"
-        app:titleTextColor="#FFFFFF" />
+        app:title="Customers"
+        app:titleTextColor="@color/matt_black" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical"
+        android:weightSum="1">
 
-
-        <LinearLayout
-            android:id="@+id/layout_new_cust"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/white">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/add" />
-
-            <TextView
-                android:fontFamily="@font/lato_medium"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:gravity="center_vertical"
-                android:text="Add New Customer"
-                android:textSize="18sp" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#DDDDDD"></View>
-
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:id="@+id/layout_search_cust"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_margin="8dp"
-            android:background="@drawable/layout_bg_white">
+            app:cardBackgroundColor="@color/light_grey"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="0dp">
 
-            <ImageView
-
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/search" />
-
-            <EditText
-                android:fontFamily="@font/lato_medium"
-                android:id="@+id/et_search_customer"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:background="#FFFFFF"
-                android:gravity="center_vertical"
-                android:hint="Search by name or mobile"
-                android:imeOptions="actionDone"
-                android:inputType="text"
-                android:textSize="18sp" />
+                android:gravity="center"
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <EditText
+                    android:id="@+id/et_search_customer"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="start"
+                    android:hint="Search by name or mobile"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:padding="12dp"
+                    android:textSize="17sp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#DDDDDD"></View>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|end"
+                    android:layout_margin="2dp"
+                    android:background="@drawable/layout_bg_white"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_search" />
+            </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listview_customers"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp"
-            />
+        </androidx.cardview.widget.CardView>
 
-        <Button
-            android:fontFamily="@font/lato_medium"
-            android:id="@+id/button_staff_continue"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.1"
-            android:background="#21AE18"
-            android:hint="Next"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:visibility="gone" />
     </LinearLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listview_customers"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

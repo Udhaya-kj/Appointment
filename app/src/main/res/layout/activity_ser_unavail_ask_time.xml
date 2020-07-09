@@ -11,15 +11,15 @@
         android:id="@+id/toolbar_ser_unavail_ask_time"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#4DBDF1"
-        android:elevation="4dp"
+        android:background="@android:color/background_light"
+        android:elevation="0dp"
         android:gravity="center"
         android:textAlignment="center"
-        app:elevation="4dp"
+        app:elevation="0dp"
         app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Service unavailability"
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="@color/matt_black" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -412,6 +412,7 @@
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
+                android:visibility="gone"
                 android:id="@+id/button_ser_unavail_submit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
