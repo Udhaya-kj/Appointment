@@ -49,7 +49,7 @@ public class ServicesMainRecyclerviewAdapter extends RecyclerView.Adapter<Servic
             @Override
             public void onClick(View v) {
                 adapterCallback.onMethodCallback();
-                mCallback.onClick(appointmentServices.get(position).getSerId(),appointmentServices.get(position).getSerName());
+                mCallback.onClick(appointmentServices.get(position).getSerId(),appointmentServices.get(position).getSerName(),appointmentServices.get(position).getSerDuration());
                 index = position;
                 notifyDataSetChanged();
             }

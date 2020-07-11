@@ -80,7 +80,7 @@ import java.util.List;
 import java.util.Map;
 
 public class AddStaffActivity extends AppCompatActivity implements MappedServicesCallback {
-    EditText et_staff_name, et_staff_mob, et_staff_load;
+    EditText et_staff_name, et_staff_mob;
     MaterialButton button_continue, button_add_time;
     private SharedPreferences sharedpreferences_staffs;
     public static final String MyPREFERENCES_STAFFS = "MyPrefs_Staffs";
@@ -92,8 +92,9 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
     private int mYear, mMonth, mDay, mHour, mMinute, mSeconds;
 
     RecyclerView recyclerView_services;
-    public ArrayList<String> arrayList_map_service;
+    public ArrayList<String> arrayList_map_service,arrayList_map_load;
     public static ArrayList<Boolean> positionArray;
+    public static ArrayList<String> loadArray;
     public static String map_services = "";
 
     TextView btn_yes_sday_p, btn_yes_mnday_p, btn_yes_tsday_p, btn_yes_wedday_p, btn_yes_trsday_p, btn_yes_fdday_p, btn_yes_strday_p;
@@ -151,7 +152,6 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
         sharedpreferences_staffs = getSharedPreferences(MyPREFERENCES_STAFFS, Context.MODE_PRIVATE);
         et_staff_name = findViewById(R.id.et_staff_name);
         et_staff_mob = findViewById(R.id.et_staff_mob);
-        et_staff_load = findViewById(R.id.et_staff_load);
         button_continue = findViewById(R.id.button_add_staff_continue);
         cardView_custom_time = findViewById(R.id.cardview_custom_time);
 
@@ -261,7 +261,9 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
         staff_name_list = new ArrayList<>();
         staff_mob_list = new ArrayList<>();
         arrayList_map_service = new ArrayList<>();
+        arrayList_map_load = new ArrayList<>();
         positionArray = new ArrayList<Boolean>();
+        loadArray = new ArrayList<String>();
 
         recyclerView_services = findViewById(R.id.recyclerview_select_services);
         LinearLayoutManager lm = new LinearLayoutManager(this);
@@ -276,15 +278,11 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
             isSameBizHrs = Boolean.parseBoolean(getIntent().getStringExtra("sameBizTime"));
             String name = getIntent().getStringExtra("name");
             String mobile = getIntent().getStringExtra("mobile");
-            String mng_load = getIntent().getStringExtra("mng_load");
 
             mapServiceResourceBodyList_update = (List<MapServiceResourceBody>) getIntent().getSerializableExtra("mapSerRes");
-            Log.d("AddStaff--->", "onCreate: " + pageId + "," + res_id + "," + isSameBizHrs + "," + name + "," + mobile + "," + mng_load + "," + mapServiceResourceBodyList_update);
+            Log.d("AddStaff--->", "onCreate: " + pageId + "," + res_id + "," + isSameBizHrs + "," + name + "," + mobile + "," + mapServiceResourceBodyList_update);
             et_staff_name.setText(name);
-
             et_staff_mob.setText(mobile);
-            et_staff_load.setText(mng_load);
-            et_staff_load.setEnabled(false);
 
             if (pageId.equals("03")) {
                 if (name.length() > 0) {
@@ -1136,12 +1134,10 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
             public void onClick(View v) {
                 final String name = et_staff_name.getText().toString();
                 final String mob = et_staff_mob.getText().toString();
-                final String staff_load = et_staff_load.getText().toString();
 
                 if (!TextUtils.isEmpty(pageId) && pageId.equals("3")) {
                     if (name.length() > 0) {
                         if (mob.length() > 0 && mob.length() >= 8) {
-                            if (staff_load.length() > 0) {
                                 if (!arrayList_map_service.isEmpty()) {
                                     Log.d("sunday_list--->", "onClick: " + list_sun.size() + "," + list_mon.size() + "," + list_tue.size() + "," + list_wed.size() + "," + list_thu.size() + "," + list_fri.size() + "," + list_sat.size());
                                     if (isBizTimeSelected) {
@@ -1151,7 +1147,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                                                 new AlertDialogYesNo(AddStaffActivity.this, "Create  Staff?", "Are you sure, You want to create " + name + " staff?", "Yes", "No") {
                                                     @Override
                                                     public void onOKButtonClick() {
-                                                        createMerStaff(name, mob, staff_load);
+                                                        createMerStaff(name, mob);
                                                     }
 
                                                     @Override
@@ -1173,7 +1169,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                                                     new AlertDialogYesNo(AddStaffActivity.this, "Create  Staff?", "Are you sure, You want to create " + name + " staff?", "Yes", "No") {
                                                         @Override
                                                         public void onOKButtonClick() {
-                                                            createMerStaff(name, mob, staff_load);
+                                                            createMerStaff(name, mob);
                                                         }
 
                                                         @Override
@@ -1198,10 +1194,6 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                                     getDialog("Must select one service for staff");
                                 }
 
-                            } else {
-                                et_staff_load.setError("Enter valid appointment");
-                                et_staff_load.requestFocus();
-                            }
                         } else {
                             et_staff_mob.setError("Enter valid mobile");
                             et_staff_mob.requestFocus();
@@ -1219,7 +1211,6 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                     }
                     if (name.length() > 0) {
                         if (mob.length() > 0 && mob.length() >= 8) {
-                            if (staff_load.length() > 0) {
                                 if (isMapSelectedUpdate) {
                                     runOnUiThread(new Runnable() {
                                         @Override
@@ -1227,7 +1218,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                                             new AlertDialogYesNo(AddStaffActivity.this, "Update  Staff?", "Are you sure, You want to update " + name + " staff?", "Yes", "No") {
                                                 @Override
                                                 public void onOKButtonClick() {
-                                                    resourceUpdate(res_id, name, mob, staff_load);
+                                                    resourceUpdate(res_id, name, mob);
                                                 }
 
                                                 @Override
@@ -1244,10 +1235,6 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                                     getDialog("Must select one service for staff");
                                 }
 
-                            } else {
-                                et_staff_load.setError("Enter valid appointment");
-                                et_staff_load.requestFocus();
-                            }
                         } else {
                             et_staff_mob.setError("Enter valid mobile");
                             et_staff_mob.requestFocus();
@@ -1363,7 +1350,12 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
+        try {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
         Intent in = new Intent(AddStaffActivity.this, SetupStaffActivity_Bottom.class);
         startActivity(in);
         finish();
@@ -1981,7 +1973,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
 
     }
 
-    private void resourceUpdate(String resid, String name, String mob, String staff_load) {
+    private void resourceUpdate(String resid, String name, String mob) {
 
         try {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -1989,426 +1981,6 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
         } catch (Exception e) {
             // TODO: handle exception
         }
-
-        AvailDay availDay_sun = new AvailDay();
-        AvailDay availDay_mon = new AvailDay();
-        AvailDay availDay_tue = new AvailDay();
-        AvailDay availDay_wed = new AvailDay();
-        AvailDay availDay_thu = new AvailDay();
-        AvailDay availDay_fri = new AvailDay();
-        AvailDay availDay_sat = new AvailDay();
-
-        List<TimeData> timeDataList_sun = new ArrayList<>();
-        List<TimeData> timeDataList_mon = new ArrayList<>();
-        List<TimeData> timeDataList_tue = new ArrayList<>();
-        List<TimeData> timeDataList_wed = new ArrayList<>();
-        List<TimeData> timeDataList_thu = new ArrayList<>();
-        List<TimeData> timeDataList_fri = new ArrayList<>();
-        List<TimeData> timeDataList_sat = new ArrayList<>();
-
-
-        TimeData timeData_sun1 = new TimeData();
-        TimeData timeData_sun2 = new TimeData();
-        TimeData timeData_sun3 = new TimeData();
-
-        TimeData timeData_mon1 = new TimeData();
-        TimeData timeData_mon2 = new TimeData();
-        TimeData timeData_mon3 = new TimeData();
-
-        TimeData timeData_tue1 = new TimeData();
-        TimeData timeData_tue2 = new TimeData();
-        TimeData timeData_tue3 = new TimeData();
-
-        TimeData timeData_wed1 = new TimeData();
-        TimeData timeData_wed2 = new TimeData();
-        TimeData timeData_wed3 = new TimeData();
-
-        TimeData timeData_thu1 = new TimeData();
-        TimeData timeData_thu2 = new TimeData();
-        TimeData timeData_thu3 = new TimeData();
-
-        TimeData timeData_fri1 = new TimeData();
-        TimeData timeData_fri2 = new TimeData();
-        TimeData timeData_fri3 = new TimeData();
-
-        TimeData timeData_sat1 = new TimeData();
-        TimeData timeData_sat2 = new TimeData();
-        TimeData timeData_sat3 = new TimeData();
-
-        //Sunday
-        if (!list_sun.isEmpty()) {
-            Log.d("sunday_list--->", "submit: " + list_sun);
-            if (list_sun.size() > 0) {
-                String[] strs = list_sun.get(0).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_sun1.setAvailId("");
-                timeData_sun1.setStartTime(s_tm + ":00");
-                timeData_sun1.setEndTime(e_tm + ":00");
-                timeDataList_sun.add(timeData_sun1);
-                Log.d("Sun--->", "onClick: >0" + " 1");
-            }
-
-            if (list_sun.size() > 1) {
-                String[] strs = list_sun.get(1).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_sun2.setAvailId("");
-                timeData_sun2.setStartTime(s_tm + ":00");
-                timeData_sun2.setEndTime(e_tm + ":00");
-                timeDataList_sun.add(timeData_sun2);
-                Log.d("Sun--->", "onClick: > 1" + " 2");
-            }
-
-            if (list_sun.size() > 2) {
-                String[] strs = list_sun.get(2).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_sun3.setAvailId("");
-                timeData_sun3.setStartTime(s_tm + ":00");
-                timeData_sun3.setEndTime(e_tm + ":00");
-                timeDataList_sun.add(timeData_sun3);
-                Log.d("Sun--->", "onClick: ==3" + " 3");
-            }
-
-            availDay_sun.setDay("1");
-            availDay_sun.setTiming(timeDataList_sun);
-        } else {
-            timeData_sun1.setAvailId("");
-            timeData_sun1.setStartTime("00:00:00");
-            timeData_sun1.setEndTime("00:00:00");
-
-            timeDataList_sun.add(timeData_sun1);
-
-            availDay_sun.setDay("1");
-            availDay_sun.setTiming(timeDataList_sun);
-        }
-
-        //Monday
-        if (!list_mon.isEmpty()) {
-            if (list_mon.size() > 0) {
-                String[] strs = list_mon.get(0).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_mon1.setAvailId("");
-                timeData_mon1.setStartTime(s_tm + ":00");
-                timeData_mon1.setEndTime(e_tm + ":00");
-                timeDataList_mon.add(timeData_mon1);
-                Log.d("Mon--->", "onClick: >0" + " 1");
-            }
-
-            if (list_mon.size() > 1) {
-                String[] strs = list_mon.get(1).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_mon2.setAvailId("");
-                timeData_mon2.setStartTime(s_tm + ":00");
-                timeData_mon2.setEndTime(e_tm + ":00");
-                timeDataList_mon.add(timeData_mon2);
-                Log.d("Mon--->", "onClick: > 1" + " 2");
-            }
-
-            if (list_mon.size() > 2) {
-                String[] strs = list_mon.get(2).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_mon3.setAvailId("");
-                timeData_mon3.setStartTime(s_tm + ":00");
-                timeData_mon3.setEndTime(e_tm + ":00");
-                timeDataList_mon.add(timeData_mon3);
-                Log.d("Mon--->", "onClick: ==3" + " 3");
-            }
-
-            availDay_mon.setDay("2");
-            availDay_mon.setTiming(timeDataList_mon);
-        } else {
-            timeData_mon1.setAvailId("");
-            timeData_mon1.setStartTime("00:00:00");
-            timeData_mon1.setEndTime("00:00:00");
-
-            timeDataList_mon.add(timeData_mon1);
-            availDay_mon.setDay("2");
-            availDay_mon.setTiming(timeDataList_mon);
-        }
-
-
-        //Tuesday
-        if (!list_tue.isEmpty()) {
-            if (list_tue.size() > 0) {
-                String[] strs = list_tue.get(0).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_tue1.setAvailId("");
-                timeData_tue1.setStartTime(s_tm + ":00");
-                timeData_tue1.setEndTime(e_tm + ":00");
-                timeDataList_tue.add(timeData_tue1);
-                Log.d("Tue--->", "onClick: >0" + " 1");
-            }
-
-            if (list_tue.size() > 1) {
-                String[] strs = list_tue.get(1).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_tue2.setAvailId("");
-                timeData_tue2.setStartTime(s_tm + ":00");
-                timeData_tue2.setEndTime(e_tm + ":00");
-                timeDataList_tue.add(timeData_tue2);
-                Log.d("Tue--->", "onClick: > 1" + " 2");
-            }
-
-            if (list_tue.size() > 2) {
-                String[] strs = list_tue.get(2).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_tue3.setAvailId("");
-                timeData_tue3.setStartTime(s_tm + ":00");
-                timeData_tue3.setEndTime(e_tm + ":00");
-                timeDataList_tue.add(timeData_tue3);
-                Log.d("Tue--->", "onClick: ==3" + " 3");
-            }
-
-            availDay_tue.setDay("3");
-            availDay_tue.setTiming(timeDataList_tue);
-        } else {
-            timeData_tue1.setAvailId("");
-            timeData_tue1.setStartTime("00:00:00");
-            timeData_tue1.setEndTime("00:00:00");
-
-            timeDataList_tue.add(timeData_tue1);
-
-            availDay_tue.setDay("3");
-            availDay_tue.setTiming(timeDataList_tue);
-        }
-
-
-        //Wednesday
-        if (!list_wed.isEmpty()) {
-            if (list_wed.size() > 0) {
-                String[] strs = list_wed.get(0).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_wed1.setAvailId("");
-                timeData_wed1.setStartTime(s_tm + ":00");
-                timeData_wed1.setEndTime(e_tm + ":00");
-                timeDataList_wed.add(timeData_wed1);
-                Log.d("Wed--->", "onClick: >0" + " 1");
-            }
-
-            if (list_wed.size() > 1) {
-                String[] strs = list_wed.get(1).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_wed2.setAvailId("");
-                timeData_wed2.setStartTime(s_tm + ":00");
-                timeData_wed2.setEndTime(e_tm + ":00");
-                timeDataList_wed.add(timeData_wed2);
-                Log.d("Wed--->", "onClick: > 1" + " 2");
-            }
-
-            if (list_wed.size() > 2) {
-                String[] strs = list_wed.get(2).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_wed3.setAvailId("");
-                timeData_wed3.setStartTime(s_tm + ":00");
-                timeData_wed3.setEndTime(e_tm + ":00");
-                timeDataList_wed.add(timeData_wed3);
-                Log.d("Wed--->", "onClick: ==3" + " 3");
-            }
-
-            availDay_wed.setDay("4");
-            availDay_wed.setTiming(timeDataList_wed);
-        } else {
-            timeData_wed1.setAvailId("");
-            timeData_wed1.setStartTime("00:00:00");
-            timeData_wed1.setEndTime("00:00:00");
-
-            timeDataList_wed.add(timeData_wed1);
-
-            availDay_wed.setDay("4");
-            availDay_wed.setTiming(timeDataList_wed);
-        }
-
-
-        //Thursday
-        if (!list_thu.isEmpty()) {
-            if (list_thu.size() > 0) {
-                String[] strs = list_thu.get(0).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_thu1.setAvailId("");
-                timeData_thu1.setStartTime(s_tm + ":00");
-                timeData_thu1.setEndTime(e_tm + ":00");
-                timeDataList_thu.add(timeData_thu1);
-                Log.d("Thu--->", "onClick: >0" + " 1");
-            }
-
-            if (list_thu.size() > 1) {
-                String[] strs = list_thu.get(1).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_thu2.setAvailId("");
-                timeData_thu2.setStartTime(s_tm + ":00");
-                timeData_thu2.setEndTime(e_tm + ":00");
-                timeDataList_thu.add(timeData_thu2);
-                Log.d("Thu--->", "onClick: > 1" + " 2");
-            }
-
-            if (list_thu.size() > 2) {
-                String[] strs = list_thu.get(2).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_thu3.setAvailId("");
-                timeData_thu3.setStartTime(s_tm + ":00");
-                timeData_thu3.setEndTime(e_tm + ":00");
-                timeDataList_thu.add(timeData_thu3);
-                Log.d("Thu--->", "onClick: ==3" + " 3");
-            }
-
-            availDay_thu.setDay("5");
-            availDay_thu.setTiming(timeDataList_thu);
-        } else {
-            timeData_thu1.setAvailId("");
-            timeData_thu1.setStartTime("00:00:00");
-            timeData_thu1.setEndTime("00:00:00");
-
-            timeDataList_thu.add(timeData_thu1);
-
-            availDay_thu.setDay("5");
-            availDay_thu.setTiming(timeDataList_thu);
-        }
-
-
-        //Friday
-        if (!list_fri.isEmpty()) {
-            if (list_fri.size() > 0) {
-                String[] strs = list_fri.get(0).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_fri1.setAvailId("");
-                timeData_fri1.setStartTime(s_tm + ":00");
-                timeData_fri1.setEndTime(e_tm + ":00");
-                timeDataList_fri.add(timeData_fri1);
-                Log.d("Fri--->", "onClick: >0" + " 1");
-            }
-
-            if (list_fri.size() > 1) {
-                String[] strs = list_fri.get(1).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_fri2.setAvailId("");
-                timeData_fri2.setStartTime(s_tm + ":00");
-                timeData_fri2.setEndTime(e_tm + ":00");
-                timeDataList_fri.add(timeData_fri2);
-                Log.d("Fri--->", "onClick: > 1" + " 2");
-            }
-
-            if (list_fri.size() > 2) {
-                String[] strs = list_fri.get(2).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_fri3.setAvailId("");
-                timeData_fri3.setStartTime(s_tm + ":00");
-                timeData_fri3.setEndTime(e_tm + ":00");
-                timeDataList_fri.add(timeData_fri3);
-                Log.d("Fri--->", "onClick: ==3" + " 3");
-            }
-
-
-            availDay_fri.setDay("6");
-            availDay_fri.setTiming(timeDataList_fri);
-        } else {
-            timeData_fri1.setAvailId("");
-            timeData_fri1.setStartTime("00:00:00");
-            timeData_fri1.setEndTime("00:00:00");
-
-            timeDataList_fri.add(timeData_fri1);
-
-            availDay_fri.setDay("6");
-            availDay_fri.setTiming(timeDataList_fri);
-        }
-
-
-        //Saturday
-        if (!list_sat.isEmpty()) {
-            if (list_sat.size() > 0) {
-                String[] strs = list_sat.get(0).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_sat1.setAvailId("");
-                timeData_sat1.setStartTime(s_tm + ":00");
-                timeData_sat1.setEndTime(e_tm + ":00");
-                timeDataList_sat.add(timeData_sat1);
-                Log.d("Sat--->", "onClick: >0" + " 1");
-            }
-
-            if (list_sat.size() > 1) {
-                String[] strs = list_sat.get(1).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_sat2.setAvailId("");
-                timeData_sat2.setStartTime(s_tm + ":00");
-                timeData_sat2.setEndTime(e_tm + ":00");
-                timeDataList_sat.add(timeData_sat2);
-                Log.d("Sat--->", "onClick: > 1" + " 2");
-            }
-
-            if (list_sat.size() > 2) {
-                String[] strs = list_sat.get(2).split(" - ");
-                String s_tm = strs[0];
-                String e_tm = strs[1];
-
-                timeData_sat3.setAvailId("");
-                timeData_sat3.setStartTime(s_tm + ":00");
-                timeData_sat3.setEndTime(e_tm + ":00");
-                timeDataList_sat.add(timeData_sat3);
-                Log.d("Sat--->", "onClick: ==3" + " 3");
-            }
-
-            availDay_sat.setDay("7");
-            availDay_sat.setTiming(timeDataList_sat);
-        } else {
-            timeData_sat1.setAvailId("");
-            timeData_sat1.setStartTime("00:00:00");
-            timeData_sat1.setEndTime("00:00:00");
-
-            timeDataList_sat.add(timeData_sat1);
-
-            availDay_sat.setDay("7");
-            availDay_sat.setTiming(timeDataList_sat);
-        }
-
-
-        //Final avail list
-        List<AvailDay> availDayList = new ArrayList<>();
-        availDayList.add(availDay_sun);
-        availDayList.add(availDay_mon);
-        availDayList.add(availDay_tue);
-        availDayList.add(availDay_wed);
-        availDayList.add(availDay_thu);
-        availDayList.add(availDay_fri);
-        availDayList.add(availDay_sat);
-
 
         List<MapServiceResourceBody> mapServiceResourceBodyList = new ArrayList<>();
         MapServiceResourceBody mapServiceResourceBody = null;
@@ -2419,17 +1991,15 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
             mapServiceResourceBodyList.add(mapServiceResourceBody);
             Log.d("MappingUpdate---", "resourceUpdate: " + appointmentServices.get(j).getSerId() + "," + !positionArray.get(j));
         }
-        //mapServiceResourceBody.setSerId("42005271232");
         AppointmentResources appointmentResources = new AppointmentResources();
         appointmentResources.setResId(resid);
         appointmentResources.setResName(name);
         appointmentResources.setMobile(mob);
         appointmentResources.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         appointmentResources.setIsActive(true);
-        appointmentResources.setManageableLoad(staff_load);
+        appointmentResources.setManageableLoad("");
         appointmentResources.setSameBussTime(isSameBizHrs);
         appointmentResources.serResMaps(mapServiceResourceBodyList);
-        appointmentResources.availDays(availDayList);
 
         ApptTransactionBody transactionBody = new ApptTransactionBody();
         transactionBody.setReqType(Constants.RESOURCE_UPDATE);
@@ -2566,7 +2136,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
         }
     }
 
-    private void createMerStaff(final String name, final String mob, final String staff_load) {
+    private void createMerStaff(final String name, final String mob) {
         try {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -2998,6 +2568,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
             mapServiceResourceBody = new MapServiceResourceBody();
             mapServiceResourceBody.setSerId(arrayList_map_service.get(j));
             mapServiceResourceBody.setDelete(false);
+            mapServiceResourceBody.setManageableLoad(arrayList_map_load.get(j));
             mapServiceResourceBodyList.add(mapServiceResourceBody);
         }
         //mapServiceResourceBody.setSerId("42005271232");
@@ -3008,7 +2579,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
         appointmentResources.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         appointmentResources.setIsActive(true);
         appointmentResources.setResId("");
-        appointmentResources.setManageableLoad(staff_load);
+        appointmentResources.setManageableLoad("");
         appointmentResources.setSameBussTime(isSameBizHrs);
         appointmentResources.serResMaps(mapServiceResourceBodyList);
         appointmentResources.availDays(availDayList);
@@ -3034,7 +2605,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                         new AlertDialogFailure(AddStaffActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
                             @Override
                             public void onButtonClick() {
-                                createMerStaff(name, mob, staff_load);
+                                createMerStaff(name, mob);
                             }
                         };
                     }
@@ -3055,24 +2626,24 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
     }
 
     @Override
-    public void mappedServicesList(String flag, String value) {
+    public void mappedServicesList(String flag, String value, String load) {
         if (flag.equals("1")) {
             arrayList_map_service.add(value);
-            Log.d("List_map_ser--->", "arrayList_map_service: " + arrayList_map_service);
+            arrayList_map_load.add(load);
+            Log.d("List_map_ser--->", "arrayList_map_service: " + arrayList_map_service+","+arrayList_map_load);
         } else if (flag.equals("0")) {
             arrayList_map_service.remove(value);
-            Log.d("List_map_ser--->", "arrayList_map_service: " + arrayList_map_service);
+            arrayList_map_load.remove(load);
+            Log.d("List_map_ser--->", "arrayList_map_service: " + arrayList_map_service+","+arrayList_map_load);
         }
     }
     private void okButtonProcess() {
         final String name = et_staff_name.getText().toString();
         final String mob = et_staff_mob.getText().toString();
-        final String staff_load = et_staff_load.getText().toString();
 
         if (!TextUtils.isEmpty(pageId) && pageId.equals("3")) {
             if (name.length() > 0) {
                 if (mob.length() > 0 && mob.length() >= 8) {
-                    if (staff_load.length() > 0) {
                         if (!arrayList_map_service.isEmpty()) {
                             Log.d("sunday_list--->", "onClick: " + list_sun.size() + "," + list_mon.size() + "," + list_tue.size() + "," + list_wed.size() + "," + list_thu.size() + "," + list_fri.size() + "," + list_sat.size());
                             if (isBizTimeSelected) {
@@ -3082,7 +2653,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                                         new AlertDialogYesNo(AddStaffActivity.this, "Create  Staff?", "Are you sure, You want to create " + name + " staff?", "Yes", "No") {
                                             @Override
                                             public void onOKButtonClick() {
-                                                createMerStaff(name, mob, staff_load);
+                                                createMerStaff(name, mob);
                                             }
 
                                             @Override
@@ -3104,7 +2675,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                                             new AlertDialogYesNo(AddStaffActivity.this, "Create  Staff?", "Are you sure, You want to create " + name + " staff?", "Yes", "No") {
                                                 @Override
                                                 public void onOKButtonClick() {
-                                                    createMerStaff(name, mob, staff_load);
+                                                    createMerStaff(name, mob);
                                                 }
 
                                                 @Override
@@ -3129,10 +2700,6 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                             getDialog("Must select one service for staff");
                         }
 
-                    } else {
-                        et_staff_load.setError("Enter valid appointment");
-                        et_staff_load.requestFocus();
-                    }
                 } else {
                     et_staff_mob.setError("Enter valid mobile");
                     et_staff_mob.requestFocus();
@@ -3150,7 +2717,6 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
             }
             if (name.length() > 0) {
                 if (mob.length() > 0 && mob.length() >= 8) {
-                    if (staff_load.length() > 0) {
                         if (isMapSelectedUpdate) {
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -3158,7 +2724,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                                     new AlertDialogYesNo(AddStaffActivity.this, "Update  Staff?", "Are you sure, You want to update " + name + " staff?", "Yes", "No") {
                                         @Override
                                         public void onOKButtonClick() {
-                                            resourceUpdate(res_id, name, mob, staff_load);
+                                            resourceUpdate(res_id, name, mob);
                                         }
 
                                         @Override
@@ -3175,10 +2741,6 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                             getDialog("Must select one service for staff");
                         }
 
-                    } else {
-                        et_staff_load.setError("Enter valid appointment");
-                        et_staff_load.requestFocus();
-                    }
                 } else {
                     et_staff_mob.setError("Enter valid mobile");
                     et_staff_mob.requestFocus();

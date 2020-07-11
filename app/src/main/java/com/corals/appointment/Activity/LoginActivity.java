@@ -65,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final String COUNTRY_CODE = "COUNTRY_CODE ";
     public static final String BIZ_NAME = "BIZ_NAME ";
     public static final String USER_MAIL = "USER_MAIL ";
+    public static final String MAX_DAYS = "MAX_DAYS ";
     private IntermediateAlertDialog intermediateAlertDialog;
 
     @Override
@@ -86,8 +87,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         }
-
-
         editText_id = findViewById(R.id.edit_userid);
         editText_password = findViewById(R.id.edit_password);
         button_login = findViewById(R.id.button_login);
@@ -192,6 +191,7 @@ public class LoginActivity extends AppCompatActivity {
                         securityAPIBody.setDeviceId(id);
                         securityAPIBody.setUserEmail(editText_id.getText().toString());
                         securityAPIBody.setUserPass(hashStr);
+                        intermediateAlertDialog = new IntermediateAlertDialog(LoginActivity.this);
                         merchantApptLogin(securityAPIBody);
                     } else {
 
@@ -223,7 +223,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void merchantApptLogin(final SecurityAPIBody requestBody) throws ApiException {
-        intermediateAlertDialog = new IntermediateAlertDialog(LoginActivity.this);
+
         Log.d("login---", "login: " + requestBody);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(LoginActivity.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();
@@ -255,7 +255,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
-                Log.d("login--->", "onSuccess-" + statusCode + " , " + result + " , " + result.getUserId() + "," + result.getBizDisplayName() + " , " + result.getCountryCode() + " , " + result.getMerCurSymbol());
+                Log.d("login--->", "onSuccess-" + statusCode + " , " + result + " , " + result.getUserId() + "," + result.getBizDisplayName() + " , " + result.getCountryCode() + " , " + result.getMerCurSymbol() + " , " + result.getMaxLenLoadingDays());
 
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
                     SharedPreferences.Editor editor = sharedpreferences_sessionToken.edit();
@@ -265,6 +265,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString(COUNTRY_CODE, result.getCountryCode());
                     editor.putString(BIZ_NAME, result.getBizDisplayName());
                     editor.putString(DEVICEID, requestBody.getDeviceId());
+                    editor.putString(MAX_DAYS, result.getMaxLenLoadingDays());
                     editor.putString(USER_MAIL, editText_id.getText().toString().trim());
                     editor.commit();
 

@@ -70,7 +70,7 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
     Menu menu;
     private LinearLayout linearLayout_bottom;
     Button button_appts, button_book;
-    public String ser_id, service;
+    public String ser_id, service,service_dur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,9 +181,10 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
         button_book.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(AppointmentActivity.this, BookingResourcesActivity.class);
+                Intent i = new Intent(AppointmentActivity.this, CalendarViewActivity.class);
                 i.putExtra("service_id", ser_id);
                 i.putExtra("service", service);
+                i.putExtra("service_dur", service_dur);
                 i.putExtra("page_id", "1");
                 startActivity(i);
                 finish();
@@ -438,9 +439,10 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
     }
 
     @Override
-    public void onClick(String id, String ser) {
+    public void onClick(String id, String ser, String ser_dur) {
         ser_id = id;
         service = ser;
+        service_dur = ser_dur;
         Log.d("Data---", "onClick: "+ser_id+","+service);
     }
 }

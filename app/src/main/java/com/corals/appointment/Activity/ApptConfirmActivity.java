@@ -46,7 +46,7 @@ public class ApptConfirmActivity extends AppCompatActivity {
     TextView tv_n1, tv_m1, tv_ser_name, tv_time, tv_date,tv_res;
     private IntermediateAlertDialog intermediateAlertDialog;
     private SharedPreferences sharedpreferences_sessionToken;
-    String name, mob, cus_id, service_id, date, slot_no, start_time, end_time, res_id, res, service,cus_email;
+    String name, mob, cus_id, service_id, date, slot_no, start_time, end_time, service,cus_email,service_dur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,17 +81,16 @@ public class ApptConfirmActivity extends AppCompatActivity {
             slot_no = getIntent().getStringExtra("slot_no");
             start_time = getIntent().getStringExtra("start_time");
             end_time = getIntent().getStringExtra("end_time");
-            res_id = getIntent().getStringExtra("res_id");
-            res = getIntent().getStringExtra("res");
             service = getIntent().getStringExtra("service");
             cus_email = getIntent().getStringExtra("cus_email");
+            service_dur = getIntent().getStringExtra("service_dur");
             tv_n1.setText(name);
             tv_m1.setText(mob);
             tv_ser_name.setText(service);
             tv_time.setText(start_time+"-"+end_time);
             tv_date.setText(date);
-            tv_res.setText("w/ "+res);
-            Log.d("Appn_Date---->", "onCreate: " + name + "," + mob + "," + cus_id + "," + service_id + "," + date + "," + slot_no + "," + start_time + "," + end_time + "," + res_id + "," + res + "," + service+ "," + cus_email);
+            tv_res.setText(service_dur+" mins");
+            Log.d("Appn_Date---->", "onCreate: " + name + "," + mob + "," + cus_id + "," + service_id + "," + date + "," + slot_no + "," + start_time + "," + end_time + "," + service+ "," + cus_email+ "," + service_dur);
         }
         sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
         button_done = findViewById(R.id.button_appt_done);
@@ -119,7 +118,6 @@ public class ApptConfirmActivity extends AppCompatActivity {
                                         transactionBody.setStartTime(start_time);
                                         transactionBody.setEndTime(end_time);
                                         transactionBody.setCustId(cus_id);
-                                        transactionBody.setResId(res_id);
                                         transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
                                         transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
 
@@ -186,11 +184,9 @@ public class ApptConfirmActivity extends AppCompatActivity {
 
     private void bookAppointment(ApptTransactionBody requestBody) throws ApiException {
         Log.d("createStaff---", "createStaff: " + requestBody);
-
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(ApptConfirmActivity.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();
         webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
-
         webMerchantApisApi.merchantAppointmentTransactionAsync(requestBody, new ApiCallback<ApptTransactionResponse>() {
             @Override
             public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
@@ -204,7 +200,7 @@ public class ApptConfirmActivity extends AppCompatActivity {
                         new AlertDialogFailure(ApptConfirmActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                startActivity(new Intent(ApptConfirmActivity.this, AppointmentActivity.class));
+                                startActivity(new Intent(ApptConfirmActivity.this, DashboardActivity.class));
                                 finish();
                                 overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
                             }
@@ -252,10 +248,10 @@ public class ApptConfirmActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(ApptConfirmActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                            new AlertDialogFailure(ApptConfirmActivity.this, result.getStatusMessage(), "OK", "", "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(ApptConfirmActivity.this, AppointmentActivity.class));
+                                    startActivity(new Intent(ApptConfirmActivity.this, DashboardActivity.class));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
                                 }
@@ -322,7 +318,6 @@ public class ApptConfirmActivity extends AppCompatActivity {
                                 transactionBody.setStartTime(start_time);
                                 transactionBody.setEndTime(end_time);
                                 transactionBody.setCustId(cus_id);
-                                transactionBody.setResId(res_id);
                                 transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
                                 transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
 

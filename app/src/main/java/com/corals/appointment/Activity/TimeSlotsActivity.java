@@ -42,7 +42,7 @@ public class TimeSlotsActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     TextView textView_appn_dt, textView_res;
     private IntermediateAlertDialog intermediateAlertDialog;
-    String service_id, service, date, res_id, res, cus_id, cus, cus_email, page_id,cus_mob;
+    String service_id, service, date, cus_id, cus, cus_email, page_id,cus_mob,service_dur;
     private SharedPreferences sharedpreferences_sessionToken;
     TimeSlotDataModel timeSlotDataModel;
 
@@ -76,17 +76,16 @@ public class TimeSlotsActivity extends AppCompatActivity {
             service_id = getIntent().getStringExtra("service_id");
             service = getIntent().getStringExtra("service");
             date = getIntent().getStringExtra("date");
-            res_id = getIntent().getStringExtra("res_id");
-            res = getIntent().getStringExtra("res");
             cus_id = getIntent().getStringExtra("cus_id");
             cus = getIntent().getStringExtra("cus");
             cus_email = getIntent().getStringExtra("cus_email");
             cus_mob = getIntent().getStringExtra("cus_mob");
-            Log.d("Appn_Date-->", "onCreate: " + page_id+","+date + "," + service + "," + service_id + "," + res_id + "," + res + "," + cus_id + "," + cus + "," + cus_email+ "," + cus_mob);
+            service_dur = getIntent().getStringExtra("service_dur");
+            Log.d("Appn_Date-->", "onCreate: " + page_id+","+date + "," + service + "," + service_id + "," + cus_id + "," + cus + "," + cus_email+ "," + cus_mob+ "," + service_dur);
             textView_appn_dt.setText(date);
             textView_res.setText(service);
 
-            timeSlotDataModel=new TimeSlotDataModel(page_id,cus_id,cus,cus_email,cus_mob,date,service_id,service,res_id,res);
+            timeSlotDataModel=new TimeSlotDataModel(page_id,cus_id,cus,cus_email,cus_mob,date,service_id,service,service_dur);
            /* timeSlotDataModel.setPage_id(page_id);
             timeSlotDataModel.setCus_id(cus_id);
             timeSlotDataModel.setCus(cus);

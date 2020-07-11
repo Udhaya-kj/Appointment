@@ -68,16 +68,13 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
     boolean isActiveSunday_p = true, isActiveMonday_p = true, isActiveTuesday_p = true, isActiveWednesday_p = true, isActiveThursday_p = true, isActiveFriday_p = true, isActiveSaturday_p = true;
     TextView text_start_time, text_end_time, text_weekday;
     ArrayList<String> list_sun, list_mon, list_tue, list_wed, list_thu, list_fri, list_sat;
-    String start_time, end_time, time_update_id = "";
     boolean isBizTimeSelected = false, isCustomTimeSelected = false;
     StringBuilder weekdays = new StringBuilder("yyyyyyy");
     int hour = 0, minute = 0;
     private SharedPreferences sharedpreferences_sessionToken;
-    private SharedPreferences sharedpreferences_services;
     public static final String MyPREFERENCES_SERVICES = "MyPrefs_Services";
     public static final String SERVICE_NAME = "service_name";
     public static final String SERVICE_DURATION = "service_duration";
-    private ArrayList<String> service_name_list, service_dur_list;
     String ser_name, ser_dur, ser_desc, page_id, position, amount, showamount;
 
     TextView textView_sun_time1, textView_sun_time2, textView_sun_time3, textView_mon_time1, textView_mon_time2, textView_mon_time3, textView_tue_time1, textView_tue_time2, textView_tue_time3, textView_wed_time1, textView_wed_time2, textView_wed_time3,
@@ -91,8 +88,8 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
     ScrollView scrollView;
     Switch aSwitch_all_days;
     String all_days_time1 = "00:00 - 00:00", all_days_time2 = "00:00 - 00:00", all_days_time3 = "00:00 - 00:00";
-    boolean isSameBizHrs = false;
-    boolean isTimeSelected = true;
+    boolean isSameBizHrs = false, isTimeSelected = true, isTimeAdded = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +118,6 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
             showamount = getIntent().getStringExtra("show_amount");
             Log.d("AddSer--->", "onCreate: " + ser_name + "," + ser_dur + "," + page_id + "," + position + "," + amount + "," + showamount);
         }
-        sharedpreferences_services = getSharedPreferences(MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
         sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
         radioButton_biz_hrs = findViewById(R.id.rb_biz_hours);
         radioButton_custom_time = findViewById(R.id.rb_custom_time);
@@ -217,7 +213,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         imageView_warning_fri3 = (ImageView) findViewById(R.id.image_warning_fri3);
         imageView_warning_sat3 = (ImageView) findViewById(R.id.image_warning_sat3);
 
-
+        aSwitch_all_days.setEnabled(false);
         LinearLayoutManager lm = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(lm);
         list_sun = new ArrayList<>();
@@ -228,8 +224,6 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         list_fri = new ArrayList<>();
         list_sat = new ArrayList<>();
 
-        service_name_list = new ArrayList<>();
-        service_dur_list = new ArrayList<>();
         getWeekDays("yyyyyyy");
        /* ArrayAdapter arrayAdapter_weekdays = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, arrayList_weekdays);
         spinner_weekdays.setAdapter(arrayAdapter_weekdays);
@@ -368,10 +362,11 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     all_days_time1 = "00:00 - 00:00";
                     all_days_time2 = "00:00 - 00:00";
                     all_days_time3 = "00:00 - 00:00";
+                    aSwitch_all_days.setEnabled(false);
+                    isTimeAdded = false;
                 }
             }
         });
-        final ArrayList<String> arrayList_weekdays = new ArrayList<>();
 
         spinner_weekdays.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -384,8 +379,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                 text_start_time.setText("00:00");
                 text_end_time.setText("00:00");
                 button_add_time.setText("ADD");
-                time_update_id = "";
-                // Toast.makeText(AddServiceAvailTimeActivity.this, ""+day, Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
@@ -396,7 +390,6 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         text_start_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //get_start_time();
                 timepicker_dialog("1");
             }
         });
@@ -404,7 +397,6 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         text_end_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //get_end_time();
                 timepicker_dialog("0");
             }
         });
@@ -413,12 +405,10 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         btn_yes_sday_p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //s_status = "1";
                 if (isActiveSunday_p) {
                     btn_yes_sday_p.setBackgroundColor(getResources().getColor(R.color.dark_grey));
                     btn_yes_sday_p.setTextColor(getResources().getColor(R.color.black));
                     isActiveSunday_p = false;
-                    // arrayList_weekdays.add(0, "");
 
                     weekdays.setCharAt(0, 'n');
                     getWeekDays(String.valueOf(weekdays));
@@ -428,7 +418,6 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     btn_yes_sday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
                     btn_yes_sday_p.setTextColor(getResources().getColor(R.color.white));
                     isActiveSunday_p = true;
-                    //arrayList_weekdays.add(0, "Sunday");
 
                     weekdays.setCharAt(0, 'y');
                     getWeekDays(String.valueOf(weekdays));
@@ -441,13 +430,10 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         btn_yes_mnday_p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              /*  mn_status = "1";
-                btn_yes_mnday.setBackgroundResource(R.drawable.yes_select_selector);*/
                 if (isActiveMonday_p) {
                     btn_yes_mnday_p.setBackgroundColor(getResources().getColor(R.color.dark_grey));
                     btn_yes_mnday_p.setTextColor(getResources().getColor(R.color.black));
                     isActiveMonday_p = false;
-                    //  arrayList_weekdays.add(1, "");
 
                     weekdays.setCharAt(1, 'n');
                     getWeekDays(String.valueOf(weekdays));
@@ -457,7 +443,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     btn_yes_mnday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
                     btn_yes_mnday_p.setTextColor(getResources().getColor(R.color.white));
                     isActiveMonday_p = true;
-                    //arrayList_weekdays.add(1, "Monday");
+
                     weekdays.setCharAt(1, 'y');
                     getWeekDays(String.valueOf(weekdays));
                     getWeekDaysLayout(String.valueOf(weekdays));
@@ -470,13 +456,11 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         btn_yes_tsday_p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* ts_status = "1";
-                btn_yes_tsday.setBackgroundResource(R.drawable.yes_select_selector);*/
+
                 if (isActiveTuesday_p) {
                     btn_yes_tsday_p.setBackgroundColor(getResources().getColor(R.color.dark_grey));
                     btn_yes_tsday_p.setTextColor(getResources().getColor(R.color.black));
                     isActiveTuesday_p = false;
-                    //arrayList_weekdays.add(2, "");
 
                     weekdays.setCharAt(2, 'n');
                     getWeekDays(String.valueOf(weekdays));
@@ -486,7 +470,6 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     btn_yes_tsday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
                     btn_yes_tsday_p.setTextColor(getResources().getColor(R.color.white));
                     isActiveTuesday_p = true;
-                    //arrayList_weekdays.add(2, "Tuesday");
 
                     weekdays.setCharAt(2, 'y');
                     getWeekDays(String.valueOf(weekdays));
@@ -500,13 +483,10 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         btn_yes_wedday_p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*wed_status = "1";
-                btn_yes_wedday.setBackgroundResource(R.drawable.yes_select_selector);*/
                 if (isActiveWednesday_p) {
                     btn_yes_wedday_p.setBackgroundColor(getResources().getColor(R.color.dark_grey));
                     btn_yes_wedday_p.setTextColor(getResources().getColor(R.color.black));
                     isActiveWednesday_p = false;
-                    // arrayList_weekdays.add(3, "");
 
                     weekdays.setCharAt(3, 'n');
                     getWeekDays(String.valueOf(weekdays));
@@ -516,7 +496,6 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     btn_yes_wedday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
                     btn_yes_wedday_p.setTextColor(getResources().getColor(R.color.white));
                     isActiveWednesday_p = true;
-                    //arrayList_weekdays.add(3, "Wednesday");
 
                     weekdays.setCharAt(3, 'y');
                     getWeekDays(String.valueOf(weekdays));
@@ -531,14 +510,11 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         btn_yes_trsday_p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* thrs_status = "1";
-                btn_yes_trsday.setBackgroundResource(R.drawable.yes_select_selector);*/
 
                 if (isActiveThursday_p) {
                     btn_yes_trsday_p.setBackgroundColor(getResources().getColor(R.color.dark_grey));
                     btn_yes_trsday_p.setTextColor(getResources().getColor(R.color.black));
                     isActiveThursday_p = false;
-                    // arrayList_weekdays.add(4, "");
 
                     weekdays.setCharAt(4, 'n');
                     getWeekDays(String.valueOf(weekdays));
@@ -548,7 +524,6 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     btn_yes_trsday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
                     btn_yes_trsday_p.setTextColor(getResources().getColor(R.color.white));
                     isActiveThursday_p = true;
-                    // arrayList_weekdays.add(4, "Thursday");
 
                     weekdays.setCharAt(4, 'y');
                     getWeekDays(String.valueOf(weekdays));
@@ -563,14 +538,10 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         btn_yes_fdday_p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* fr_status = "1";
-                btn_yes_fdday.setBackgroundResource(R.drawable.yes_select_selector);*/
-
                 if (isActiveFriday_p) {
                     btn_yes_fdday_p.setBackgroundColor(getResources().getColor(R.color.dark_grey));
                     btn_yes_fdday_p.setTextColor(getResources().getColor(R.color.black));
                     isActiveFriday_p = false;
-                    //  arrayList_weekdays.add(5, "");
 
                     weekdays.setCharAt(5, 'n');
                     getWeekDays(String.valueOf(weekdays));
@@ -580,7 +551,6 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     btn_yes_fdday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
                     btn_yes_fdday_p.setTextColor(getResources().getColor(R.color.white));
                     isActiveFriday_p = true;
-                    //arrayList_weekdays.add(5, "Friday");
 
                     weekdays.setCharAt(5, 'y');
                     getWeekDays(String.valueOf(weekdays));
@@ -595,14 +565,11 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         btn_yes_strday_p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              /*  st_status = "1";
-                btn_yes_strday.setBackgroundResource(R.drawable.yes_select_selector);*/
 
                 if (isActiveSaturday_p) {
                     btn_yes_strday_p.setBackgroundColor(getResources().getColor(R.color.dark_grey));
                     btn_yes_strday_p.setTextColor(getResources().getColor(R.color.black));
                     isActiveSaturday_p = false;
-                    // arrayList_weekdays.add(6, "");
 
                     weekdays.setCharAt(6, 'n');
                     getWeekDays(String.valueOf(weekdays));
@@ -612,7 +579,6 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     btn_yes_strday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
                     btn_yes_strday_p.setTextColor(getResources().getColor(R.color.white));
                     isActiveSaturday_p = true;
-                    //arrayList_weekdays.add(6, "Saturday");
 
                     weekdays.setCharAt(6, 'y');
                     getWeekDays(String.valueOf(weekdays));
@@ -744,8 +710,9 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
                 boolean chktime = checktimings(s_time, e_time);
                 if (chktime) {
+                    isTimeAdded = true;
+                    aSwitch_all_days.setEnabled(true);
                     if (weekday.equals("Sunday")) {
-
                         if (list_sun.size() <= 2) {
                             if (list_sun.size() == 1) {
                                 String data_sun = list_sun.get(0);
@@ -1145,7 +1112,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     });
 
                 } else if (isCustomTimeSelected) {
-                    if(isTimeSelected) {
+                    if (isTimeSelected) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -1163,7 +1130,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                                 };
                             }
                         });
-                    }else {
+                    } else {
                         getDialog("Select valid service active days");
                     }
 
@@ -2215,27 +2182,32 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                 });
 
             } else if (isCustomTimeSelected) {
-                if(isTimeSelected) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            new AlertDialogYesNo(AddServiceAvailTimeActivity.this, "Create Service?", "Are you sure, You want to create " + ser_name + " service?", "Yes", "No") {
-                                @Override
-                                public void onOKButtonClick() {
-                                    createService();
-                                }
+                if (isTimeSelected) {
+                    if (isTimeAdded) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                new AlertDialogYesNo(AddServiceAvailTimeActivity.this, "Create Service?", "Are you sure, You want to create " + ser_name + " service?", "Yes", "No") {
+                                    @Override
+                                    public void onOKButtonClick() {
+                                        createService();
+                                    }
 
-                                @Override
-                                public void onCancelButtonClick() {
+                                    @Override
+                                    public void onCancelButtonClick() {
 
-                                }
+                                    }
 
-                            };
-                        }
-                    });
-                }else {
+                                };
+                            }
+                        });
+                    } else {
+                        getDialog("Select valid service active time");
+                    }
+                } else {
                     getDialog("Select valid service active days");
                 }
+
 
             } else {
                 getDialog("Select valid service availability time");

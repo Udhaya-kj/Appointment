@@ -54,7 +54,7 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
     private RecyclerView listView_customers;
     CustomersAdapterMakeAppt_Recyclerview customersAdapter_makeAppt;
     EditText editText_search;
-    String pageId, ser_id, date, res_id, res, service, slot_no, start_time, end_time;
+    String pageId, ser_id, date, service, slot_no, start_time, end_time,service_dur;
     private ArrayList<CustomersModel> mCustomersArrayList = new ArrayList<CustomersModel>();
     AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
     private SharedPreferences sharedpreferences_sessionToken;
@@ -87,14 +87,13 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
             pageId = getIntent().getStringExtra("page_id");
             ser_id = getIntent().getStringExtra("service_id");
             service = getIntent().getStringExtra("service");
-            res_id = getIntent().getStringExtra("res_id");
-            res = getIntent().getStringExtra("res");
             date = getIntent().getStringExtra("date");
             slot_no = getIntent().getStringExtra("slot_no");
             start_time = getIntent().getStringExtra("start_time");
             end_time = getIntent().getStringExtra("end_time");
+            service_dur = getIntent().getStringExtra("service_dur");
 
-            Log.d("Data---", "onCreate: "+pageId+","+ser_id+","+service+","+res_id+","+res+","+date+","+slot_no+","+start_time+","+end_time);
+            Log.d("Data---", "onCreate: "+pageId+","+ser_id+","+service+","+date+","+slot_no+","+start_time+","+end_time+","+service_dur);
         }
 
         editText_search.addTextChangedListener(new TextWatcher() {
@@ -190,7 +189,7 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
 
                                 Log.d("Customer---", "run: " + cus_id + "," + cus_name + "," + cus_mob);
                             }
-                            customersAdapter_makeAppt = new CustomersAdapterMakeAppt_Recyclerview(CustomersMakeApptActivity.this, customersModelArrayList, ser_id, date, slot_no, start_time, end_time, res_id, res, service);
+                            customersAdapter_makeAppt = new CustomersAdapterMakeAppt_Recyclerview(CustomersMakeApptActivity.this, customersModelArrayList, ser_id, date, slot_no, start_time, end_time, service,service_dur);
                             listView_customers.setAdapter(customersAdapter_makeAppt);
 
                         }
@@ -268,12 +267,11 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
             i.putExtra("page_id", "2");
             i.putExtra("service_id", ser_id);
             i.putExtra("service", service);
-            i.putExtra("res_id", res_id);
-            i.putExtra("res", res);
             i.putExtra("date", date);
             i.putExtra("slot_no", slot_no);
             i.putExtra("start_time", start_time);
             i.putExtra("end_time", end_time);
+            i.putExtra("service_dur", service_dur);
             startActivity(i);
             finish();
             overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);

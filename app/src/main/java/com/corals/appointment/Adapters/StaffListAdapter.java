@@ -88,10 +88,6 @@ public class StaffListAdapter extends BaseAdapter {
         LinearLayout linearLayout = (LinearLayout) rowView.findViewById(R.id.layout_staff);
         titleText.setText(appointmentResources.get(position).getResName());
 
-        if(appointmentResources.get(position).isIsActive()==false){
-            linearLayout.setEnabled(false);
-        }
-
         imageView_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,7 +97,6 @@ public class StaffListAdapter extends BaseAdapter {
                 i.putExtra("res_id", appointmentResources.get(position).getResId());
                 i.putExtra("name", appointmentResources.get(position).getResName());
                 i.putExtra("mobile", appointmentResources.get(position).getMobile());
-                i.putExtra("mng_load", appointmentResources.get(position).getManageableLoad());
                 i.putExtra("sameBizTime", appointmentResources.get(position).isSameBussTime());
                 i.putExtra("mapSerRes", (Serializable)appointmentResources.get(position).getSerResMaps());
                 context.startActivity(i);

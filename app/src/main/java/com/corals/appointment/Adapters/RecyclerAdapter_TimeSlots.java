@@ -110,8 +110,7 @@ public class RecyclerAdapter_TimeSlots extends RecyclerView.Adapter<RecyclerAdap
                         in.putExtra("service_id", timeSlotDataModel.getSer_id());
                         in.putExtra("service", timeSlotDataModel.getSer());
                         in.putExtra("date", timeSlotDataModel.getDate());
-                        in.putExtra("res_id", timeSlotDataModel.getRes_id());
-                        in.putExtra("res", timeSlotDataModel.getRes());
+                        in.putExtra("service_dur", timeSlotDataModel.getService_dur());
                         in.putExtra("slot_no", appointmentAvailableSlots.get(position).getSlotNo());
                         in.putExtra("start_time", appointmentAvailableSlots.get(position).getSerStartTime());
                         in.putExtra("end_time", appointmentAvailableSlots.get(position).getSerEndTime());
@@ -124,8 +123,6 @@ public class RecyclerAdapter_TimeSlots extends RecyclerView.Adapter<RecyclerAdap
                         in.putExtra("service_id", timeSlotDataModel.getSer_id());
                         in.putExtra("service", timeSlotDataModel.getSer());
                         in.putExtra("date", timeSlotDataModel.getDate());
-                        in.putExtra("res_id", timeSlotDataModel.getRes_id());
-                        in.putExtra("res", timeSlotDataModel.getRes());
                         in.putExtra("cus_id", timeSlotDataModel.getCus_id());
                         in.putExtra("cus", timeSlotDataModel.getCus());
                         in.putExtra("cus_email", timeSlotDataModel.getCus_email());

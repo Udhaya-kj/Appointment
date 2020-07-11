@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * SecurityAPIResponse
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-03T07:40:49.972Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-10T11:08:14.822Z")
 public class SecurityAPIResponse {
   @SerializedName("status_code")
   private String statusCode = null;
@@ -44,6 +44,18 @@ public class SecurityAPIResponse {
 
   @SerializedName("biz_display_name")
   private String bizDisplayName = null;
+
+  @SerializedName("total_res_count")
+  private String totalResCount = null;
+
+  @SerializedName("total_ser_count")
+  private String totalSerCount = null;
+
+  @SerializedName("max_len_loading_days")
+  private String maxLenLoadingDays = null;
+
+  @SerializedName("max_appt_allowed_for_same_cust")
+  private String maxApptAllowedForSameCust = null;
 
   public SecurityAPIResponse statusCode(String statusCode) {
     this.statusCode = statusCode;
@@ -171,6 +183,78 @@ public class SecurityAPIResponse {
     this.bizDisplayName = bizDisplayName;
   }
 
+  public SecurityAPIResponse totalResCount(String totalResCount) {
+    this.totalResCount = totalResCount;
+    return this;
+  }
+
+  /**
+   * Get totalResCount
+   * @return totalResCount
+   **/
+  @Schema(description = "")
+  public String getTotalResCount() {
+    return totalResCount;
+  }
+
+  public void setTotalResCount(String totalResCount) {
+    this.totalResCount = totalResCount;
+  }
+
+  public SecurityAPIResponse totalSerCount(String totalSerCount) {
+    this.totalSerCount = totalSerCount;
+    return this;
+  }
+
+  /**
+   * Get totalSerCount
+   * @return totalSerCount
+   **/
+  @Schema(description = "")
+  public String getTotalSerCount() {
+    return totalSerCount;
+  }
+
+  public void setTotalSerCount(String totalSerCount) {
+    this.totalSerCount = totalSerCount;
+  }
+
+  public SecurityAPIResponse maxLenLoadingDays(String maxLenLoadingDays) {
+    this.maxLenLoadingDays = maxLenLoadingDays;
+    return this;
+  }
+
+  /**
+   * Get maxLenLoadingDays
+   * @return maxLenLoadingDays
+   **/
+  @Schema(description = "")
+  public String getMaxLenLoadingDays() {
+    return maxLenLoadingDays;
+  }
+
+  public void setMaxLenLoadingDays(String maxLenLoadingDays) {
+    this.maxLenLoadingDays = maxLenLoadingDays;
+  }
+
+  public SecurityAPIResponse maxApptAllowedForSameCust(String maxApptAllowedForSameCust) {
+    this.maxApptAllowedForSameCust = maxApptAllowedForSameCust;
+    return this;
+  }
+
+  /**
+   * Get maxApptAllowedForSameCust
+   * @return maxApptAllowedForSameCust
+   **/
+  @Schema(description = "")
+  public String getMaxApptAllowedForSameCust() {
+    return maxApptAllowedForSameCust;
+  }
+
+  public void setMaxApptAllowedForSameCust(String maxApptAllowedForSameCust) {
+    this.maxApptAllowedForSameCust = maxApptAllowedForSameCust;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -187,12 +271,16 @@ public class SecurityAPIResponse {
             Objects.equals(this.userId, securityAPIResponse.userId) &&
             Objects.equals(this.merCurSymbol, securityAPIResponse.merCurSymbol) &&
             Objects.equals(this.countryCode, securityAPIResponse.countryCode) &&
-            Objects.equals(this.bizDisplayName, securityAPIResponse.bizDisplayName);
+            Objects.equals(this.bizDisplayName, securityAPIResponse.bizDisplayName) &&
+            Objects.equals(this.totalResCount, securityAPIResponse.totalResCount) &&
+            Objects.equals(this.totalSerCount, securityAPIResponse.totalSerCount) &&
+            Objects.equals(this.maxLenLoadingDays, securityAPIResponse.maxLenLoadingDays) &&
+            Objects.equals(this.maxApptAllowedForSameCust, securityAPIResponse.maxApptAllowedForSameCust);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(statusCode, statusMessage, sessionToken, userId, merCurSymbol, countryCode, bizDisplayName);
+    return Objects.hash(statusCode, statusMessage, sessionToken, userId, merCurSymbol, countryCode, bizDisplayName, totalResCount, totalSerCount, maxLenLoadingDays, maxApptAllowedForSameCust);
   }
 
 
@@ -208,6 +296,10 @@ public class SecurityAPIResponse {
     sb.append("    merCurSymbol: ").append(toIndentedString(merCurSymbol)).append("\n");
     sb.append("    countryCode: ").append(toIndentedString(countryCode)).append("\n");
     sb.append("    bizDisplayName: ").append(toIndentedString(bizDisplayName)).append("\n");
+    sb.append("    totalResCount: ").append(toIndentedString(totalResCount)).append("\n");
+    sb.append("    totalSerCount: ").append(toIndentedString(totalSerCount)).append("\n");
+    sb.append("    maxLenLoadingDays: ").append(toIndentedString(maxLenLoadingDays)).append("\n");
+    sb.append("    maxApptAllowedForSameCust: ").append(toIndentedString(maxApptAllowedForSameCust)).append("\n");
     sb.append("}");
     return sb.toString();
   }

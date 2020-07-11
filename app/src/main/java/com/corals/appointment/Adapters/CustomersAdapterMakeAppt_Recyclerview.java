@@ -29,11 +29,11 @@ public class CustomersAdapterMakeAppt_Recyclerview extends RecyclerView.Adapter<
     String date;
     String slot_no;
     String startTime;
-    String endTime,res_id,res,service;
+    String endTime,service,service_dur;
     private ArrayList<CustomersModel> customersModelArrayList;
     private ArrayList<CustomersModel> mDisplayedValues;
 
-    public CustomersAdapterMakeAppt_Recyclerview(Activity context, ArrayList<CustomersModel> mCustomersValues, String ser_id, String date, String slot_no, String startTime, String endTime, String res_id, String res, String service) {
+    public CustomersAdapterMakeAppt_Recyclerview(Activity context, ArrayList<CustomersModel> mCustomersValues, String ser_id, String date, String slot_no, String startTime, String endTime, String service, String service_dur) {
         this.context = context;
         this.customersModelArrayList = mCustomersValues;
         this.mDisplayedValues = mCustomersValues;
@@ -42,9 +42,8 @@ public class CustomersAdapterMakeAppt_Recyclerview extends RecyclerView.Adapter<
         this.slot_no = slot_no;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.res_id = res_id;
-        this.res = res;
         this.service = service;
+        this.service_dur = service_dur;
     }
 
     @Override
@@ -74,8 +73,7 @@ public class CustomersAdapterMakeAppt_Recyclerview extends RecyclerView.Adapter<
                 i.putExtra("slot_no",slot_no);
                 i.putExtra("start_time", startTime);
                 i.putExtra("end_time", endTime);
-                i.putExtra("res_id", res_id);
-                i.putExtra("res", res);
+                i.putExtra("service_dur", service_dur);
                 context.startActivity(i);
                 ((Activity) context).finish();
                 ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);

@@ -12,18 +12,13 @@
 
 
 package com.corals.appointment.Client.model;
-
 import com.google.gson.annotations.SerializedName;
-
 import java.util.Objects;
-
 import io.swagger.v3.oas.annotations.media.Schema;
-
-
 /**
  * SecurityAPIBody
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-13T07:13:20.960Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-10T11:08:14.822Z")
 public class SecurityAPIBody {
   @SerializedName("mer_id")
   private String merId = null;
@@ -46,6 +41,9 @@ public class SecurityAPIBody {
   @SerializedName("biz_namelegal")
   private String bizNamelegal = null;
 
+  @SerializedName("web_path")
+  private String webPath = null;
+
   @SerializedName("outlet_add1")
   private String outletAdd1 = null;
 
@@ -60,6 +58,12 @@ public class SecurityAPIBody {
 
   @SerializedName("qr_mer_inf_unique_cd")
   private String qrMerInfUniqueCd = null;
+
+  @SerializedName("max_len_loading_days")
+  private String maxLenLoadingDays = null;
+
+  @SerializedName("max_appt_allowed_for_same_cust")
+  private String maxApptAllowedForSameCust = null;
 
   @SerializedName("qr_required")
   private Boolean qrRequired = null;
@@ -90,10 +94,10 @@ public class SecurityAPIBody {
     return this;
   }
 
-   /**
+  /**
    * Get merId
    * @return merId
-  **/
+   **/
   @Schema(description = "")
   public String getMerId() {
     return merId;
@@ -108,10 +112,10 @@ public class SecurityAPIBody {
     return this;
   }
 
-   /**
+  /**
    * Get custId
    * @return custId
-  **/
+   **/
   @Schema(description = "")
   public String getCustId() {
     return custId;
@@ -126,10 +130,10 @@ public class SecurityAPIBody {
     return this;
   }
 
-   /**
+  /**
    * Get userEmail
    * @return userEmail
-  **/
+   **/
   @Schema(description = "")
   public String getUserEmail() {
     return userEmail;
@@ -144,10 +148,10 @@ public class SecurityAPIBody {
     return this;
   }
 
-   /**
+  /**
    * Get userPass
    * @return userPass
-  **/
+   **/
   @Schema(description = "")
   public String getUserPass() {
     return userPass;
@@ -162,10 +166,10 @@ public class SecurityAPIBody {
     return this;
   }
 
-   /**
+  /**
    * Get userMob
    * @return userMob
-  **/
+   **/
   @Schema(description = "")
   public String getUserMob() {
     return userMob;
@@ -180,10 +184,10 @@ public class SecurityAPIBody {
     return this;
   }
 
-   /**
+  /**
    * Get bizDisplayName
    * @return bizDisplayName
-  **/
+   **/
   @Schema(description = "")
   public String getBizDisplayName() {
     return bizDisplayName;
@@ -198,10 +202,10 @@ public class SecurityAPIBody {
     return this;
   }
 
-   /**
+  /**
    * Get bizNamelegal
    * @return bizNamelegal
-  **/
+   **/
   @Schema(description = "")
   public String getBizNamelegal() {
     return bizNamelegal;
@@ -211,15 +215,33 @@ public class SecurityAPIBody {
     this.bizNamelegal = bizNamelegal;
   }
 
+  public SecurityAPIBody webPath(String webPath) {
+    this.webPath = webPath;
+    return this;
+  }
+
+  /**
+   * Get webPath
+   * @return webPath
+   **/
+  @Schema(description = "")
+  public String getWebPath() {
+    return webPath;
+  }
+
+  public void setWebPath(String webPath) {
+    this.webPath = webPath;
+  }
+
   public SecurityAPIBody outletAdd1(String outletAdd1) {
     this.outletAdd1 = outletAdd1;
     return this;
   }
 
-   /**
+  /**
    * Get outletAdd1
    * @return outletAdd1
-  **/
+   **/
   @Schema(description = "")
   public String getOutletAdd1() {
     return outletAdd1;
@@ -234,10 +256,10 @@ public class SecurityAPIBody {
     return this;
   }
 
-   /**
+  /**
    * Get outletAdd2
    * @return outletAdd2
-  **/
+   **/
   @Schema(description = "")
   public String getOutletAdd2() {
     return outletAdd2;
@@ -252,10 +274,10 @@ public class SecurityAPIBody {
     return this;
   }
 
-   /**
+  /**
    * Get outletAdd3
    * @return outletAdd3
-  **/
+   **/
   @Schema(description = "")
   public String getOutletAdd3() {
     return outletAdd3;
@@ -270,10 +292,10 @@ public class SecurityAPIBody {
     return this;
   }
 
-   /**
+  /**
    * Get postCode
    * @return postCode
-  **/
+   **/
   @Schema(description = "")
   public String getPostCode() {
     return postCode;
@@ -288,10 +310,10 @@ public class SecurityAPIBody {
     return this;
   }
 
-   /**
+  /**
    * Get qrMerInfUniqueCd
    * @return qrMerInfUniqueCd
-  **/
+   **/
   @Schema(description = "")
   public String getQrMerInfUniqueCd() {
     return qrMerInfUniqueCd;
@@ -301,15 +323,51 @@ public class SecurityAPIBody {
     this.qrMerInfUniqueCd = qrMerInfUniqueCd;
   }
 
+  public SecurityAPIBody maxLenLoadingDays(String maxLenLoadingDays) {
+    this.maxLenLoadingDays = maxLenLoadingDays;
+    return this;
+  }
+
+  /**
+   * Get maxLenLoadingDays
+   * @return maxLenLoadingDays
+   **/
+  @Schema(description = "")
+  public String getMaxLenLoadingDays() {
+    return maxLenLoadingDays;
+  }
+
+  public void setMaxLenLoadingDays(String maxLenLoadingDays) {
+    this.maxLenLoadingDays = maxLenLoadingDays;
+  }
+
+  public SecurityAPIBody maxApptAllowedForSameCust(String maxApptAllowedForSameCust) {
+    this.maxApptAllowedForSameCust = maxApptAllowedForSameCust;
+    return this;
+  }
+
+  /**
+   * Get maxApptAllowedForSameCust
+   * @return maxApptAllowedForSameCust
+   **/
+  @Schema(description = "")
+  public String getMaxApptAllowedForSameCust() {
+    return maxApptAllowedForSameCust;
+  }
+
+  public void setMaxApptAllowedForSameCust(String maxApptAllowedForSameCust) {
+    this.maxApptAllowedForSameCust = maxApptAllowedForSameCust;
+  }
+
   public SecurityAPIBody qrRequired(Boolean qrRequired) {
     this.qrRequired = qrRequired;
     return this;
   }
 
-   /**
+  /**
    * Get qrRequired
    * @return qrRequired
-  **/
+   **/
   @Schema(description = "")
   public Boolean isQrRequired() {
     return qrRequired;
@@ -324,10 +382,10 @@ public class SecurityAPIBody {
     return this;
   }
 
-   /**
+  /**
    * Get merCurSymbol
    * @return merCurSymbol
-  **/
+   **/
   @Schema(description = "")
   public String getMerCurSymbol() {
     return merCurSymbol;
@@ -342,10 +400,10 @@ public class SecurityAPIBody {
     return this;
   }
 
-   /**
+  /**
    * Get countryName
    * @return countryName
-  **/
+   **/
   @Schema(description = "")
   public String getCountryName() {
     return countryName;
@@ -360,10 +418,10 @@ public class SecurityAPIBody {
     return this;
   }
 
-   /**
+  /**
    * Get countryCode
    * @return countryCode
-  **/
+   **/
   @Schema(description = "")
   public String getCountryCode() {
     return countryCode;
@@ -378,10 +436,10 @@ public class SecurityAPIBody {
     return this;
   }
 
-   /**
+  /**
    * Get userName
    * @return userName
-  **/
+   **/
   @Schema(description = "")
   public String getUserName() {
     return userName;
@@ -396,10 +454,10 @@ public class SecurityAPIBody {
     return this;
   }
 
-   /**
+  /**
    * Get deviceId
    * @return deviceId
-  **/
+   **/
   @Schema(description = "")
   public String getDeviceId() {
     return deviceId;
@@ -414,10 +472,10 @@ public class SecurityAPIBody {
     return this;
   }
 
-   /**
+  /**
    * Get reqType
    * @return reqType
-  **/
+   **/
   @Schema(description = "")
   public String getReqType() {
     return reqType;
@@ -432,10 +490,10 @@ public class SecurityAPIBody {
     return this;
   }
 
-   /**
+  /**
    * Get sessionToken
    * @return sessionToken
-  **/
+   **/
   @Schema(description = "")
   public String getSessionToken() {
     return sessionToken;
@@ -447,7 +505,7 @@ public class SecurityAPIBody {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -456,30 +514,33 @@ public class SecurityAPIBody {
     }
     SecurityAPIBody securityAPIBody = (SecurityAPIBody) o;
     return Objects.equals(this.merId, securityAPIBody.merId) &&
-        Objects.equals(this.custId, securityAPIBody.custId) &&
-        Objects.equals(this.userEmail, securityAPIBody.userEmail) &&
-        Objects.equals(this.userPass, securityAPIBody.userPass) &&
-        Objects.equals(this.userMob, securityAPIBody.userMob) &&
-        Objects.equals(this.bizDisplayName, securityAPIBody.bizDisplayName) &&
-        Objects.equals(this.bizNamelegal, securityAPIBody.bizNamelegal) &&
-        Objects.equals(this.outletAdd1, securityAPIBody.outletAdd1) &&
-        Objects.equals(this.outletAdd2, securityAPIBody.outletAdd2) &&
-        Objects.equals(this.outletAdd3, securityAPIBody.outletAdd3) &&
-        Objects.equals(this.postCode, securityAPIBody.postCode) &&
-        Objects.equals(this.qrMerInfUniqueCd, securityAPIBody.qrMerInfUniqueCd) &&
-        Objects.equals(this.qrRequired, securityAPIBody.qrRequired) &&
-        Objects.equals(this.merCurSymbol, securityAPIBody.merCurSymbol) &&
-        Objects.equals(this.countryName, securityAPIBody.countryName) &&
-        Objects.equals(this.countryCode, securityAPIBody.countryCode) &&
-        Objects.equals(this.userName, securityAPIBody.userName) &&
-        Objects.equals(this.deviceId, securityAPIBody.deviceId) &&
-        Objects.equals(this.reqType, securityAPIBody.reqType) &&
-        Objects.equals(this.sessionToken, securityAPIBody.sessionToken);
+            Objects.equals(this.custId, securityAPIBody.custId) &&
+            Objects.equals(this.userEmail, securityAPIBody.userEmail) &&
+            Objects.equals(this.userPass, securityAPIBody.userPass) &&
+            Objects.equals(this.userMob, securityAPIBody.userMob) &&
+            Objects.equals(this.bizDisplayName, securityAPIBody.bizDisplayName) &&
+            Objects.equals(this.bizNamelegal, securityAPIBody.bizNamelegal) &&
+            Objects.equals(this.webPath, securityAPIBody.webPath) &&
+            Objects.equals(this.outletAdd1, securityAPIBody.outletAdd1) &&
+            Objects.equals(this.outletAdd2, securityAPIBody.outletAdd2) &&
+            Objects.equals(this.outletAdd3, securityAPIBody.outletAdd3) &&
+            Objects.equals(this.postCode, securityAPIBody.postCode) &&
+            Objects.equals(this.qrMerInfUniqueCd, securityAPIBody.qrMerInfUniqueCd) &&
+            Objects.equals(this.maxLenLoadingDays, securityAPIBody.maxLenLoadingDays) &&
+            Objects.equals(this.maxApptAllowedForSameCust, securityAPIBody.maxApptAllowedForSameCust) &&
+            Objects.equals(this.qrRequired, securityAPIBody.qrRequired) &&
+            Objects.equals(this.merCurSymbol, securityAPIBody.merCurSymbol) &&
+            Objects.equals(this.countryName, securityAPIBody.countryName) &&
+            Objects.equals(this.countryCode, securityAPIBody.countryCode) &&
+            Objects.equals(this.userName, securityAPIBody.userName) &&
+            Objects.equals(this.deviceId, securityAPIBody.deviceId) &&
+            Objects.equals(this.reqType, securityAPIBody.reqType) &&
+            Objects.equals(this.sessionToken, securityAPIBody.sessionToken);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(merId, custId, userEmail, userPass, userMob, bizDisplayName, bizNamelegal, outletAdd1, outletAdd2, outletAdd3, postCode, qrMerInfUniqueCd, qrRequired, merCurSymbol, countryName, countryCode, userName, deviceId, reqType, sessionToken);
+    return Objects.hash(merId, custId, userEmail, userPass, userMob, bizDisplayName, bizNamelegal, webPath, outletAdd1, outletAdd2, outletAdd3, postCode, qrMerInfUniqueCd, maxLenLoadingDays, maxApptAllowedForSameCust, qrRequired, merCurSymbol, countryName, countryCode, userName, deviceId, reqType, sessionToken);
   }
 
 
@@ -487,7 +548,7 @@ public class SecurityAPIBody {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SecurityAPIBody {\n");
-    
+
     sb.append("    merId: ").append(toIndentedString(merId)).append("\n");
     sb.append("    custId: ").append(toIndentedString(custId)).append("\n");
     sb.append("    userEmail: ").append(toIndentedString(userEmail)).append("\n");
@@ -495,11 +556,14 @@ public class SecurityAPIBody {
     sb.append("    userMob: ").append(toIndentedString(userMob)).append("\n");
     sb.append("    bizDisplayName: ").append(toIndentedString(bizDisplayName)).append("\n");
     sb.append("    bizNamelegal: ").append(toIndentedString(bizNamelegal)).append("\n");
+    sb.append("    webPath: ").append(toIndentedString(webPath)).append("\n");
     sb.append("    outletAdd1: ").append(toIndentedString(outletAdd1)).append("\n");
     sb.append("    outletAdd2: ").append(toIndentedString(outletAdd2)).append("\n");
     sb.append("    outletAdd3: ").append(toIndentedString(outletAdd3)).append("\n");
     sb.append("    postCode: ").append(toIndentedString(postCode)).append("\n");
     sb.append("    qrMerInfUniqueCd: ").append(toIndentedString(qrMerInfUniqueCd)).append("\n");
+    sb.append("    maxLenLoadingDays: ").append(toIndentedString(maxLenLoadingDays)).append("\n");
+    sb.append("    maxApptAllowedForSameCust: ").append(toIndentedString(maxApptAllowedForSameCust)).append("\n");
     sb.append("    qrRequired: ").append(toIndentedString(qrRequired)).append("\n");
     sb.append("    merCurSymbol: ").append(toIndentedString(merCurSymbol)).append("\n");
     sb.append("    countryName: ").append(toIndentedString(countryName)).append("\n");
@@ -516,7 +580,7 @@ public class SecurityAPIBody {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

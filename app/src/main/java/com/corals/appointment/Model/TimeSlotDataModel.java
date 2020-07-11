@@ -8,9 +8,25 @@ public class TimeSlotDataModel {
     public String date;
     public String ser_id;
     public String ser;
-    public String res_id;
-    public String res;
+    public String service_dur;
+
     public String cus_mob;
+
+    public String getService_dur() {
+        return service_dur;
+    }
+
+    public void setService_dur(String service_dur) {
+        this.service_dur = service_dur;
+    }
+
+    public String getCus_mob() {
+        return cus_mob;
+    }
+
+    public void setCus_mob(String cus_mob) {
+        this.cus_mob = cus_mob;
+    }
 
     public String getPage_id() {
         return page_id;
@@ -68,23 +84,8 @@ public class TimeSlotDataModel {
         this.ser = ser;
     }
 
-    public String getRes_id() {
-        return res_id;
-    }
 
-    public void setRes_id(String res_id) {
-        this.res_id = res_id;
-    }
-
-    public String getRes() {
-        return res;
-    }
-
-    public void setRes(String res) {
-        this.res = res;
-    }
-
-    public TimeSlotDataModel(String page_id, String cus_id, String cus, String cus_email, String cus_mob, String date, String ser_id, String ser, String res_id, String res) {
+    public TimeSlotDataModel(String page_id, String cus_id, String cus, String cus_email, String cus_mob, String date, String ser_id, String ser, String service_dur) {
         super();
         this.page_id = page_id;
         this.cus_id = cus_id;
@@ -93,8 +94,7 @@ public class TimeSlotDataModel {
         this.date = date;
         this.ser_id = ser_id;
         this.ser = ser;
-        this.res_id = res_id;
-        this.res = res;
+        this.service_dur = service_dur;
         this.cus_mob = cus_mob;
     }
 

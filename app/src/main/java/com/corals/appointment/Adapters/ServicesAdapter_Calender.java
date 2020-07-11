@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 
 import com.corals.appointment.Activity.BookingResourcesActivity;
+import com.corals.appointment.Activity.CalendarViewActivity;
 import com.corals.appointment.Activity.TimeSlotsActivity;
 import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.R;
@@ -63,7 +64,7 @@ public class ServicesAdapter_Calender extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-                Intent i = new Intent(context, BookingResourcesActivity.class);
+                Intent i = new Intent(context, CalendarViewActivity.class);
                 i.putExtra("service_id", appointmentServices.get(position).getSerId());
                 i.putExtra("service", appointmentServices.get(position).getSerName());
                 i.putExtra("cus_id", cus_id);
@@ -71,6 +72,7 @@ public class ServicesAdapter_Calender extends BaseAdapter {
                 i.putExtra("cus_email", cus_email);
                 i.putExtra("cus_mob", cus_mob);
                 i.putExtra("page_id", "2");
+                i.putExtra("service_dur", appointmentServices.get(position).getSerDuration());
                 context.startActivity(i);
                 ((Activity) context).finish();
                 ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);

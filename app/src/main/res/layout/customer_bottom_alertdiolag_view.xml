@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@drawable/bottom_sheet_curve"
     >
 
 
@@ -10,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/bottom_sheet_curve"
         android:padding="10dp">
 
         <LinearLayout
@@ -105,7 +105,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/phone"
-                android:tint="#4DBDF1" />
+                android:tint="@color/app_blue" />
 
             <TextView
                 android:fontFamily="@font/lato_medium"
@@ -135,7 +135,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/reminder"
-                android:tint="#4DBDF1" />
+                android:tint="@color/app_blue" />
 
             <TextView
                 android:fontFamily="@font/lato_medium"
@@ -156,7 +156,7 @@
             android:layout_height="55dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/layout_bg_white"
             android:gravity="center_vertical"
             android:padding="8dp">
@@ -166,7 +166,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/travel"
-                android:tint="#4DBDF1" />
+                android:tint="@color/app_blue" />
 
             <TextView
                 android:fontFamily="@font/lato_medium"

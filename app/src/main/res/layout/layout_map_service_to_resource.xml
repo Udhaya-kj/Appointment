@@ -1,36 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_map_ser_res"
     android:layout_width="match_parent"
-    android:layout_height="45dp"
+    android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingStart="10dp"
+    android:paddingStart="0dp"
     android:paddingEnd="0dp"
+    android:background="@color/light_grey"
     android:weightSum="1">
 
-    <ImageView
+    <TextView
+        android:id="@+id/text_ser_no"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_weight="0.1"
-        android:padding="6dp"
-        android:src="@drawable/order" />
+        android:gravity="center"
+        android:text="1" />
 
     <TextView
         android:id="@+id/text_service_name"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginStart="10dp"
-        android:layout_weight="0.7"
+        android:layout_weight="0.5"
+        android:paddingStart="5dp"
+        android:paddingEnd="0dp"
+        android:fontFamily="@font/lato_medium"
         android:gravity="center_vertical"
-        android:fontFamily="@font/lato_medium" />
+        android:singleLine="true" />
+
+
+
+    <LinearLayout
+
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25">
+        <EditText
+            android:id="@+id/et_max_load"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato_medium"
+            android:gravity="center"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:maxLength="2"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:singleLine="true" />
+    </LinearLayout>
+
 
     <CheckBox
+        android:layout_marginStart="20dp"
         android:id="@+id/checkbox"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_weight="0.2"
+        android:layout_weight="0.15"
         android:buttonTint="@color/app_blue"
         android:gravity="center"
         android:scaleX="1"

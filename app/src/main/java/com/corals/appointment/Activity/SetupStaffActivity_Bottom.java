@@ -44,8 +44,7 @@ import java.util.Map;
 
 public class SetupStaffActivity_Bottom extends AppCompatActivity {
     private ListView listView_staffs;
-    private ArrayList<String> staff_name_list, staff_mob_list;
-    private SharedPreferences sharedpreferences_staffs;
+
     StaffListAdapter staffListAdapter;
     public String pageId = "";
     private SharedPreferences sharedpreferences_sessionToken;
@@ -70,18 +69,12 @@ public class SetupStaffActivity_Bottom extends AppCompatActivity {
         });
 
         sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
-        sharedpreferences_staffs = getSharedPreferences(AddStaffActivity.MyPREFERENCES_STAFFS, Context.MODE_PRIVATE);
         textView_no_staff = findViewById(R.id.tv_no_staffs);
-        staff_name_list = new ArrayList<>();
-        staff_mob_list = new ArrayList<>();
         listView_staffs = findViewById(R.id.listview_staffs);
 
         if (getIntent().getExtras() != null) {
             pageId = getIntent().getStringExtra("page_id");
-
         }
-
-
         callAPI_Staff();
 
     }

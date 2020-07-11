@@ -56,7 +56,7 @@ public class CreateCustomerActivity extends AppCompatActivity {
     private SharedPreferences sharedpreferences_sessionToken;
     ApptTransactionBody Body = new ApptTransactionBody();
     String page_id = "";
-    String  ser_id, date, res_id, res, service, slot_no, start_time, end_time;
+    String  ser_id, date, service, slot_no, start_time, end_time,service_dur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,14 +88,13 @@ public class CreateCustomerActivity extends AppCompatActivity {
             if(page_id.equals("2")){
                 ser_id = getIntent().getStringExtra("service_id");
                 service = getIntent().getStringExtra("service");
-                res_id = getIntent().getStringExtra("res_id");
-                res = getIntent().getStringExtra("res");
                 date = getIntent().getStringExtra("date");
                 slot_no = getIntent().getStringExtra("slot_no");
                 start_time = getIntent().getStringExtra("start_time");
                 end_time = getIntent().getStringExtra("end_time");
+                service_dur = getIntent().getStringExtra("service_dur");
 
-                Log.d("Data---", "onCreate: "+page_id+","+ser_id+","+service+","+res_id+","+res+","+date+","+slot_no+","+start_time+","+end_time);
+                Log.d("Data---", "onCreate: "+page_id+","+ser_id+","+service+","+date+","+slot_no+","+start_time+","+end_time+","+service_dur);
             }
         }
         button_continue.setOnClickListener(new View.OnClickListener() {
@@ -224,21 +223,23 @@ public class CreateCustomerActivity extends AppCompatActivity {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
-
                     if(page_id.equals("2")){
+                        String name = editText_cus_name.getText().toString().trim();
+                        String mob = editText_cus_mob.getText().toString().trim();
+                        String mail = editText_cus_mail.getText().toString().trim();
+
                         Intent i=new Intent(CreateCustomerActivity.this, ApptConfirmActivity.class);
-           /*             i.putExtra("cus_name", mDisplayedValues.get(position).getName());
-                        i.putExtra("cus_mob", mDisplayedValues.get(position).getMobile());
-                        i.putExtra("cus_id", mDisplayedValues.get(position).getCus_id());
-                        i.putExtra("cus_email", mDisplayedValues.get(position).getEmail());*/
+                        i.putExtra("cus_name",name);
+                        i.putExtra("cus_mob", mob);
+                        i.putExtra("cus_id", result.getCustId());
+                        i.putExtra("cus_email", mail);
                         i.putExtra("service_id", ser_id);
                         i.putExtra("service", service);
                         i.putExtra("date", date);
                         i.putExtra("slot_no",slot_no);
                         i.putExtra("start_time", start_time);
                         i.putExtra("end_time", end_time);
-                        i.putExtra("res_id", res_id);
-                        i.putExtra("res", res);
+                        i.putExtra("service_dur", service_dur);
                         startActivity(i);
                         finish();
                         overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
@@ -300,12 +301,11 @@ public class CreateCustomerActivity extends AppCompatActivity {
             i.putExtra("page_id", "2");
             i.putExtra("service_id", ser_id);
             i.putExtra("service", service);
-            i.putExtra("res_id", res_id);
-            i.putExtra("res", res);
             i.putExtra("date", date);
             i.putExtra("slot_no", slot_no);
             i.putExtra("start_time", start_time);
             i.putExtra("end_time", end_time);
+            i.putExtra("service_dur", service_dur);
             startActivity(i);
             finish();
             overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
