@@ -167,6 +167,8 @@ public class ApptConfirmActivity extends AppCompatActivity {
                     @Override
                     public void onOKButtonClick() {
                         Intent in = new Intent(ApptConfirmActivity.this, DashboardActivity.class);
+                        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(in);
                         finish();
                         overridePendingTransition(R.anim.swipe_in_left,R.anim.swipe_in_left);
@@ -200,7 +202,7 @@ public class ApptConfirmActivity extends AppCompatActivity {
                         new AlertDialogFailure(ApptConfirmActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                startActivity(new Intent(ApptConfirmActivity.this, DashboardActivity.class));
+                                startActivity(new Intent(ApptConfirmActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                 finish();
                                 overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
                             }
@@ -223,7 +225,7 @@ public class ApptConfirmActivity extends AppCompatActivity {
                             new AlertDialogFailure(ApptConfirmActivity.this, "Appointment booked successfully!", "OK", "", "Success") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(ApptConfirmActivity.this, ApptSuccessActivity.class).putExtra("cus_email",cus_email));
+                                    startActivity(new Intent(ApptConfirmActivity.this, ApptSuccessActivity.class).putExtra("cus_email",cus_email).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                                 }
@@ -237,7 +239,7 @@ public class ApptConfirmActivity extends AppCompatActivity {
                             new AlertDialogFailure(ApptConfirmActivity.this, result.getStatusMessage(), "OK","", "Warning") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(ApptConfirmActivity.this, AppointmentActivity.class));
+                                    startActivity(new Intent(ApptConfirmActivity.this, AppointmentActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                                 }
@@ -251,7 +253,7 @@ public class ApptConfirmActivity extends AppCompatActivity {
                             new AlertDialogFailure(ApptConfirmActivity.this, result.getStatusMessage(), "OK", "", "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(ApptConfirmActivity.this, DashboardActivity.class));
+                                    startActivity(new Intent(ApptConfirmActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
                                 }

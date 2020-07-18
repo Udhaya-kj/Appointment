@@ -65,8 +65,6 @@ public class CustomerBottomSheetDialog implements View.OnClickListener {
         } else {
             textView_email.setText("--");
         }
-
-
         layout_call.setOnClickListener(this);
         layout_view_appt.setOnClickListener(this);
         layout_make_appt.setOnClickListener(this);
@@ -97,7 +95,7 @@ public class CustomerBottomSheetDialog implements View.OnClickListener {
             in.putExtra("cus_name", name);
             in.putExtra("cus_mob", mob);
             mCtx.startActivity(in);
-            ((Activity) mCtx).finish();
+           // ((Activity) mCtx).finish();
             ((Activity) mCtx).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
         } else if (v.getId() == R.id.layout_make_appt) {
             //Toast.makeText(mCtx, "Make Appointment", Toast.LENGTH_SHORT).show();
@@ -108,7 +106,7 @@ public class CustomerBottomSheetDialog implements View.OnClickListener {
             in.putExtra("cus_email", email);
             in.putExtra("cus_mob", mob);
             mCtx.startActivity(in);
-            ((Activity) mCtx).finish();
+           // ((Activity) mCtx).finish();
             ((Activity) mCtx).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
         }
     }

@@ -1,50 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-   >
+    android:weightSum="10">
 
-<ImageView
-    android:layout_width="70dp"
-    android:layout_height="70dp"
-    android:layout_gravity="center_horizontal"
-    android:src="@drawable/tick"
-    ></ImageView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/loading_bar"
+            android:layout_width="188dp"
+            android:layout_height="120dp"
+            android:background="@android:color/transparent"
+            android:paddingStart="8dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="14dp"
+            android:src="@drawable/successgif1"
+            android:theme="@style/Theme.AppCompat.Light" />
+
+    </LinearLayout>
+
 
     <TextView
-        android:fontFamily="@font/lato_medium"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:fontFamily="@font/lato_medium"
+        android:gravity="center"
         android:text="Appointment Successfully Booked!"
-        android:gravity="center_horizontal"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        />
+        android:textStyle="bold" />
 
-    <TextView
-        android:fontFamily="@font/lato_medium"
-        android:id="@+id/text_confirm_email"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="We have sent confirmation mail to xyz@gmail.com"
-        android:layout_marginTop="15dp"
-        android:gravity="center_horizontal|center"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:background="#C6FEBE"
+        android:orientation="vertical"
+        android:weightSum="1">
 
-        />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_weight="0.15"
+            android:background="@drawable/appt_success_curve">
 
-    <com.google.android.material.button.MaterialButton
-        android:backgroundTint="@color/button_green"
-        android:textColor="@color/white"
-        android:id="@+id/button_setup_close"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="OK"
-        android:fontFamily="@font/lato_medium"
-        android:layout_marginTop="50dp"
-        />
+        </FrameLayout>
+
+
+        <TextView
+            android:id="@+id/text_confirm_email"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.4"
+            android:fontFamily="@font/lato_medium"
+            android:gravity="center"
+            android:text="We have sent confirmation mail to xyz@gmail.com"
+            android:textColor="@color/matt_black"
+
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center|top"
+            android:layout_weight="0.45">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_setup_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/button_green"
+                android:fontFamily="@font/lato_medium"
+                android:text="OK"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

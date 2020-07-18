@@ -57,7 +57,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-public class AppointmentActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, AdapterCallback, OnItemClick_Main_Services {
+public class AppointmentActivity extends AppCompatActivity implements  AdapterCallback, OnItemClick_Main_Services {
 
     DatePickerDialog datePickerDialog;
     int Year, Month, Day, Hour, Minute;
@@ -105,76 +105,17 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
         LinearLayoutManager li = new LinearLayoutManager(AppointmentActivity.this);
         recyclerView_services.setLayoutManager(li);
         //recyclerView_services.addItemDecoration(new DividerItemDecoration(recyclerView_services.getContext(), li.getOrientation()));
-
         textView_no_ser = findViewById(R.id.tv_no_services);
 
-        callAPI();
-
-
-       /* final Button button_datepicker = (Button) findViewById(R.id.button_datepicker);
-        button_datepicker.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //make weekdays ex: yyyyyny
-                //String weekdays = textView.getText().toString();
-                String weekdays = "yyynyyy";
-                if (weekdays.length() != 0 && weekdays.length() == 7) {
-                    datePickerDialog = DatePickerDialog.newInstance(AppointmentActivity.this, Year, Month, Day);
-                    datePickerDialog.setThemeDark(false);
-                    datePickerDialog.showYearPickerFirst(false);
-                    datePickerDialog.setTitle("Select Appointment Date");
-
-                    // Setting Min Date to today date
-                    Calendar min_date_c = Calendar.getInstance();
-                    datePickerDialog.setMinDate(min_date_c);
-
-                    // Setting Max Date to next 2 years
-                    Calendar max_date_c = Calendar.getInstance();
-                    max_date_c.set(Calendar.YEAR, Year + 2);
-                    datePickerDialog.setMaxDate(max_date_c);
-
-
-                    //Disable all SUNDAYS and SATURDAYS between Min and Max Dates
-                    for (Calendar loopdate = min_date_c; min_date_c.before(max_date_c); min_date_c.add(Calendar.DATE, 1), loopdate = min_date_c) {
-                        int dayOfWeek = loopdate.get(Calendar.DAY_OF_WEEK);
-                        String sun = String.valueOf(weekdays.charAt(0));
-                        String mon = String.valueOf(weekdays.charAt(1));
-                        String tue = String.valueOf(weekdays.charAt(2));
-                        String wed = String.valueOf(weekdays.charAt(3));
-                        String thu = String.valueOf(weekdays.charAt(4));
-                        String fri = String.valueOf(weekdays.charAt(5));
-                        String sat = String.valueOf(weekdays.charAt(6));
-                        Log.d("weekdays---", "onClick: " + sun + "," + mon + "," + tue + "," + wed + "," + thu + "," + fri + "," + sat);
-                        if ((sun.equals("n") ? dayOfWeek == Calendar.SUNDAY : dayOfWeek == 0) || (mon.equals("n") ? dayOfWeek == Calendar.MONDAY : dayOfWeek == 0) || (tue.equals("n") ? dayOfWeek == Calendar.TUESDAY : dayOfWeek == 0) || (wed.equals("n") ? dayOfWeek == Calendar.WEDNESDAY : dayOfWeek == 0) || (thu.equals("n") ? dayOfWeek == Calendar.THURSDAY : dayOfWeek == 0) || (fri.equals("n") ? dayOfWeek == Calendar.FRIDAY : dayOfWeek == 0) || (sat.equals("n") ? dayOfWeek == Calendar.SATURDAY : dayOfWeek == 0)) {
-                            Calendar[] disabledDays = new Calendar[1];
-                            disabledDays[0] = loopdate;
-                            datePickerDialog.setDisabledDays(disabledDays);
-                        }
-                    }
-
-                    datePickerDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-                        @Override
-                        public void onCancel(DialogInterface dialogInterface) {
-
-                            //Toast.makeText(AppointmentActivity.this, "Datepicker Canceled", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                    datePickerDialog.show(getFragmentManager(), "DatePickerDialog");
-
-                } else {
-                    Toast.makeText(AppointmentActivity.this, "Enter valid active weekdays", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
         button_appts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(AppointmentActivity.this, ViewApptServiceActivity.class);
                 i.putExtra("service_id", ser_id);
                 i.putExtra("service", service);
+                i.putExtra("service_dur", service_dur);
                 startActivity(i);
-                finish();
+                //finish();
                 overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
@@ -187,11 +128,12 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
                 i.putExtra("service_dur", service_dur);
                 i.putExtra("page_id", "1");
                 startActivity(i);
-                finish();
+                //finish();
                 overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
 
+        callAPI();
     }
 
     private void callAPI() {
@@ -224,23 +166,6 @@ public class AppointmentActivity extends AppCompatActivity implements DatePicker
         }
     }
 
-    @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        int mnth = monthOfYear + 1;
-        String month = null;
-        if (String.valueOf(mnth).length() == 1) {
-            month = "0" + String.valueOf(mnth);
-        } else {
-            month = String.valueOf(mnth);
-        }
-        String date = year + "-" + month + "-" + dayOfMonth;
-        Intent i = new Intent(AppointmentActivity.this, CalendarServicesActivity.class);
-        //i.putExtra("page_id", "1");
-        //i.putExtra("date", date);
-        startActivity(i);
-        finish();
-        overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
-    }
 
     @Override
     public void onBackPressed() {

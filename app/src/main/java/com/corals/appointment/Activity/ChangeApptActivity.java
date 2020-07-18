@@ -70,15 +70,12 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
     EditText editText_comment;
     Button button_changes_appt;
     public static TextView textView_appt_date;
-    private SharedPreferences sharedpreferences_services, sharedpreferences_staffs;
-    private ArrayList<String> service_name_list, service_dur_list;
-    private ArrayList<String> staff_name_list, staff_mob_list;
     DatePickerDialog datePickerDialog;
     int Year, Month, Day, Hour, Minute;
     Calendar calendar;
     RecyclerView recyclerView;
-    TextView textView_ser, textView_staff, textView_date, textView_time;
-    LinearLayout linearLayout, linearLayout_no_slots;
+    TextView textView_ser, textView_staff, textView_date, textView_time,textView_sel_staff_title;
+    LinearLayout linearLayout, linearLayout_no_slots,linearLayout_select_staff;
     private IntermediateAlertDialog intermediateAlertDialog;
     private SharedPreferences sharedpreferences_sessionToken;
     String service_id, service, staff, appt_date, appt_time, appt_id, cus_id;
@@ -110,10 +107,6 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
         Hour = calendar.get(Calendar.HOUR_OF_DAY);
         Minute = calendar.get(Calendar.MINUTE);
 
-        service_name_list = new ArrayList<>();
-        service_dur_list = new ArrayList<>();
-        staff_name_list = new ArrayList<>();
-        staff_mob_list = new ArrayList<>();
         recyclerView = findViewById(R.id.recyclerview_change_appt_slots);
         spinner_services = findViewById(R.id.spinner_services);
         spinner_staffs = findViewById(R.id.spinner_staff);
@@ -128,6 +121,9 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
         textView_staff = findViewById(R.id.text_staff);
         textView_date = findViewById(R.id.text_appn_dt);
         textView_time = findViewById(R.id.text_appn_time);
+
+        textView_sel_staff_title = findViewById(R.id.text_select_staff_title);
+        linearLayout_select_staff = findViewById(R.id.layout_select_staff);
         sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
 
         if (getIntent().getExtras() != null) {
@@ -153,8 +149,6 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
         GridLayoutManager li = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(li);
         recyclerView.setFocusable(false);
-        sharedpreferences_services = getSharedPreferences(AddServiceAvailTimeActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
-        sharedpreferences_staffs = getSharedPreferences(AddStaffActivity.MyPREFERENCES_STAFFS, Context.MODE_PRIVATE);
 
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -357,10 +351,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
                     new AlertDialogFailure(ChangeApptActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
                         @Override
                         public void onButtonClick() {
-                            Intent i = new Intent(ChangeApptActivity.this, AppointmentActivity.class);
-                            startActivity(i);
-                            finish();
-                            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                            callAPIFetchStaff();
                         }
                     };
                 }
@@ -373,10 +364,10 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i = new Intent(ChangeApptActivity.this, AppointmentActivity.class);
+    /*    Intent i = new Intent(ChangeApptActivity.this, AppointmentActivity.class);
         startActivity(i);
         finish();
-        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
     }
 
     @Override
@@ -418,9 +409,10 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
                         new AlertDialogFailure(ChangeApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
+                              /*  startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
                                 finish();
-                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                                onBackPressed();
                             }
                         };
                     }
@@ -440,7 +432,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
                             new AlertDialogFailure(ChangeApptActivity.this, "Appointment rescheduled successfully!", "OK", "", "Success") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
+                                    startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                                 }
@@ -451,10 +443,10 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(ChangeApptActivity.this, result.getStatusMessage(), "OK","", "Failed") {
+                            new AlertDialogFailure(ChangeApptActivity.this, result.getStatusMessage(), "OK", "", "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
+                                    startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
                                 }
@@ -496,9 +488,11 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
                         new AlertDialogFailure(ChangeApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
+                           /*     startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
                                 finish();
-                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+
+                                onBackPressed();
                             }
                         };
                     }
@@ -549,9 +543,11 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
                             new AlertDialogFailure(ChangeApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
+                                   /* startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
                                     finish();
-                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+
+                                    onBackPressed();
                                 }
                             };
                         }
@@ -586,16 +582,19 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
-
+                textView_sel_staff_title.setVisibility(View.GONE);
+                linearLayout_select_staff.setVisibility(View.GONE);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         new AlertDialogFailure(ChangeApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
+                                /*startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
                                 finish();
-                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+
+                                onBackPressed();
                             }
                         };
                     }
@@ -615,16 +614,22 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
                         public void run() {
                             appointmentResources = result.getResources();
                             if (!result.getResources().isEmpty() && result.getResources() != null) {
+
+                                textView_sel_staff_title.setVisibility(View.VISIBLE);
+                                linearLayout_select_staff.setVisibility(View.VISIBLE);
+
                                 CustomStaffSpinnerAdapter staffSpinnerAdapter = new CustomStaffSpinnerAdapter(ChangeApptActivity.this, result.getResources());
                                 spinner_staffs.setAdapter(staffSpinnerAdapter);
                             } else {
+                                textView_sel_staff_title.setVisibility(View.GONE);
+                                linearLayout_select_staff.setVisibility(View.GONE);
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         new AlertDialogFailure(ChangeApptActivity.this, "Setup staff before reschedule appointment", "OK", "", "Failed") {
                                             @Override
                                             public void onButtonClick() {
-                                                startActivity(new Intent(ChangeApptActivity.this, DashboardActivity.class));
+                                                startActivity(new Intent(ChangeApptActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                                 finish();
                                                 overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
                                             }
@@ -637,15 +642,19 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
                         }
                     });
                 } else {
+                    textView_sel_staff_title.setVisibility(View.GONE);
+                    linearLayout_select_staff.setVisibility(View.GONE);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             new AlertDialogFailure(ChangeApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
+                                   /* startActivity(new Intent(ChangeApptActivity.this, AppointmentActivity.class));
                                     finish();
-                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+
+                                   onBackPressed();
                                 }
                             };
                         }
@@ -677,11 +686,11 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
 
     @Override
     public void slot_onClick(String slot_no, String start_time, String end_time) {
-        slotNo=slot_no;
-        startTime=start_time;
-        endTime=end_time;
+        slotNo = slot_no;
+        startTime = start_time;
+        endTime = end_time;
 
-        Log.d("ChangeSlot--->", "slot_onClick: "+slotNo+","+startTime+","+endTime);
+        Log.d("ChangeSlot--->", "slot_onClick: " + slotNo + "," + startTime + "," + endTime);
 
     }
 
@@ -700,7 +709,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
         return super.onOptionsItemSelected(item);
     }
 
-    private void okButtonProcess(){
+    private void okButtonProcess() {
         if (!TextUtils.isEmpty(startTime) && !TextUtils.isEmpty(endTime) && !TextUtils.isEmpty(slotNo)) {
             runOnUiThread(new Runnable() {
                 @Override

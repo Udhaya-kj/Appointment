@@ -168,10 +168,10 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        Intent i = new Intent(ServiceUnavailbleActivity.this, SettingsActivity.class);
+      /*  Intent i = new Intent(ServiceUnavailbleActivity.this, SettingsActivity.class);
         startActivity(i);
         finish();
-        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
     }
 
     private void fetchServices(AppointmentEnquiryBody requestBody) throws ApiException {
@@ -196,9 +196,11 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
                         new AlertDialogFailure(ServiceUnavailbleActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                startActivity(new Intent(ServiceUnavailbleActivity.this, DashboardActivity.class));
+                               /* startActivity(new Intent(ServiceUnavailbleActivity.this, DashboardActivity.class));
                                 finish();
-                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+
+                                onBackPressed();
                             }
                         };
                     }
@@ -239,9 +241,11 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
                             new AlertDialogFailure(ServiceUnavailbleActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(ServiceUnavailbleActivity.this, DashboardActivity.class));
+                                 /*   startActivity(new Intent(ServiceUnavailbleActivity.this, DashboardActivity.class));
                                     finish();
-                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+
+                                    onBackPressed();
                                 }
                             };
                         }
@@ -284,9 +288,10 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
                         new AlertDialogFailure(ServiceUnavailbleActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                startActivity(new Intent(ServiceUnavailbleActivity.this, DashboardActivity.class));
+                               /* startActivity(new Intent(ServiceUnavailbleActivity.this, DashboardActivity.class));
                                 finish();
-                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                                onBackPressed();
                             }
                         };
                     }
@@ -323,9 +328,10 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
                             new AlertDialogFailure(ServiceUnavailbleActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(ServiceUnavailbleActivity.this, DashboardActivity.class));
+                                  /*  startActivity(new Intent(ServiceUnavailbleActivity.this, DashboardActivity.class));
                                     finish();
-                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                                  onBackPressed();
                                 }
                             };
                         }

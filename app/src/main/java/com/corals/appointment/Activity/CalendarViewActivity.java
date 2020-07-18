@@ -44,7 +44,7 @@ import java.util.Map;
 public class CalendarViewActivity extends AppCompatActivity {
 
     CalendarView calendarView;
-    String calendar_date, cus_name, cus_id, cus_email, cus_mob, page_id, ser, ser_id,service_dur;
+    String calendar_date, cus_name, cus_id, cus_email, cus_mob, page_id, ser, ser_id, service_dur;
     Button textView_cal_next;
     Calendar c;
     private SharedPreferences sharedpreferences_sessionToken;
@@ -90,10 +90,10 @@ public class CalendarViewActivity extends AppCompatActivity {
         calendarView = findViewById(R.id.calendarView);
         textView_cal_next = findViewById(R.id.text_calendar_next);
 
-        String maxday=sharedpreferences_sessionToken.getString(LoginActivity.MAX_DAYS, "");
+        String maxday = sharedpreferences_sessionToken.getString(LoginActivity.MAX_DAYS, "");
         int day = 0;
-        if(!TextUtils.isEmpty(maxday)) {
-             day = Integer.parseInt(maxday);
+        if (!TextUtils.isEmpty(maxday)) {
+            day = Integer.parseInt(maxday) - 1;
         }
         c = Calendar.getInstance();
         long now = System.currentTimeMillis() - 1000;
@@ -101,7 +101,7 @@ public class CalendarViewActivity extends AppCompatActivity {
         final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         calendar_date = df.format(c.getTime());
         calendarView.setMinDate(System.currentTimeMillis() - 1000);
-        calendarView.setMaxDate(now+(1000*60*60*24*day));
+        calendarView.setMaxDate(now + (1000 * 60 * 60 * 24 * day));
 
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -118,16 +118,16 @@ public class CalendarViewActivity extends AppCompatActivity {
                 } else {
                     day = String.valueOf(dayOfMonth);
                 }
-                calendar_date= year + "-" + month_ + "-" + day;
+                calendar_date = year + "-" + month_ + "-" + day;
 
-                Calendar checkCalendar = Calendar.getInstance();
+          /*      Calendar checkCalendar = Calendar.getInstance();
                 checkCalendar.set(year, month, dayOfMonth);
                 if(checkCalendar.equals(c))
                     return;
                 if(checkCalendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
                     calendarView.setDate(c.getTimeInMillis());
                 else
-                    c = checkCalendar;
+                    c = checkCalendar;*/
 
                 //calendar_date = year + "-" + (month + 1) + "-" + dayOfMonth;
             }
@@ -149,7 +149,7 @@ public class CalendarViewActivity extends AppCompatActivity {
                     i.putExtra("service_id", ser_id);
                     i.putExtra("service_dur", service_dur);
                     startActivity(i);
-                    finish();
+                    //finish();
                     overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
 
                 } else {
@@ -169,7 +169,7 @@ public class CalendarViewActivity extends AppCompatActivity {
             }
         });
 
-        callAPI();
+        // callAPI();
     }
 
     private void callAPI() {
@@ -206,7 +206,7 @@ public class CalendarViewActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        failedIntent();
+        //failedIntent();
     }
 
     @Override
@@ -219,7 +219,6 @@ public class CalendarViewActivity extends AppCompatActivity {
     }
 
     private void fetchActiveDays(AppointmentEnquiryBody requestBody) throws ApiException {
-
         intermediateAlertDialog = new IntermediateAlertDialog(CalendarViewActivity.this);
         Log.d("fetchApptSlots---", "login: " + requestBody);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(CalendarViewActivity.this);
@@ -262,21 +261,21 @@ public class CalendarViewActivity extends AppCompatActivity {
                                 AppointmentService appointmentService = result.getService();
                                 List<AvailDay> availDayList = appointmentService.getAvailDays();
 
-                                Log.d("Day--->", "run: " + availDayList.size());
+                                Log.d("Day--->", "run: " + availDayList.size() + "," + appointmentService.getAvailDays());
                                 String day = "";
                                 for (int y = 0; y < availDayList.size(); y++) {
+                                    String availDay = appointmentService.getAvailDays().get(y).getDay();
                                     List<TimeData> timing = availDayList.get(y).getTiming();
-                                     //day = availDayList.get(y+1).getDay();
+                                    //day = availDayList.get(y+1).getDay();
                                     String id = timing.get(0).getAvailId();
                                     String st = timing.get(0).getStartTime();
                                     String et = timing.get(0).getEndTime();
-                                    Log.d("Time--->", "run: "+id+","+st+","+et);
+                                    Log.d("Time--->", "run: " + id + "," + st + "," + et + "," + availDay);
 
-                                    if(!et.equals("00:00:00")){
-                                        day=day+"y";
-                                    }
-                                    else {
-                                        day=day+"n";
+                                    if (!et.equals("00:00:00")) {
+                                        day = day + "y";
+                                    } else {
+                                        day = day + "n";
                                     }
                                 }
                                 Log.d("Day--->", "run: " + day);
@@ -327,18 +326,21 @@ public class CalendarViewActivity extends AppCompatActivity {
     private void failedIntent() {
         if (!TextUtils.isEmpty(page_id) && page_id.equals("1")) {
             Intent i = new Intent(CalendarViewActivity.this, AppointmentActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
-            finish();
+            //finish();
             overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
         } else if (!TextUtils.isEmpty(page_id) && page_id.equals("2")) {
             Intent i = new Intent(CalendarViewActivity.this, CustomerActivity_Bottom.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
-            finish();
+           // finish();
             overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
         } else {
             Intent i = new Intent(CalendarViewActivity.this, DashboardActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
-            finish();
+            //finish();
             overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
         }
     }
@@ -366,7 +368,7 @@ public class CalendarViewActivity extends AppCompatActivity {
                 i.putExtra("service_id", ser_id);
                 i.putExtra("service_dur", service_dur);
                 startActivity(i);
-                finish();
+                //finish();
                 overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
 
             } else {

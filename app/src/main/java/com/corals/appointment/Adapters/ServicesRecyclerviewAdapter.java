@@ -55,7 +55,7 @@ public class ServicesRecyclerviewAdapter extends RecyclerView.Adapter<ServicesRe
                     i.putExtra("service_id", appointmentServices.get(position).getSerId());
                     i.putExtra("service", appointmentServices.get(position).getSerName());
                     context.startActivity(i);
-                    ((Activity) context).finish();
+                    //((Activity) context).finish();
                     ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                 }
                 else if(id.equals("5")){
@@ -64,7 +64,7 @@ public class ServicesRecyclerviewAdapter extends RecyclerView.Adapter<ServicesRe
                     i.putExtra("service_id", appointmentServices.get(position).getSerId());
                     i.putExtra("service", appointmentServices.get(position).getSerName());
                     context.startActivity(i);
-                    ((Activity) context).finish();
+                    //((Activity) context).finish();
                     ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                 }
             }

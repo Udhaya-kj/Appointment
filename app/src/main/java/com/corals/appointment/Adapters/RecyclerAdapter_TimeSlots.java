@@ -115,7 +115,7 @@ public class RecyclerAdapter_TimeSlots extends RecyclerView.Adapter<RecyclerAdap
                         in.putExtra("start_time", appointmentAvailableSlots.get(position).getSerStartTime());
                         in.putExtra("end_time", appointmentAvailableSlots.get(position).getSerEndTime());
                         context.startActivity(in);
-                        ((Activity) context).finish();
+                        //((Activity) context).finish();
                         ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                     }
                     else if( timeSlotDataModel.getPage_id().equals("2")) {
@@ -130,7 +130,7 @@ public class RecyclerAdapter_TimeSlots extends RecyclerView.Adapter<RecyclerAdap
                         in.putExtra("start_time", appointmentAvailableSlots.get(position).getSerStartTime());
                         in.putExtra("end_time", appointmentAvailableSlots.get(position).getSerEndTime());
                         context.startActivity(in);
-                        ((Activity) context).finish();
+                        //((Activity) context).finish();
                         ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                     }
                 }

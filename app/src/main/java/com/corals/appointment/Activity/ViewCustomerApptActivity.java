@@ -67,8 +67,6 @@ public class ViewCustomerApptActivity extends AppCompatActivity {
             toolbar.setTitle(cus_name + "'s Appointments");
         }
         sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
-
-
         textView_no_appts = findViewById(R.id.text_no_appts);
         imageView_back = findViewById(R.id.image_appt_back);
         imageView_next = findViewById(R.id.image_appt_next);
@@ -177,10 +175,10 @@ public class ViewCustomerApptActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent in = new Intent(ViewCustomerApptActivity.this, CustomerActivity_Bottom.class);
+     /*   Intent in = new Intent(ViewCustomerApptActivity.this, CustomerActivity_Bottom.class);
         startActivity(in);
         finish();
-        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
     }
 
     private void fetchAppointments(AppointmentEnquiryBody requestBody) throws ApiException {
@@ -203,9 +201,10 @@ public class ViewCustomerApptActivity extends AppCompatActivity {
                         new AlertDialogFailure(ViewCustomerApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                startActivity(new Intent(ViewCustomerApptActivity.this, CustomerActivity_Bottom.class));
+                               /* startActivity(new Intent(ViewCustomerApptActivity.this, CustomerActivity_Bottom.class));
                                 finish();
-                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                                onBackPressed();
                             }
                         };
                     }
@@ -259,9 +258,10 @@ public class ViewCustomerApptActivity extends AppCompatActivity {
                             new AlertDialogFailure(ViewCustomerApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(ViewCustomerApptActivity.this, CustomerActivity_Bottom.class));
+                                   /* startActivity(new Intent(ViewCustomerApptActivity.this, CustomerActivity_Bottom.class));
                                     finish();
-                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                                    onBackPressed();
                                 }
                             };
                         }

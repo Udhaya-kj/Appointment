@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * AppointmentService
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-20T15:31:28.176Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-14T16:11:36.591Z")
 public class AppointmentService {
   @SerializedName("ser_id")
   private String serId = null;
@@ -36,7 +36,7 @@ public class AppointmentService {
   private Boolean sameBussTime = null;
 
   @SerializedName("is_active")
-  private Boolean isActive = null;
+  private String isActive = null;
 
   @SerializedName("is_show_cust")
   private Boolean isShowCust = null;
@@ -61,10 +61,10 @@ public class AppointmentService {
     return this;
   }
 
-   /**
+  /**
    * Get serId
    * @return serId
-  **/
+   **/
   @Schema(description = "")
   public String getSerId() {
     return serId;
@@ -79,11 +79,11 @@ public class AppointmentService {
     return this;
   }
 
-   /**
+  /**
    * Get serDescription
    * @return serDescription
-  **/
-   @Schema(description = "")
+   **/
+  @Schema(description = "")
   public String getSerDescription() {
     return serDescription;
   }
@@ -97,11 +97,11 @@ public class AppointmentService {
     return this;
   }
 
-   /**
+  /**
    * Get sameBussTime
    * @return sameBussTime
-  **/
-   @Schema(description = "")
+   **/
+  @Schema(description = "")
   public Boolean isSameBussTime() {
     return sameBussTime;
   }
@@ -110,21 +110,21 @@ public class AppointmentService {
     this.sameBussTime = sameBussTime;
   }
 
-  public AppointmentService isActive(Boolean isActive) {
+  public AppointmentService isActive(String isActive) {
     this.isActive = isActive;
     return this;
   }
 
-   /**
+  /**
    * Get isActive
    * @return isActive
-  **/
-   @Schema(description = "")
-  public Boolean isIsActive() {
+   **/
+  @Schema(description = "")
+  public String getIsActive() {
     return isActive;
   }
 
-  public void setIsActive(Boolean isActive) {
+  public void setIsActive(String isActive) {
     this.isActive = isActive;
   }
 
@@ -133,11 +133,11 @@ public class AppointmentService {
     return this;
   }
 
-   /**
+  /**
    * Get isShowCust
    * @return isShowCust
-  **/
-   @Schema(description = "")
+   **/
+  @Schema(description = "")
   public Boolean isIsShowCust() {
     return isShowCust;
   }
@@ -151,11 +151,11 @@ public class AppointmentService {
     return this;
   }
 
-   /**
+  /**
    * Get serName
    * @return serName
-  **/
-   @Schema(description = "")
+   **/
+  @Schema(description = "")
   public String getSerName() {
     return serName;
   }
@@ -169,11 +169,11 @@ public class AppointmentService {
     return this;
   }
 
-   /**
+  /**
    * Get merId
    * @return merId
-  **/
-   @Schema(description = "")
+   **/
+  @Schema(description = "")
   public String getMerId() {
     return merId;
   }
@@ -187,11 +187,11 @@ public class AppointmentService {
     return this;
   }
 
-   /**
+  /**
    * Get serPrice
    * @return serPrice
-  **/
-   @Schema(description = "")
+   **/
+  @Schema(description = "")
   public String getSerPrice() {
     return serPrice;
   }
@@ -205,11 +205,11 @@ public class AppointmentService {
     return this;
   }
 
-   /**
+  /**
    * Get serDuration
    * @return serDuration
-  **/
-   @Schema(description = "")
+   **/
+  @Schema(description = "")
   public String getSerDuration() {
     return serDuration;
   }
@@ -231,11 +231,11 @@ public class AppointmentService {
     return this;
   }
 
-   /**
+  /**
    * Get availDays
    * @return availDays
-  **/
-   @Schema(description = "")
+   **/
+  @Schema(description = "")
   public List<AvailDay> getAvailDays() {
     return availDays;
   }
@@ -246,7 +246,7 @@ public class AppointmentService {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -255,15 +255,15 @@ public class AppointmentService {
     }
     AppointmentService appointmentService = (AppointmentService) o;
     return Objects.equals(this.serId, appointmentService.serId) &&
-        Objects.equals(this.serDescription, appointmentService.serDescription) &&
-        Objects.equals(this.sameBussTime, appointmentService.sameBussTime) &&
-        Objects.equals(this.isActive, appointmentService.isActive) &&
-        Objects.equals(this.isShowCust, appointmentService.isShowCust) &&
-        Objects.equals(this.serName, appointmentService.serName) &&
-        Objects.equals(this.merId, appointmentService.merId) &&
-        Objects.equals(this.serPrice, appointmentService.serPrice) &&
-        Objects.equals(this.serDuration, appointmentService.serDuration) &&
-        Objects.equals(this.availDays, appointmentService.availDays);
+            Objects.equals(this.serDescription, appointmentService.serDescription) &&
+            Objects.equals(this.sameBussTime, appointmentService.sameBussTime) &&
+            Objects.equals(this.isActive, appointmentService.isActive) &&
+            Objects.equals(this.isShowCust, appointmentService.isShowCust) &&
+            Objects.equals(this.serName, appointmentService.serName) &&
+            Objects.equals(this.merId, appointmentService.merId) &&
+            Objects.equals(this.serPrice, appointmentService.serPrice) &&
+            Objects.equals(this.serDuration, appointmentService.serDuration) &&
+            Objects.equals(this.availDays, appointmentService.availDays);
   }
 
   @Override
@@ -276,7 +276,7 @@ public class AppointmentService {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AppointmentService {\n");
-    
+
     sb.append("    serId: ").append(toIndentedString(serId)).append("\n");
     sb.append("    serDescription: ").append(toIndentedString(serDescription)).append("\n");
     sb.append("    sameBussTime: ").append(toIndentedString(sameBussTime)).append("\n");
@@ -295,7 +295,7 @@ public class AppointmentService {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

@@ -36,7 +36,6 @@ public abstract class AlertDialogFailure {
         txtvw.setText(msg);
         btn.setText(btnTxt);
         oops.setText(oopsmsg);
-        final AlertDialog finalAlertDialog = alertDialog;
         builder = new AlertDialog.Builder(mcntx);
         builder.setView(view);
         alertDialog = builder.create();

@@ -4,8 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -26,7 +32,7 @@ public class ServiceUnavailCalendarActivity extends AppCompatActivity {
     String ser_id, ser, task, calendar_date;
     Calendar c;
     ImageView imageView;
-
+    private SharedPreferences sharedpreferences_sessionToken;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +49,7 @@ public class ServiceUnavailCalendarActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
 
         imageView = findViewById(R.id.image_cal);
         textView_title = findViewById(R.id.text_unavail_title);
@@ -64,10 +71,19 @@ public class ServiceUnavailCalendarActivity extends AppCompatActivity {
             }
 
         }
+        String maxday = sharedpreferences_sessionToken.getString(LoginActivity.MAX_DAYS, "");
+        int day = 0;
+        if (!TextUtils.isEmpty(maxday)) {
+            day = Integer.parseInt(maxday) - 1;
+        }
         c = Calendar.getInstance();
+        long now = System.currentTimeMillis() - 1000;
         System.out.println("Current time => " + c.getTime());
         final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         calendar_date = df.format(c.getTime());
+        calendarView.setMinDate(System.currentTimeMillis() - 1000);
+        calendarView.setMaxDate(now + (1000 * 60 * 60 * 24 * day));
+
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
@@ -104,7 +120,7 @@ public class ServiceUnavailCalendarActivity extends AppCompatActivity {
                     in.putExtra("service", ser);
                     in.putExtra("date", calendar_date);
                     startActivity(in);
-                    finish();
+                    //finish();
                     overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                 } else {
 
@@ -128,9 +144,47 @@ public class ServiceUnavailCalendarActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        Intent in = new Intent(ServiceUnavailCalendarActivity.this, SettingsActivity.class);
+      /*  Intent in = new Intent(ServiceUnavailCalendarActivity.this, SettingsActivity.class);
         startActivity(in);
         finish();
-        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.finish_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_finish) {
+            boolean isConn = ConnectivityReceiver.isConnected();
+            if (isConn) {
+
+                Intent in = new Intent(ServiceUnavailCalendarActivity.this, SerUnavailAskTimeActivity.class);
+                in.putExtra("task", task);
+                in.putExtra("service_id", ser_id);
+                in.putExtra("service", ser);
+                in.putExtra("date", calendar_date);
+                startActivity(in);
+                //finish();
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+            } else {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(ServiceUnavailCalendarActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                            @Override
+                            public void onButtonClick() {
+                            }
+                        };
+                    }
+                });
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

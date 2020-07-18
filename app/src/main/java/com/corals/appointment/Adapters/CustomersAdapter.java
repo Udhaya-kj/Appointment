@@ -1,35 +1,27 @@
 package com.corals.appointment.Adapters;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.corals.appointment.Activity.ApptConfirmActivity;
-import com.corals.appointment.Activity.CreateCustomerActivity;
-import com.corals.appointment.Client.model.InlineResponse20013Customersrec;
 import com.corals.appointment.Dialogs.CustomerBottomSheetDialog;
+import com.corals.appointment.Interface.SearchCustomerCallback;
 import com.corals.appointment.Model.CustomersModel;
 import com.corals.appointment.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.MyViewHolder> implements Filterable {
     private ArrayList<CustomersModel> customersModelArrayList;
@@ -41,6 +33,7 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.MyVi
     String slot_no;
     String startTime;
     String endTime, res_id, res;
+    SearchCustomerCallback searchCustomerCallback;
 
     public CustomersAdapter(Context mCtx, ArrayList<CustomersModel> mCustomersValues, String ser_id, String date, String slot_no, String startTime, String endTime, String res_id, String res) {
         this.context = mCtx;
@@ -53,6 +46,7 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.MyVi
         this.endTime = endTime;
         this.res_id = res_id;
         this.res = res;
+        searchCustomerCallback= (SearchCustomerCallback) context;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -89,28 +83,7 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.MyVi
             }
         });
 
-      /*  holder.imageView_popup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Creating the instance of PopupMenu
-                PopupMenu popup = new PopupMenu(context, holder.imageView_popup);
-                //Inflating the Popup using xml file
-                popup.getMenuInflater().inflate(R.menu.poupup_menu, popup.getMenu());
-                //registering popup with OnMenuItemClickListener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getTitle().equals("View")) {
-                            CustomerBottomSheetDialog coralsBottomSheetDialog = new CustomerBottomSheetDialog(context, mDisplayedValues.get(position).getCus_id(), mDisplayedValues.get(position).getName(), mDisplayedValues.get(position).getMobile(), mDisplayedValues.get(position).getEmail());
-                            coralsBottomSheetDialog.showBottomSheetDialog();
 
-                            //change customerList to mDisplayedValues
-                        }
-                        return true;
-                    }
-                });
-                popup.show();//showing popup menu
-            }
-        });*/
     }
 
     @Override
@@ -136,6 +109,7 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.MyVi
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();        // Holds the results of a filtering operation in values
                 ArrayList<CustomersModel> FilteredArrList = new ArrayList<CustomersModel>();
+
                 if (customersModelArrayList == null) {
                     customersModelArrayList = new ArrayList<CustomersModel>(mDisplayedValues); // saves the original data in mOriginalValues
                 }
@@ -144,6 +118,7 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.MyVi
                     // set the Original result to return
                     results.count = customersModelArrayList.size();
                     results.values = customersModelArrayList;
+
                 } else {
                     constraint = constraint.toString().toLowerCase();
                     for (int i = 0; i < customersModelArrayList.size(); i++) {
@@ -155,6 +130,7 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.MyVi
                     // set the Filtered result to return
                     results.count = FilteredArrList.size();
                     results.values = FilteredArrList;
+
                     if (results.count == 0) {
                         constraint = constraint.toString().toLowerCase();
                         for (int i = 0; i < customersModelArrayList.size(); i++) {
@@ -166,6 +142,17 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.MyVi
                         // set the Filtered result to return
                         results.count = FilteredArrList.size();
                         results.values = FilteredArrList;
+                        if (results.count == 0) {
+                            searchCustomerCallback.customerCallback("0");
+                            Log.d("Flag--->", "performFiltering: 0");
+                        }else {
+                            searchCustomerCallback.customerCallback("1");
+                            Log.d("Flag--->", "performFiltering: 1");
+                        }
+                    }
+                    else {
+                        searchCustomerCallback.customerCallback("1");
+                        Log.d("Flag--->", "performFiltering: 1");
                     }
                 }
                 return results;

@@ -51,11 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView textView, textView_title;
     ImageView imageView_logo;
     MaterialButton button_login;
-    private SharedPreferences sharedpreferences_services;
-    private SharedPreferences sharedpreferences_staffs;
     private SharedPreferences sharedpreferences_ask_again;
-    private ArrayList<String> service_name_list, service_dur_list;
-    private ArrayList<String> staff_name_list, staff_mob_list;
     private SharedPreferences sharedpreferences_sessionToken;
     public static final String MyPREFERENCES_SESSIONTOKEN = "MyPREFERENCES_SESSIONTOKEN ";
     public static final String SESSIONTOKEN = "SESSIONTOKEN ";
@@ -67,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final String USER_MAIL = "USER_MAIL ";
     public static final String MAX_DAYS = "MAX_DAYS ";
     private IntermediateAlertDialog intermediateAlertDialog;
+    String ask_again_value = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,15 +94,9 @@ public class LoginActivity extends AppCompatActivity {
         imageView_logo = findViewById(R.id.image_logo);
         textView_title = findViewById(R.id.text_app_title);
 
-        service_name_list = new ArrayList<>();
-        service_dur_list = new ArrayList<>();
-        staff_name_list = new ArrayList<>();
-        staff_mob_list = new ArrayList<>();
 
         sharedpreferences_sessionToken = getSharedPreferences(MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
         sharedpreferences_ask_again = getSharedPreferences(StatusServiceStaffActivity.MyPREFERENCES_ASK_AGAIN, Context.MODE_PRIVATE);
-        sharedpreferences_services = getSharedPreferences(AddServiceAvailTimeActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
-        sharedpreferences_staffs = getSharedPreferences(AddStaffActivity.MyPREFERENCES_STAFFS, Context.MODE_PRIVATE);
 
         if (!TextUtils.isEmpty(sharedpreferences_sessionToken.getString(LoginActivity.USER_MAIL, ""))) {
             editText_id.setText(sharedpreferences_sessionToken.getString(LoginActivity.USER_MAIL, ""));
@@ -115,28 +106,7 @@ public class LoginActivity extends AppCompatActivity {
        /* SharedPreferences.Editor editor = sharedpreferences_ask_again.edit();
         editor.putString(StatusServiceStaffActivity.VALUE, "0");
         editor.commit();*/
-
-
-        String nameList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_NAME, "");
-        String mobList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_DURATION, "");
-        if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
-            service_name_list = new Gson().fromJson(nameList, new TypeToken<ArrayList<String>>() {
-            }.getType());
-            service_dur_list = new Gson().fromJson(mobList, new TypeToken<ArrayList<String>>() {
-            }.getType());
-        }
-
-        String nameList1 = sharedpreferences_staffs.getString(AddStaffActivity.NAME, "");
-        String mobList1 = sharedpreferences_staffs.getString(AddStaffActivity.MOBILE, "");
-        if (!TextUtils.isEmpty(nameList1) && !TextUtils.isEmpty(mobList1)) {
-            staff_name_list = new Gson().fromJson(nameList1, new TypeToken<ArrayList<String>>() {
-            }.getType());
-            staff_mob_list = new Gson().fromJson(mobList1, new TypeToken<ArrayList<String>>() {
-            }.getType());
-        }
-
-
-        Log.d("listsize---->", "onCreate: " + service_name_list.size() + "," + service_dur_list.size() + "," + staff_name_list.size() + "," + staff_mob_list.size());
+        ask_again_value = sharedpreferences_ask_again.getString(StatusServiceStaffActivity.VALUE, "");
 
         textView.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + "Sign up" + "</u>  </font>"));
         textView.setOnClickListener(new View.OnClickListener() {
@@ -150,16 +120,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
-                finish();
                 overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 callAPI();
-
             }
         });
     }
@@ -194,7 +161,6 @@ public class LoginActivity extends AppCompatActivity {
                         intermediateAlertDialog = new IntermediateAlertDialog(LoginActivity.this);
                         merchantApptLogin(securityAPIBody);
                     } else {
-
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -223,7 +189,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void merchantApptLogin(final SecurityAPIBody requestBody) throws ApiException {
-
         Log.d("login---", "login: " + requestBody);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(LoginActivity.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();
@@ -255,7 +220,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
-                Log.d("login--->", "onSuccess-" + statusCode + " , " + result + " , " + result.getUserId() + "," + result.getBizDisplayName() + " , " + result.getCountryCode() + " , " + result.getMerCurSymbol() + " , " + result.getMaxLenLoadingDays());
+                Log.d("login--->", "onSuccess-" + statusCode + " , " + result + " , " + result.getUserId() + "," + result.getBizDisplayName() + " , " + result.getCountryCode() + " , " + result.getMerCurSymbol() + " , " + result.getMaxLenLoadingDays() + "," + result.getTotalSerCount() + "," + result.getTotalResCount());
 
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
                     SharedPreferences.Editor editor = sharedpreferences_sessionToken.edit();
@@ -269,9 +234,18 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString(USER_MAIL, editText_id.getText().toString().trim());
                     editor.commit();
 
-                    startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+                    if (Integer.parseInt(result.getTotalSerCount()) > 0 && Integer.parseInt(result.getTotalResCount()) > 0) {
+                        startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+                        } else {
+                        if (!TextUtils.isEmpty(ask_again_value) && ask_again_value.equals("1")) {
+                            startActivity(new Intent(LoginActivity.this, ApptSuccessActivity.class));
+                        } else {
+                            startActivity(new Intent(LoginActivity.this, StatusServiceStaffActivity.class).putExtra("total_service", result.getTotalSerCount()).putExtra("total_resource", result.getTotalResCount()));
+                        }
+                        }
                     finish();
                     overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+
                 } else if (Integer.parseInt(result.getStatusCode()) == 205) {
                     runOnUiThread(new Runnable() {
                         @Override

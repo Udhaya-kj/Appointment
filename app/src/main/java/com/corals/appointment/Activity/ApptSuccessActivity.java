@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,7 +23,11 @@ public class ApptSuccessActivity extends AppCompatActivity {
         textView_confirm=findViewById(R.id.text_confirm_email);
         if(getIntent().getExtras()!=null){
             cus_email=getIntent().getStringExtra("cus_email");
-            textView_confirm.setText("We have sent confirmation mail to "+cus_email);
+            if(!TextUtils.isEmpty(cus_email) && !cus_email.equals("null")) {
+                textView_confirm.setText("We have sent confirmation mail to " + cus_email);
+            }else {
+                textView_confirm.setText("We have sent confirmation mail to --");
+            }
         }
         button_close=findViewById(R.id.button_setup_close);
         button_close.setOnClickListener(new View.OnClickListener() {

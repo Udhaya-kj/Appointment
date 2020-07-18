@@ -46,7 +46,7 @@ public class ViewApptServiceActivity extends AppCompatActivity {
     ImageView imageView_back, imageView_next;
     TextView textView_date,textView_no_appts;
     Calendar c;
-    String formattedDate, service, service_id;
+    String formattedDate, service, service_id,service_dur;
     private IntermediateAlertDialog intermediateAlertDialog;
     private SharedPreferences sharedpreferences_sessionToken;
     Toolbar toolbar;
@@ -71,6 +71,7 @@ public class ViewApptServiceActivity extends AppCompatActivity {
         if (getIntent().getExtras() != null) {
             service_id = getIntent().getStringExtra("service_id");
             service = getIntent().getStringExtra("service");
+            service_dur = getIntent().getStringExtra("service_dur");
             toolbar.setTitle(service);
         }
 
@@ -165,7 +166,7 @@ public class ViewApptServiceActivity extends AppCompatActivity {
         if (isConn) {
             try {
                 intermediateAlertDialog = new IntermediateAlertDialog(ViewApptServiceActivity.this);
-                fetchApptService(enquiryBody, service_id, toolbar.getTitle().toString(), date); ////dt_appt
+                fetchApptService(enquiryBody, service_id, toolbar.getTitle().toString(), date,service_dur); ////dt_appt
             } catch (ApiException e) {
                 e.printStackTrace();
             }
@@ -186,13 +187,13 @@ public class ViewApptServiceActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent in = new Intent(ViewApptServiceActivity.this, AppointmentActivity.class);
+/*        Intent in = new Intent(ViewApptServiceActivity.this, AppointmentActivity.class);
         startActivity(in);
         finish();
-        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
     }
 
-    private void fetchApptService(AppointmentEnquiryBody requestBody, final String service_id, final String service, final String date) throws ApiException {
+    private void fetchApptService(AppointmentEnquiryBody requestBody, final String service_id, final String service, final String date, final String service_dur) throws ApiException {
 
         Log.d("fetchApptService---", "login: " + requestBody + "," + service + "," + service_id + "," + date);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(ViewApptServiceActivity.this);
@@ -213,9 +214,10 @@ public class ViewApptServiceActivity extends AppCompatActivity {
                         new AlertDialogFailure(ViewApptServiceActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                startActivity(new Intent(ViewApptServiceActivity.this, AppointmentActivity.class));
+                          /*      startActivity(new Intent(ViewApptServiceActivity.this, AppointmentActivity.class));
                                 finish();
-                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                          onBackPressed();
                             }
                         };
                     }
@@ -238,7 +240,7 @@ public class ViewApptServiceActivity extends AppCompatActivity {
                             if (!result.getAppointments().isEmpty() && result.getAppointments() != null) {
                                 textView_no_appts.setVisibility(View.GONE);
                                 recyclerView.setVisibility(View.VISIBLE);
-                                ApptServiceSlotsAdapter apptServiceSlotsAdapter = new ApptServiceSlotsAdapter(ViewApptServiceActivity.this, service_id, service, date, result.getAppointments());
+                                ApptServiceSlotsAdapter apptServiceSlotsAdapter = new ApptServiceSlotsAdapter(ViewApptServiceActivity.this, service_id, service, date,service_dur, result.getAppointments());
                                 recyclerView.setAdapter(apptServiceSlotsAdapter);
 
                             } else {
@@ -270,9 +272,11 @@ public class ViewApptServiceActivity extends AppCompatActivity {
                             new AlertDialogFailure(ViewApptServiceActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(ViewApptServiceActivity.this, AppointmentActivity.class));
+                                   /* startActivity(new Intent(ViewApptServiceActivity.this, AppointmentActivity.class));
                                     finish();
-                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+
+                                   onBackPressed();
                                 }
                             };
                         }

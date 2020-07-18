@@ -180,7 +180,7 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
                 in.putExtra("appt_time", textView_booking_time.getText().toString().trim());
                 in.putExtra("appt_id", appt_id);
                 startActivity(in);
-                finish();
+               // finish();
                 overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                 } else {
 
@@ -206,10 +206,10 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        Intent i = new Intent(ApptSlotDetailsActivity.this, AppointmentActivity.class);
+      /*  Intent i = new Intent(ApptSlotDetailsActivity.this, AppointmentActivity.class);
         startActivity(i);
         finish();
-        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
 
     }
 
@@ -233,9 +233,10 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
                         new AlertDialogFailure(ApptSlotDetailsActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                startActivity(new Intent(ApptSlotDetailsActivity.this, AppointmentActivity.class));
+                           /*     startActivity(new Intent(ApptSlotDetailsActivity.this, AppointmentActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                 finish();
-                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                           onBackPressed();
                             }
                         };
                     }
@@ -256,7 +257,7 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
                             new AlertDialogFailure(ApptSlotDetailsActivity.this, "Appointment cancelled successfully!", "OK", "", "Success") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(ApptSlotDetailsActivity.this, AppointmentActivity.class));
+                                    startActivity(new Intent(ApptSlotDetailsActivity.this, AppointmentActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                                 }
@@ -270,9 +271,11 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
                             new AlertDialogFailure(ApptSlotDetailsActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(ApptSlotDetailsActivity.this, AppointmentActivity.class));
+                                    /*startActivity(new Intent(ApptSlotDetailsActivity.this, AppointmentActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     finish();
-                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+
+                                    onBackPressed();
                                 }
                             };
                         }

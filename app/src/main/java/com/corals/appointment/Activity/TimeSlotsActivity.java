@@ -148,7 +148,7 @@ public class TimeSlotsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        failedIntent();
+       // failedIntent();
     }
 
     private void fetchApptAvailSlots(AppointmentEnquiryBody requestBody) throws ApiException {
@@ -173,7 +173,8 @@ public class TimeSlotsActivity extends AppCompatActivity {
                         new AlertDialogFailure(TimeSlotsActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                failedIntent();
+                                onBackPressed();
+                                //failedIntent();
                             }
                         };
                     }
@@ -204,7 +205,8 @@ public class TimeSlotsActivity extends AppCompatActivity {
                             new AlertDialogFailure(TimeSlotsActivity.this, getResources().getString(R.string.no_avail_slots), "OK", "", "Warning") {
                                 @Override
                                 public void onButtonClick() {
-                                    failedIntent();
+                                    onBackPressed();
+                                    //failedIntent();
                                 }
                             };
                         }
@@ -216,7 +218,8 @@ public class TimeSlotsActivity extends AppCompatActivity {
                             new AlertDialogFailure(TimeSlotsActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    failedIntent();
+                                    onBackPressed();
+                                    //failedIntent();
                                 }
                             };
                         }

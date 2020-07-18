@@ -122,7 +122,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:gravity="center"
             android:orientation="horizontal"
@@ -132,26 +132,26 @@
                 android:id="@+id/button_status_dont_ask"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:layout_weight="0.5"
                 android:backgroundTint="@color/red"
-                android:minWidth="150dp"
                 android:fontFamily="@font/lato_medium"
                 android:text="Don't ask again"
+                android:textSize="13sp"
                 android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/button_status_create"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:layout_weight="0.5"
                 android:fontFamily="@font/lato_medium"
                 android:backgroundTint="@color/button_green"
-                android:minWidth="150dp"
                 android:text="OK"
+                android:textSize="13sp"
                 android:textColor="@color/white" />
 
 

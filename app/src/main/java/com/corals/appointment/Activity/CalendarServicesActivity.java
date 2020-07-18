@@ -96,10 +96,7 @@ public class CalendarServicesActivity extends AppCompatActivity {
                     new AlertDialogFailure(CalendarServicesActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
                         @Override
                         public void onButtonClick() {
-                            Intent i = new Intent(CalendarServicesActivity.this, AppointmentActivity.class);
-                            startActivity(i);
-                            finish();
-                            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+
                         }
                     };
                 }
@@ -112,11 +109,13 @@ public class CalendarServicesActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i = new Intent(CalendarServicesActivity.this, CustomerActivity_Bottom.class);
+     /*   Intent i = new Intent(CalendarServicesActivity.this, CustomerActivity_Bottom.class);
         startActivity(i);
         finish();
-        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
 
+
+     //old
    /*     if (!TextUtils.isEmpty(pageId) && pageId.equals("1")) {
             Intent i = new Intent(CalendarServicesActivity.this, AppointmentActivity.class);
             startActivity(i);

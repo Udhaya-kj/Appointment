@@ -70,6 +70,17 @@
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No Results Found"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:id="@+id/tv_no_results"
+        android:visibility="gone"
+        />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listview_customers"
         android:layout_width="match_parent"

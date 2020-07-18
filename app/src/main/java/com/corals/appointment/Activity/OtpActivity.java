@@ -52,7 +52,7 @@ public class OtpActivity extends AppCompatActivity {
     private EditText editTextCode;
     //firebase auth object
     private FirebaseAuth mAuth;
-    private String mob;
+    private String mob,dial_code;
 
     private ProgressBar progress;
     private FrameLayout linearLayout;
@@ -65,7 +65,6 @@ public class OtpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_otp);
 
         sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
-
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
 
@@ -81,7 +80,8 @@ public class OtpActivity extends AppCompatActivity {
 
         if (getIntent().getExtras() != null) {
             mob = getIntent().getStringExtra("mobile");
-            Log.d("Mobile---->", "" + mob);
+            dial_code = getIntent().getStringExtra("dial_code");
+            Log.d("Mobile---->", "" + mob+","+dial_code);
         }
 
         boolean isConn = ConnectivityReceiver.isConnected();
@@ -173,7 +173,7 @@ public class OtpActivity extends AppCompatActivity {
         String mob_code = paramProperties.getProperty(code, MOBILE_CODE);
         progress.setVisibility(View.VISIBLE);
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                "+" + mob_code + "" + mobile,
+                "+" + dial_code + "" + mobile,
                 120,
                 TimeUnit.SECONDS,
                 TaskExecutors.MAIN_THREAD,

@@ -40,7 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
                 Intent i = new Intent(SettingsActivity.this, ServiceUnavailbleActivity.class);
                 i.putExtra("task", "1");
                 startActivity(i);
-                finish();
+               // finish();
                 overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
@@ -51,7 +51,7 @@ public class SettingsActivity extends AppCompatActivity {
                 Intent i = new Intent(SettingsActivity.this, ServiceUnavailbleActivity.class);
                 i.putExtra("task", "2");
                 startActivity(i);
-                finish();
+               // finish();
                 overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });

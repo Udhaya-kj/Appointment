@@ -101,7 +101,7 @@ public class ServicesAdapter extends BaseAdapter {
                 i.putExtra("description", appointmentServiceArrayList.get(position).getSerDescription());
                 i.putExtra("show_cust", String.valueOf(appointmentServiceArrayList.get(position).isIsShowCust()));
                 context.startActivity(i);
-                ((Activity) context).finish();
+                //((Activity) context).finish();
                 ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
 
             }
@@ -125,7 +125,7 @@ public class ServicesAdapter extends BaseAdapter {
                                         AppointmentService appointmentService = new AppointmentService();
                                         appointmentService.setSerId(appointmentServiceArrayList.get(position).getSerId());
                                         appointmentService.setIsShowCust(appointmentServiceArrayList.get(position).isIsShowCust());
-                                        appointmentService.setIsActive(false);
+                                        appointmentService.setIsActive("false");
                                         appointmentService.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
 
                                         ApptTransactionBody transactionBody = new ApptTransactionBody();

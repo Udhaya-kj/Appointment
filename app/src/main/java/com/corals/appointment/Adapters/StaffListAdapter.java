@@ -91,6 +91,8 @@ public class StaffListAdapter extends BaseAdapter {
         imageView_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("Mapping---", "onClick: "+appointmentResources.get(position).getSerResMaps()+" , "+appointmentResources.get(position).getResName());
+
                 Intent i = new Intent(context, AddStaffActivity.class);
                 i.putExtra("page_id", "03");
                 i.putExtra("position", String.valueOf(position));
@@ -98,9 +100,9 @@ public class StaffListAdapter extends BaseAdapter {
                 i.putExtra("name", appointmentResources.get(position).getResName());
                 i.putExtra("mobile", appointmentResources.get(position).getMobile());
                 i.putExtra("sameBizTime", appointmentResources.get(position).isSameBussTime());
-                i.putExtra("mapSerRes", (Serializable)appointmentResources.get(position).getSerResMaps());
+                i.putExtra("mapSerRes", (Serializable) appointmentResources.get(position).getSerResMaps());
                 context.startActivity(i);
-                ((Activity) context).finish();
+               // ((Activity) context).finish();
                 ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });
@@ -117,29 +119,10 @@ public class StaffListAdapter extends BaseAdapter {
                                 sharedpreferences_sessionToken = context.getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
 
                                 List<MapServiceResourceBody> mapServiceResourceBodyList = appointmentResources.get(position).getSerResMaps();
-                                List<MapServiceResourceBody>  mapServiceResourceBodyList_update=new ArrayList<>();
-                                if(!mapServiceResourceBodyList.isEmpty() && mapServiceResourceBodyList!=null) {
-                                    for (int q = 0; q < mapServiceResourceBodyList.size(); q++) {
-
-                                        MapServiceResourceBody mapServiceResourceBody = new MapServiceResourceBody();
-                                        String resId = mapServiceResourceBodyList.get(q).getResId();
-                                        String serId = mapServiceResourceBodyList.get(q).getSerId();
-                                        boolean isdelete = mapServiceResourceBodyList.get(q).isDelete();
-
-                                        mapServiceResourceBody.setResId(resId);
-                                        mapServiceResourceBody.setSerId(serId);
-                                        mapServiceResourceBody.setDelete(true);
-                                        mapServiceResourceBodyList_update.add(mapServiceResourceBody);
-                                    }
-                                }
                                 AppointmentResources appointmentResources1 = new AppointmentResources();
                                 appointmentResources1.setResId(appointmentResources.get(position).getResId());
                                 appointmentResources1.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
-                                appointmentResources1.setIsActive(false);
-                                appointmentResources1.serResMaps(mapServiceResourceBodyList_update);
-                                appointmentResources1.setSameBussTime(true);
-                                //appointmentResources1.setSameBussTime(appointmentResources.get(position).isSameBussTime());
-                                //appointmentResources.availDays(availDayList);
+                                appointmentResources1.setIsActive("false");
 
                                 ApptTransactionBody transactionBody = new ApptTransactionBody();
                                 transactionBody.setReqType(Constants.RESOURCE_UPDATE);

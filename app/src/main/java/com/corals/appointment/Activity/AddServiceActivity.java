@@ -170,11 +170,6 @@ public class AddServiceActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
     }
 
     private void okButtonProcess(){
@@ -208,7 +203,7 @@ public class AddServiceActivity extends AppCompatActivity {
                             in.putExtra("amount", s_amt);
                             in.putExtra("show_amount", showAmtCustomer);
                             startActivity(in);
-                            finish();
+                           // finish();
                             overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                         } else if (pageId.equals("03")) {
                             runOnUiThread(new Runnable() {
@@ -256,7 +251,7 @@ public class AddServiceActivity extends AppCompatActivity {
         appointmentService.setSerName(ser_name);
         appointmentService.setSerDuration(ser_dur);
         appointmentService.setSerPrice(ser_amt);
-        appointmentService.setIsActive(true);
+        appointmentService.setIsActive("");
         appointmentService.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         appointmentService.setSerDescription(ser_desc);
         if (!TextUtils.isEmpty(showAmtCustomer) && showAmtCustomer.equals("1")) {
@@ -391,10 +386,10 @@ public class AddServiceActivity extends AppCompatActivity {
             // TODO: handle exception
         }
 
-        Intent in = new Intent(AddServiceActivity.this, SetupServiceActivity_Bottom.class);
+ /*       Intent in = new Intent(AddServiceActivity.this, SetupServiceActivity_Bottom.class);
         startActivity(in);
         finish();
-        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
 
     }
 
@@ -434,9 +429,10 @@ public class AddServiceActivity extends AppCompatActivity {
                         new AlertDialogFailure(AddServiceActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                startActivity(new Intent(AddServiceActivity.this, SetupServiceActivity_Bottom.class));
+                               /* startActivity(new Intent(AddServiceActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                 finish();
-                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                                onBackPressed();
                             }
                         };
                     }
@@ -456,7 +452,7 @@ public class AddServiceActivity extends AppCompatActivity {
                             new AlertDialogFailure(AddServiceActivity.this, "Service updated successfully!", "OK", "", "Success") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(AddServiceActivity.this, SetupServiceActivity_Bottom.class));
+                                    startActivity(new Intent(AddServiceActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                                 }
@@ -470,9 +466,10 @@ public class AddServiceActivity extends AppCompatActivity {
                             new AlertDialogFailure(AddServiceActivity.this, "Please try again later!", "OK", "Service update failed", "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(AddServiceActivity.this, SetupServiceActivity_Bottom.class));
+                                   /* startActivity(new Intent(AddServiceActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     finish();
-                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                                   onBackPressed();
                                 }
                             };
                         }

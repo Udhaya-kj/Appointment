@@ -156,9 +156,7 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
                         new AlertDialogFailure(SetupServiceActivity_Bottom.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                startActivity(new Intent(SetupServiceActivity_Bottom.this, DashboardActivity.class));
-                                finish();
-                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                onBackPressed();
                             }
                         };
                     }
@@ -197,9 +195,7 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
                             new AlertDialogFailure(SetupServiceActivity_Bottom.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(SetupServiceActivity_Bottom.this, DashboardActivity.class));
-                                    finish();
-                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                    onBackPressed();
                                 }
                             };
                         }
@@ -242,7 +238,7 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
             Intent in = new Intent(SetupServiceActivity_Bottom.this, AddServiceActivity.class);
             in.putExtra("page_id", "3");
             startActivity(in);
-            finish();
+           // finish();
             overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
         }
         return super.onOptionsItemSelected(item);

@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.corals.appointment.Adapters.CustomersAdapter;
@@ -37,6 +38,7 @@ import com.corals.appointment.Client.model.InlineResponse20013Customersrec;
 import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
+import com.corals.appointment.Interface.SearchCustomerCallback;
 import com.corals.appointment.Model.CustomersModel;
 import com.corals.appointment.Model.TimeSlotDataModel;
 import com.corals.appointment.R;
@@ -49,7 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class CustomersMakeApptActivity extends AppCompatActivity {
+public class CustomersMakeApptActivity extends AppCompatActivity implements SearchCustomerCallback {
 
     private RecyclerView listView_customers;
     CustomersAdapterMakeAppt_Recyclerview customersAdapter_makeAppt;
@@ -59,7 +61,7 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
     AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
     private SharedPreferences sharedpreferences_sessionToken;
     private IntermediateAlertDialog intermediateAlertDialog;
-    TimeSlotDataModel timeSlotDataModel;
+    TextView textView_no_results;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +81,7 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
         sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
         listView_customers = findViewById(R.id.listview_customers);
         editText_search = findViewById(R.id.et_search_customer);
-
+        textView_no_results = findViewById(R.id.tv_no_results);
         LinearLayoutManager lm = new LinearLayoutManager(this);
         listView_customers.setLayoutManager(lm);
 
@@ -163,6 +165,19 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(CustomersMakeApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                startActivity(new Intent(CustomersMakeApptActivity.this, DashboardActivity.class));
+                                finish();
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                            }
+                        };
+                    }
+                });
             }
 
             @Override
@@ -237,10 +252,10 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        Intent i = new Intent(CustomersMakeApptActivity.this, AppointmentActivity.class);
+  /*      Intent i = new Intent(CustomersMakeApptActivity.this, AppointmentActivity.class);
         startActivity(i);
         finish();
-        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
 
     }
 
@@ -272,12 +287,29 @@ public class CustomersMakeApptActivity extends AppCompatActivity {
             i.putExtra("start_time", start_time);
             i.putExtra("end_time", end_time);
             i.putExtra("service_dur", service_dur);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
-            finish();
+            //finish();
             overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
         }
         return super.onOptionsItemSelected(item);
     }
 
 
+    @Override
+    public void customerCallback(final String flag) {
+        Log.d("CustomerFlag--->", "customerCallback: "+flag);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (flag.equals("1")) {
+                    textView_no_results.setVisibility(View.GONE);
+                    listView_customers.setVisibility(View.VISIBLE);
+                } else if (flag.equals("0")) {
+                    textView_no_results.setVisibility(View.VISIBLE);
+                    listView_customers.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
 }

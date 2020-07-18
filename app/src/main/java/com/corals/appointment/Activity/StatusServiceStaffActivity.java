@@ -30,9 +30,6 @@ public class StatusServiceStaffActivity extends AppCompatActivity {
     public static final String VALUE = "VALUE";
     private SharedPreferences sharedpreferences_ask_again;
     ImageView imageView_service, imageView_staff;
-    private SharedPreferences sharedpreferences_services, sharedpreferences_staffs;
-    private ArrayList<String> service_name_list, service_dur_list;
-    private ArrayList<String> staff_name_list, staff_mob_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +42,19 @@ public class StatusServiceStaffActivity extends AppCompatActivity {
         button_dont_ask_again = findViewById(R.id.button_status_dont_ask);
 
         sharedpreferences_ask_again = getSharedPreferences(MyPREFERENCES_ASK_AGAIN, Context.MODE_PRIVATE);
-        sharedpreferences_services = getSharedPreferences(AddServiceAvailTimeActivity.MyPREFERENCES_SERVICES, Context.MODE_PRIVATE);
-        sharedpreferences_staffs = getSharedPreferences(AddStaffActivity.MyPREFERENCES_STAFFS, Context.MODE_PRIVATE);
 
-        service_name_list = new ArrayList<>();
-        service_dur_list = new ArrayList<>();
-        staff_name_list = new ArrayList<>();
-        staff_mob_list = new ArrayList<>();
+        if(getIntent().getExtras()!=null){
+            String tl_ser=getIntent().getStringExtra("total_service");
+            String tl_res=getIntent().getStringExtra("total_resource");
 
+            if(Integer.parseInt(tl_ser)!=0){
+                imageView_service.setColorFilter(Color.TRANSPARENT);
+            }
+            if(Integer.parseInt(tl_res)!=0){
+                imageView_staff.setColorFilter(Color.TRANSPARENT);
+            }
+
+        }
         button_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,37 +78,6 @@ public class StatusServiceStaffActivity extends AppCompatActivity {
             }
         });
 
-
-        String nameList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_NAME, "");
-        String mobList = sharedpreferences_services.getString(AddServiceAvailTimeActivity.SERVICE_DURATION, "");
-        if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
-            service_name_list = new Gson().fromJson(nameList, new TypeToken<ArrayList<String>>() {
-            }.getType());
-            service_dur_list = new Gson().fromJson(mobList, new TypeToken<ArrayList<String>>() {
-            }.getType());
-        }
-        Log.d("service_name_list--->", "onCreate: "+service_name_list.size());
-        if (service_name_list != null && !service_name_list.isEmpty()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                imageView_service.setColorFilter(Color.TRANSPARENT);
-            }
-
-            Log.d("service_name_list", "onCreate: "+service_name_list);
-        }
-        String nameList_staff = sharedpreferences_staffs.getString(AddStaffActivity.NAME, "");
-        String mobList_staff = sharedpreferences_staffs.getString(AddStaffActivity.MOBILE, "");
-        if (!TextUtils.isEmpty(nameList) && !TextUtils.isEmpty(mobList)) {
-            staff_name_list = new Gson().fromJson(nameList_staff, new TypeToken<ArrayList<String>>() {
-            }.getType());
-            staff_mob_list = new Gson().fromJson(mobList_staff, new TypeToken<ArrayList<String>>() {
-            }.getType());
-        }
-
-      //  Log.d("staff_name_list--->", "onCreate: "+staff_name_list.size());
-        if (staff_name_list != null && !staff_name_list.isEmpty()) {
-            imageView_staff.setColorFilter(Color.TRANSPARENT);
-            Log.d("staff_name_list", "onCreate: "+staff_name_list);
-        }
 
 
     }

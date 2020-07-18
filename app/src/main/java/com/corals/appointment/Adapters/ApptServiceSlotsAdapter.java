@@ -46,13 +46,14 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
     List<Appointments> appointmentAvailableSlots;
     private SharedPreferences sharedpreferences_sessionToken;
     private IntermediateAlertDialog intermediateAlertDialog;
-    String date, service_id, service;
+    String date, service_id, service,service_dur;
 
-    public ApptServiceSlotsAdapter(Activity context, String service_id, String service, String date, List<Appointments> appointmentAvailableSlots) {
+    public ApptServiceSlotsAdapter(Activity context, String service_id, String service, String date, String service_dur, List<Appointments> appointmentAvailableSlots) {
         this.context = context;
         this.date = date;
         this.service_id = service_id;
         this.service = service;
+        this.service_dur = service_dur;
         this.appointmentAvailableSlots = appointmentAvailableSlots;
     }
 
@@ -88,15 +89,22 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
             }
         });
 
-        holder.imageView_avail.setOnClickListener(new View.OnClickListener() {
+  /*      holder.imageView_avail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent in = new Intent(context, CustomersMakeApptActivity.class);
                 in.putExtra("page_id", "2");
+                in.putExtra("service_id", service_id);
+                in.putExtra("service", service);
+                in.putExtra("date", date);
+                in.putExtra("service_dur",service_dur);
+                in.putExtra("slot_no", "");
+                in.putExtra("start_time", appointmentAvailableSlots.get(position).getStartTime());
+                in.putExtra("end_time", appointmentAvailableSlots.get(position).getEndTime());
                 context.startActivity(in);
-                ((Activity) context).finish();
+                //((Activity) context).finish();
             }
-        });
+        });*/
 
     }
 
@@ -199,32 +207,13 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
                     context.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            List<InlineResponse20013Customersrec> inlineResponse20013Customersrecs = new ArrayList<>();
-                            List<InlineResponse20013Customersrec> inlineResponse20013CustomersrecList = result.getCustomers();
-                            for (int t = 0; t < inlineResponse20013CustomersrecList.size(); t++) {
-                                String cus_id = inlineResponse20013CustomersrecList.get(t).getCustId();
-                                String cus_name = inlineResponse20013CustomersrecList.get(t).getCustName();
-                                String cus_mob = inlineResponse20013CustomersrecList.get(t).getCustMobile();
-                                String res_name = inlineResponse20013CustomersrecList.get(t).getResName();
-                                //boolean sameBussTime = appointmentResourcesList.get(t).isSameBussTime();
-                                Log.d("fetchCustomer---", "run: " + cus_id + "," + cus_name + "," + cus_mob);
-
-                                InlineResponse20013Customersrec inlineResponse20013Customersrec = new InlineResponse20013Customersrec();
-                                inlineResponse20013Customersrec.setCustId(cus_id);
-                                inlineResponse20013Customersrec.setCustName(cus_name);
-                                inlineResponse20013Customersrec.setCustMobile(cus_mob);
-                                inlineResponse20013Customersrec.setResName(res_name);
-                                inlineResponse20013Customersrecs.add(inlineResponse20013Customersrec);
-                            }
-                            if (!inlineResponse20013Customersrecs.isEmpty() && inlineResponse20013Customersrecs != null) {
+                            if (!result.getCustomers().isEmpty() && result.getCustomers() != null) {
                                 BottomSheetDialog bd = new BottomSheetDialog(context);
-                                ViewSlotCustomersBottomDialog viewSlotCustomersBottomDialog = new ViewSlotCustomersBottomDialog(context, appt_id, start_time + "-" + end_time, date, service_id, service, bd, inlineResponse20013Customersrecs);
+                                ViewSlotCustomersBottomDialog viewSlotCustomersBottomDialog = new ViewSlotCustomersBottomDialog(context, appt_id, start_time + "-" + end_time, date, service_id, service, bd, result.getCustomers());
                                 viewSlotCustomersBottomDialog.showBottomSheetDialog();
                             } else {
 
                             }
-
-
                         }
                     });
                 } else {

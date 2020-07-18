@@ -1085,12 +1085,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         button_add_ser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                } catch (Exception e) {
-                    // TODO: handle exception
-                }
+             closeKeyboard();
                 Log.d("sunday_list--->", "onClick: " + list_sun.size() + "," + list_mon.size() + "," + list_tue.size() + "," + list_wed.size() + "," + list_thu.size() + "," + list_fri.size() + "," + list_sat.size());
                 if (isBizTimeSelected) {
                     runOnUiThread(new Runnable() {
@@ -1566,7 +1561,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         appointmentService.setSerName(ser_name);
         appointmentService.setSerDuration(ser_dur);
         appointmentService.setSerPrice(amount);
-        appointmentService.setIsActive(true);
+        appointmentService.setIsActive("");
         appointmentService.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         appointmentService.setSameBussTime(isSameBizHrs);
         if (showamount.equals("1")) {
@@ -1610,11 +1605,11 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        Intent in = new Intent(AddServiceAvailTimeActivity.this, AddServiceActivity.class);
+      /*  Intent in = new Intent(AddServiceAvailTimeActivity.this, AddServiceActivity.class);
         in.putExtra("page_id", "003");
         startActivity(in);
         finish();
-        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
 
     }
 
@@ -2009,9 +2004,10 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                         new AlertDialogFailure(AddServiceAvailTimeActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                startActivity(new Intent(AddServiceAvailTimeActivity.this, SetupServiceActivity_Bottom.class));
+                                /*startActivity(new Intent(AddServiceAvailTimeActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                 finish();
-                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                           onBackPressed();
                             }
                         };
                     }
@@ -2025,14 +2021,13 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(AddServiceAvailTimeActivity.this, "Service successfully created!", "OK", "", getResources().getString(R.string.success)) {
+                            new AlertDialogFailure(AddServiceAvailTimeActivity.this, "Service created successfully!", "OK", "", getResources().getString(R.string.success)) {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(AddServiceAvailTimeActivity.this, SetupServiceActivity_Bottom.class));
+                                    startActivity(new Intent(AddServiceAvailTimeActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                                 }
@@ -2047,9 +2042,11 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                             new AlertDialogFailure(AddServiceAvailTimeActivity.this, "Please try again later!", "OK", "Service setup failed", "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(AddServiceAvailTimeActivity.this, SetupServiceActivity_Bottom.class));
+
+                                    onBackPressed();
+                        /*            startActivity(new Intent(AddServiceAvailTimeActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     finish();
-                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
                                 }
                             };
                         }
@@ -2067,8 +2064,6 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 
     private void getScrollTop() {
@@ -2155,12 +2150,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_finish) {
-            try {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-            } catch (Exception e) {
-                // TODO: handle exception
-            }
+            closeKeyboard();
             Log.d("sunday_list--->", "onClick: " + list_sun.size() + "," + list_mon.size() + "," + list_tue.size() + "," + list_wed.size() + "," + list_thu.size() + "," + list_fri.size() + "," + list_sat.size());
             if (isBizTimeSelected) {
                 runOnUiThread(new Runnable() {
@@ -2182,8 +2172,9 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                 });
 
             } else if (isCustomTimeSelected) {
-                if (isTimeSelected) {
-                    if (isTimeAdded) {
+                if (isTimeAdded) {
+                    if (isTimeSelected) {
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -2202,17 +2193,24 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                             }
                         });
                     } else {
-                        getDialog("Select valid service active time");
+                        getDialog("Select valid service active days");
                     }
                 } else {
-                    getDialog("Select valid service active days");
+                    getDialog("Select valid service active time");
                 }
-
-
             } else {
                 getDialog("Select valid service availability time");
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void closeKeyboard(){
+        try {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
     }
 }

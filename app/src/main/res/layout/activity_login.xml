@@ -50,7 +50,7 @@
         android:text="jayanth"
         android:imeOptions="actionDone"
         android:fontFamily="@font/lato_medium"
-        android:inputType="text"
+        android:inputType="textPassword"
         android:singleLine="true" />
 
     <TextView

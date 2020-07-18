@@ -69,7 +69,7 @@ public class Slot_Cus_BottomSheet_RecyclerAdapter extends RecyclerView.Adapter<S
                 i.putExtra("service_id", service_id);
                 i.putExtra("service", service);
                 context.startActivity(i);
-                ((Activity) context).finish();
+                //((Activity) context).finish();
                 ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
 
                 Log.d("SerName---", "onClick: "+service);

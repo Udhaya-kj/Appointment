@@ -167,6 +167,33 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/text_terms_conditions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:text="Terms &amp; Conditions"
+                android:textColor="@color/primary_blue" />
+
+            <TextView
+                android:id="@+id/text_faq"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:text="FAQ"
+                android:textColor="@color/primary_blue" />
+
+            <TextView
+                android:id="@+id/text_contact_us"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:text="Contact us"
+                android:textColor="@color/primary_blue" />
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

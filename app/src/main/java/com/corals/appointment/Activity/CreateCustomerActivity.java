@@ -18,14 +18,11 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.corals.appointment.Adapters.CustomersAdapter_MakeAppt;
 import com.corals.appointment.Client.ApiCallback;
 import com.corals.appointment.Client.ApiException;
 import com.corals.appointment.Client.OkHttpApiClient;
 import com.corals.appointment.Client.api.MerchantApisApi;
-import com.corals.appointment.Client.model.AppointmentEnquiryBody;
 import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
 import com.corals.appointment.Constants.Constants;
@@ -34,36 +31,25 @@ import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class CreateCustomerActivity extends AppCompatActivity {
     private EditText editText_cus_name, editText_cus_mob, editText_cus_mail;
     private Button button_continue;
-    private SharedPreferences sharedpreferences_customers;
-    public static final String MyPREFERENCES_CUSTOMERS = "MyPrefs_Customers";
-    public static final String CUSTOMER_NAME = "CUSTOMER_NAME";
-    public static final String CUSTOMER_MOBILE = "CUSTOMER_MOBILE";
-    private ArrayList<String> cus_name_list, cus_mob_list;
     public String position = "";
     private IntermediateAlertDialog intermediateAlertDialog;
     private SharedPreferences sharedpreferences_sessionToken;
     ApptTransactionBody Body = new ApptTransactionBody();
     String page_id = "";
-    String  ser_id, date, service, slot_no, start_time, end_time,service_dur;
+    private String ser_id, date, service, slot_no, start_time, end_time, service_dur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_customer);
+        setContentView(R.layout.activity_create_customer1);
 
-        sharedpreferences_customers = getSharedPreferences(MyPREFERENCES_CUSTOMERS, Context.MODE_PRIVATE);
         sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
         Toolbar toolbar = findViewById(R.id.toolbar_create_customer);
         setSupportActionBar(toolbar);
@@ -76,16 +62,15 @@ public class CreateCustomerActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        cus_name_list = new ArrayList<>();
-        cus_mob_list = new ArrayList<>();
-        editText_cus_name = findViewById(R.id.et_cus_name);
+
+        editText_cus_name = findViewById(R.id.et_name);
         editText_cus_mob = findViewById(R.id.et_cus_mob);
         editText_cus_mail = findViewById(R.id.et_cus_email);
         button_continue = findViewById(R.id.button_create_customer);
 
         if (getIntent().getExtras() != null) {
             page_id = getIntent().getStringExtra("page_id");
-            if(page_id.equals("2")){
+            if (page_id.equals("2")) {
                 ser_id = getIntent().getStringExtra("service_id");
                 service = getIntent().getStringExtra("service");
                 date = getIntent().getStringExtra("date");
@@ -94,7 +79,7 @@ public class CreateCustomerActivity extends AppCompatActivity {
                 end_time = getIntent().getStringExtra("end_time");
                 service_dur = getIntent().getStringExtra("service_dur");
 
-                Log.d("Data---", "onCreate: "+page_id+","+ser_id+","+service+","+date+","+slot_no+","+start_time+","+end_time+","+service_dur);
+                Log.d("Data---", "onCreate: " + page_id + "," + ser_id + "," + service + "," + date + "," + slot_no + "," + start_time + "," + end_time + "," + service_dur);
             }
         }
         button_continue.setOnClickListener(new View.OnClickListener() {
@@ -108,8 +93,10 @@ public class CreateCustomerActivity extends AppCompatActivity {
     private void callAPI() {
         boolean isConn = ConnectivityReceiver.isConnected();
         if (isConn) {
-            getRequestBody();
-
+            String cus_name = editText_cus_name.getText().toString().trim();
+            String mob = editText_cus_mob.getText().toString().trim();
+            String mail = editText_cus_mail.getText().toString().trim();
+            getRequestBody(cus_name, mob, mail);
         } else {
             runOnUiThread(new Runnable() {
                 @Override
@@ -125,14 +112,9 @@ public class CreateCustomerActivity extends AppCompatActivity {
         }
     }
 
-    private void getRequestBody() {
-        String cus_name = "";
-        cus_name = editText_cus_name.getText().toString().trim();
-        String mob = editText_cus_mob.getText().toString().trim();
-        String mail = editText_cus_mail.getText().toString().trim();
+    private void getRequestBody(final String cus_name, String mob, String mail) {
 
-        String name = cus_name;
-        Log.d("Customer--->", "getRequestBody: " + cus_name.length() + "," + mob + "," + mail + "," + name);
+        Log.d("Customer--->", "getRequestBody: " + cus_name.length() + "," + mob + "," + mail + "," + cus_name);
         if (!TextUtils.isEmpty(cus_name)) {
             if (mob.length() > 0 && mob.length() >= 8) {
                 if (mail.length() > 0 && Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {
@@ -150,11 +132,11 @@ public class CreateCustomerActivity extends AppCompatActivity {
                     Body.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
                     Body.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
 
-                    final String finalCus_name = cus_name;
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogYesNo(CreateCustomerActivity.this, "Create Customer?", "Are you sure, You want to create " + finalCus_name + "?", "Yes", "No") {
+                            new AlertDialogYesNo(CreateCustomerActivity.this, "Create Customer?", "Are you sure, You want to create " + cus_name + "?", "Yes", "No") {
                                 @Override
                                 public void onOKButtonClick() {
                                     try {
@@ -182,9 +164,10 @@ public class CreateCustomerActivity extends AppCompatActivity {
                 editText_cus_mob.setError("Enter valid mobile");
                 editText_cus_mob.requestFocus();
             }
+        } else {
+            editText_cus_name.setError("Enter valid name");
+            editText_cus_name.requestFocus();
         }
-        editText_cus_name.setError("Enter valid name");
-        editText_cus_name.requestFocus();
     }
 
     private void createCustomer(ApptTransactionBody requestBody) throws ApiException {
@@ -206,9 +189,7 @@ public class CreateCustomerActivity extends AppCompatActivity {
                         new AlertDialogFailure(CreateCustomerActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                startActivity(new Intent(CreateCustomerActivity.this, CustomerActivity_Bottom.class));
-                                finish();
-                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                onBackPressed();
                             }
                         };
                     }
@@ -223,42 +204,57 @@ public class CreateCustomerActivity extends AppCompatActivity {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
-                    if(page_id.equals("2")){
+                    if (page_id.equals("2")) {
                         String name = editText_cus_name.getText().toString().trim();
                         String mob = editText_cus_mob.getText().toString().trim();
                         String mail = editText_cus_mail.getText().toString().trim();
 
-                        Intent i=new Intent(CreateCustomerActivity.this, ApptConfirmActivity.class);
-                        i.putExtra("cus_name",name);
+                        Intent i = new Intent(CreateCustomerActivity.this, ApptConfirmActivity.class);
+                        i.putExtra("cus_name", name);
                         i.putExtra("cus_mob", mob);
                         i.putExtra("cus_id", result.getCustId());
                         i.putExtra("cus_email", mail);
                         i.putExtra("service_id", ser_id);
                         i.putExtra("service", service);
                         i.putExtra("date", date);
-                        i.putExtra("slot_no",slot_no);
+                        i.putExtra("slot_no", slot_no);
                         i.putExtra("start_time", start_time);
                         i.putExtra("end_time", end_time);
                         i.putExtra("service_dur", service_dur);
                         startActivity(i);
-                        finish();
+                        //finish();
                         overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
-                    }
-                    else {
+                    } else {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 new AlertDialogFailure(CreateCustomerActivity.this, "Customer created successfully!", "OK", "", "Success") {
                                     @Override
                                     public void onButtonClick() {
-                                        startActivity(new Intent(CreateCustomerActivity.this, CustomerActivity_Bottom.class));
+                                       //onBackPressed();
+                                        Intent in = new Intent(CreateCustomerActivity.this, DashboardActivity.class);
+                                        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(in);
                                         finish();
-                                        overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                                        overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
                                     }
                                 };
                             }
                         });
                     }
+                } else if (Integer.parseInt(result.getStatusCode()) == 202) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(CreateCustomerActivity.this, "Customer already exist!", "OK", "", "Warning") {
+                                @Override
+                                public void onButtonClick() {
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
                 } else {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -266,9 +262,7 @@ public class CreateCustomerActivity extends AppCompatActivity {
                             new AlertDialogFailure(CreateCustomerActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(CreateCustomerActivity.this, CustomerActivity_Bottom.class));
-                                    finish();
-                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                    onBackPressed();
                                 }
                             };
                         }
@@ -290,31 +284,6 @@ public class CreateCustomerActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        if (!TextUtils.isEmpty(page_id) && page_id.equals("02")) {
-            Intent in = new Intent(CreateCustomerActivity.this, CustomerActivity_Bottom.class);
-            startActivity(in);
-            finish();
-            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
-
-        } else if (!TextUtils.isEmpty(page_id) && page_id.equals("2")) {
-            Intent i = new Intent(CreateCustomerActivity.this, CustomersMakeApptActivity.class);
-            i.putExtra("page_id", "2");
-            i.putExtra("service_id", ser_id);
-            i.putExtra("service", service);
-            i.putExtra("date", date);
-            i.putExtra("slot_no", slot_no);
-            i.putExtra("start_time", start_time);
-            i.putExtra("end_time", end_time);
-            i.putExtra("service_dur", service_dur);
-            startActivity(i);
-            finish();
-            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
-        } else {
-            Intent in = new Intent(CreateCustomerActivity.this, DashboardActivity.class);
-            startActivity(in);
-            finish();
-            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
-        }
     }
 
     @Override

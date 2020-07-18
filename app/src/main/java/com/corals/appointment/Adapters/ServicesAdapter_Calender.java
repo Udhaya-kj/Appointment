@@ -74,7 +74,7 @@ public class ServicesAdapter_Calender extends BaseAdapter {
                 i.putExtra("page_id", "2");
                 i.putExtra("service_dur", appointmentServices.get(position).getSerDuration());
                 context.startActivity(i);
-                ((Activity) context).finish();
+               // ((Activity) context).finish();
                 ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
             }
         });

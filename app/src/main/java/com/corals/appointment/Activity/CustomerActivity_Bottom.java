@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,6 +38,7 @@ import com.corals.appointment.Client.model.InlineResponse20013Customersrec;
 import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
+import com.corals.appointment.Interface.SearchCustomerCallback;
 import com.corals.appointment.Model.CustomersModel;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
@@ -47,13 +49,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class CustomerActivity_Bottom extends AppCompatActivity {
+public class CustomerActivity_Bottom extends AppCompatActivity implements SearchCustomerCallback {
     private RecyclerView list_customers;
-    private ArrayList<String> cus_name_list, cus_mob_list;
-    private SharedPreferences sharedpreferences_customers;
-    CustomersAdapter customersAdapter_filter;
-    Button button_continue;
 
+    CustomersAdapter customersAdapter_filter;
+    TextView textView_no_results;
     private ArrayList<CustomersModel> mCustomersArrayList = new ArrayList<CustomersModel>();
     EditText editText_search;
     private IntermediateAlertDialog intermediateAlertDialog;
@@ -87,9 +87,8 @@ public class CustomerActivity_Bottom extends AppCompatActivity {
             res_id = getIntent().getStringExtra("res_id");
             res = getIntent().getStringExtra("res");
         }
-        sharedpreferences_customers = getSharedPreferences(CreateCustomerActivity.MyPREFERENCES_CUSTOMERS, Context.MODE_PRIVATE);
-        cus_name_list = new ArrayList<>();
-        cus_mob_list = new ArrayList<>();
+
+        textView_no_results = findViewById(R.id.tv_no_results);
         editText_search = findViewById(R.id.et_search_customer);
         list_customers = findViewById(R.id.listview_customers);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
@@ -208,7 +207,7 @@ public class CustomerActivity_Bottom extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(CustomerActivity_Bottom.this,"No customers found", "OK", "", "Warning") {
+                            new AlertDialogFailure(CustomerActivity_Bottom.this, "No customers found", "OK", "", "Warning") {
                                 @Override
                                 public void onButtonClick() {
                                     editText_search.setEnabled(false);
@@ -216,8 +215,7 @@ public class CustomerActivity_Bottom extends AppCompatActivity {
                             };
                         }
                     });
-                }
-                else {
+                } else {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -275,11 +273,28 @@ public class CustomerActivity_Bottom extends AppCompatActivity {
             Intent i = new Intent(CustomerActivity_Bottom.this, CreateCustomerActivity.class);
             i.putExtra("page_id", "02");
             startActivity(i);
-            finish();
+            //finish();
             overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
         }
         return super.onOptionsItemSelected(item);
     }
 
 
+    @Override
+    public void customerCallback(final String flag) {
+        Log.d("CustomerFlag--->", "customerCallback: "+flag);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (flag.equals("1")) {
+                    textView_no_results.setVisibility(View.GONE);
+                    list_customers.setVisibility(View.VISIBLE);
+                } else if (flag.equals("0")) {
+                    textView_no_results.setVisibility(View.VISIBLE);
+                    list_customers.setVisibility(View.GONE);
+                }
+            }
+        });
+
+    }
 }

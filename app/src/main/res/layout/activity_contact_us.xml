@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_contact_us"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/background_light"
+        android:elevation="0dp"
+        android:textAlignment="center"
+        app:elevation="0dp"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:title="Contact Us"
+        app:titleTextColor="@color/matt_black" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/image_logo"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/ic_corals"
+            android:tint="@color/app_blue" />
+
+        <LinearLayout
+            android:id="@+id/layout_mob"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/list_item_decor"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:padding="20dp"
+                android:src="@drawable/ic_contact_number"
+                android:tint="@color/colorPrimaryDark" />
+
+            <TextView
+                android:text="+91 6379685956"
+                android:id="@+id/text_mob"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:gravity="start|center"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_wp"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/list_item_decor"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:padding="20dp"
+                android:src="@drawable/whatsapp"
+                />
+
+            <TextView
+                android:text="6379685956"
+                android:id="@+id/text_whatsapp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:gravity="start|center"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_email"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/list_item_decor"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:padding="20dp"
+                android:src="@drawable/email"
+                />
+
+            <TextView
+                android:text="dijkstralogistics@gmail.com"
+                android:id="@+id/text_email"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:gravity="start|center"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

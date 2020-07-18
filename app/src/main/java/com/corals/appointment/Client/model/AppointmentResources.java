@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * AppointmentResources
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-26T13:30:21.935Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-14T16:11:36.591Z")
 public class AppointmentResources {
     @SerializedName("res_id")
     private String resId = null;
@@ -48,7 +48,7 @@ public class AppointmentResources {
     private Boolean sameBussTime = null;
 
     @SerializedName("is_active")
-    private Boolean isActive = null;
+    private String isActive = null;
 
     @SerializedName("ser_res_maps")
     private List<MapServiceResourceBody> serResMaps = null;
@@ -187,7 +187,7 @@ public class AppointmentResources {
         this.sameBussTime = sameBussTime;
     }
 
-    public AppointmentResources isActive(Boolean isActive) {
+    public AppointmentResources isActive(String isActive) {
         this.isActive = isActive;
         return this;
     }
@@ -197,11 +197,11 @@ public class AppointmentResources {
      * @return isActive
      **/
     @Schema(description = "")
-    public Boolean isIsActive() {
+    public String getIsActive() {
         return isActive;
     }
 
-    public void setIsActive(Boolean isActive) {
+    public void setIsActive(String isActive) {
         this.isActive = isActive;
     }
 
