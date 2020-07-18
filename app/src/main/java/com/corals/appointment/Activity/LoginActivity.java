@@ -238,7 +238,7 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
                         } else {
                         if (!TextUtils.isEmpty(ask_again_value) && ask_again_value.equals("1")) {
-                            startActivity(new Intent(LoginActivity.this, ApptSuccessActivity.class));
+                            startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
                         } else {
                             startActivity(new Intent(LoginActivity.this, StatusServiceStaffActivity.class).putExtra("total_service", result.getTotalSerCount()).putExtra("total_resource", result.getTotalResCount()));
                         }
