@@ -41,6 +41,7 @@ import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.Utils.CAllLoginAPI;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 
 import java.util.Calendar;
@@ -63,7 +64,7 @@ public class AddServiceActivity extends AppCompatActivity {
     Switch aSwitch;
     int time_mins = 0;
     String showAmtCustomer = "0";
-    private TextView tv_ser_duration,textView_currency;
+    private TextView tv_ser_duration, textView_currency;
     String ser_id, ser_name, ser_dur, ser_amount, ser_desc, show_cust;
     private SharedPreferences sharedpreferences_sessionToken;
     private IntermediateAlertDialog intermediateAlertDialog;
@@ -122,7 +123,7 @@ public class AddServiceActivity extends AppCompatActivity {
             Log.d("AddService--->", "onCreate: " + pageId + "," + ser_name + "," + ser_dur + "," + ser_amount + "," + ser_id + "," + ser_desc + "," + show_cust);
             if (!TextUtils.isEmpty(ser_name)) {
                 et_ser_name.setText(ser_name);
-                if(!TextUtils.isEmpty(ser_name)){
+                if (!TextUtils.isEmpty(ser_name)) {
                     et_ser_name.setSelection(ser_name.length());
                 }
             }
@@ -172,7 +173,12 @@ public class AddServiceActivity extends AppCompatActivity {
 
     }
 
-    private void okButtonProcess(){
+    private void okButtonProcess() {
+
+        callAPI();
+    }
+
+    private void callAPI() {
         try {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -203,13 +209,13 @@ public class AddServiceActivity extends AppCompatActivity {
                             in.putExtra("amount", s_amt);
                             in.putExtra("show_amount", showAmtCustomer);
                             startActivity(in);
-                           // finish();
+                            // finish();
                             overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                         } else if (pageId.equals("03")) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    new AlertDialogYesNo(AddServiceActivity.this, "Update Service?", "Are you sure, You want to update "+name+" service?", "Yes", "No") {
+                                    new AlertDialogYesNo(AddServiceActivity.this, "Update Service?", "Are you sure, You want to update " + name + " service?", "Yes", "No") {
                                         @Override
                                         public void onOKButtonClick() {
                                             updateService(name, s_amt, s_desc);
@@ -242,7 +248,6 @@ public class AddServiceActivity extends AppCompatActivity {
             et_ser_name.setError("Enter service name");
             et_ser_name.requestFocus();
         }
-
     }
 
     void updateService(final String ser_name, final String ser_amt, final String ser_desc) {
@@ -426,7 +431,7 @@ public class AddServiceActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(AddServiceActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                        new AlertDialogFailure(AddServiceActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.server_error), "Failed") {
                             @Override
                             public void onButtonClick() {
                                /* startActivity(new Intent(AddServiceActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -442,10 +447,10 @@ public class AddServiceActivity extends AppCompatActivity {
             @Override
             public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
                 Log.d("updateService--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -459,17 +464,91 @@ public class AddServiceActivity extends AppCompatActivity {
                             };
                         }
                     });
-                } else {
+                } else if (Integer.parseInt(result.getStatusCode()) == 404) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(AddServiceActivity.this, "Please try again later!", "OK", "Service update failed", "Failed") {
+                            new AlertDialogFailure(AddServiceActivity.this, "Service does not exist!", "OK", "", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                   /* startActivity(new Intent(AddServiceActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);*/
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 409) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddServiceActivity.this, "Service update failed!", "OK", "", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                   /* startActivity(new Intent(AddServiceActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);*/
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 503) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddServiceActivity.this, "Service has appointment in future dates!", "OK", "Service update failed", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                   /* startActivity(new Intent(AddServiceActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);*/
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+
+                                    callAPI();
+                                }
+                            }.callLoginAPI(AddServiceActivity.this);
+                        }
+                    });
+
+                } else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddServiceActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
                                    /* startActivity(new Intent(AddServiceActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
-                                   onBackPressed();
+                                    onBackPressed();
                                 }
                             };
                         }

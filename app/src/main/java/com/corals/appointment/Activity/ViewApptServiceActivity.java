@@ -33,6 +33,7 @@ import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.Utils.CAllLoginAPI;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 
 import java.text.SimpleDateFormat;
@@ -211,7 +212,7 @@ public class ViewApptServiceActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(ViewApptServiceActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                        new AlertDialogFailure(ViewApptServiceActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.server_error), "Failed") {
                             @Override
                             public void onButtonClick() {
                           /*      startActivity(new Intent(ViewApptServiceActivity.this, AppointmentActivity.class));
@@ -229,11 +230,11 @@ public class ViewApptServiceActivity extends AppCompatActivity {
             public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
 
                 Log.d("fetchApptService--->", "onSuccess-" + statusCode + "," + result);
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
 
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -258,6 +259,9 @@ public class ViewApptServiceActivity extends AppCompatActivity {
                         }
                     });
                 } else if (Integer.parseInt(result.getStatusCode()) == 404) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -265,7 +269,48 @@ public class ViewApptServiceActivity extends AppCompatActivity {
                             recyclerView.setVisibility(View.GONE);
                         }
                     });
-                } else {
+                }
+                else if(Integer.parseInt(result.getStatusCode()) == 400){
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ViewApptServiceActivity.this, getResources().getString(R.string.try_again), "OK", "Invalid data", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                   /* startActivity(new Intent(ViewApptServiceActivity.this, AppointmentActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+
+                                   onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                }
+                else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+
+                                    callAPI(textView_date.getText().toString().trim());
+                                }
+                            }.callLoginAPI(ViewApptServiceActivity.this);
+                        }
+                    });
+
+                }else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -275,7 +320,6 @@ public class ViewApptServiceActivity extends AppCompatActivity {
                                    /* startActivity(new Intent(ViewApptServiceActivity.this, AppointmentActivity.class));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
-
                                    onBackPressed();
                                 }
                             };

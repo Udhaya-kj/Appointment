@@ -36,6 +36,7 @@ import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.Utils.CAllLoginAPI;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 
 import java.util.List;
@@ -102,7 +103,7 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
         layout_call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri number = Uri.parse("tel:"+mob);
+                Uri number = Uri.parse("tel:" + mob);
                 Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
                 startActivity(callIntent);
             }
@@ -120,48 +121,7 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        new AlertDialogYesNo(ApptSlotDetailsActivity.this, "Cancel Appointment?", "Are you sure, You want to cancel this appointment?", "Yes", "No") {
-                            @Override
-                            public void onOKButtonClick() {
-                                ApptTransactionBody transactionBody = new ApptTransactionBody();
-                                transactionBody.setReqType(Constants.CANCEL_APPOINTMENT);
-                                transactionBody.setApptId(appt_id);
-                                transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
-                                transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
-                                transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
-                                try {
-                                    Log.d("Token--->", "token: " + sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
-                                    boolean isConn = ConnectivityReceiver.isConnected();
-                                    if (isConn) {
-                                        intermediateAlertDialog = new IntermediateAlertDialog(ApptSlotDetailsActivity.this);
-                                        cancelAppointment(transactionBody);
-                                    } else {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                new AlertDialogFailure(ApptSlotDetailsActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title),getResources().getString(R.string.no_internet_Heading)) {
-                                                    @Override
-                                                    public void onButtonClick() {
-                                                    }
-                                                };
-                                            }
-                                        });                                    }
-                                } catch (ApiException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelButtonClick() {
-
-                            }
-
-                        };
-                    }
-                });
+                callAPI();
 
             }
         });
@@ -171,23 +131,23 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 boolean isConn = ConnectivityReceiver.isConnected();
                 if (isConn) {
-                Intent in = new Intent(ApptSlotDetailsActivity.this, ChangeApptActivity.class);
-                in.putExtra("service", textView_ser_name.getText().toString().trim());
-                in.putExtra("service_id", service_id);
-                in.putExtra("staff", textView_staff.getText().toString().trim());
-                in.putExtra("cus_id", cus_id);
-                in.putExtra("appt_date", textView_booking_date.getText().toString().trim());
-                in.putExtra("appt_time", textView_booking_time.getText().toString().trim());
-                in.putExtra("appt_id", appt_id);
-                startActivity(in);
-               // finish();
-                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                    Intent in = new Intent(ApptSlotDetailsActivity.this, ChangeApptActivity.class);
+                    in.putExtra("service", textView_ser_name.getText().toString().trim());
+                    in.putExtra("service_id", service_id);
+                    in.putExtra("staff", textView_staff.getText().toString().trim());
+                    in.putExtra("cus_id", cus_id);
+                    in.putExtra("appt_date", textView_booking_date.getText().toString().trim());
+                    in.putExtra("appt_time", textView_booking_time.getText().toString().trim());
+                    in.putExtra("appt_id", appt_id);
+                    startActivity(in);
+                    // finish();
+                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                 } else {
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(ApptSlotDetailsActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title),getResources().getString(R.string.no_internet_Heading)) {
+                            new AlertDialogFailure(ApptSlotDetailsActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
                                 @Override
                                 public void onButtonClick() {
 
@@ -200,6 +160,52 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void callAPI() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new AlertDialogYesNo(ApptSlotDetailsActivity.this, "Cancel Appointment?", "Are you sure, You want to cancel this appointment?", "Yes", "No") {
+                    @Override
+                    public void onOKButtonClick() {
+                        ApptTransactionBody transactionBody = new ApptTransactionBody();
+                        transactionBody.setReqType(Constants.CANCEL_APPOINTMENT);
+                        transactionBody.setApptId(appt_id);
+                        transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+                        transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
+                        transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+                        try {
+                            Log.d("Token--->", "token: " + sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+                            boolean isConn = ConnectivityReceiver.isConnected();
+                            if (isConn) {
+                                intermediateAlertDialog = new IntermediateAlertDialog(ApptSlotDetailsActivity.this);
+                                cancelAppointment(transactionBody);
+                            } else {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        new AlertDialogFailure(ApptSlotDetailsActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                                            @Override
+                                            public void onButtonClick() {
+                                            }
+                                        };
+                                    }
+                                });
+                            }
+                        } catch (ApiException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelButtonClick() {
+
+                    }
+
+                };
+            }
+        });
     }
 
     @Override
@@ -230,13 +236,13 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(ApptSlotDetailsActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                        new AlertDialogFailure(ApptSlotDetailsActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.server_error), "Failed") {
                             @Override
                             public void onButtonClick() {
                            /*     startActivity(new Intent(ApptSlotDetailsActivity.this, AppointmentActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                 finish();
                                 overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
-                           onBackPressed();
+                                onBackPressed();
                             }
                         };
                     }
@@ -246,11 +252,11 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
                 Log.d("changeApptCustomer--->", "onSuccess-" + result.getStatusCode() + "," + result.getStatusMessage());
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
 
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -264,7 +270,45 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
                             };
                         }
                     });
+                }
+                if (Integer.parseInt(result.getStatusCode()) == 409) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ApptSlotDetailsActivity.this, getResources().getString(R.string.try_again), "OK", "Appointment Cancel failed", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(ApptSlotDetailsActivity.this, AppointmentActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                                }
+                            };
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+
+                                    callAPI();
+                                }
+                            }.callLoginAPI(ApptSlotDetailsActivity.this);
+                        }
+                    });
+
                 } else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

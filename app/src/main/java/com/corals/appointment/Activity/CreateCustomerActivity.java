@@ -30,6 +30,7 @@ import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.Utils.CAllLoginAPI;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 
 import java.util.List;
@@ -124,13 +125,6 @@ public class CreateCustomerActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         // TODO: handle exception
                     }
-                    Body.setMobile(mob);
-                    Body.setName(cus_name);
-                    Body.setMail(mail);
-                    Body.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
-                    Body.setReqType(Constants.CUSTOMER_CREATE);
-                    Body.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
-                    Body.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
 
 
                     runOnUiThread(new Runnable() {
@@ -139,11 +133,7 @@ public class CreateCustomerActivity extends AppCompatActivity {
                             new AlertDialogYesNo(CreateCustomerActivity.this, "Create Customer?", "Are you sure, You want to create " + cus_name + "?", "Yes", "No") {
                                 @Override
                                 public void onOKButtonClick() {
-                                    try {
-                                        createCustomer(Body);
-                                    } catch (ApiException e) {
-                                        e.printStackTrace();
-                                    }
+                                    callCreateCustomer();
                                 }
 
                                 @Override
@@ -170,6 +160,23 @@ public class CreateCustomerActivity extends AppCompatActivity {
         }
     }
 
+    private void callCreateCustomer(){
+        String cus_name = editText_cus_name.getText().toString().trim();
+        String mob = editText_cus_mob.getText().toString().trim();
+        String mail = editText_cus_mail.getText().toString().trim();
+        Body.setMobile(mob);
+        Body.setName(cus_name);
+        Body.setMail(mail);
+        Body.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        Body.setReqType(Constants.CUSTOMER_CREATE);
+        Body.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
+        Body.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+        try {
+            createCustomer(Body);
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+    }
     private void createCustomer(ApptTransactionBody requestBody) throws ApiException {
         Log.d("createCustomer---", "createCustomer: " + requestBody);
         intermediateAlertDialog = new IntermediateAlertDialog(CreateCustomerActivity.this);
@@ -186,7 +193,7 @@ public class CreateCustomerActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(CreateCustomerActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                        new AlertDialogFailure(CreateCustomerActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.server_error), "Failed") {
                             @Override
                             public void onButtonClick() {
                                 onBackPressed();
@@ -200,10 +207,11 @@ public class CreateCustomerActivity extends AppCompatActivity {
             public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
                 Log.d("createCustomer--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
                 Log.d("createCustomer--->", "onSuccess-" + result);
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
+
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     if (page_id.equals("2")) {
                         String name = editText_cus_name.getText().toString().trim();
                         String mob = editText_cus_mob.getText().toString().trim();
@@ -244,6 +252,9 @@ public class CreateCustomerActivity extends AppCompatActivity {
                         });
                     }
                 } else if (Integer.parseInt(result.getStatusCode()) == 202) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -255,7 +266,60 @@ public class CreateCustomerActivity extends AppCompatActivity {
                             };
                         }
                     });
-                } else {
+                }
+                else if (Integer.parseInt(result.getStatusCode()) == 400) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(CreateCustomerActivity.this, getResources().getString(R.string.try_again), "OK", "Invalid request", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                }
+                else if (Integer.parseInt(result.getStatusCode()) == 409) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(CreateCustomerActivity.this, getResources().getString(R.string.try_again), "OK","Customer registration failed!", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                }
+                else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+                                    callCreateCustomer();
+                                }
+                            }.callLoginAPI(CreateCustomerActivity.this);
+                        }
+                    });
+
+                }
+                else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

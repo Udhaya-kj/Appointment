@@ -18,6 +18,7 @@ import java.net.Proxy;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -36,6 +37,9 @@ public  class OkHttpApiClient {
     @SuppressLint("AllowAllHostnameVerifier")
     public OkHttpApiClient(Context mCtx) {
         OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.setConnectTimeout(120, TimeUnit.SECONDS); // connect timeout
+        okHttpClient.setReadTimeout(120, TimeUnit.SECONDS);    // socket timeout
+        okHttpClient.setWriteTimeout(120,TimeUnit.SECONDS);
         okHttpClient.setAuthenticator(getAuthenticator());
 
         HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;

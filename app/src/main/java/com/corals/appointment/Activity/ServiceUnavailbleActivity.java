@@ -33,6 +33,7 @@ import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.Utils.CAllLoginAPI;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -193,7 +194,7 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(ServiceUnavailbleActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                        new AlertDialogFailure(ServiceUnavailbleActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.server_error), "Failed") {
                             @Override
                             public void onButtonClick() {
                                /* startActivity(new Intent(ServiceUnavailbleActivity.this, DashboardActivity.class));
@@ -211,10 +212,10 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
             public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
 
                 Log.d("fetchService--->", "onSuccess-" + statusCode + "," + result);
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -234,17 +235,75 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
 
                         }
                     });
-                } else {
+                } else if (Integer.parseInt(result.getStatusCode()) == 404) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ServiceUnavailbleActivity.this, "No services created!", "OK","", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                          /*          startActivity(new Intent(CalendarServicesActivity.this, DashboardActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                }
+                else if (Integer.parseInt(result.getStatusCode()) == 400) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ServiceUnavailbleActivity.this, getResources().getString(R.string.try_again), "OK", "Invalid data", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                               /*     startActivity(new Intent(CalendarServicesActivity.this, DashboardActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                }
+                else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+
+                                    callAPI();
+                                }
+                            }.callLoginAPI(ServiceUnavailbleActivity.this);
+                        }
+                    });
+
+                }
+                else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             new AlertDialogFailure(ServiceUnavailbleActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                 /*   startActivity(new Intent(ServiceUnavailbleActivity.this, DashboardActivity.class));
+                       /*             startActivity(new Intent(CalendarServicesActivity.this, DashboardActivity.class));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
-
                                     onBackPressed();
                                 }
                             };
@@ -285,7 +344,7 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(ServiceUnavailbleActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                        new AlertDialogFailure(ServiceUnavailbleActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.server_error), "Failed") {
                             @Override
                             public void onButtonClick() {
                                /* startActivity(new Intent(ServiceUnavailbleActivity.this, DashboardActivity.class));
@@ -302,10 +361,10 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
             public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
 
                 Log.d("fetchStaff--->", "onSuccess-" + statusCode + "," + result + "," + result.getResources());
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -321,17 +380,96 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
 
                         }
                     });
-                } else {
+                }else if (Integer.parseInt(result.getStatusCode()) == 404) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ServiceUnavailbleActivity.this, "No staffs created!", "OK","", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                          /*          startActivity(new Intent(CalendarServicesActivity.this, DashboardActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                }
+                else if (Integer.parseInt(result.getStatusCode()) == 400) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ServiceUnavailbleActivity.this, getResources().getString(R.string.try_again), "OK", "Invalid data", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                               /*     startActivity(new Intent(CalendarServicesActivity.this, DashboardActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                }
+                else if (Integer.parseInt(result.getStatusCode()) == 501) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ServiceUnavailbleActivity.this, getResources().getString(R.string.try_again), "OK", "Staff not found", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                               /*     startActivity(new Intent(CalendarServicesActivity.this, DashboardActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                }
+                else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+
+                                    callAPI_Staff();
+                                }
+                            }.callLoginAPI(ServiceUnavailbleActivity.this);
+                        }
+                    });
+
+                }
+
+                else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             new AlertDialogFailure(ServiceUnavailbleActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                  /*  startActivity(new Intent(ServiceUnavailbleActivity.this, DashboardActivity.class));
+                       /*             startActivity(new Intent(CalendarServicesActivity.this, DashboardActivity.class));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
-                                  onBackPressed();
+                                    onBackPressed();
                                 }
                             };
                         }

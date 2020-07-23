@@ -13,6 +13,7 @@
         android:elevation="0dp"
         android:textAlignment="center"
         app:elevation="0dp"
+        app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Terms &amp; Conditions"
         app:titleTextColor="@color/matt_black" />
@@ -35,9 +36,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
+                android:fontFamily="@font/lato_medium"
                 />
-
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

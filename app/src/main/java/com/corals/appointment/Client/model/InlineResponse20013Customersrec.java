@@ -12,6 +12,7 @@
 
 
 package com.corals.appointment.Client.model;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Objects;
@@ -21,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * InlineResponse20013Customersrec
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-02T15:41:39.578Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-14T16:11:36.591Z")
 public class InlineResponse20013Customersrec {
   @SerializedName("cust_cb_points_balance")
   private String custCbPointsBalance = null;

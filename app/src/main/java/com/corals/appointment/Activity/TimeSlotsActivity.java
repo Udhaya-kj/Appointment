@@ -31,6 +31,7 @@ import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.Model.TimeSlotDataModel;
 import com.corals.appointment.R;
+import com.corals.appointment.Utils.CAllLoginAPI;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 
 import java.time.LocalTime;
@@ -42,7 +43,7 @@ public class TimeSlotsActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     TextView textView_appn_dt, textView_res;
     private IntermediateAlertDialog intermediateAlertDialog;
-    String service_id, service, date, cus_id, cus, cus_email, page_id,cus_mob,service_dur;
+    String service_id, service, date, cus_id, cus, cus_email, page_id, cus_mob, service_dur;
     private SharedPreferences sharedpreferences_sessionToken;
     TimeSlotDataModel timeSlotDataModel;
 
@@ -81,11 +82,11 @@ public class TimeSlotsActivity extends AppCompatActivity {
             cus_email = getIntent().getStringExtra("cus_email");
             cus_mob = getIntent().getStringExtra("cus_mob");
             service_dur = getIntent().getStringExtra("service_dur");
-            Log.d("Appn_Date-->", "onCreate: " + page_id+","+date + "," + service + "," + service_id + "," + cus_id + "," + cus + "," + cus_email+ "," + cus_mob+ "," + service_dur);
+            Log.d("Appn_Date-->", "onCreate: " + page_id + "," + date + "," + service + "," + service_id + "," + cus_id + "," + cus + "," + cus_email + "," + cus_mob + "," + service_dur);
             textView_appn_dt.setText(date);
             textView_res.setText(service);
 
-            timeSlotDataModel=new TimeSlotDataModel(page_id,cus_id,cus,cus_email,cus_mob,date,service_id,service,service_dur);
+            timeSlotDataModel = new TimeSlotDataModel(page_id, cus_id, cus, cus_email, cus_mob, date, service_id, service, service_dur);
            /* timeSlotDataModel.setPage_id(page_id);
             timeSlotDataModel.setCus_id(cus_id);
             timeSlotDataModel.setCus(cus);
@@ -96,7 +97,7 @@ public class TimeSlotsActivity extends AppCompatActivity {
             timeSlotDataModel.setRes_id(res_id);
             timeSlotDataModel.setRes(res);*/
 
-            Log.d("Appn_Date2--->", "onCreate: " + timeSlotDataModel.getPage_id()+","+timeSlotDataModel.getSer());
+            Log.d("Appn_Date2--->", "onCreate: " + timeSlotDataModel.getPage_id() + "," + timeSlotDataModel.getSer());
 
         }
         callAPI();
@@ -148,7 +149,7 @@ public class TimeSlotsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-       // failedIntent();
+        // failedIntent();
     }
 
     private void fetchApptAvailSlots(AppointmentEnquiryBody requestBody) throws ApiException {
@@ -185,10 +186,10 @@ public class TimeSlotsActivity extends AppCompatActivity {
             public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
 
                 Log.d("fetchApptSlots--->", "onSuccess-" + statusCode + "," + result);
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -199,32 +200,160 @@ public class TimeSlotsActivity extends AppCompatActivity {
                         }
                     });
                 } else if (Integer.parseInt(result.getStatusCode()) == 404) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(TimeSlotsActivity.this, getResources().getString(R.string.no_avail_slots), "OK", "", "Warning") {
+                            new AlertDialogFailure(TimeSlotsActivity.this, getResources().getString(R.string.no_avail_slots), "OK", "", "Failed") {
                                 @Override
                                 public void onButtonClick() {
+                                   /* startActivity(new Intent(ViewApptServiceActivity.this, AppointmentActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+
                                     onBackPressed();
-                                    //failedIntent();
                                 }
                             };
                         }
                     });
-                } else {
+                } else if (Integer.parseInt(result.getStatusCode()) == 510) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(TimeSlotsActivity.this, "Service not found", "OK", "", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                   /* startActivity(new Intent(ViewApptServiceActivity.this, AppointmentActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 502) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(TimeSlotsActivity.this, "Service un-available for this day", "OK", "", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                   /* startActivity(new Intent(ViewApptServiceActivity.this, AppointmentActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 503) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(TimeSlotsActivity.this, getResources().getString(R.string.no_avail_slots), "OK", "", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                   /* startActivity(new Intent(ViewApptServiceActivity.this, AppointmentActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 405) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(TimeSlotsActivity.this, "Staff not found for this service", "OK", "", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                   /* startActivity(new Intent(ViewApptServiceActivity.this, AppointmentActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 400) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(TimeSlotsActivity.this, getResources().getString(R.string.try_again), "OK", "Invalid data", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                   /* startActivity(new Intent(ViewApptServiceActivity.this, AppointmentActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                }
+                else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+
+                                    callAPI();
+                                }
+                            }.callLoginAPI(TimeSlotsActivity.this);
+                        }
+                    });
+
+                }
+                else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             new AlertDialogFailure(TimeSlotsActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
+                                   /* startActivity(new Intent(ViewApptServiceActivity.this, AppointmentActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+
                                     onBackPressed();
-                                    //failedIntent();
                                 }
                             };
                         }
                     });
                 }
+
+
             }
 
             @Override
@@ -248,18 +377,17 @@ public class TimeSlotsActivity extends AppCompatActivity {
             intermediateAlertDialog = null;
         }
     }
-    private void failedIntent(){
-        if(!TextUtils.isEmpty(page_id) && page_id.equals("1")) {
+
+    private void failedIntent() {
+        if (!TextUtils.isEmpty(page_id) && page_id.equals("1")) {
             startActivity(new Intent(TimeSlotsActivity.this, AppointmentActivity.class));
             finish();
             overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
-        }
-        else if(!TextUtils.isEmpty(page_id) && page_id.equals("2")) {
+        } else if (!TextUtils.isEmpty(page_id) && page_id.equals("2")) {
             startActivity(new Intent(TimeSlotsActivity.this, CustomerActivity_Bottom.class));
             finish();
             overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
-        }
-        else {
+        } else {
             startActivity(new Intent(TimeSlotsActivity.this, DashboardActivity.class));
             finish();
             overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);

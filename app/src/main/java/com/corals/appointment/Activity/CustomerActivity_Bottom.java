@@ -41,6 +41,7 @@ import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.Interface.SearchCustomerCallback;
 import com.corals.appointment.Model.CustomersModel;
 import com.corals.appointment.R;
+import com.corals.appointment.Utils.CAllLoginAPI;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -163,7 +164,7 @@ public class CustomerActivity_Bottom extends AppCompatActivity implements Search
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(CustomerActivity_Bottom.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                        new AlertDialogFailure(CustomerActivity_Bottom.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.server_error), "Failed") {
                             @Override
                             public void onButtonClick() {
                                 startActivity(new Intent(CustomerActivity_Bottom.this, DashboardActivity.class));
@@ -177,12 +178,12 @@ public class CustomerActivity_Bottom extends AppCompatActivity implements Search
 
             @Override
             public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
                 Log.d("fetchService--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
                 Log.d("fetchService--->", "onSuccess-" + result);
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -193,10 +194,11 @@ public class CustomerActivity_Bottom extends AppCompatActivity implements Search
                                 String cus_id = customersrecList.get(i).getCustId();
                                 String cus_name = customersrecList.get(i).getCustName();
                                 String cus_mob = customersrecList.get(i).getCustMobile();
-                                CustomersModel customersModel = new CustomersModel(cus_id, cus_name, cus_mob, "");
+                                String cus_email = customersrecList.get(i).getMailId();
+                                CustomersModel customersModel = new CustomersModel(cus_id, cus_name, cus_mob, cus_email);
                                 customersModelArrayList.add(customersModel);
 
-                                Log.d("Customer---", "run: " + cus_id + "," + cus_name + "," + cus_mob);
+                                Log.d("Customer---", "run: " + cus_id + "," + cus_name + "," + cus_mob+ "," + cus_email);
                             }
 
                             customersAdapter_filter = new CustomersAdapter(CustomerActivity_Bottom.this, customersModelArrayList, service_id, date, slot_no, start_time, end_time, res_id, res);
@@ -204,6 +206,9 @@ public class CustomerActivity_Bottom extends AppCompatActivity implements Search
                         }
                     });
                 } else if (Integer.parseInt(result.getStatusCode()) == 404) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -215,7 +220,29 @@ public class CustomerActivity_Bottom extends AppCompatActivity implements Search
                             };
                         }
                     });
-                } else {
+                }
+                else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+
+                                    callAPI();
+                                }
+                            }.callLoginAPI(CustomerActivity_Bottom.this);
+                        }
+                    });
+
+                }
+                else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

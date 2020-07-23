@@ -13,6 +13,7 @@
         android:elevation="0dp"
         android:textAlignment="center"
         app:elevation="0dp"
+        app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Contact Us"
         app:titleTextColor="@color/matt_black" />
@@ -59,8 +60,9 @@
                 android:gravity="start|center"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:textSize="17sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/lato_medium"
+                android:textColor="@color/matt_black"
+              />
 
         </LinearLayout>
 
@@ -92,8 +94,9 @@
                 android:gravity="start|center"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:textSize="17sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/lato_medium"
+                android:textColor="@color/matt_black"
+                />
 
         </LinearLayout>
 
@@ -125,8 +128,9 @@
                 android:gravity="start|center"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:textSize="17sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/lato_medium"
+                android:textColor="@color/matt_black"
+                />
 
         </LinearLayout>
 

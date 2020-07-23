@@ -59,6 +59,7 @@ import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.Interface.MappedServicesCallback;
 import com.corals.appointment.R;
+import com.corals.appointment.Utils.CAllLoginAPI;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.android.material.button.MaterialButton;
 
@@ -72,19 +73,20 @@ import java.util.Map;
 public class AddStaffActivity extends AppCompatActivity implements MappedServicesCallback {
     EditText et_staff_name, et_staff_mob;
     MaterialButton button_continue, button_add_time;
-    private SharedPreferences sharedpreferences_staffs;
+
     public static final String MyPREFERENCES_STAFFS = "MyPrefs_Staffs";
     public static final String NAME = "name";
     public static final String MOBILE = "mobile";
-    private ArrayList<String> staff_name_list, staff_mob_list;
+    private ArrayList<String> mng_service_name_list, mng_load_update_list, mng_service_load_list, mng_service_id_list;
+    private ArrayList<Boolean> mng_check_pos_list;
     public String pageId = "", position = "", res_id = null;
 
-    private int mYear, mMonth, mDay, mHour, mMinute, mSeconds;
+
     CardView cardView_mapped_services;
     RecyclerView recyclerView_services;
     public ArrayList<String> arrayList_map_service, arrayList_map_load, arrayList_map_service_name;
-    public static ArrayList<Boolean> positionArray;
-    public static ArrayList<String> loadArray, update_serId, update_serName, update_serLoad;
+    //public static ArrayList<Boolean> positionArray;
+    //public  ArrayList<String>  update_serId;
     public static String map_services = "";
 
     TextView btn_yes_sday_p, btn_yes_mnday_p, btn_yes_tsday_p, btn_yes_wedday_p, btn_yes_trsday_p, btn_yes_fdday_p, btn_yes_strday_p;
@@ -120,6 +122,8 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
     boolean isBizTimeSelected = false, isCustomTimeSelected = false;
     boolean isTimeSelected = true, isTimeAdded = false;
     ImageView imageView_add_update_icon;
+    MapServiceResourceRecyclerAdapter mapServiceResourceRecyclerAdapter;
+    private String serviceFlag = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +144,6 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
         });
         sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
 
-        sharedpreferences_staffs = getSharedPreferences(MyPREFERENCES_STAFFS, Context.MODE_PRIVATE);
         et_staff_name = findViewById(R.id.et_staff_name);
         et_staff_mob = findViewById(R.id.et_staff_mob);
         button_continue = findViewById(R.id.button_add_staff_continue);
@@ -250,16 +253,18 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
         list_fri = new ArrayList<>();
         list_sat = new ArrayList<>();
 
-        update_serName = new ArrayList<>();
-        update_serId = new ArrayList<>();
-        update_serLoad = new ArrayList<>();
-        staff_name_list = new ArrayList<>();
-        staff_mob_list = new ArrayList<>();
+
+        //update_serId = new ArrayList<>();
+
+        mng_load_update_list = new ArrayList<>();
+        mng_service_name_list = new ArrayList<>();
+        mng_service_load_list = new ArrayList<>();
+        mng_service_id_list = new ArrayList<>();
+        mng_check_pos_list = new ArrayList<>();
         arrayList_map_service = new ArrayList<>();
         arrayList_map_load = new ArrayList<>();
         arrayList_map_service_name = new ArrayList<>();
-        positionArray = new ArrayList<Boolean>();
-        loadArray = new ArrayList<String>();
+
         aSwitch_all_days.setEnabled(false);
         recyclerView_services = findViewById(R.id.recyclerview_select_services);
         LinearLayoutManager lm = new LinearLayoutManager(this);
@@ -281,6 +286,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
             et_staff_mob.setText(mobile);
 
             if (pageId.equals("03")) {
+                serviceFlag = "1";
                 if (name.length() > 0) {
                     et_staff_name.setSelection(name.length());
                     imageView_add_update_icon.setImageResource(R.drawable.edit_map);
@@ -288,8 +294,9 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                 toolbar.setTitle("Update Staff");
                 button_continue.setText("UPDATE STAFF");
                 layout_wrk_hrs.setVisibility(View.GONE);
-                //fetchMerServices("1");
+                fetchMerServices("2");
             } else {
+                serviceFlag = "0";
                 //imageView_add_update_icon.setImageResource(0);
                 imageView_add_update_icon.setImageResource(R.drawable.add_map);
                 //fetchMerServices("0");
@@ -304,9 +311,9 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                     public void run() {
                         closeKeyboard();
                         if (pageId.equals("03")) {
-                            fetchMerServices("1");
+                            fetchMerServices(serviceFlag);
                         } else {
-                            fetchMerServices("0");
+                            fetchMerServices(serviceFlag);
                         }
 
                     }
@@ -423,7 +430,6 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                 }
             }
         });
-        final ArrayList<String> arrayList_weekdays = new ArrayList<>();
 
         spinner_weekdays.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -1154,116 +1160,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
         button_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String name = et_staff_name.getText().toString();
-                final String mob = et_staff_mob.getText().toString();
-
-                if (!TextUtils.isEmpty(pageId) && pageId.equals("3")) {
-                    if (name.length() > 0) {
-                        if (mob.length() > 0 && mob.length() >= 8) {
-                            if (!arrayList_map_service.isEmpty()) {
-                                Log.d("sunday_list--->", "onClick: " + list_sun.size() + "," + list_mon.size() + "," + list_tue.size() + "," + list_wed.size() + "," + list_thu.size() + "," + list_fri.size() + "," + list_sat.size());
-                                if (isBizTimeSelected) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            new AlertDialogYesNo(AddStaffActivity.this, "Create  Staff?", "Are you sure, You want to create " + name + " staff?", "Yes", "No") {
-                                                @Override
-                                                public void onOKButtonClick() {
-                                                    createMerStaff(name, mob);
-                                                }
-
-                                                @Override
-                                                public void onCancelButtonClick() {
-
-                                                }
-
-                                            };
-                                        }
-                                    });
-
-
-                                } else if (isCustomTimeSelected) {
-                                    if (isTimeSelected) {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                new AlertDialogYesNo(AddStaffActivity.this, "Create  Staff?", "Are you sure, You want to create " + name + " staff?", "Yes", "No") {
-                                                    @Override
-                                                    public void onOKButtonClick() {
-                                                        createMerStaff(name, mob);
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelButtonClick() {
-
-                                                    }
-
-                                                };
-                                            }
-                                        });
-                                    } else {
-                                        getDialog("Select valid staff active days");
-                                    }
-
-
-                                } else {
-                                    getDialog("Select valid staff availability time");
-                                }
-
-                            } else {
-                                getDialog("Must select one service for staff");
-                            }
-
-                        } else {
-                            et_staff_mob.setError("Enter valid mobile");
-                            et_staff_mob.requestFocus();
-                        }
-                    } else {
-                        et_staff_name.setError("Enter valid name");
-                        et_staff_name.requestFocus();
-                    }
-                } else if (!TextUtils.isEmpty(pageId) && pageId.equals("03")) {
-
-                    for (int y = 0; y < positionArray.size(); y++) {
-                        if (positionArray.get(y) == true) {
-                            isMapSelectedUpdate = true;
-                        }
-                    }
-                    if (name.length() > 0) {
-                        if (mob.length() > 0 && mob.length() >= 8) {
-                            if (isMapSelectedUpdate) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        new AlertDialogYesNo(AddStaffActivity.this, "Update  Staff?", "Are you sure, You want to update " + name + " staff?", "Yes", "No") {
-                                            @Override
-                                            public void onOKButtonClick() {
-                                                resourceUpdate(res_id, name, mob);
-                                            }
-
-                                            @Override
-                                            public void onCancelButtonClick() {
-
-                                            }
-
-                                        };
-                                    }
-                                });
-
-                            } else {
-                                getDialog("Must select one service for staff");
-                            }
-
-                        } else {
-                            et_staff_mob.setError("Enter valid mobile");
-                            et_staff_mob.requestFocus();
-                        }
-                    } else {
-                        et_staff_name.setError("Enter valid name");
-                        et_staff_name.requestFocus();
-                    }
-                }
-
+                callAPI();
 
             }
         });
@@ -1316,7 +1213,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(AddStaffActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                        new AlertDialogFailure(AddStaffActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.server_error), "Failed") {
                             @Override
                             public void onButtonClick() {
                         /*        startActivity(new Intent(AddStaffActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -1333,11 +1230,10 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
             @Override
             public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
                 Log.d("createStaff--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
-
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -1356,11 +1252,88 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                             };
                         }
                     });
-                } else {
+                } else if (Integer.parseInt(result.getStatusCode()) == 204) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(AddStaffActivity.this, "Staff setup failed. Please try again later!", "OK", "", "Failed") {
+                            new AlertDialogFailure(AddStaffActivity.this, "Staff available time creation failed!", "OK", "Staff created successfully", "Warning") {
+                                @Override
+                                public void onButtonClick() {
+                               /*     startActivity(new Intent(AddStaffActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 409) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddStaffActivity.this, getResources().getString(R.string.try_again), "OK", "Staff registration failed", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                               /*     startActivity(new Intent(AddStaffActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 412) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddStaffActivity.this, getResources().getString(R.string.try_again), "OK", "Service mapping failed", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                               /*     startActivity(new Intent(AddStaffActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+
+                                    callAPI();
+                                }
+                            }.callLoginAPI(AddStaffActivity.this);
+                        }
+                    });
+
+                } else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddStaffActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
                                /*     startActivity(new Intent(AddStaffActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -1799,7 +1772,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(AddStaffActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                        new AlertDialogFailure(AddStaffActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.server_error), "Failed") {
                             @Override
                             public void onButtonClick() {
                                 /*startActivity(new Intent(AddStaffActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -1814,11 +1787,12 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
 
             @Override
             public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
+
                 Log.d("fetchService--->", "onSuccess-" + statusCode + "," + result);
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -1826,86 +1800,93 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                                 //layout_services.setVisibility(View.VISIBLE);
                                 appointmentServices = result.getServices();
 
-                                if (flag.equals("0")) {
-                                    arrayList_map_service.clear();
-                                    arrayList_map_service_name.clear();
-                                    arrayList_map_load.clear();
-                                } else if (flag.equals("1")) {
-                                    update_serId.clear();
-                                    update_serLoad.clear();
-                                    update_serName.clear();
-                                    positionArray.clear();
-                                    loadArray.clear();
-                                }
-                                Log.d("update---", "run: update :" + update_serName + "," + update_serLoad);
+                                if (flag.equals("2")) {
+                                    getServiMngLoadceUpdate(result.getServices(), mapServiceResourceBodyList_update);
+                                } else {
+                                    if (flag.equals("0")) {
+                                        arrayList_map_service.clear();
+                                        arrayList_map_service_name.clear();
+                                        arrayList_map_load.clear();
+                                    }
 
-                                LayoutInflater factory = LayoutInflater.from(AddStaffActivity.this);
-                                final View mapDialogView = factory.inflate(R.layout.alert_mapping, null);
-                                final AlertDialog mappingDialog = new AlertDialog.Builder(AddStaffActivity.this).create();
-                                mappingDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-                                mappingDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-                                mappingDialog.setView(mapDialogView);
-                                mappingDialog.setCancelable(false);
-                                RecyclerView recyclerView = mapDialogView.findViewById(R.id.recyclerview_select_services);
-                                LinearLayoutManager li = new LinearLayoutManager(AddStaffActivity.this);
-                                recyclerView.setLayoutManager(li);
-                                MapServiceResourceRecyclerAdapter mapServiceResourceRecyclerAdapter = new MapServiceResourceRecyclerAdapter(AddStaffActivity.this, flag, result.getServices(), mapServiceResourceBodyList_update);
-                                recyclerView.setAdapter(mapServiceResourceRecyclerAdapter);
-                                mapDialogView.findViewById(R.id.buttonOk).setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        //your business logic
-                                        closeKeyboard();
-                                        mappingDialog.dismiss();
-                                        Log.d("MappedServices---", "onClick: " + arrayList_map_service + "," + arrayList_map_load);
+                                    LayoutInflater factory = LayoutInflater.from(AddStaffActivity.this);
+                                    final View mapDialogView = factory.inflate(R.layout.alert_mapping, null);
+                                    final AlertDialog mappingDialog = new AlertDialog.Builder(AddStaffActivity.this).create();
+                                    //mappingDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+                                    //mappingDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                                    mappingDialog.setView(mapDialogView);
+                                    mappingDialog.setCancelable(false);
+                                    RecyclerView recyclerView = mapDialogView.findViewById(R.id.recyclerview_select_services);
+                                    LinearLayoutManager li = new LinearLayoutManager(AddStaffActivity.this);
+                                    recyclerView.setLayoutManager(li);
+                                    mapServiceResourceRecyclerAdapter = new MapServiceResourceRecyclerAdapter(AddStaffActivity.this, flag, result.getServices(), mapServiceResourceBodyList_update);
+                                    recyclerView.setAdapter(mapServiceResourceRecyclerAdapter);
+                                    mapDialogView.findViewById(R.id.buttonOk).setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            //your business logic
+                                            closeKeyboard();
+                                            mappingDialog.dismiss();
 
+                                            Log.d("MappedServices---", "adapter: " + mapServiceResourceRecyclerAdapter.getUpdateServiceName() + "," + mapServiceResourceRecyclerAdapter.getLoad());
 
-                                        if (flag.equals("0")) {
-                                            if (!arrayList_map_service.isEmpty() && !arrayList_map_load.isEmpty()) {
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        layout_services.setVisibility(View.VISIBLE);
-                                                        MappingServicesAdapter mappingServicesAdapter = new MappingServicesAdapter(AddStaffActivity.this, arrayList_map_service_name, arrayList_map_load);
-                                                        recyclerView_services.setAdapter(mappingServicesAdapter);
-                                                        mappingServicesAdapter.notifyDataSetChanged();
-                                                    }
-                                                });
+                                            if (flag.equals("0")) {
+                                                mng_service_name_list = mapServiceResourceRecyclerAdapter.getUpdateServiceName();
+                                                mng_service_load_list = mapServiceResourceRecyclerAdapter.getLoad();
+                                                mng_service_id_list = mapServiceResourceRecyclerAdapter.getService();
+                                                Log.d("MappedServices---", "onClick: " + mng_service_name_list + "," + mng_service_load_list + "," + mng_service_id_list + "," + mng_check_pos_list);
 
-                                            } else {
-                                                layout_services.setVisibility(View.GONE);
-                                            }
-                                        } else if (flag.equals("1")) {
-                                            if (!update_serName.isEmpty() && !update_serLoad.isEmpty()) {
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
+                                                if (!mng_service_name_list.isEmpty() && !mng_service_load_list.isEmpty()) {
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            layout_services.setVisibility(View.VISIBLE);
+                                                            MappingServicesAdapter mappingServicesAdapter = new MappingServicesAdapter(AddStaffActivity.this, mng_service_name_list, mng_service_load_list);
+                                                            recyclerView_services.setAdapter(mappingServicesAdapter);
+                                                            mappingServicesAdapter.notifyDataSetChanged();
+                                                        }
+                                                    });
 
-                                                        Log.d("update---", "run: update :" + update_serName + "," + update_serLoad);
-                                                        layout_services.setVisibility(View.VISIBLE);
-                                                        MappingServicesAdapter mappingServicesAdapter = new MappingServicesAdapter(AddStaffActivity.this, update_serName, update_serLoad);
-                                                        recyclerView_services.setAdapter(mappingServicesAdapter);
-                                                        mappingServicesAdapter.notifyDataSetChanged();
-                                                    }
-                                                });
+                                                } else {
+                                                    layout_services.setVisibility(View.GONE);
+                                                }
+                                            } else if (flag.equals("1")) {
+                                                mng_service_name_list = mapServiceResourceRecyclerAdapter.getUpdateServiceName();
+                                                mng_service_load_list = mapServiceResourceRecyclerAdapter.getLoad();
+                                                mng_service_id_list = mapServiceResourceRecyclerAdapter.getService();
+                                                mng_check_pos_list = mapServiceResourceRecyclerAdapter.getCheckPosition();
+                                                mng_load_update_list = mapServiceResourceRecyclerAdapter.getUpdateServiceLoad();
+                                                Log.d("MappedServices---", "onClick: " + mng_service_name_list+"," +mng_load_update_list+ "," + mng_service_load_list + "," + mng_service_id_list + "," + mng_check_pos_list);
+                                                if (!mng_service_name_list.isEmpty() && !mng_service_load_list.isEmpty()) {
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Log.d("update---", "run: update :" + mng_service_name_list + "," + mng_service_load_list);
+                                                            layout_services.setVisibility(View.VISIBLE);
+                                                            MappingServicesAdapter mappingServicesAdapter = new MappingServicesAdapter(AddStaffActivity.this, mng_service_name_list, mng_load_update_list);
+                                                            recyclerView_services.setAdapter(mappingServicesAdapter);
+                                                            mappingServicesAdapter.notifyDataSetChanged();
+                                                        }
+                                                    });
 
-                                            } else {
-                                                layout_services.setVisibility(View.GONE);
+                                                } else {
+                                                    layout_services.setVisibility(View.GONE);
+                                                }
                                             }
                                         }
-                                    }
 
-                                });
-                                mapDialogView.findViewById(R.id.button_cancel).setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        //your business logic
-                                        closeKeyboard();
-                                        mappingDialog.dismiss();
-                                    }
-                                });
-                                mappingDialog.show();
+                                    });
+                                    mapDialogView.findViewById(R.id.button_cancel).setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            //your business logic
+                                            closeKeyboard();
+                                            mappingDialog.dismiss();
 
+                                        }
+                                    });
+                                    mappingDialog.show();
+                                }
                                /* MapServiceResourceRecyclerAdapter mapServiceResourceRecyclerAdapter2 = new MapServiceResourceRecyclerAdapter(AddStaffActivity.this, flag, result.getServices(), mapServiceResourceBodyList_update);
                                 recyclerView_services.setAdapter(mapServiceResourceRecyclerAdapter2);*/
                             } else {
@@ -1922,8 +1903,6 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                                                 startActivity(in);
                                                 finish();
                                                 overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
-
-
                                             }
                                         };
                                     }
@@ -1937,7 +1916,9 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
 
 
                 } else if (Integer.parseInt(result.getStatusCode()) == 404) {
-
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -1950,6 +1931,39 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                                     startActivity(in);
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
+                        }
+                    });
+
+                } else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+                                    createMerStaff();
+                                }
+                            }.callLoginAPI(AddStaffActivity.this);
+                        }
+                    });
+
+                } else if (Integer.parseInt(result.getStatusCode()) == 400) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddStaffActivity.this, getResources().getString(R.string.try_again), "OK", "Invalid data", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    onBackPressed();
                                 }
                             };
                         }
@@ -1988,17 +2002,23 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
     }
 
     private void resourceUpdate(String resid, String name, String mob) {
-
         closeKeyboard();
         List<MapServiceResourceBody> mapServiceResourceBodyList = new ArrayList<>();
         MapServiceResourceBody mapServiceResourceBody = null;
         for (int j = 0; j < appointmentServices.size(); j++) {
-            mapServiceResourceBody = new MapServiceResourceBody();
+      /*      mapServiceResourceBody = new MapServiceResourceBody();
             mapServiceResourceBody.setSerId(appointmentServices.get(j).getSerId());
             mapServiceResourceBody.setDelete(!positionArray.get(j));
             mapServiceResourceBody.setManageableLoad(loadArray.get(j));
+            mapServiceResourceBodyList.add(mapServiceResourceBody);*/
+
+            mapServiceResourceBody = new MapServiceResourceBody();
+            mapServiceResourceBody.setSerId(appointmentServices.get(j).getSerId());
+            mapServiceResourceBody.setDelete(!mng_check_pos_list.get(j));
+            mapServiceResourceBody.setManageableLoad(mng_service_load_list.get(j));
             mapServiceResourceBodyList.add(mapServiceResourceBody);
-            Log.d("MappingUpdate---", "resourceUpdate: " + appointmentServices.get(j).getSerId() + "," + !positionArray.get(j) + "," + loadArray.get(j));
+
+            Log.d("MappingUpdate---", "resourceUpdate: " + appointmentServices.get(j).getSerId() + "," + !mng_check_pos_list.get(j) + "," + mng_service_load_list.get(j));
         }
         AppointmentResources appointmentResources = new AppointmentResources();
         appointmentResources.setResId(resid);
@@ -2061,7 +2081,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(AddStaffActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                        new AlertDialogFailure(AddStaffActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.server_error), "Failed") {
                             @Override
                             public void onButtonClick() {
                            /*     startActivity(new Intent(AddStaffActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -2078,10 +2098,10 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
             @Override
             public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
                 Log.d("apptUpdateStaff--->", "onSuccess-" + result.getStatusCode() + "," + result.getStatusMessage());
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -2096,18 +2116,118 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                         }
                     });
 
-                } else {
+                } else if (Integer.parseInt(result.getStatusCode()) == 404) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(AddStaffActivity.this, "Please try again later!", "OK", "Staff update failed", "Failed") {
+                            new AlertDialogFailure(AddStaffActivity.this, "Staff does not exist!", "OK", "", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                /*    startActivity(new Intent(AddStaffActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);*/
+
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+
+                } else if (Integer.parseInt(result.getStatusCode()) == 409) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddStaffActivity.this, "Staff updation failed!", "OK", "", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                /*    startActivity(new Intent(AddStaffActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);*/
+
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+
+                } else if (Integer.parseInt(result.getStatusCode()) == 412) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddStaffActivity.this, "Service mapping failed!", "OK", "", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                /*    startActivity(new Intent(AddStaffActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);*/
+
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+
+                } else if (Integer.parseInt(result.getStatusCode()) == 503) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddStaffActivity.this, "Staff has appointment in future dates!", "OK", "Staff updation failed", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                /*    startActivity(new Intent(AddStaffActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);*/
+
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+
+                } else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+
+                                    callAPI();
+                                }
+                            }.callLoginAPI(AddStaffActivity.this);
+                        }
+                    });
+
+                } else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddStaffActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
                                   /*  startActivity(new Intent(AddStaffActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
 
-                                  onBackPressed();
+                                    onBackPressed();
                                 }
                             };
                         }
@@ -2159,7 +2279,11 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
         }
     }
 
-    private void createMerStaff(final String name, final String mob) {
+    private void createMerStaff() {
+
+        String name = et_staff_name.getText().toString();
+        String mob = et_staff_mob.getText().toString();
+
         closeKeyboard();
         AvailDay availDay_sun = new AvailDay();
         AvailDay availDay_mon = new AvailDay();
@@ -2582,14 +2706,21 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
 
         List<MapServiceResourceBody> mapServiceResourceBodyList = new ArrayList<>();
         MapServiceResourceBody mapServiceResourceBody = null;
-        for (int j = 0; j < arrayList_map_service.size(); j++) {
-            mapServiceResourceBody = new MapServiceResourceBody();
+        for (int j = 0; j < mng_service_id_list.size(); j++) {
+ /*           mapServiceResourceBody = new MapServiceResourceBody();
             mapServiceResourceBody.setSerId(arrayList_map_service.get(j));
             mapServiceResourceBody.setDelete(false);
             mapServiceResourceBody.setManageableLoad(arrayList_map_load.get(j));
+            mapServiceResourceBodyList.add(mapServiceResourceBody);*/
+
+            mapServiceResourceBody = new MapServiceResourceBody();
+            mapServiceResourceBody.setSerId(mng_service_id_list.get(j));
+            mapServiceResourceBody.setDelete(false);
+            mapServiceResourceBody.setManageableLoad(mng_service_load_list.get(j));
             mapServiceResourceBodyList.add(mapServiceResourceBody);
+
+            Log.d("MapCreate---", "createMerStaff: " + mng_service_id_list.get(j) + "," + mng_service_load_list.get(j));
         }
-        //mapServiceResourceBody.setSerId("42005271232");
 
         AppointmentResources appointmentResources = new AppointmentResources();
         appointmentResources.setResName(name);
@@ -2623,7 +2754,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                         new AlertDialogFailure(AddStaffActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
                             @Override
                             public void onButtonClick() {
-                                createMerStaff(name, mob);
+                                createMerStaff();
                             }
                         };
                     }
@@ -2658,9 +2789,97 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
         }
     }
 
-    private void okButtonProcess() {
-        Log.d("List_map_ser--->", "arrayList_map_service: " + loadArray);
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.finish_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_finish) {
+            callAPI();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void closeKeyboard() {
+        try {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
+
+    private void getServiMngLoadceUpdate(List<AppointmentService> appointmentServiceArrayList, List<MapServiceResourceBody> mapServiceResourceBodies) {
+
+        ArrayList<String> ser_list = new ArrayList<>();
+        ArrayList<Integer> pos_list = new ArrayList<>();
+        if (!appointmentServiceArrayList.isEmpty() && appointmentServiceArrayList != null) {
+            for (int i = 0; i < appointmentServiceArrayList.size(); i++) {
+                //Service
+                mng_check_pos_list.add(false);
+                ser_list.add(appointmentServiceArrayList.get(i).getSerId());
+            }
+
+            for (int i = 0; i < mapServiceResourceBodies.size(); i++) {
+                mng_service_load_list.add("0");
+            }
+
+            Log.d("load_list--->", "Pos :" + mng_service_load_list);
+            int add_count = ser_list.size() - mapServiceResourceBodies.size();
+            for (int i = 0; i < add_count; i++) {
+                MapServiceResourceBody mapServiceResourceBody = new MapServiceResourceBody();
+                mapServiceResourceBody.setSerId("0");
+                mapServiceResourceBody.setManageableLoad("0");
+                mapServiceResourceBodies.add(mapServiceResourceBody);
+                mng_service_load_list.add("0");
+
+            }
+            Log.d("apptSerArrayList--->", "" + appointmentServiceArrayList.size() + "," + ser_list + "," + mapServiceResourceBodies.size());
+            for (int i = 0; i < ser_list.size(); i++) {
+                if (ser_list.contains(mapServiceResourceBodies.get(i).getSerId())) {
+                    int pos = ser_list.indexOf(mapServiceResourceBodies.get(i).getSerId());
+                    mng_check_pos_list.set(pos, true);
+                    mng_service_load_list.set(pos, mapServiceResourceBodies.get(i).getManageableLoad());
+                    pos_list.add(pos);
+                    mng_load_update_list.add(mapServiceResourceBodies.get(i).getManageableLoad());
+                    Log.d("pos_list--->", "" + pos);
+
+                }
+            }
+
+            Log.d("pos_list--->", "" + pos_list);
+            for (int g = 0; g < pos_list.size(); g++) {
+                mng_service_name_list.add(appointmentServiceArrayList.get(pos_list.get(g)).getSerName());
+                Log.d("pos_loadData--->", "" + mng_service_name_list + "," + mng_load_update_list);
+            }
+
+            Log.d("positionArrayServer--->", "" + mng_service_name_list + "," + mng_load_update_list + "," + mng_check_pos_list + "," + mng_service_load_list);
+            if (!mng_service_name_list.isEmpty() && !mng_load_update_list.isEmpty()) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        layout_services.setVisibility(View.VISIBLE);
+                        MappingServicesAdapter mappingServicesAdapter = new MappingServicesAdapter(AddStaffActivity.this, mng_service_name_list, mng_load_update_list);
+                        recyclerView_services.setAdapter(mappingServicesAdapter);
+                        mappingServicesAdapter.notifyDataSetChanged();
+                    }
+                });
+
+            } else {
+                layout_services.setVisibility(View.GONE);
+            }
+
+        } else {
+            Log.d("positionArray--->", "Data empty");
+        }
+    }
+
+    private void callAPI() {
         closeKeyboard();
         final String name = et_staff_name.getText().toString();
         final String mob = et_staff_mob.getText().toString();
@@ -2670,14 +2889,14 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                 if (mob.length() > 0 && mob.length() >= 8) {
                     Log.d("sunday_list--->", "onClick: " + list_sun.size() + "," + list_mon.size() + "," + list_tue.size() + "," + list_wed.size() + "," + list_thu.size() + "," + list_fri.size() + "," + list_sat.size());
                     if (isBizTimeSelected) {
-                        if (!arrayList_map_service.isEmpty()) {
+                        if (!mng_service_id_list.isEmpty()) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     new AlertDialogYesNo(AddStaffActivity.this, "Create  Staff?", "Are you sure, You want to create " + name + " staff?", "Yes", "No") {
                                         @Override
                                         public void onOKButtonClick() {
-                                            createMerStaff(name, mob);
+                                            createMerStaff();
                                         }
 
                                         @Override
@@ -2695,14 +2914,14 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                     } else if (isCustomTimeSelected) {
                         if (isTimeAdded) {
                             if (isTimeSelected) {
-                                if (!arrayList_map_service.isEmpty()) {
+                                if (!mng_service_id_list.isEmpty()) {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             new AlertDialogYesNo(AddStaffActivity.this, "Create  Staff?", "Are you sure, You want to create " + name + " staff?", "Yes", "No") {
                                                 @Override
                                                 public void onOKButtonClick() {
-                                                    createMerStaff(name, mob);
+                                                    createMerStaff();
                                                 }
 
                                                 @Override
@@ -2741,8 +2960,8 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
             }
         } else if (!TextUtils.isEmpty(pageId) && pageId.equals("03")) {
 
-            for (int y = 0; y < positionArray.size(); y++) {
-                if (positionArray.get(y) == true) {
+            for (int y = 0; y < mng_check_pos_list.size(); y++) {
+                if (mng_check_pos_list.get(y) == true) {
                     isMapSelectedUpdate = true;
                 }
             }
@@ -2782,29 +3001,5 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
             }
         }
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.finish_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_finish) {
-            okButtonProcess();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void closeKeyboard() {
-        try {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
     }
 }

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,7 +30,12 @@ import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.Model.ParamProperties;
 import com.corals.appointment.R;
 import com.corals.appointment.receiver.ConnectivityReceiver;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -61,9 +67,11 @@ public class LoginActivity extends AppCompatActivity {
     public static final String COUNTRY_CODE = "COUNTRY_CODE ";
     public static final String BIZ_NAME = "BIZ_NAME ";
     public static final String USER_MAIL = "USER_MAIL ";
+    public static final String USER_PASSWORD = "USER_PASSWORD ";
     public static final String MAX_DAYS = "MAX_DAYS ";
     private IntermediateAlertDialog intermediateAlertDialog;
     String ask_again_value = null;
+    String fb_token = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,66 +137,65 @@ public class LoginActivity extends AppCompatActivity {
                 callAPI();
             }
         });
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                fb_token=getFirebaseToken();
+            }
+        });
+
+
+       // Toast.makeText(this, "Token :"+fb_token, Toast.LENGTH_SHORT).show();
+
     }
 
     private void callAPI() {
         String email = editText_id.getText().toString().trim();
         String pass = editText_password.getText().toString().trim();
+        boolean isConn = ConnectivityReceiver.isConnected();
+        if (isConn) {
+            if (!TextUtils.isEmpty(email)) {
+                if (!TextUtils.isEmpty(pass)) {
+                    if (!TextUtils.isEmpty(fb_token)) {
 
-        if (!email.isEmpty()) {
-            if (!pass.isEmpty()) {
-                try {
-                    boolean isConn = ConnectivityReceiver.isConnected();
-                    if (isConn) {
-                        MessageDigest messageDigest = null;
-                        try {
-                            messageDigest = MessageDigest.getInstance("SHA-256");
-                        } catch (NoSuchAlgorithmException e) {
-                            e.printStackTrace();
-                        }
-                        byte hashBytes[] = messageDigest.digest(pass.getBytes(StandardCharsets.UTF_8));
-                        BigInteger noHash = new BigInteger(1, hashBytes);
-                        String hashStr = noHash.toString(16);
-                        Log.d("PASSWORD--->", "onClick: " + hashStr);
-
-                        String id = UUID.randomUUID().toString();
-                        Log.d("UUID--->", "onCreate: " + id);
-                        SecurityAPIBody securityAPIBody = new SecurityAPIBody();
-                        securityAPIBody.setReqType(Constants.LOGIN_API);
-                        securityAPIBody.setDeviceId(id);
-                        securityAPIBody.setUserEmail(editText_id.getText().toString());
-                        securityAPIBody.setUserPass(hashStr);
-                        intermediateAlertDialog = new IntermediateAlertDialog(LoginActivity.this);
-                        merchantApptLogin(securityAPIBody);
-                    } else {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                new AlertDialogFailure(LoginActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
-                                    @Override
-                                    public void onButtonClick() {
-                                        callAPI();
-                                    }
-                                };
-                            }
-                        });
+                        Log.d("Login---", "callAPI: IF :"+fb_token);
+                        callLogin(email, pass);
                     }
-                } catch (ApiException e) {
-                    e.printStackTrace();
-                }
+                    else {
+                        fb_token=getFirebaseToken();
+                        Log.d("Login---", "callAPI: ELSE :"+fb_token);
+                        callLogin(email, pass);
+                    }
 
+                } else {
+                    editText_password.setError("Enter valid password");
+                    editText_password.requestFocus();
+                }
             } else {
-                editText_password.setError("Enter valid password");
-                editText_password.requestFocus();
+                editText_id.setError("Enter valid email");
+                editText_id.requestFocus();
             }
         } else {
-            editText_id.setError("Enter valid email");
-            editText_id.requestFocus();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialogFailure(LoginActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                        @Override
+                        public void onButtonClick() {
+                            callAPI();
+                        }
+                    };
+                }
+            });
+
         }
+
 
     }
 
-    private void merchantApptLogin(final SecurityAPIBody requestBody) throws ApiException {
+    private void merchantApptLogin(final SecurityAPIBody requestBody,final String username,final String password) throws ApiException {
+        intermediateAlertDialog = new IntermediateAlertDialog(LoginActivity.this);
         Log.d("login---", "login: " + requestBody);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(LoginActivity.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();
@@ -205,10 +212,10 @@ public class LoginActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(LoginActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                        new AlertDialogFailure(LoginActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.server_error), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                // finish();
+                                finish();
                             }
                         };
                     }
@@ -231,22 +238,23 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString(BIZ_NAME, result.getBizDisplayName());
                     editor.putString(DEVICEID, requestBody.getDeviceId());
                     editor.putString(MAX_DAYS, result.getMaxLenLoadingDays());
-                    editor.putString(USER_MAIL, editText_id.getText().toString().trim());
+                    editor.putString(USER_MAIL, username);
+                    editor.putString(USER_PASSWORD, password);
                     editor.commit();
 
                     if (Integer.parseInt(result.getTotalSerCount()) > 0 && Integer.parseInt(result.getTotalResCount()) > 0) {
                         startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
-                        } else {
+                    } else {
                         if (!TextUtils.isEmpty(ask_again_value) && ask_again_value.equals("1")) {
                             startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
                         } else {
                             startActivity(new Intent(LoginActivity.this, StatusServiceStaffActivity.class).putExtra("total_service", result.getTotalSerCount()).putExtra("total_resource", result.getTotalResCount()));
                         }
-                        }
+                    }
                     finish();
                     overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
 
-                } else if (Integer.parseInt(result.getStatusCode()) == 205) {
+                } else if ((Integer.parseInt(result.getStatusCode()) == 205) || (Integer.parseInt(result.getStatusCode()) == 412)) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -258,11 +266,24 @@ public class LoginActivity extends AppCompatActivity {
                             };
                         }
                     });
-                } else if (Integer.parseInt(result.getStatusCode()) == 412) {
+                } else if (Integer.parseInt(result.getStatusCode()) == 401) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(LoginActivity.this, "Email or password is incorrect", "OK", "", "Login Failed") {
+                            new AlertDialogFailure(LoginActivity.this, getResources().getString(R.string.try_again), "OK", "Unauthorized", "Login Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    // finish();
+                                }
+                            };
+                        }
+                    });
+                } else if ((Integer.parseInt(result.getStatusCode()) == 422) || (Integer.parseInt(result.getStatusCode()) == 501) || (Integer.parseInt(result.getStatusCode()) == 503)) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(LoginActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
                                     // finish();
@@ -271,7 +292,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -309,5 +329,67 @@ public class LoginActivity extends AppCompatActivity {
             intermediateAlertDialog.dismissAlertDialog();
             intermediateAlertDialog = null;
         }
+    }
+/*
+    public class MyFirebaseMessagingService extends FirebaseMessagingService {
+        @Override
+        public void onNewToken(String token) {
+            Log.d("MY_TOKEN", "Refreshed token: " + token);
+            fb_token = FirebaseInstanceId.getInstance().getToken();
+            // fb_token = token;
+            // If you want to send messages to this application instance or
+            // manage this apps subscriptions on the server side, send the
+            // Instance ID token to your app server.
+            // sendRegistrationToServer(token);
+        }
+    }*/
+
+    public void callLogin(String username, String password) {
+        try {
+            MessageDigest messageDigest = null;
+            try {
+                messageDigest = MessageDigest.getInstance("SHA-256");
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            byte hashBytes[] = messageDigest.digest(password.getBytes(StandardCharsets.UTF_8));
+            BigInteger noHash = new BigInteger(1, hashBytes);
+            String hashStr = noHash.toString(16);
+            Log.d("PASSWORD--->", "onClick: " + hashStr);
+
+            String id = UUID.randomUUID().toString();
+            Log.d("UUID--->", "onCreate: " + id);
+            SecurityAPIBody securityAPIBody = new SecurityAPIBody();
+            securityAPIBody.setReqType(Constants.LOGIN_API);
+            securityAPIBody.setDeviceId(id);
+            securityAPIBody.setFirebaseInstId(fb_token);
+            securityAPIBody.setUserEmail(username);
+            securityAPIBody.setUserPass(hashStr);
+
+            merchantApptLogin(securityAPIBody,username,password);
+
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private String getFirebaseToken(){
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if (!task.isSuccessful()) {
+                    Log.w("TAG", "getInstanceId failed", task.getException());
+                    return;
+                }
+
+                // Get new Instance ID token
+                fb_token = task.getResult().getToken();
+                Log.d("Token--->", "onComplete: " + fb_token);
+                //Toast.makeText(LoginActivity.this,"Token M:"+ fb_token, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        return fb_token;
     }
 }

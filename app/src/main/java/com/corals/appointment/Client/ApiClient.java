@@ -77,8 +77,8 @@ public class ApiClient {
 
     //public static String basePath = "http://192.168.225.70:8080";//local-jayanth
     //  public static String basePath = "http://192.168.43.148:8080";//local-kathir
-     //public static String basePath = "http://192.168.43.122:8080";//local-kathir2
-   public static String basePath = "http://192.168.43.103:8080";//local-udhay
+    //public static String basePath = "http://192.168.43.122:8080";//local-kathir2
+    public static String basePath = "http://192.168.43.103:8080";//local-udhay
     //private String basePath = "https://139.59.11.186:8443";//dev server
     //private String basePath = "https://localhost:8080";
     private boolean debugging = false;

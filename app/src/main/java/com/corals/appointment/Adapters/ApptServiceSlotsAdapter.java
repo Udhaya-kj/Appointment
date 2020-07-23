@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.corals.appointment.Activity.AppointmentActivity;
 import com.corals.appointment.Activity.CustomersMakeApptActivity;
 import com.corals.appointment.Activity.DashboardActivity;
 import com.corals.appointment.Activity.LoginActivity;
@@ -34,6 +35,7 @@ import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.Dialogs.ViewSlotCustomersBottomDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.Utils.CAllLoginAPI;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -89,7 +91,7 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
             }
         });
 
-  /*      holder.imageView_avail.setOnClickListener(new View.OnClickListener() {
+        holder.imageView_avail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent in = new Intent(context, CustomersMakeApptActivity.class);
@@ -98,13 +100,13 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
                 in.putExtra("service", service);
                 in.putExtra("date", date);
                 in.putExtra("service_dur",service_dur);
-                in.putExtra("slot_no", "");
+                in.putExtra("slot_no",  appointmentAvailableSlots.get(position).getSlotNo());
                 in.putExtra("start_time", appointmentAvailableSlots.get(position).getStartTime());
                 in.putExtra("end_time", appointmentAvailableSlots.get(position).getEndTime());
                 context.startActivity(in);
                 //((Activity) context).finish();
             }
-        });*/
+        });
 
     }
 
@@ -147,7 +149,7 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
                 enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
                 enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
                 intermediateAlertDialog = new IntermediateAlertDialog(context);
-                fetchCustomer(enquiryBody, appointmentAvailableSlots.get(position).getApptId(), appointmentAvailableSlots.get(position).getStartTime(), appointmentAvailableSlots.get(position).getEndTime(), date, service_id, service);
+                fetchCustomer(enquiryBody, appointmentAvailableSlots.get(position).getApptId(), appointmentAvailableSlots.get(position).getStartTime(), appointmentAvailableSlots.get(position).getEndTime(), date, service_id, service,position);
             } catch (ApiException e) {
                 e.printStackTrace();
             }
@@ -166,7 +168,7 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
         }
     }
 
-    private void fetchCustomer(AppointmentEnquiryBody requestBody, final String appt_id, final String start_time, final String end_time, final String date, final String service_id, final String service) throws ApiException {
+    private void fetchCustomer(AppointmentEnquiryBody requestBody, final String appt_id, final String start_time, final String end_time, final String date, final String service_id, final String service,final int position) throws ApiException {
 
         Log.d("fetchCustomer--->", "fetchService: " + requestBody + "," + service);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(context);
@@ -184,10 +186,10 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(context, context.getResources().getString(R.string.try_again), "OK", context.getResources().getString(R.string.went_wrong), "Failed") {
+                        new AlertDialogFailure(context, context.getResources().getString(R.string.try_again), "OK", context.getResources().getString(R.string.server_error), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                context.startActivity(new Intent(context, DashboardActivity.class));
+                                context.startActivity(new Intent(context, AppointmentActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                 ((Activity) context).finish();
                                 context.overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
                             }
@@ -200,10 +202,10 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
             public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
 
                 Log.d("fetchCustomer--->", "onSuccess-" + statusCode + "," + result + "," + result.getResources());
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     context.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -216,14 +218,71 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
                             }
                         }
                     });
-                } else {
+                } else if (Integer.parseInt(result.getStatusCode()) == 404){
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    context.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(context, "Customers not found for this appointment", "OK", "", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                /*    context.startActivity(new Intent(context, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    ((Activity) context).finish();
+                                    context.overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                                }
+                            };
+                        }
+                    });
+                }
+                else if (Integer.parseInt(result.getStatusCode()) == 400){
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    context.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(context, context.getResources().getString(R.string.try_again), "OK", "Invalid data", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    context.startActivity(new Intent(context, AppointmentActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    ((Activity) context).finish();
+                                    context.overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
+                        }
+                    });
+                }
+                else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    context.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+
+                                    callAPI(position);
+                                }
+                            }.callLoginAPI(context);
+                        }
+                    });
+
+                }
+                else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     context.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             new AlertDialogFailure(context, context.getResources().getString(R.string.try_again), "OK", context.getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    context.startActivity(new Intent(context, DashboardActivity.class));
+                                    context.startActivity(new Intent(context, AppointmentActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     ((Activity) context).finish();
                                     context.overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
                                 }

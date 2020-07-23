@@ -12,13 +12,19 @@
 
 
 package com.corals.appointment.Client.model;
+
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
 import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
  * SecurityAPIBody
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-10T11:08:14.822Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-22T10:03:21.373Z")
 public class SecurityAPIBody {
   @SerializedName("mer_id")
   private String merId = null;
@@ -86,8 +92,26 @@ public class SecurityAPIBody {
   @SerializedName("req_type")
   private String reqType = null;
 
+  @SerializedName("firebase_inst_id")
+  private String firebaseInstId = null;
+
+  @SerializedName("changes_not_allowed_day")
+  private String changesNotAllowedDay = null;
+
+  @SerializedName("create_temlpate")
+  private String createTemlpate = null;
+
+  @SerializedName("reschedule_temlpate")
+  private String rescheduleTemlpate = null;
+
+  @SerializedName("cancel_temlpate")
+  private String cancelTemlpate = null;
+
   @SerializedName("session_token")
   private String sessionToken = null;
+
+  @SerializedName("avail_days")
+  private List<AvailDay> availDays = null;
 
   public SecurityAPIBody merId(String merId) {
     this.merId = merId;
@@ -485,6 +509,96 @@ public class SecurityAPIBody {
     this.reqType = reqType;
   }
 
+  public SecurityAPIBody firebaseInstId(String firebaseInstId) {
+    this.firebaseInstId = firebaseInstId;
+    return this;
+  }
+
+  /**
+   * Get firebaseInstId
+   * @return firebaseInstId
+   **/
+  @Schema(description = "")
+  public String getFirebaseInstId() {
+    return firebaseInstId;
+  }
+
+  public void setFirebaseInstId(String firebaseInstId) {
+    this.firebaseInstId = firebaseInstId;
+  }
+
+  public SecurityAPIBody changesNotAllowedDay(String changesNotAllowedDay) {
+    this.changesNotAllowedDay = changesNotAllowedDay;
+    return this;
+  }
+
+  /**
+   * Get changesNotAllowedDay
+   * @return changesNotAllowedDay
+   **/
+  @Schema(description = "")
+  public String getChangesNotAllowedDay() {
+    return changesNotAllowedDay;
+  }
+
+  public void setChangesNotAllowedDay(String changesNotAllowedDay) {
+    this.changesNotAllowedDay = changesNotAllowedDay;
+  }
+
+  public SecurityAPIBody createTemlpate(String createTemlpate) {
+    this.createTemlpate = createTemlpate;
+    return this;
+  }
+
+  /**
+   * Get createTemlpate
+   * @return createTemlpate
+   **/
+  @Schema(description = "")
+  public String getCreateTemlpate() {
+    return createTemlpate;
+  }
+
+  public void setCreateTemlpate(String createTemlpate) {
+    this.createTemlpate = createTemlpate;
+  }
+
+  public SecurityAPIBody rescheduleTemlpate(String rescheduleTemlpate) {
+    this.rescheduleTemlpate = rescheduleTemlpate;
+    return this;
+  }
+
+  /**
+   * Get rescheduleTemlpate
+   * @return rescheduleTemlpate
+   **/
+  @Schema(description = "")
+  public String getRescheduleTemlpate() {
+    return rescheduleTemlpate;
+  }
+
+  public void setRescheduleTemlpate(String rescheduleTemlpate) {
+    this.rescheduleTemlpate = rescheduleTemlpate;
+  }
+
+  public SecurityAPIBody cancelTemlpate(String cancelTemlpate) {
+    this.cancelTemlpate = cancelTemlpate;
+    return this;
+  }
+
+  /**
+   * Get cancelTemlpate
+   * @return cancelTemlpate
+   **/
+  @Schema(description = "")
+  public String getCancelTemlpate() {
+    return cancelTemlpate;
+  }
+
+  public void setCancelTemlpate(String cancelTemlpate) {
+    this.cancelTemlpate = cancelTemlpate;
+  }
+
   public SecurityAPIBody sessionToken(String sessionToken) {
     this.sessionToken = sessionToken;
     return this;
@@ -501,6 +615,32 @@ public class SecurityAPIBody {
 
   public void setSessionToken(String sessionToken) {
     this.sessionToken = sessionToken;
+  }
+
+  public SecurityAPIBody availDays(List<AvailDay> availDays) {
+    this.availDays = availDays;
+    return this;
+  }
+
+  public SecurityAPIBody addAvailDaysItem(AvailDay availDaysItem) {
+    if (this.availDays == null) {
+      this.availDays = new ArrayList<AvailDay>();
+    }
+    this.availDays.add(availDaysItem);
+    return this;
+  }
+
+  /**
+   * Get availDays
+   * @return availDays
+   **/
+  @Schema(description = "")
+  public List<AvailDay> getAvailDays() {
+    return availDays;
+  }
+
+  public void setAvailDays(List<AvailDay> availDays) {
+    this.availDays = availDays;
   }
 
 
@@ -535,12 +675,18 @@ public class SecurityAPIBody {
             Objects.equals(this.userName, securityAPIBody.userName) &&
             Objects.equals(this.deviceId, securityAPIBody.deviceId) &&
             Objects.equals(this.reqType, securityAPIBody.reqType) &&
-            Objects.equals(this.sessionToken, securityAPIBody.sessionToken);
+            Objects.equals(this.firebaseInstId, securityAPIBody.firebaseInstId) &&
+            Objects.equals(this.changesNotAllowedDay, securityAPIBody.changesNotAllowedDay) &&
+            Objects.equals(this.createTemlpate, securityAPIBody.createTemlpate) &&
+            Objects.equals(this.rescheduleTemlpate, securityAPIBody.rescheduleTemlpate) &&
+            Objects.equals(this.cancelTemlpate, securityAPIBody.cancelTemlpate) &&
+            Objects.equals(this.sessionToken, securityAPIBody.sessionToken) &&
+            Objects.equals(this.availDays, securityAPIBody.availDays);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(merId, custId, userEmail, userPass, userMob, bizDisplayName, bizNamelegal, webPath, outletAdd1, outletAdd2, outletAdd3, postCode, qrMerInfUniqueCd, maxLenLoadingDays, maxApptAllowedForSameCust, qrRequired, merCurSymbol, countryName, countryCode, userName, deviceId, reqType, sessionToken);
+    return Objects.hash(merId, custId, userEmail, userPass, userMob, bizDisplayName, bizNamelegal, webPath, outletAdd1, outletAdd2, outletAdd3, postCode, qrMerInfUniqueCd, maxLenLoadingDays, maxApptAllowedForSameCust, qrRequired, merCurSymbol, countryName, countryCode, userName, deviceId, reqType, firebaseInstId, changesNotAllowedDay, createTemlpate, rescheduleTemlpate, cancelTemlpate, sessionToken, availDays);
   }
 
 
@@ -571,7 +717,13 @@ public class SecurityAPIBody {
     sb.append("    userName: ").append(toIndentedString(userName)).append("\n");
     sb.append("    deviceId: ").append(toIndentedString(deviceId)).append("\n");
     sb.append("    reqType: ").append(toIndentedString(reqType)).append("\n");
+    sb.append("    firebaseInstId: ").append(toIndentedString(firebaseInstId)).append("\n");
+    sb.append("    changesNotAllowedDay: ").append(toIndentedString(changesNotAllowedDay)).append("\n");
+    sb.append("    createTemlpate: ").append(toIndentedString(createTemlpate)).append("\n");
+    sb.append("    rescheduleTemlpate: ").append(toIndentedString(rescheduleTemlpate)).append("\n");
+    sb.append("    cancelTemlpate: ").append(toIndentedString(cancelTemlpate)).append("\n");
     sb.append("    sessionToken: ").append(toIndentedString(sessionToken)).append("\n");
+    sb.append("    availDays: ").append(toIndentedString(availDays)).append("\n");
     sb.append("}");
     return sb.toString();
   }

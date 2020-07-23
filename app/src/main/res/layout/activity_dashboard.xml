@@ -173,6 +173,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:gravity="center"
+                android:fontFamily="@font/lato_medium"
                 android:text="Terms &amp; Conditions"
                 android:textColor="@color/primary_blue" />
 
@@ -183,6 +184,7 @@
                 android:layout_marginTop="15dp"
                 android:gravity="center"
                 android:text="FAQ"
+                android:fontFamily="@font/lato_medium"
                 android:textColor="@color/primary_blue" />
 
             <TextView
@@ -192,6 +194,7 @@
                 android:layout_marginTop="15dp"
                 android:gravity="center"
                 android:text="Contact us"
+                android:fontFamily="@font/lato_medium"
                 android:textColor="@color/primary_blue" />
 
         </LinearLayout>

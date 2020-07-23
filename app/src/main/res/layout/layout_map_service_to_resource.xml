@@ -8,6 +8,8 @@
     android:orientation="horizontal"
     android:paddingStart="0dp"
     android:paddingEnd="0dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:weightSum="1">
 
     <TextView

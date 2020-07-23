@@ -42,6 +42,7 @@ import com.corals.appointment.Interface.SearchCustomerCallback;
 import com.corals.appointment.Model.CustomersModel;
 import com.corals.appointment.Model.TimeSlotDataModel;
 import com.corals.appointment.R;
+import com.corals.appointment.Utils.CAllLoginAPI;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -168,7 +169,7 @@ public class CustomersMakeApptActivity extends AppCompatActivity implements Sear
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(CustomersMakeApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                        new AlertDialogFailure(CustomersMakeApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.server_error), "Failed") {
                             @Override
                             public void onButtonClick() {
                                 startActivity(new Intent(CustomersMakeApptActivity.this, DashboardActivity.class));
@@ -182,12 +183,13 @@ public class CustomersMakeApptActivity extends AppCompatActivity implements Sear
 
             @Override
             public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
+
                 Log.d("fetchService--->", "onSuccess-" + result + "," + result.getStatusMessage());
 
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -210,6 +212,9 @@ public class CustomersMakeApptActivity extends AppCompatActivity implements Sear
                         }
                     });
                 } else if (Integer.parseInt(result.getStatusCode()) == 404) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -221,7 +226,29 @@ public class CustomersMakeApptActivity extends AppCompatActivity implements Sear
                             };
                         }
                     });
-                } else {
+                }
+                else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+
+                                    callAPI();
+                                }
+                            }.callLoginAPI(CustomersMakeApptActivity.this);
+                        }
+                    });
+
+                }
+                else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

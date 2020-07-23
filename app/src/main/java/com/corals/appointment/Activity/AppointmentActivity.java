@@ -46,9 +46,11 @@ import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.Interface.AdapterCallback;
 import com.corals.appointment.Interface.OnItemClick_Main_Services;
 import com.corals.appointment.R;
+import com.corals.appointment.Utils.CAllLoginAPI;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.wdullaer.materialdatetimepicker.Utils;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
@@ -57,7 +59,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-public class AppointmentActivity extends AppCompatActivity implements  AdapterCallback, OnItemClick_Main_Services {
+public class AppointmentActivity extends AppCompatActivity implements AdapterCallback, OnItemClick_Main_Services {
 
     DatePickerDialog datePickerDialog;
     int Year, Month, Day, Hour, Minute;
@@ -70,7 +72,7 @@ public class AppointmentActivity extends AppCompatActivity implements  AdapterCa
     Menu menu;
     private LinearLayout linearLayout_bottom;
     Button button_appts, button_book;
-    public String ser_id, service,service_dur;
+    public String ser_id, service, service_dur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -292,10 +294,11 @@ public class AppointmentActivity extends AppCompatActivity implements  AdapterCa
             public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
 
                 Log.d("fetchService--->", "onSuccess-" + statusCode + "," + result);
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
+
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -318,7 +321,66 @@ public class AppointmentActivity extends AppCompatActivity implements  AdapterCa
 
                         }
                     });
-                } else {
+                } else if (Integer.parseInt(result.getStatusCode()) == 404) {
+
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AppointmentActivity.this, "No services created!", "OK","", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(AppointmentActivity.this, DashboardActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
+                        }
+                    });
+                }
+                else if (Integer.parseInt(result.getStatusCode()) == 400) {
+
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AppointmentActivity.this, getResources().getString(R.string.try_again), "OK", "Invalid data", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(AppointmentActivity.this, DashboardActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                }
+                            };
+                        }
+                    });
+                }
+                else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+
+                                    callAPI();
+                                }
+                            }.callLoginAPI(AppointmentActivity.this);
+                        }
+                    });
+
+                }
+                else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -368,6 +430,6 @@ public class AppointmentActivity extends AppCompatActivity implements  AdapterCa
         ser_id = id;
         service = ser;
         service_dur = ser_dur;
-        Log.d("Data---", "onClick: "+ser_id+","+service);
+        Log.d("Data---", "onClick: " + ser_id + "," + service);
     }
 }

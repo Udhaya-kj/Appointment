@@ -27,6 +27,7 @@ import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.Utils.CAllLoginAPI;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -39,7 +40,7 @@ public class CalendarServicesActivity extends AppCompatActivity {
 
     ListView recyclerView_services;
     TextView textView_no_ser, textView_appt_dt;
-    public String cus_id,cus,cus_email,cus_mob;
+    public String cus_id, cus, cus_email, cus_mob;
     private IntermediateAlertDialog intermediateAlertDialog;
     private SharedPreferences sharedpreferences_sessionToken;
 
@@ -70,10 +71,16 @@ public class CalendarServicesActivity extends AppCompatActivity {
             cus = getIntent().getStringExtra("cus");
             cus_email = getIntent().getStringExtra("cus_email");
             cus_mob = getIntent().getStringExtra("cus_mob");
-            Log.d("CalServices---->", "onCreate: " + cus_id + "," + cus + "," + cus_email+ "," + cus_mob);
+            Log.d("CalServices---->", "onCreate: " + cus_id + "," + cus + "," + cus_email + "," + cus_mob);
 
         }
 
+        callAPI();
+
+
+    }
+
+    private void callAPI() {
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
         enquiryBody.setReqType(Constants.SERVICES_LIST_API);
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
@@ -103,7 +110,6 @@ public class CalendarServicesActivity extends AppCompatActivity {
             });
 
         }
-
     }
 
     @Override
@@ -115,7 +121,7 @@ public class CalendarServicesActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
 
 
-     //old
+        //old
    /*     if (!TextUtils.isEmpty(pageId) && pageId.equals("1")) {
             Intent i = new Intent(CalendarServicesActivity.this, AppointmentActivity.class);
             startActivity(i);
@@ -146,7 +152,7 @@ public class CalendarServicesActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(CalendarServicesActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                        new AlertDialogFailure(CalendarServicesActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.server_error), "Failed") {
                             @Override
                             public void onButtonClick() {
                                 startActivity(new Intent(CalendarServicesActivity.this, DashboardActivity.class));
@@ -162,17 +168,17 @@ public class CalendarServicesActivity extends AppCompatActivity {
             public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
 
                 Log.d("fetchService--->", "onSuccess-" + statusCode + "," + result);
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             if (!result.getServices().isEmpty() && result.getServices() != null) {
                                 textView_no_ser.setVisibility(View.GONE);
                                 recyclerView_services.setVisibility(View.VISIBLE);
-                                ServicesAdapter_Calender servicesAdapter_calender = new ServicesAdapter_Calender(CalendarServicesActivity.this, result.getServices(),cus_id,cus,cus_email,cus_mob);
+                                ServicesAdapter_Calender servicesAdapter_calender = new ServicesAdapter_Calender(CalendarServicesActivity.this, result.getServices(), cus_id, cus, cus_email, cus_mob);
                                 recyclerView_services.setAdapter(servicesAdapter_calender);
 
                             } else {
@@ -183,16 +189,73 @@ public class CalendarServicesActivity extends AppCompatActivity {
 
                         }
                     });
+                } else if (Integer.parseInt(result.getStatusCode()) == 404) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(CalendarServicesActivity.this, "No services created!", "OK", "", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                          /*          startActivity(new Intent(CalendarServicesActivity.this, DashboardActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 400) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(CalendarServicesActivity.this, getResources().getString(R.string.try_again), "OK", "Invalid data", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                               /*     startActivity(new Intent(CalendarServicesActivity.this, DashboardActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+                                    callAPI();
+                                }
+                            }.callLoginAPI(CalendarServicesActivity.this);
+                        }
+                    });
+
                 } else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             new AlertDialogFailure(CalendarServicesActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(CalendarServicesActivity.this, DashboardActivity.class));
+                       /*             startActivity(new Intent(CalendarServicesActivity.this, DashboardActivity.class));
                                     finish();
-                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                                    onBackPressed();
                                 }
                             };
                         }

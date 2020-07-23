@@ -48,6 +48,7 @@ import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.Utils.CAllLoginAPI;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 
 import java.text.ParseException;
@@ -1085,53 +1086,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         button_add_ser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             closeKeyboard();
-                Log.d("sunday_list--->", "onClick: " + list_sun.size() + "," + list_mon.size() + "," + list_tue.size() + "," + list_wed.size() + "," + list_thu.size() + "," + list_fri.size() + "," + list_sat.size());
-                if (isBizTimeSelected) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            new AlertDialogYesNo(AddServiceAvailTimeActivity.this, "Create Service?", "Are you sure, You want to create " + ser_name + " service?", "Yes", "No") {
-                                @Override
-                                public void onOKButtonClick() {
-                                    createService();
-                                }
-
-                                @Override
-                                public void onCancelButtonClick() {
-
-                                }
-
-                            };
-                        }
-                    });
-
-                } else if (isCustomTimeSelected) {
-                    if (isTimeSelected) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                new AlertDialogYesNo(AddServiceAvailTimeActivity.this, "Create Service?", "Are you sure, You want to create " + ser_name + " service?", "Yes", "No") {
-                                    @Override
-                                    public void onOKButtonClick() {
-                                        createService();
-                                    }
-
-                                    @Override
-                                    public void onCancelButtonClick() {
-
-                                    }
-
-                                };
-                            }
-                        });
-                    } else {
-                        getDialog("Select valid service active days");
-                    }
-
-                } else {
-                    getDialog("Select valid service availability time");
-                }
+                callAPI();
             }
         });
     }
@@ -2001,13 +1956,13 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(AddServiceAvailTimeActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                        new AlertDialogFailure(AddServiceAvailTimeActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.server_error), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                /*startActivity(new Intent(AddServiceAvailTimeActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                startActivity(new Intent(AddServiceAvailTimeActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                 finish();
-                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
-                           onBackPressed();
+                                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
+                                //onBackPressed();
                             }
                         };
                     }
@@ -2017,10 +1972,10 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
             @Override
             public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
                 Log.d("createService--->", "onSuccess-" + statusCode + "," + result.getStatusMessage());
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -2035,18 +1990,109 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                         }
                     });
 
-                } else {
+                } else if (Integer.parseInt(result.getStatusCode()) == 204) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(AddServiceAvailTimeActivity.this, "Please try again later!", "OK", "Service setup failed", "Failed") {
+                            new AlertDialogFailure(AddServiceAvailTimeActivity.this, "Service available time creation failed", "OK", "Service created successfully", "Warning") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(AddServiceAvailTimeActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                                }
+                            };
+                        }
+                    });
+
+                } else if (Integer.parseInt(result.getStatusCode()) == 400) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddServiceAvailTimeActivity.this, getResources().getString(R.string.try_again), "OK", "Invalid data", "Warning") {
+                                @Override
+                                public void onButtonClick() {
+                                  /*  startActivity(new Intent(AddServiceAvailTimeActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);*/
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+
+                } else if (Integer.parseInt(result.getStatusCode()) == 409) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddServiceAvailTimeActivity.this, "Service registration failed!", "OK", "", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(AddServiceAvailTimeActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                                }
+                            };
+                        }
+                    });
+
+                } else if (Integer.parseInt(result.getStatusCode()) == 501) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddServiceAvailTimeActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(AddServiceAvailTimeActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                                }
+                            };
+                        }
+                    });
+
+                } else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
                                 @Override
                                 public void onButtonClick() {
 
-                                    onBackPressed();
-                        /*            startActivity(new Intent(AddServiceAvailTimeActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    callAPI();
+                                }
+                            }.callLoginAPI(AddServiceAvailTimeActivity.this);
+                        }
+                    });
+
+                } else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddServiceAvailTimeActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(AddServiceAvailTimeActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     finish();
-                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                                 }
                             };
                         }
@@ -2150,67 +2196,71 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_finish) {
-            closeKeyboard();
-            Log.d("sunday_list--->", "onClick: " + list_sun.size() + "," + list_mon.size() + "," + list_tue.size() + "," + list_wed.size() + "," + list_thu.size() + "," + list_fri.size() + "," + list_sat.size());
-            if (isBizTimeSelected) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        new AlertDialogYesNo(AddServiceAvailTimeActivity.this, "Create Service?", "Are you sure, You want to create " + ser_name + " service?", "Yes", "No") {
-                            @Override
-                            public void onOKButtonClick() {
-                                createService();
-                            }
-
-                            @Override
-                            public void onCancelButtonClick() {
-
-                            }
-
-                        };
-                    }
-                });
-
-            } else if (isCustomTimeSelected) {
-                if (isTimeAdded) {
-                    if (isTimeSelected) {
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                new AlertDialogYesNo(AddServiceAvailTimeActivity.this, "Create Service?", "Are you sure, You want to create " + ser_name + " service?", "Yes", "No") {
-                                    @Override
-                                    public void onOKButtonClick() {
-                                        createService();
-                                    }
-
-                                    @Override
-                                    public void onCancelButtonClick() {
-
-                                    }
-
-                                };
-                            }
-                        });
-                    } else {
-                        getDialog("Select valid service active days");
-                    }
-                } else {
-                    getDialog("Select valid service active time");
-                }
-            } else {
-                getDialog("Select valid service availability time");
-            }
+            callAPI();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void closeKeyboard(){
+    private void closeKeyboard() {
         try {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         } catch (Exception e) {
             // TODO: handle exception
+        }
+    }
+
+    private void callAPI() {
+        closeKeyboard();
+        Log.d("sunday_list--->", "onClick: " + list_sun.size() + "," + list_mon.size() + "," + list_tue.size() + "," + list_wed.size() + "," + list_thu.size() + "," + list_fri.size() + "," + list_sat.size());
+        if (isBizTimeSelected) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialogYesNo(AddServiceAvailTimeActivity.this, "Create Service?", "Are you sure, You want to create " + ser_name + " service?", "Yes", "No") {
+                        @Override
+                        public void onOKButtonClick() {
+                            createService();
+                        }
+
+                        @Override
+                        public void onCancelButtonClick() {
+
+                        }
+
+                    };
+                }
+            });
+
+        } else if (isCustomTimeSelected) {
+            if (isTimeAdded) {
+                if (isTimeSelected) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogYesNo(AddServiceAvailTimeActivity.this, "Create Service?", "Are you sure, You want to create " + ser_name + " service?", "Yes", "No") {
+                                @Override
+                                public void onOKButtonClick() {
+                                    createService();
+                                }
+
+                                @Override
+                                public void onCancelButtonClick() {
+
+                                }
+
+                            };
+                        }
+                    });
+                } else {
+                    getDialog("Select valid service active days");
+                }
+            } else {
+                getDialog("Select valid service active time");
+            }
+        } else {
+            getDialog("Select valid service availability time");
         }
     }
 }

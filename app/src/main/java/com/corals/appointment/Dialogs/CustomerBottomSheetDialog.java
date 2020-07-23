@@ -60,7 +60,7 @@ public class CustomerBottomSheetDialog implements View.OnClickListener {
         } else {
             textView_mob.setText("--");
         }
-        if (!TextUtils.isEmpty(email)) {
+        if (!email.equals("null")) {
             textView_email.setText(email);
         } else {
             textView_email.setText("--");

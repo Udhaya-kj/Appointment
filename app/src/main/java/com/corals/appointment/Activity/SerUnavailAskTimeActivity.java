@@ -51,6 +51,7 @@ import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.Interface.UnavailCallback;
 import com.corals.appointment.R;
+import com.corals.appointment.Utils.CAllLoginAPI;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 
 import java.text.ParseException;
@@ -213,32 +214,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
         button_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (!TextUtils.isEmpty(task) && task.equals("1")) {
-                    //Service unavailable
-                    callSerUnavailAPI();
-                } else if (!TextUtils.isEmpty(task) && task.equals("2")) {
-                    if (isFullDay == true) {
-                        //Resource unavailable
-                        callResUnavailAPI();
-                    } else {
-                        if (isValidUnavailTime) {
-                            callResUnavailAPI();
-                        } else {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    new AlertDialogFailure(SerUnavailAskTimeActivity.this, "Select valid unavailable time", "OK", "", "Warning") {
-                                        @Override
-                                        public void onButtonClick() {
-                                        }
-                                    };
-                                }
-                            });
-                        }
-                    }
-                }
-
+                callAPI();
 
             }
         });
@@ -303,6 +279,34 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
 
     }
 
+    private void callAPI(){
+
+        if (!TextUtils.isEmpty(task) && task.equals("1")) {
+            //Service unavailable
+            callSerUnavailAPI();
+        } else if (!TextUtils.isEmpty(task) && task.equals("2")) {
+            if (isFullDay == true) {
+                //Resource unavailable
+                callResUnavailAPI();
+            } else {
+                if (isValidUnavailTime) {
+                    callResUnavailAPI();
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, "Select valid unavailable time", "OK", "", "Warning") {
+                                @Override
+                                public void onButtonClick() {
+                                }
+                            };
+                        }
+                    });
+                }
+            }
+        }
+
+    }
     public void callSerUnavailAPI() {
 
 
@@ -770,7 +774,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(SerUnavailAskTimeActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                        new AlertDialogFailure(SerUnavailAskTimeActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.server_error), "Failed") {
                             @Override
                             public void onButtonClick() {
                            /*     startActivity(new Intent(SerUnavailAskTimeActivity.this, SettingsActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -786,10 +790,11 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
             @Override
             public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
                 Log.d("createStaff--->", "onSuccess-" + result.getStatusCode() + "," + result.getStatusMessage());
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
+
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -804,12 +809,14 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
                         }
                     });
 
-                } else if (Integer.parseInt(result.getStatusCode()) == 406) {
-
+                } else if (Integer.parseInt(result.getStatusCode()) == 208) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, "Appointment already available for this slot!", "OK", "", "Warning") {
+                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, "Date and time already unavailable!", "OK", "", "Warning") {
                                 @Override
                                 public void onButtonClick() {
                                     if (intermediateAlertDialog != null) {
@@ -820,11 +827,94 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
                         }
                     });
 
-                } else {
+                } else if (Integer.parseInt(result.getStatusCode()) == 400) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, "Service unavailability added failed. Please try again later!", "OK", "", "Failed") {
+                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, getResources().getString(R.string.try_again), "OK", "Invalid data", "Warning") {
+                                @Override
+                                public void onButtonClick() {
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+
+                } else if (Integer.parseInt(result.getStatusCode()) == 406) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, getResources().getString(R.string.try_again), "OK", "Unavailable submission failed", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+
+                } else if (Integer.parseInt(result.getStatusCode()) == 409) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, getResources().getString(R.string.try_again), "OK", "Unavailable submission failed", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+
+                } else if (Integer.parseInt(result.getStatusCode()) == 501) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, getResources().getString(R.string.try_again), "OK", "Invalid request", "Warning") {
+                                @Override
+                                public void onButtonClick() {
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+
+                } else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+                                    callAPI();
+                                }
+                            }.callLoginAPI(SerUnavailAskTimeActivity.this);
+                        }
+                    });
+
+                } else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
 
@@ -866,7 +956,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialogFailure(SerUnavailAskTimeActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                        new AlertDialogFailure(SerUnavailAskTimeActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.server_error), "Failed") {
                             @Override
                             public void onButtonClick() {
                               /*  startActivity(new Intent(SerUnavailAskTimeActivity.this, SettingsActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -883,11 +973,10 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
             @Override
             public void onSuccess(ApptTransactionResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
                 Log.d("createStaff--->", "onSuccess-" + result.getStatusCode() + "," + result.getStatusMessage());
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
-
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -902,33 +991,116 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
                         }
                     });
 
-                } else if (Integer.parseInt(result.getStatusCode()) == 406) {
-
+                } else if (Integer.parseInt(result.getStatusCode()) == 208) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, "Appointment already available for this slot!", "OK", "", "Warning") {
+                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, "Date and time already unavailable!", "OK", "", "Warning") {
                                 @Override
                                 public void onButtonClick() {
-                                   /* startActivity(new Intent(SerUnavailAskTimeActivity.this, SettingsActivity.class));
-                                    finish();
-                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);*/
+                                    if (intermediateAlertDialog != null) {
+                                        intermediateAlertDialog.dismissAlertDialog();
+
+                                    }
                                 }
                             };
                         }
                     });
 
-                } else {
+                } else if (Integer.parseInt(result.getStatusCode()) == 400) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, "Staff unavailability failed. Please try again later!", "OK", "", "Failed") {
+                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, getResources().getString(R.string.try_again), "OK", "Invalid data", "Warning") {
                                 @Override
                                 public void onButtonClick() {
-                                   /* startActivity(new Intent(SerUnavailAskTimeActivity.this, SettingsActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                                    finish();
-                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
 
+                } else if (Integer.parseInt(result.getStatusCode()) == 406) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, getResources().getString(R.string.try_again), "OK", "Unavailable submission failed", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+
+                } else if (Integer.parseInt(result.getStatusCode()) == 409) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, getResources().getString(R.string.try_again), "OK", "Unavailable submission failed", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+
+                } else if (Integer.parseInt(result.getStatusCode()) == 501) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, getResources().getString(R.string.try_again), "OK", "Invalid request", "Warning") {
+                                @Override
+                                public void onButtonClick() {
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                }
+                else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+                                    callAPI();
+                                }
+                            }.callLoginAPI(SerUnavailAskTimeActivity.this);
+                        }
+                    });
+
+                }
+                else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(SerUnavailAskTimeActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                                @Override
+                                public void onButtonClick() {
                                     onBackPressed();
                                 }
                             };

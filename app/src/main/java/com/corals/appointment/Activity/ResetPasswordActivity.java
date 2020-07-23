@@ -30,6 +30,7 @@ import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.R;
+import com.corals.appointment.Utils.CAllLoginAPI;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.android.material.button.MaterialButton;
 
@@ -208,20 +209,33 @@ public class ResetPasswordActivity extends AppCompatActivity {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
                 Log.d("login--->", "onFailure-" + e.getMessage());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(ResetPasswordActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.server_error), "Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
+                                finish();
+                                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                            }
+                        };
+                    }
+                });
             }
 
             @Override
             public void onSuccess(SecurityAPIResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
                 Log.d("login--->", "onSuccess-" + statusCode + " , " + result);
 
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogFailure(ResetPasswordActivity.this, "Password reset successfully!", "OK", "", "Success") {
+                            new AlertDialogFailure(ResetPasswordActivity.this, "Password changed successfully!", "OK", "", "Success") {
                                 @Override
                                 public void onButtonClick() {
                                     startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
@@ -232,15 +246,73 @@ public class ResetPasswordActivity extends AppCompatActivity {
                         }
                     });
 
-                } else {
+                }
+                else if (Integer.parseInt(result.getStatusCode()) == 400) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ResetPasswordActivity.this, getResources().getString(R.string.try_again), "OK", "Invalid data", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                                }
+                            };
+                        }
+                    });
 
+                }
+                else if (Integer.parseInt(result.getStatusCode()) == 404) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(ResetPasswordActivity.this, "Please enter your registered mobile!", "OK", "Invalid mobile number", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+                                }
+                            };
+                        }
+                    });
+
+                }  else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+
+                                    callAPI();
+                                }
+                            }.callLoginAPI(ResetPasswordActivity.this);
+                        }
+                    });
+
+                }
+                else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             new AlertDialogFailure(ResetPasswordActivity.this, "Please try again later!", "OK", "Password reset Failed", "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(ResetPasswordActivity.this, SetupServiceActivity_Bottom.class));
+                                    startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                                 }
