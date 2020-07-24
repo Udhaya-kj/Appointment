@@ -124,14 +124,18 @@ public class RecyclerAdapter_TimeSlots extends RecyclerView.Adapter<RecyclerAdap
                         in.putExtra("service", timeSlotDataModel.getSer());
                         in.putExtra("date", timeSlotDataModel.getDate());
                         in.putExtra("cus_id", timeSlotDataModel.getCus_id());
-                        in.putExtra("cus", timeSlotDataModel.getCus());
+                        in.putExtra("cus_name", timeSlotDataModel.getCus());
+                        in.putExtra("service_dur", timeSlotDataModel.getService_dur());
                         in.putExtra("cus_email", timeSlotDataModel.getCus_email());
+                        in.putExtra("cus_mob", timeSlotDataModel.getCus_mob());
                         in.putExtra("slot_no", appointmentAvailableSlots.get(position).getSlotNo());
                         in.putExtra("start_time", appointmentAvailableSlots.get(position).getSerStartTime());
                         in.putExtra("end_time", appointmentAvailableSlots.get(position).getSerEndTime());
                         context.startActivity(in);
                         //((Activity) context).finish();
                         ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+
+                        Log.d("Timeslot_data---", "onClick: "+timeSlotDataModel.getCus_id()+","+timeSlotDataModel.getCus()+","+timeSlotDataModel.getCus_email());
                     }
                 }
 

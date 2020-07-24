@@ -83,27 +83,6 @@ public abstract class CAllLoginAPI {
 
     }
 
-    private String getFirebaseToken() {
-        final String[] token = {""};
-        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-            @Override
-            public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                if (!task.isSuccessful()) {
-                    Log.w("TAG", "getInstanceId failed", task.getException());
-                    return;
-                }
-
-                // Get new Instance ID token
-                token[0] = task.getResult().getToken();
-                Constants.FIREBASE_TOKEN = token[0];
-                Log.d("TokenUtils--->", "onComplete: " + token[0]);
-                //Toast.makeText(LoginActivity.this,"Token M:"+ fb_token, Toast.LENGTH_SHORT).show();
-
-            }
-
-        });
-        return token[0];
-    }
 
     private void merchantApptLoginAPI(final SecurityAPIBody requestBody, final String username, final String password, final Context context) throws ApiException {
         Log.d("login---", "login: " + requestBody);
@@ -159,7 +138,6 @@ public abstract class CAllLoginAPI {
                             onButtonClick();
                         }
                     });
-
 
                 } else {
 

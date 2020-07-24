@@ -172,7 +172,7 @@ public class CustomersMakeApptActivity extends AppCompatActivity implements Sear
                         new AlertDialogFailure(CustomersMakeApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.server_error), "Failed") {
                             @Override
                             public void onButtonClick() {
-                                startActivity(new Intent(CustomersMakeApptActivity.this, DashboardActivity.class));
+                                startActivity(new Intent(CustomersMakeApptActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                 finish();
                                 overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
                             }
@@ -221,7 +221,9 @@ public class CustomersMakeApptActivity extends AppCompatActivity implements Sear
                             new AlertDialogFailure(CustomersMakeApptActivity.this, "No customers found", "OK", "", "Warning") {
                                 @Override
                                 public void onButtonClick() {
-                                    editText_search.setEnabled(false);
+                                    startActivity(new Intent(CustomersMakeApptActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    finish();
+                                    overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
                                 }
                             };
                         }
@@ -237,7 +239,6 @@ public class CustomersMakeApptActivity extends AppCompatActivity implements Sear
                             new CAllLoginAPI() {
                                 @Override
                                 public void onButtonClick() {
-
                                     callAPI();
                                 }
                             }.callLoginAPI(CustomersMakeApptActivity.this);
@@ -255,7 +256,7 @@ public class CustomersMakeApptActivity extends AppCompatActivity implements Sear
                             new AlertDialogFailure(CustomersMakeApptActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(CustomersMakeApptActivity.this, DashboardActivity.class));
+                                    startActivity(new Intent(CustomersMakeApptActivity.this, DashboardActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
                                 }

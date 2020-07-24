@@ -140,6 +140,7 @@ public class DashboardActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.action_settings) {
             Intent i = new Intent(DashboardActivity.this, SettingsActivity.class);
             startActivity(i);
+            finish();
             overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
         }
         return super.onOptionsItemSelected(item);

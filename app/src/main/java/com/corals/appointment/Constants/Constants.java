@@ -24,6 +24,9 @@ public class Constants {
     public static final String RESOURCE_UNAVAILABLE="T-UA.R";
     public static final String ALL_RESOURCE_LIST="E-R.";
     public static final String SERVICE_ACTIVE_DAYS="E-SS.";
+    public static final String GET_MERCHANT_INFO="E-MI.";
+    public static final String UPDATE_MERCHANT_INFO="T-MU.";
 
-    public static String FIREBASE_TOKEN="";
+
+
 }

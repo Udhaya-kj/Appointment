@@ -174,11 +174,6 @@ public class AddServiceActivity extends AppCompatActivity {
     }
 
     private void okButtonProcess() {
-
-        callAPI();
-    }
-
-    private void callAPI() {
         try {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -215,10 +210,10 @@ public class AddServiceActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    new AlertDialogYesNo(AddServiceActivity.this, "Update Service?", "Are you sure, You want to update " + name + " service?", "Yes", "No") {
+                                    new AlertDialogYesNo(AddServiceActivity.this, "Update Service?", "Are you sure, You want to update " + name + "?", "Yes", "No") {
                                         @Override
                                         public void onOKButtonClick() {
-                                            updateService(name, s_amt, s_desc);
+                                           updateService();
                                         }
 
                                         @Override
@@ -250,7 +245,14 @@ public class AddServiceActivity extends AppCompatActivity {
         }
     }
 
-    void updateService(final String ser_name, final String ser_amt, final String ser_desc) {
+
+
+    void updateService() {
+
+        final String ser_name = et_ser_name.getText().toString().trim();
+        final String ser_desc = et_ser_desc.getText().toString().trim();
+        final String ser_amt = et_ser_amt.getText().toString().trim();
+
         AppointmentService appointmentService = new AppointmentService();
         appointmentService.setSerId(ser_id);
         appointmentService.setSerName(ser_name);
@@ -529,7 +531,7 @@ public class AddServiceActivity extends AppCompatActivity {
                                 @Override
                                 public void onButtonClick() {
 
-                                    callAPI();
+                               updateService();
                                 }
                             }.callLoginAPI(AddServiceActivity.this);
                         }

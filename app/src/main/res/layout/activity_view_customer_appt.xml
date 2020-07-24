@@ -15,6 +15,7 @@
         android:gravity="center"
         android:textAlignment="center"
         app:elevation="0dp"
+        app:title="Appointment"
         app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
         app:titleTextColor="@color/matt_black" />

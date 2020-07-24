@@ -50,14 +50,14 @@ public class ViewApptServiceActivity extends AppCompatActivity {
     String formattedDate, service, service_id,service_dur;
     private IntermediateAlertDialog intermediateAlertDialog;
     private SharedPreferences sharedpreferences_sessionToken;
-    Toolbar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_appt_service);
 
-        toolbar = findViewById(R.id.toolbar_view_service_appt);
+        Toolbar toolbar = findViewById(R.id.toolbar_view_service_apptsss);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -74,6 +74,8 @@ public class ViewApptServiceActivity extends AppCompatActivity {
             service = getIntent().getStringExtra("service");
             service_dur = getIntent().getStringExtra("service_dur");
             toolbar.setTitle(service);
+           // Toast.makeText(this, ""+service, Toast.LENGTH_SHORT).show();
+            Log.d("ViewSerAppt--->", "onCreate: "+service_id+","+service+","+service_dur);
         }
 
         textView_no_appts = findViewById(R.id.text_no_appts);
@@ -167,7 +169,7 @@ public class ViewApptServiceActivity extends AppCompatActivity {
         if (isConn) {
             try {
                 intermediateAlertDialog = new IntermediateAlertDialog(ViewApptServiceActivity.this);
-                fetchApptService(enquiryBody, service_id, toolbar.getTitle().toString(), date,service_dur); ////dt_appt
+                fetchApptService(enquiryBody, service_id, service, date,service_dur); ////dt_appt
             } catch (ApiException e) {
                 e.printStackTrace();
             }
@@ -300,7 +302,6 @@ public class ViewApptServiceActivity extends AppCompatActivity {
                             new CAllLoginAPI() {
                                 @Override
                                 public void onButtonClick() {
-
                                     callAPI(textView_date.getText().toString().trim());
                                 }
                             }.callLoginAPI(ViewApptServiceActivity.this);

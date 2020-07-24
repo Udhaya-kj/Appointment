@@ -1,5 +1,6 @@
 package com.corals.appointment.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -13,6 +14,9 @@ import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -169,9 +173,9 @@ public class ResetPasswordActivity extends AppCompatActivity {
         }
     }
 
-    private void getDialog(String msg) {
+    private void getDialog(final String msg) {
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ResetPasswordActivity.this);
+      /*  AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ResetPasswordActivity.this);
         alertDialogBuilder.setMessage(msg);
         alertDialogBuilder.setPositiveButton("OK",
                 new DialogInterface.OnClickListener() {
@@ -182,7 +186,21 @@ public class ResetPasswordActivity extends AppCompatActivity {
                 });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        alertDialog.show();*/
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new AlertDialogFailure(ResetPasswordActivity.this, msg, "OK", "", "Warning") {
+                    @Override
+                    public void onButtonClick() {
+
+                    }
+                };
+            }
+        });
+
+
     }
 
     @Override
@@ -312,7 +330,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                             new AlertDialogFailure(ResetPasswordActivity.this, "Please try again later!", "OK", "Password reset Failed", "Failed") {
                                 @Override
                                 public void onButtonClick() {
-                                    startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
+                                    startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                                 }
@@ -344,4 +362,20 @@ public class ResetPasswordActivity extends AppCompatActivity {
             intermediateAlertDialog = null;
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.finish_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_finish) {
+            callAPI();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

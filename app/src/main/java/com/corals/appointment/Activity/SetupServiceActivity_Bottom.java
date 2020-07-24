@@ -48,9 +48,7 @@ import java.util.Map;
 public class SetupServiceActivity_Bottom extends AppCompatActivity {
     TextView textView_no_ser;
     private ListView listView_services;
-    private ArrayList<String> service_name_list, service_dur_list;
     ServicesAdapter servicesAdapter;
-    public String pageId = "";
     private SharedPreferences sharedpreferences_service_data;
     private IntermediateAlertDialog intermediateAlertDialog;
     private SharedPreferences sharedpreferences_sessionToken;
@@ -80,8 +78,6 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
         editor_oh.clear();
         editor_oh.commit();
 
-        service_name_list = new ArrayList<>();
-        service_dur_list = new ArrayList<>();
         listView_services = findViewById(R.id.listview_services);
 
         SharedPreferences preferences = getSharedPreferences(AddServiceActivity.MyPREFERENCES_SERVICE_DATA, Context.MODE_PRIVATE);
@@ -90,9 +86,6 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
         editor.commit();
 
         callAPI_Service();
-
-
-
 
     }
 

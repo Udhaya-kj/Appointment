@@ -52,12 +52,13 @@ public class OtpActivity extends AppCompatActivity {
     private EditText editTextCode;
     //firebase auth object
     private FirebaseAuth mAuth;
-    private String mob,dial_code;
+    private String mob, dial_code;
 
     private ProgressBar progress;
     private FrameLayout linearLayout;
     private LinearLayout imageView_back;
     private SharedPreferences sharedpreferences_sessionToken;
+    private CountDownTimer countDownTimer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +82,7 @@ public class OtpActivity extends AppCompatActivity {
         if (getIntent().getExtras() != null) {
             mob = getIntent().getStringExtra("mobile");
             dial_code = getIntent().getStringExtra("dial_code");
-            Log.d("Mobile---->", "" + mob+","+dial_code);
+            Log.d("Mobile---->", "" + mob + "," + dial_code);
         }
 
         boolean isConn = ConnectivityReceiver.isConnected();
@@ -117,11 +118,7 @@ public class OtpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent in = new Intent(OtpActivity.this, ForgotPasswordActivity.class);
-                startActivity(in);
-                finish();
-                overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
-
+              onBackPressed();
 
             }
         });
@@ -172,6 +169,10 @@ public class OtpActivity extends AppCompatActivity {
         ParamProperties paramProperties = new ParamProperties();
         String mob_code = paramProperties.getProperty(code, MOBILE_CODE);
         progress.setVisibility(View.VISIBLE);
+     /*   if(dial_code.equals("91")){
+            dial_code="+"+dial_code;
+        }*/
+        Log.d("dial_code--->", "sendVerificationCode: "+dial_code+","+mob_code);
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 "+" + dial_code + "" + mobile,
                 120,
@@ -203,7 +204,11 @@ public class OtpActivity extends AppCompatActivity {
         @Override
         public void onVerificationFailed(FirebaseException e) {
             Toast.makeText(OtpActivity.this, "Verification Failed.Please try again!", Toast.LENGTH_LONG).show();
-
+            progress.setVisibility(View.GONE);
+            if(countDownTimer!=null){
+                countDownTimer.cancel();
+                textView_time.setText("00 : 00");
+            }
             Log.d("Verification Failed--->", "" + e.getMessage().toString());
         }
 
@@ -243,6 +248,8 @@ public class OtpActivity extends AppCompatActivity {
 
                             Intent in = new Intent(getApplicationContext(), ResetPasswordActivity.class);
                             in.putExtra("mobile", mob);
+                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(in);
                             finish();
                             overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
@@ -287,7 +294,8 @@ public class OtpActivity extends AppCompatActivity {
 
 
     public void Timer() {
-        new CountDownTimer(120000, 1000) { // adjust the milli seconds here
+
+        countDownTimer = new CountDownTimer(120000, 1000) { // adjust the milli seconds here
 
             public void onTick(long millisUntilFinished) {
                 textView_time.setText("" + String.format("%02d : %02d ",
@@ -302,7 +310,8 @@ public class OtpActivity extends AppCompatActivity {
                 textView_resend.setAlpha(1f);
                 textView_resend.setEnabled(true);
             }
-        }.start();
+        };
+        countDownTimer.start();
     }
 
 }

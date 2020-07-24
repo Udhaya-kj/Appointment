@@ -169,33 +169,7 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
                 new AlertDialogYesNo(ApptSlotDetailsActivity.this, "Cancel Appointment?", "Are you sure, You want to cancel this appointment?", "Yes", "No") {
                     @Override
                     public void onOKButtonClick() {
-                        ApptTransactionBody transactionBody = new ApptTransactionBody();
-                        transactionBody.setReqType(Constants.CANCEL_APPOINTMENT);
-                        transactionBody.setApptId(appt_id);
-                        transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
-                        transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
-                        transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
-                        try {
-                            Log.d("Token--->", "token: " + sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
-                            boolean isConn = ConnectivityReceiver.isConnected();
-                            if (isConn) {
-                                intermediateAlertDialog = new IntermediateAlertDialog(ApptSlotDetailsActivity.this);
-                                cancelAppointment(transactionBody);
-                            } else {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        new AlertDialogFailure(ApptSlotDetailsActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
-                                            @Override
-                                            public void onButtonClick() {
-                                            }
-                                        };
-                                    }
-                                });
-                            }
-                        } catch (ApiException e) {
-                            e.printStackTrace();
-                        }
+                        callCancelAPI();
                     }
 
                     @Override
@@ -206,6 +180,36 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
                 };
             }
         });
+    }
+
+    private void callCancelAPI() {
+        ApptTransactionBody transactionBody = new ApptTransactionBody();
+        transactionBody.setReqType(Constants.CANCEL_APPOINTMENT);
+        transactionBody.setApptId(appt_id);
+        transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
+        transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+        try {
+            Log.d("Token--->", "token: " + sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+            boolean isConn = ConnectivityReceiver.isConnected();
+            if (isConn) {
+                intermediateAlertDialog = new IntermediateAlertDialog(ApptSlotDetailsActivity.this);
+                cancelAppointment(transactionBody);
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(ApptSlotDetailsActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                            @Override
+                            public void onButtonClick() {
+                            }
+                        };
+                    }
+                });
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -298,8 +302,7 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
                             new CAllLoginAPI() {
                                 @Override
                                 public void onButtonClick() {
-
-                                    callAPI();
+                                    callCancelAPI();
                                 }
                             }.callLoginAPI(ApptSlotDetailsActivity.this);
                         }

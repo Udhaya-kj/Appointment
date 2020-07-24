@@ -146,8 +146,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-       // Toast.makeText(this, "Token :"+fb_token, Toast.LENGTH_SHORT).show();
-
     }
 
     private void callAPI() {

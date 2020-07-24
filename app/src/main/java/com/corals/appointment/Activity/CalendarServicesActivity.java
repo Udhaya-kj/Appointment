@@ -76,8 +76,6 @@ public class CalendarServicesActivity extends AppCompatActivity {
         }
 
         callAPI();
-
-
     }
 
     private void callAPI() {
@@ -120,19 +118,6 @@ public class CalendarServicesActivity extends AppCompatActivity {
         finish();
         overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
 
-
-        //old
-   /*     if (!TextUtils.isEmpty(pageId) && pageId.equals("1")) {
-            Intent i = new Intent(CalendarServicesActivity.this, AppointmentActivity.class);
-            startActivity(i);
-            finish();
-            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
-        } else if (!TextUtils.isEmpty(pageId) && pageId.equals("2")) {
-            Intent i = new Intent(CalendarServicesActivity.this, CalendarViewActivity.class);
-            startActivity(i);
-            finish();
-            overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
-        }*/
     }
 
     private void fetchServices(AppointmentEnquiryBody requestBody) throws ApiException {

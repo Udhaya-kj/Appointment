@@ -1319,8 +1319,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                             new CAllLoginAPI() {
                                 @Override
                                 public void onButtonClick() {
-
-                                    callAPI();
+                                    createMerStaff();
                                 }
                             }.callLoginAPI(AddStaffActivity.this);
                         }
@@ -1756,7 +1755,6 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
     }
 
     private void fetchServices(AppointmentEnquiryBody requestBody, final String flag) throws ApiException {
-
         Log.d("fetchService--->", "fetchService: " + requestBody);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(AddStaffActivity.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();
@@ -1856,7 +1854,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                                                 mng_service_id_list = mapServiceResourceRecyclerAdapter.getService();
                                                 mng_check_pos_list = mapServiceResourceRecyclerAdapter.getCheckPosition();
                                                 mng_load_update_list = mapServiceResourceRecyclerAdapter.getUpdateServiceLoad();
-                                                Log.d("MappedServices---", "onClick: " + mng_service_name_list+"," +mng_load_update_list+ "," + mng_service_load_list + "," + mng_service_id_list + "," + mng_check_pos_list);
+                                                Log.d("MappedServices---", "onClick: " + mng_service_name_list + "," + mng_load_update_list + "," + mng_service_load_list + "," + mng_service_id_list + "," + mng_check_pos_list);
                                                 if (!mng_service_name_list.isEmpty() && !mng_service_load_list.isEmpty()) {
                                                     runOnUiThread(new Runnable() {
                                                         @Override
@@ -1946,7 +1944,24 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                             new CAllLoginAPI() {
                                 @Override
                                 public void onButtonClick() {
-                                    createMerStaff();
+
+                                    if (!TextUtils.isEmpty(serviceFlag) && serviceFlag.equals("1")) {
+                                        fetchMerServices("1");
+                                    } else if (!TextUtils.isEmpty(serviceFlag) && serviceFlag.equals("0")) {
+                                        fetchMerServices("0");
+                                    } else {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                new AlertDialogFailure(AddStaffActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                                                    @Override
+                                                    public void onButtonClick() {
+                                                        onBackPressed();
+                                                    }
+                                                };
+                                            }
+                                        });
+                                    }
                                 }
                             }.callLoginAPI(AddStaffActivity.this);
                         }
@@ -2001,8 +2016,12 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
 
     }
 
-    private void resourceUpdate(String resid, String name, String mob) {
+    private void resourceUpdate() {
         closeKeyboard();
+
+        String name = et_staff_name.getText().toString();
+        String mob = et_staff_mob.getText().toString();
+
         List<MapServiceResourceBody> mapServiceResourceBodyList = new ArrayList<>();
         MapServiceResourceBody mapServiceResourceBody = null;
         for (int j = 0; j < appointmentServices.size(); j++) {
@@ -2021,7 +2040,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
             Log.d("MappingUpdate---", "resourceUpdate: " + appointmentServices.get(j).getSerId() + "," + !mng_check_pos_list.get(j) + "," + mng_service_load_list.get(j));
         }
         AppointmentResources appointmentResources = new AppointmentResources();
-        appointmentResources.setResId(resid);
+        appointmentResources.setResId(res_id);
         appointmentResources.setResName(name);
         appointmentResources.setMobile(mob);
         appointmentResources.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
@@ -2032,7 +2051,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
 
         ApptTransactionBody transactionBody = new ApptTransactionBody();
         transactionBody.setReqType(Constants.RESOURCE_UPDATE);
-        transactionBody.setResId(resid);
+        transactionBody.setResId(res_id);
         transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
         transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
@@ -2206,8 +2225,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                             new CAllLoginAPI() {
                                 @Override
                                 public void onButtonClick() {
-
-                                    callAPI();
+                                    resourceUpdate();
                                 }
                             }.callLoginAPI(AddStaffActivity.this);
                         }
@@ -2893,7 +2911,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    new AlertDialogYesNo(AddStaffActivity.this, "Create  Staff?", "Are you sure, You want to create " + name + " staff?", "Yes", "No") {
+                                    new AlertDialogYesNo(AddStaffActivity.this, "Create Staff?", "Are you sure, You want to create " + name + "?", "Yes", "No") {
                                         @Override
                                         public void onOKButtonClick() {
                                             createMerStaff();
@@ -2918,7 +2936,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            new AlertDialogYesNo(AddStaffActivity.this, "Create  Staff?", "Are you sure, You want to create " + name + " staff?", "Yes", "No") {
+                                            new AlertDialogYesNo(AddStaffActivity.this, "Create Staff?", "Are you sure, You want to create " + name + "?", "Yes", "No") {
                                                 @Override
                                                 public void onOKButtonClick() {
                                                     createMerStaff();
@@ -2971,10 +2989,10 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                new AlertDialogYesNo(AddStaffActivity.this, "Update  Staff?", "Are you sure, You want to update " + name + " staff?", "Yes", "No") {
+                                new AlertDialogYesNo(AddStaffActivity.this, "Update Staff?", "Are you sure, You want to update " + name + "?", "Yes", "No") {
                                     @Override
                                     public void onOKButtonClick() {
-                                        resourceUpdate(res_id, name, mob);
+                                        resourceUpdate();
                                     }
 
                                     @Override

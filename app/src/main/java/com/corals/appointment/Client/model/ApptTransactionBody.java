@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * ApptTransactionBody
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-26T13:30:21.935Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-24T15:07:27.543Z")
 public class ApptTransactionBody {
   @SerializedName("mobile")
   private String mobile = null;
@@ -79,6 +79,9 @@ public class ApptTransactionBody {
 
   @SerializedName("slot_no")
   private String slotNo = null;
+
+  @SerializedName("merchant")
+  private Merchantinfo merchant = null;
 
   @SerializedName("resource")
   private AppointmentResources resource = null;
@@ -413,6 +416,24 @@ public class ApptTransactionBody {
     this.slotNo = slotNo;
   }
 
+  public ApptTransactionBody merchant(Merchantinfo merchant) {
+    this.merchant = merchant;
+    return this;
+  }
+
+  /**
+   * Get merchant
+   * @return merchant
+   **/
+  @Schema(description = "")
+  public Merchantinfo getMerchant() {
+    return merchant;
+  }
+
+  public void setMerchant(Merchantinfo merchant) {
+    this.merchant = merchant;
+  }
+
   public ApptTransactionBody resource(AppointmentResources resource) {
     this.resource = resource;
     return this;
@@ -503,6 +524,7 @@ public class ApptTransactionBody {
             Objects.equals(this.isFullDay, apptTransactionBody.isFullDay) &&
             Objects.equals(this.date, apptTransactionBody.date) &&
             Objects.equals(this.slotNo, apptTransactionBody.slotNo) &&
+            Objects.equals(this.merchant, apptTransactionBody.merchant) &&
             Objects.equals(this.resource, apptTransactionBody.resource) &&
             Objects.equals(this.service, apptTransactionBody.service) &&
             Objects.equals(this.serResUnavail, apptTransactionBody.serResUnavail);
@@ -510,7 +532,7 @@ public class ApptTransactionBody {
 
   @Override
   public int hashCode() {
-    return Objects.hash(mobile, name, mail, reqType, sessionToken, merId, deviceId, serId, resId, apptId, custId, startTime, endTime, startSlot, endSlot, isFullDay, date, slotNo, resource, service, serResUnavail);
+    return Objects.hash(mobile, name, mail, reqType, sessionToken, merId, deviceId, serId, resId, apptId, custId, startTime, endTime, startSlot, endSlot, isFullDay, date, slotNo, merchant, resource, service, serResUnavail);
   }
 
 
@@ -537,6 +559,7 @@ public class ApptTransactionBody {
     sb.append("    isFullDay: ").append(toIndentedString(isFullDay)).append("\n");
     sb.append("    date: ").append(toIndentedString(date)).append("\n");
     sb.append("    slotNo: ").append(toIndentedString(slotNo)).append("\n");
+    sb.append("    merchant: ").append(toIndentedString(merchant)).append("\n");
     sb.append("    resource: ").append(toIndentedString(resource)).append("\n");
     sb.append("    service: ").append(toIndentedString(service)).append("\n");
     sb.append("    serResUnavail: ").append(toIndentedString(serResUnavail)).append("\n");

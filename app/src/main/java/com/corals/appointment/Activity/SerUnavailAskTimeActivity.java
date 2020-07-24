@@ -48,6 +48,7 @@ import com.corals.appointment.Client.model.ServiceResourceUnavailBody;
 import com.corals.appointment.Client.model.UnavailSlotBody;
 import com.corals.appointment.Constants.Constants;
 import com.corals.appointment.Dialogs.AlertDialogFailure;
+import com.corals.appointment.Dialogs.AlertDialogYesNo;
 import com.corals.appointment.Dialogs.IntermediateAlertDialog;
 import com.corals.appointment.Interface.UnavailCallback;
 import com.corals.appointment.R;
@@ -279,8 +280,29 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
 
     }
 
-    private void callAPI(){
+    private void callAPI() {
 
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new AlertDialogYesNo(SerUnavailAskTimeActivity.this, "Submit Leave?", "Are you sure, You want to submit leave for " +ser+"?", "Yes", "No") {
+                    @Override
+                    public void onOKButtonClick() {
+                        callUnavailAPI();
+                    }
+
+                    @Override
+                    public void onCancelButtonClick() {
+
+                    }
+
+                };
+            }
+        });
+
+    }
+
+    private void callUnavailAPI() {
         if (!TextUtils.isEmpty(task) && task.equals("1")) {
             //Service unavailable
             callSerUnavailAPI();
@@ -304,12 +326,26 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
                     });
                 }
             }
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialogFailure(SerUnavailAskTimeActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Warning") {
+                        @Override
+                        public void onButtonClick() {
+                            Intent in = new Intent(SerUnavailAskTimeActivity.this, SettingsActivity.class);
+                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(in);
+                            finish();
+                        }
+                    };
+                }
+            });
         }
-
     }
+
     public void callSerUnavailAPI() {
-
-
         if (!isFullDay) {
             if (!arrayList_startTime.isEmpty() && arrayList_startTime != null) {
                 List<ServiceResourceUnavailBody> serviceResourceUnavailBodyList = new ArrayList<>();
@@ -341,7 +377,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
                     Log.d("Token--->", "token: " + sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
                     boolean isConn = ConnectivityReceiver.isConnected();
                     if (isConn) {
-                        intermediateAlertDialog = new IntermediateAlertDialog(SerUnavailAskTimeActivity.this);
+                        //intermediateAlertDialog = new IntermediateAlertDialog(SerUnavailAskTimeActivity.this);
                         apptServiceUnavailability(transactionBody);
                     } else {
                         runOnUiThread(new Runnable() {
@@ -441,7 +477,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
             Log.d("Token--->", "token: " + sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
             boolean isConn = ConnectivityReceiver.isConnected();
             if (isConn) {
-                intermediateAlertDialog = new IntermediateAlertDialog(SerUnavailAskTimeActivity.this);
+                //intermediateAlertDialog = new IntermediateAlertDialog(SerUnavailAskTimeActivity.this);
                 apptResourceUnavailability(transactionBody);
             } else {
                 runOnUiThread(new Runnable() {
@@ -901,7 +937,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
                             new CAllLoginAPI() {
                                 @Override
                                 public void onButtonClick() {
-                                    callAPI();
+                                    callUnavailAPI();
                                 }
                             }.callLoginAPI(SerUnavailAskTimeActivity.this);
                         }
@@ -1073,8 +1109,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
                             };
                         }
                     });
-                }
-                else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                } else if (Integer.parseInt(result.getStatusCode()) == 401) {
                     if (intermediateAlertDialog != null) {
                         intermediateAlertDialog.dismissAlertDialog();
                     }
@@ -1084,14 +1119,13 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
                             new CAllLoginAPI() {
                                 @Override
                                 public void onButtonClick() {
-                                    callAPI();
+                                    callUnavailAPI();
                                 }
                             }.callLoginAPI(SerUnavailAskTimeActivity.this);
                         }
                     });
 
-                }
-                else {
+                } else {
                     if (intermediateAlertDialog != null) {
                         intermediateAlertDialog.dismissAlertDialog();
                     }
@@ -1257,30 +1291,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_finish) {
-            if (!TextUtils.isEmpty(task) && task.equals("1")) {
-                //Service unavailable
-                callSerUnavailAPI();
-            } else if (!TextUtils.isEmpty(task) && task.equals("2")) {
-                if (isFullDay == true) {
-                    //Resource unavailable
-                    callResUnavailAPI();
-                } else {
-                    if (isValidUnavailTime) {
-                        callResUnavailAPI();
-                    } else {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                new AlertDialogFailure(SerUnavailAskTimeActivity.this, "Select valid unavailable time", "OK", "", "Warning") {
-                                    @Override
-                                    public void onButtonClick() {
-                                    }
-                                };
-                            }
-                        });
-                    }
-                }
-            }
+            callAPI();
 
         }
         return super.onOptionsItemSelected(item);

@@ -2073,8 +2073,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                             new CAllLoginAPI() {
                                 @Override
                                 public void onButtonClick() {
-
-                                    callAPI();
+                                    createService();
                                 }
                             }.callLoginAPI(AddServiceAvailTimeActivity.this);
                         }
@@ -2217,7 +2216,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    new AlertDialogYesNo(AddServiceAvailTimeActivity.this, "Create Service?", "Are you sure, You want to create " + ser_name + " service?", "Yes", "No") {
+                    new AlertDialogYesNo(AddServiceAvailTimeActivity.this, "Create Service?", "Are you sure, You want to create " + ser_name + "?", "Yes", "No") {
                         @Override
                         public void onOKButtonClick() {
                             createService();
@@ -2239,7 +2238,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialogYesNo(AddServiceAvailTimeActivity.this, "Create Service?", "Are you sure, You want to create " + ser_name + " service?", "Yes", "No") {
+                            new AlertDialogYesNo(AddServiceAvailTimeActivity.this, "Create Service?", "Are you sure, You want to create " + ser_name + "?", "Yes", "No") {
                                 @Override
                                 public void onOKButtonClick() {
                                     createService();

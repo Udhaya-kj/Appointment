@@ -307,7 +307,6 @@ public class ApptConfirmActivity extends AppCompatActivity {
                             new CAllLoginAPI() {
                                 @Override
                                 public void onButtonClick() {
-
                                     callAPI();
                                 }
                             }.callLoginAPI(ApptConfirmActivity.this);

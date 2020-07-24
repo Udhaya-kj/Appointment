@@ -65,7 +65,7 @@ public class ViewCustomerApptActivity extends AppCompatActivity {
             cus_id = getIntent().getStringExtra("cus_id");
             cus_name = getIntent().getStringExtra("cus_name");
             cus_mob = getIntent().getStringExtra("cus_mob");
-            toolbar.setTitle(cus_name + "'s Appointments");
+            toolbar.setTitle(cus_name);
         }
         sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
         textView_no_appts = findViewById(R.id.text_no_appts);

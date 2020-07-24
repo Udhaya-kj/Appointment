@@ -8,11 +8,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.corals.appointment.Client.model.Merchantinfo;
 import com.corals.appointment.R;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    LinearLayout layout_ser_unavail,layout_staff_leave;
+    LinearLayout layout_ser_unavail,layout_staff_leave,layout_merchant_info;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +33,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         layout_ser_unavail=findViewById(R.id.layout_ser_unavail);
         layout_staff_leave=findViewById(R.id.layout_staff_leave);
+        layout_merchant_info=findViewById(R.id.layout_merchant_info);
 
 
         layout_ser_unavail.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +52,16 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(SettingsActivity.this, ServiceUnavailbleActivity.class);
                 i.putExtra("task", "2");
+                startActivity(i);
+               // finish();
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
+            }
+        });
+
+        layout_merchant_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(SettingsActivity.this, MerchantInfoActivity.class);
                 startActivity(i);
                // finish();
                 overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);

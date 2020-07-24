@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_view_service_appt"
+        android:id="@+id/toolbar_view_service_apptsss"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@android:color/background_light"
@@ -15,6 +15,7 @@
         android:gravity="center"
         android:textAlignment="center"
         app:elevation="0dp"
+        app:title="Appointment"
         app:layout_scrollFlags="scroll|enterAlways"
         app:titleTextColor="@color/matt_black" />
 

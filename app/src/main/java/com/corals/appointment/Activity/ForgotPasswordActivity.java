@@ -107,7 +107,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         in.putExtra("mobile", mob);
                         in.putExtra("dial_code", dial_code.substring(1));
                         startActivity(in);
-                        finish();
+                       // finish();
                         overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
                     } else {
 
