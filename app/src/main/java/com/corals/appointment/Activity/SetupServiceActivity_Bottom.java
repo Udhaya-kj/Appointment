@@ -40,12 +40,13 @@ import com.corals.appointment.Utils.CAllLoginAPI;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SetupServiceActivity_Bottom extends AppCompatActivity {
+public class SetupServiceActivity_Bottom extends AppCompatActivity  {
     TextView textView_no_ser;
     private ListView listView_services;
     ServicesAdapter servicesAdapter;
@@ -69,9 +70,7 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
         textView_no_ser = findViewById(R.id.tv_no_services);
-
         sharedpreferences_sessionToken = getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
         sharedpreferences_service_data = getSharedPreferences(AddServiceActivity.MyPREFERENCES_SERVICE_DATA, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor_oh = sharedpreferences_service_data.edit();
@@ -79,7 +78,6 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
         editor_oh.commit();
 
         listView_services = findViewById(R.id.listview_services);
-
         SharedPreferences preferences = getSharedPreferences(AddServiceActivity.MyPREFERENCES_SERVICE_DATA, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
@@ -97,6 +95,7 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
                 AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
                 enquiryBody.setReqType(Constants.SERVICES_LIST_API);
                 enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+                enquiryBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
                 enquiryBody.callerType("m");
                 enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
                 enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
@@ -195,7 +194,7 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
                           /*          startActivity(new Intent(CalendarServicesActivity.this, DashboardActivity.class));
                                     finish();
                                     overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
-                                    onBackPressed();
+                                   // onBackPressed();
                                 }
                             };
                         }
@@ -300,4 +299,6 @@ public class SetupServiceActivity_Bottom extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

@@ -108,6 +108,7 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
         enquiryBody.setReqType(Constants.SERVICES_LIST_API);
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        enquiryBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
         enquiryBody.callerType("m");
         enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
@@ -138,6 +139,7 @@ public class ServiceUnavailbleActivity extends AppCompatActivity {
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
         enquiryBody.setReqType(Constants.ALL_RESOURCE_LIST);
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        enquiryBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
         enquiryBody.callerType("m");
         enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));

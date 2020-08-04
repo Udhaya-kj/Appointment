@@ -26,7 +26,6 @@ public class ViewCustomersApptRecyclerAdapter extends RecyclerView.Adapter<ViewC
     public ViewCustomersApptRecyclerAdapter(Activity context, List<Appointments> appointmentsList) {
         this.context = context;
         this.appointmentsList = appointmentsList;
-
     }
 
     @Override
@@ -41,7 +40,6 @@ public class ViewCustomersApptRecyclerAdapter extends RecyclerView.Adapter<ViewC
         holder.textView_dt_time.setText(appointmentsList.get(position).getStartTime() + "-" + appointmentsList.get(position).getEndTime());
 
     }
-
 
     @Override
     public int getItemCount() {

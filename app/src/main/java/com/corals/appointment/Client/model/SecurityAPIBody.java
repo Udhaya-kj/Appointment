@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * SecurityAPIBody
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-22T10:03:21.373Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-28T15:26:50.147Z")
 public class SecurityAPIBody {
   @SerializedName("mer_id")
   private String merId = null;
@@ -122,7 +122,7 @@ public class SecurityAPIBody {
    * Get merId
    * @return merId
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getMerId() {
     return merId;
   }
@@ -140,7 +140,7 @@ public class SecurityAPIBody {
    * Get custId
    * @return custId
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getCustId() {
     return custId;
   }
@@ -158,7 +158,7 @@ public class SecurityAPIBody {
    * Get userEmail
    * @return userEmail
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getUserEmail() {
     return userEmail;
   }
@@ -176,7 +176,7 @@ public class SecurityAPIBody {
    * Get userPass
    * @return userPass
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getUserPass() {
     return userPass;
   }
@@ -194,7 +194,7 @@ public class SecurityAPIBody {
    * Get userMob
    * @return userMob
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getUserMob() {
     return userMob;
   }
@@ -212,7 +212,7 @@ public class SecurityAPIBody {
    * Get bizDisplayName
    * @return bizDisplayName
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getBizDisplayName() {
     return bizDisplayName;
   }
@@ -230,7 +230,7 @@ public class SecurityAPIBody {
    * Get bizNamelegal
    * @return bizNamelegal
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getBizNamelegal() {
     return bizNamelegal;
   }
@@ -248,7 +248,7 @@ public class SecurityAPIBody {
    * Get webPath
    * @return webPath
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getWebPath() {
     return webPath;
   }
@@ -266,7 +266,7 @@ public class SecurityAPIBody {
    * Get outletAdd1
    * @return outletAdd1
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getOutletAdd1() {
     return outletAdd1;
   }
@@ -284,7 +284,7 @@ public class SecurityAPIBody {
    * Get outletAdd2
    * @return outletAdd2
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getOutletAdd2() {
     return outletAdd2;
   }
@@ -302,7 +302,7 @@ public class SecurityAPIBody {
    * Get outletAdd3
    * @return outletAdd3
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getOutletAdd3() {
     return outletAdd3;
   }
@@ -320,7 +320,7 @@ public class SecurityAPIBody {
    * Get postCode
    * @return postCode
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getPostCode() {
     return postCode;
   }
@@ -338,7 +338,7 @@ public class SecurityAPIBody {
    * Get qrMerInfUniqueCd
    * @return qrMerInfUniqueCd
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getQrMerInfUniqueCd() {
     return qrMerInfUniqueCd;
   }
@@ -356,7 +356,7 @@ public class SecurityAPIBody {
    * Get maxLenLoadingDays
    * @return maxLenLoadingDays
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getMaxLenLoadingDays() {
     return maxLenLoadingDays;
   }
@@ -374,7 +374,7 @@ public class SecurityAPIBody {
    * Get maxApptAllowedForSameCust
    * @return maxApptAllowedForSameCust
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getMaxApptAllowedForSameCust() {
     return maxApptAllowedForSameCust;
   }
@@ -392,7 +392,7 @@ public class SecurityAPIBody {
    * Get qrRequired
    * @return qrRequired
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public Boolean isQrRequired() {
     return qrRequired;
   }
@@ -410,7 +410,7 @@ public class SecurityAPIBody {
    * Get merCurSymbol
    * @return merCurSymbol
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getMerCurSymbol() {
     return merCurSymbol;
   }
@@ -428,7 +428,7 @@ public class SecurityAPIBody {
    * Get countryName
    * @return countryName
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getCountryName() {
     return countryName;
   }
@@ -446,7 +446,7 @@ public class SecurityAPIBody {
    * Get countryCode
    * @return countryCode
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getCountryCode() {
     return countryCode;
   }
@@ -464,7 +464,7 @@ public class SecurityAPIBody {
    * Get userName
    * @return userName
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getUserName() {
     return userName;
   }
@@ -482,7 +482,7 @@ public class SecurityAPIBody {
    * Get deviceId
    * @return deviceId
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getDeviceId() {
     return deviceId;
   }
@@ -500,7 +500,7 @@ public class SecurityAPIBody {
    * Get reqType
    * @return reqType
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getReqType() {
     return reqType;
   }
@@ -518,7 +518,7 @@ public class SecurityAPIBody {
    * Get firebaseInstId
    * @return firebaseInstId
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getFirebaseInstId() {
     return firebaseInstId;
   }
@@ -536,7 +536,7 @@ public class SecurityAPIBody {
    * Get changesNotAllowedDay
    * @return changesNotAllowedDay
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getChangesNotAllowedDay() {
     return changesNotAllowedDay;
   }
@@ -554,7 +554,7 @@ public class SecurityAPIBody {
    * Get createTemlpate
    * @return createTemlpate
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getCreateTemlpate() {
     return createTemlpate;
   }
@@ -572,7 +572,7 @@ public class SecurityAPIBody {
    * Get rescheduleTemlpate
    * @return rescheduleTemlpate
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getRescheduleTemlpate() {
     return rescheduleTemlpate;
   }
@@ -590,7 +590,7 @@ public class SecurityAPIBody {
    * Get cancelTemlpate
    * @return cancelTemlpate
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getCancelTemlpate() {
     return cancelTemlpate;
   }
@@ -608,7 +608,7 @@ public class SecurityAPIBody {
    * Get sessionToken
    * @return sessionToken
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getSessionToken() {
     return sessionToken;
   }
@@ -634,7 +634,7 @@ public class SecurityAPIBody {
    * Get availDays
    * @return availDays
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public List<AvailDay> getAvailDays() {
     return availDays;
   }

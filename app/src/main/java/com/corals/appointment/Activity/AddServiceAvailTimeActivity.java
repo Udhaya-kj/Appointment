@@ -414,6 +414,10 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     weekdays.setCharAt(0, 'n');
                     getWeekDays(String.valueOf(weekdays));
                     getWeekDaysLayout(String.valueOf(weekdays));
+
+                    textView_sun_time1.setText("00:00 - 00:00");
+                    textView_sun_time2.setText("00:00 - 00:00");
+                    textView_sun_time3.setText("00:00 - 00:00");
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_sday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -439,6 +443,9 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     weekdays.setCharAt(1, 'n');
                     getWeekDays(String.valueOf(weekdays));
                     getWeekDaysLayout(String.valueOf(weekdays));
+                    textView_mon_time1.setText("00:00 - 00:00");
+                    textView_mon_time2.setText("00:00 - 00:00");
+                    textView_mon_time3.setText("00:00 - 00:00");
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_mnday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -466,6 +473,9 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     weekdays.setCharAt(2, 'n');
                     getWeekDays(String.valueOf(weekdays));
                     getWeekDaysLayout(String.valueOf(weekdays));
+                    textView_tue_time1.setText("00:00 - 00:00");
+                    textView_tue_time2.setText("00:00 - 00:00");
+                    textView_tue_time3.setText("00:00 - 00:00");
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_tsday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -492,6 +502,9 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     weekdays.setCharAt(3, 'n');
                     getWeekDays(String.valueOf(weekdays));
                     getWeekDaysLayout(String.valueOf(weekdays));
+                    textView_wed_time1.setText("00:00 - 00:00");
+                    textView_wed_time2.setText("00:00 - 00:00");
+                    textView_wed_time3.setText("00:00 - 00:00");
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_wedday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -520,6 +533,9 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     weekdays.setCharAt(4, 'n');
                     getWeekDays(String.valueOf(weekdays));
                     getWeekDaysLayout(String.valueOf(weekdays));
+                    textView_thu_time1.setText("00:00 - 00:00");
+                    textView_thu_time2.setText("00:00 - 00:00");
+                    textView_thu_time3.setText("00:00 - 00:00");
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_trsday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -547,6 +563,9 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     weekdays.setCharAt(5, 'n');
                     getWeekDays(String.valueOf(weekdays));
                     getWeekDaysLayout(String.valueOf(weekdays));
+                    textView_fri_time1.setText("00:00 - 00:00");
+                    textView_fri_time2.setText("00:00 - 00:00");
+                    textView_fri_time3.setText("00:00 - 00:00");
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_fdday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -575,6 +594,9 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
                     weekdays.setCharAt(6, 'n');
                     getWeekDays(String.valueOf(weekdays));
                     getWeekDaysLayout(String.valueOf(weekdays));
+                    textView_sat_time1.setText("00:00 - 00:00");
+                    textView_sat_time2.setText("00:00 - 00:00");
+                    textView_sat_time3.setText("00:00 - 00:00");
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_strday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -1530,6 +1552,7 @@ public class AddServiceAvailTimeActivity extends AppCompatActivity {
         ApptTransactionBody transactionBody = new ApptTransactionBody();
         transactionBody.setReqType(Constants.SERVICES_CREATE);
         transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        transactionBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
         transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
         transactionBody.setService(appointmentService);

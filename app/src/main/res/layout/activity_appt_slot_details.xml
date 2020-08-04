@@ -182,7 +182,8 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:weightSum="2">
+                android:weightSum="2"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:id="@+id/layout_call"
@@ -213,8 +214,37 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/layout_change_appt"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:minHeight="55dp"
+                    android:background="@drawable/layout_bg_white"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/appointment"
+                        android:tint="#4DBDF1" />
+
+                    <TextView
+                        android:fontFamily="@font/lato_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="0dp"
+                        android:text="Reschedule Appointment"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/layout_sent_reminder"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -246,12 +276,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:weightSum="2">
-
-
+                android:weightSum="2"
+                android:baselineAligned="false">
 
                     <LinearLayout
                         android:id="@+id/layout_cancel_appt"
@@ -283,35 +311,7 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/layout_change_appt"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:minHeight="55dp"
 
-                        android:background="@drawable/layout_bg_white"
-                        android:clickable="true"
-                        android:gravity="center_vertical"
-                        android:padding="8dp">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/appointment"
-                            android:tint="#4DBDF1" />
-
-                        <TextView
-                            android:fontFamily="@font/lato_medium"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:paddingStart="8dp"
-                            android:paddingEnd="0dp"
-                            android:text="Reschedule Appointment"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
             </LinearLayout>
 
 

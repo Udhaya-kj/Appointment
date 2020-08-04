@@ -43,7 +43,6 @@
                 android:gravity="start|bottom"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:textColor="@color/matt_black"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 

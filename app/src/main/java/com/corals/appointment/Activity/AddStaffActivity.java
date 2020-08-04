@@ -40,6 +40,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.corals.appointment.Adapters.MapServiceResourceRecyclerAdapter;
 import com.corals.appointment.Adapters.MappingServicesAdapter;
+import com.corals.appointment.Adapters.StaffListAdapter;
 import com.corals.appointment.Client.ApiCallback;
 import com.corals.appointment.Client.ApiException;
 import com.corals.appointment.Client.OkHttpApiClient;
@@ -274,27 +275,25 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
         if (getIntent().getExtras() != null) {
 
             pageId = getIntent().getStringExtra("page_id");
-            position = getIntent().getStringExtra("position");
+           // position = getIntent().getStringExtra("position");
             res_id = getIntent().getStringExtra("res_id");
-            isSameBizHrs = Boolean.parseBoolean(getIntent().getStringExtra("sameBizTime"));
+      /*      isSameBizHrs = Boolean.parseBoolean(getIntent().getStringExtra("sameBizTime"));
             String name = getIntent().getStringExtra("name");
             String mobile = getIntent().getStringExtra("mobile");
 
             mapServiceResourceBodyList_update = (List<MapServiceResourceBody>) getIntent().getSerializableExtra("mapSerRes");
             Log.d("AddStaff--->", "onCreate: " + pageId + "," + res_id + "," + isSameBizHrs + "," + name + "," + mobile + "," + mapServiceResourceBodyList_update);
-            et_staff_name.setText(name);
-            et_staff_mob.setText(mobile);
+*/
 
             if (pageId.equals("03")) {
                 serviceFlag = "1";
-                if (name.length() > 0) {
-                    et_staff_name.setSelection(name.length());
-                    imageView_add_update_icon.setImageResource(R.drawable.edit_map);
-                }
+
                 toolbar.setTitle("Update Staff");
                 button_continue.setText("UPDATE STAFF");
                 layout_wrk_hrs.setVisibility(View.GONE);
-                fetchMerServices("2");
+
+                callAPI_Staff();
+
             } else {
                 serviceFlag = "0";
                 //imageView_add_update_icon.setImageResource(0);
@@ -508,6 +507,9 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                     weekdays.setCharAt(0, 'n');
                     getWeekDays(String.valueOf(weekdays));
                     getWeekDaysLayout(String.valueOf(weekdays));
+                    textView_sun_time1.setText("00:00 - 00:00");
+                    textView_sun_time2.setText("00:00 - 00:00");
+                    textView_sun_time3.setText("00:00 - 00:00");
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_sday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -534,6 +536,9 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                     weekdays.setCharAt(1, 'n');
                     getWeekDays(String.valueOf(weekdays));
                     getWeekDaysLayout(String.valueOf(weekdays));
+                    textView_mon_time1.setText("00:00 - 00:00");
+                    textView_mon_time2.setText("00:00 - 00:00");
+                    textView_mon_time3.setText("00:00 - 00:00");
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_mnday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -560,6 +565,9 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                     weekdays.setCharAt(2, 'n');
                     getWeekDays(String.valueOf(weekdays));
                     getWeekDaysLayout(String.valueOf(weekdays));
+                    textView_tue_time1.setText("00:00 - 00:00");
+                    textView_tue_time2.setText("00:00 - 00:00");
+                    textView_tue_time3.setText("00:00 - 00:00");
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_tsday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -586,6 +594,9 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                     weekdays.setCharAt(3, 'n');
                     getWeekDays(String.valueOf(weekdays));
                     getWeekDaysLayout(String.valueOf(weekdays));
+                    textView_wed_time1.setText("00:00 - 00:00");
+                    textView_wed_time2.setText("00:00 - 00:00");
+                    textView_wed_time3.setText("00:00 - 00:00");
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_wedday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -614,6 +625,9 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                     weekdays.setCharAt(4, 'n');
                     getWeekDays(String.valueOf(weekdays));
                     getWeekDaysLayout(String.valueOf(weekdays));
+                    textView_thu_time1.setText("00:00 - 00:00");
+                    textView_thu_time2.setText("00:00 - 00:00");
+                    textView_thu_time3.setText("00:00 - 00:00");
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_trsday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -642,6 +656,9 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                     weekdays.setCharAt(5, 'n');
                     getWeekDays(String.valueOf(weekdays));
                     getWeekDaysLayout(String.valueOf(weekdays));
+                    textView_fri_time1.setText("00:00 - 00:00");
+                    textView_fri_time2.setText("00:00 - 00:00");
+                    textView_fri_time3.setText("00:00 - 00:00");
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_fdday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -670,6 +687,9 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                     weekdays.setCharAt(6, 'n');
                     getWeekDays(String.valueOf(weekdays));
                     getWeekDaysLayout(String.valueOf(weekdays));
+                    textView_sat_time1.setText("00:00 - 00:00");
+                    textView_sat_time2.setText("00:00 - 00:00");
+                    textView_sat_time3.setText("00:00 - 00:00");
                     Log.d("Weekdayslist--->", "onClick: " + weekdays);
                 } else {
                     btn_yes_strday_p.setBackgroundColor(getResources().getColor(R.color.green_hase));
@@ -700,7 +720,6 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                 getScrollTop();
             }
         });
-
 
         //Edit monday
         imageView_edit_mon.setOnClickListener(new View.OnClickListener() {
@@ -1168,12 +1187,160 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
 
     }
 
+    private void callAPI_Staff() {
+        AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+        enquiryBody.setReqType(Constants.UPDATE_RESOURCE_INFO);
+        enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        enquiryBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
+        enquiryBody.callerType("m");
+        enquiryBody.setResId(res_id);
+        enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
+        enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+        boolean isConn = ConnectivityReceiver.isConnected();
+        if (isConn) {
+            try {
+                intermediateAlertDialog = new IntermediateAlertDialog(AddStaffActivity.this);
+                fetchStaff(enquiryBody);
+            } catch (ApiException e) {
+                e.printStackTrace();
+            }
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialogFailure(AddStaffActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                        @Override
+                        public void onButtonClick() {
+                            callAPI_Staff();
+                        }
+                    };
+                }
+            });
+        }
+    }
 
+    private void fetchStaff(AppointmentEnquiryBody requestBody) throws ApiException {
+        Log.d("fetchService--->", "fetchService: " + requestBody);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(AddStaffActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentEnquiryAsync(requestBody, new ApiCallback<AppointmentEnquiryResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("fetchStaff--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(AddStaffActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.server_error), "Failed") {
+                            @Override
+                            public void onButtonClick() {
+
+                                onBackPressed();
+                            }
+                        };
+                    }
+                });
+            }
+
+            @Override
+            public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("fetchStaff--->", "onSuccess-" + statusCode + "," + result + "," + result.getResource());
+                if (Integer.parseInt(result.getStatusCode()) == 200) {
+                  /*  if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }*/
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (result.getResource() != null) {
+
+                                et_staff_name.setText(result.getResource().getResName());
+                                et_staff_mob.setText(result.getResource().getMobile());
+                                mapServiceResourceBodyList_update=result.getResource().getSerResMaps();
+                                if (result.getResource().getResName().length() > 0) {
+                                    et_staff_name.setSelection(result.getResource().getResName().length());
+                                    imageView_add_update_icon.setImageResource(R.drawable.edit_map);
+                                }
+
+                                fetchMerServices("2");
+                            }
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 400) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddStaffActivity.this, getResources().getString(R.string.try_again), "OK", "Invalid data", "Failed") {
+                                @Override
+                                public void onButtonClick() {
+
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+                                    callAPI_Staff();
+                                }
+                            }.callLoginAPI(AddStaffActivity.this);
+                        }
+                    });
+
+                } else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddStaffActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                                @Override
+                                public void onButtonClick() {
+
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+            }
+        });
+
+    }
+
+    
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         closeKeyboard();
-     /*   Intent in = new Intent(AddStaffActivity.this, SetupStaffActivity_Bottom.class);
+     /*   Intent in = new Intent(AddStaffActivity.this, AddStaffActivity.class);
         startActivity(in);
         finish();
         overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);*/
@@ -1755,7 +1922,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
     }
 
     private void fetchServices(AppointmentEnquiryBody requestBody, final String flag) throws ApiException {
-        Log.d("fetchService--->", "fetchService: " + requestBody);
+        Log.d("fetchServiceAddStaff--->", "fetchService: " + requestBody);
         OkHttpApiClient okHttpApiClient = new OkHttpApiClient(AddStaffActivity.this);
         MerchantApisApi webMerchantApisApi = new MerchantApisApi();
         webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
@@ -1763,7 +1930,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
         webMerchantApisApi.merchantAppointmentEnquiryAsync(requestBody, new ApiCallback<AppointmentEnquiryResponse>() {
             @Override
             public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
-                Log.d("fetchService--->", "onFailure-" + e.getMessage());
+                Log.d("fetchServiceAddStaff--->", "onFailure-" + e.getMessage());
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
@@ -1786,7 +1953,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
             @Override
             public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
 
-                Log.d("fetchService--->", "onSuccess-" + statusCode + "," + result);
+                Log.d("fetchServiceAddStaff--->", "onSuccess-" + statusCode + "," + result);
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
                     if (intermediateAlertDialog != null) {
                         intermediateAlertDialog.dismissAlertDialog();
@@ -2053,6 +2220,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
         transactionBody.setReqType(Constants.RESOURCE_UPDATE);
         transactionBody.setResId(res_id);
         transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        transactionBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
         transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
 
@@ -2269,13 +2437,14 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
         enquiryBody.setReqType(Constants.SERVICE_MERCHANT);
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        enquiryBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
         enquiryBody.callerType("m");
         enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
         boolean isConn = ConnectivityReceiver.isConnected();
         if (isConn) {
             try {
-                intermediateAlertDialog = new IntermediateAlertDialog(AddStaffActivity.this);
+               // intermediateAlertDialog = new IntermediateAlertDialog(AddStaffActivity.this);
                 fetchServices(enquiryBody, flag);
             } catch (ApiException e) {
                 e.printStackTrace();
@@ -2287,7 +2456,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
                     new AlertDialogFailure(AddStaffActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
                         @Override
                         public void onButtonClick() {
-                            startActivity(new Intent(AddStaffActivity.this, SetupStaffActivity_Bottom.class));
+                            startActivity(new Intent(AddStaffActivity.this, AddStaffActivity.class));
                             finish();
                             overridePendingTransition(R.anim.swipe_in_left, R.anim.swipe_in_left);
                         }
@@ -2754,6 +2923,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
         ApptTransactionBody transactionBody = new ApptTransactionBody();
         transactionBody.setReqType(Constants.RESOURCE_CREATE);
         transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        transactionBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
         transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
 
@@ -2836,7 +3006,7 @@ public class AddStaffActivity extends AppCompatActivity implements MappedService
 
         ArrayList<String> ser_list = new ArrayList<>();
         ArrayList<Integer> pos_list = new ArrayList<>();
-        if (!appointmentServiceArrayList.isEmpty() && appointmentServiceArrayList != null) {
+        if (!appointmentServiceArrayList.isEmpty() && appointmentServiceArrayList != null && !mapServiceResourceBodies.isEmpty() && mapServiceResourceBodies != null) {
             for (int i = 0; i < appointmentServiceArrayList.size(); i++) {
                 //Service
                 mng_check_pos_list.add(false);

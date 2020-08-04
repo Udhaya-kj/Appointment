@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.corals.appointment.Client.model.AppointmentService;
@@ -44,6 +45,8 @@ public class ServicesMainRecyclerviewAdapter extends RecyclerView.Adapter<Servic
     public void onBindViewHolder(final ServicesMainRecyclerviewAdapter.MyViewHolder holder, final int position) {
 
         holder.textView_ser_name.setText(appointmentServices.get(position).getSerName());
+        holder.imageView_indicator.setColorFilter(ContextCompat.getColor(context, R.color.light_grey), android.graphics.PorterDuff.Mode.MULTIPLY);
+
         //holder.textView_ser_dur.setText(appointmentServices.get(position).getSerDuration());
         holder.linearLayout_bg.setOnClickListener(new View.OnClickListener() {
             @Override

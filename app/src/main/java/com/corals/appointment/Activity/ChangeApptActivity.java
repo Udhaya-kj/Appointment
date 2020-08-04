@@ -272,6 +272,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
         transactionBody.setStartTime(startTime);
         transactionBody.setEndTime(endTime);
         transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        transactionBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
         transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
         try {
@@ -302,6 +303,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
         enquiryBody.setReqType(Constants.AVAILABLE_SLOTS);
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        enquiryBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
         enquiryBody.callerType("m");
         enquiryBody.setDate(date);
         enquiryBody.setSerId(service_id);
@@ -338,6 +340,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
         enquiryBody.setReqType(Constants.RESOURCE_LIST_API);
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        enquiryBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
         enquiryBody.callerType("m");
         enquiryBody.setSerId(service_id);
         enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
@@ -613,10 +616,10 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
             public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
 
                 Log.d("fetchApptSlots--->", "onSuccess-" + statusCode + "," + result);
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -635,6 +638,9 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
                         }
                     });
                 } else if (Integer.parseInt(result.getStatusCode()) == 404) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -646,7 +652,25 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
                             };
                         }
                     });
+                } else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+                                    callAPIFetchSlots(appt_date);
+                                }
+                            }.callLoginAPI(ChangeApptActivity.this);
+                        }
+                    });
                 } else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -715,10 +739,11 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
             public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
 
                 Log.d("fetchStaff--->", "onSuccess-" + statusCode + "," + result + "," + result.getResources());
-                if (intermediateAlertDialog != null) {
-                    intermediateAlertDialog.dismissAlertDialog();
-                }
+
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -751,7 +776,25 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
 
                         }
                     });
+                } else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+                                    callAPIFetchStaff();
+                                }
+                            }.callLoginAPI(ChangeApptActivity.this);
+                        }
+                    });
                 } else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
                     textView_sel_staff_title.setVisibility(View.GONE);
                     linearLayout_select_staff.setVisibility(View.GONE);
                     runOnUiThread(new Runnable() {
@@ -840,6 +883,7 @@ public class ChangeApptActivity extends AppCompatActivity implements DatePickerD
                             transactionBody.setStartTime(startTime);
                             transactionBody.setEndTime(endTime);
                             transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+                            transactionBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
                             transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
                             transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
                             try {

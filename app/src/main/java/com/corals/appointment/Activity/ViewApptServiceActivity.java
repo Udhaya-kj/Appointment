@@ -160,6 +160,7 @@ public class ViewApptServiceActivity extends AppCompatActivity {
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
         enquiryBody.setReqType(Constants.SERVICE_BOOKED_APPOINTMENT);
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        enquiryBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
         enquiryBody.callerType("m");
         enquiryBody.setSerId(service_id);
         enquiryBody.setDate(date); //dt_appt

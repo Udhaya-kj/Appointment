@@ -14,6 +14,7 @@
         android:roundIcon="@drawable/ic_launcher2"
         android:theme="@style/AppTheme">
         <activity android:name=".Activity.MerchantInfoActivity"
+            android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppTheme.MaterialTheme" ></activity>
         <activity
             android:name=".Activity.ContactUsActivity"

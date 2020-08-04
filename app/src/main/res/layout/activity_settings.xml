@@ -54,7 +54,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.1"
                     android:clickable="false"
-                    android:padding="4dp"
+                    android:padding="2dp"
                     android:src="@drawable/order"
                     android:tint="@color/primary_blue" />
 
@@ -98,7 +98,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.1"
                     android:clickable="false"
-                    android:padding="4dp"
+                    android:padding="2dp"
                     android:src="@drawable/user"
                     android:tint="@color/primary_blue" />
 
@@ -142,8 +142,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.1"
                     android:clickable="false"
-                    android:padding="4dp"
-                    android:src="@drawable/user"
+                    android:padding="2dp"
+                    android:src="@drawable/profile"
                     android:tint="@color/primary_blue" />
 
                 <TextView

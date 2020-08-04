@@ -8,12 +8,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -46,6 +48,8 @@ import com.google.gson.Gson;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +59,8 @@ public class StaffListAdapter extends BaseAdapter {
     List<AppointmentResources> appointmentResources;
     private SharedPreferences sharedpreferences_sessionToken;
     private IntermediateAlertDialog intermediateAlertDialog;
-
+    String date_active = "";
+    int pos;
     public StaffListAdapter(Activity context, List<AppointmentResources> appointmentResources) {
         // TODO Auto-generated constructor stub
 
@@ -95,12 +100,12 @@ public class StaffListAdapter extends BaseAdapter {
 
                 Intent i = new Intent(context, AddStaffActivity.class);
                 i.putExtra("page_id", "03");
-                i.putExtra("position", String.valueOf(position));
+                //i.putExtra("position", String.valueOf(position));
                 i.putExtra("res_id", appointmentResources.get(position).getResId());
-                i.putExtra("name", appointmentResources.get(position).getResName());
+             /*   i.putExtra("name", appointmentResources.get(position).getResName());
                 i.putExtra("mobile", appointmentResources.get(position).getMobile());
                 i.putExtra("sameBizTime", appointmentResources.get(position).isSameBussTime());
-                i.putExtra("mapSerRes", (Serializable) appointmentResources.get(position).getSerResMaps());
+                i.putExtra("mapSerRes", (Serializable) appointmentResources.get(position).getSerResMaps());*/
                 context.startActivity(i);
                // ((Activity) context).finish();
                 ((Activity) context).overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_in_right);
@@ -116,42 +121,11 @@ public class StaffListAdapter extends BaseAdapter {
                         new AlertDialogYesNo(context, "Delete Staff?", "Are you sure, You want to delete "+appointmentResources.get(position).getResName()+"?", "Yes", "No") {
                             @Override
                             public void onOKButtonClick() {
-                                sharedpreferences_sessionToken = context.getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
 
-                                List<MapServiceResourceBody> mapServiceResourceBodyList = appointmentResources.get(position).getSerResMaps();
-                                AppointmentResources appointmentResources1 = new AppointmentResources();
-                                appointmentResources1.setResId(appointmentResources.get(position).getResId());
-                                appointmentResources1.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
-                                appointmentResources1.setIsActive("false");
+                                pos = position;
 
-                                ApptTransactionBody transactionBody = new ApptTransactionBody();
-                                transactionBody.setReqType(Constants.RESOURCE_UPDATE);
-                                transactionBody.setResId(appointmentResources.get(position).getResId());
-                                transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
-                                transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
-                                transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
-                                transactionBody.setResource(appointmentResources1);
+                                getdate();
 
-                                try {
-                                    boolean isConn = ConnectivityReceiver.isConnected();
-                                    if (isConn) {
-                                        intermediateAlertDialog = new IntermediateAlertDialog(context);
-                                        deactivateStaff(transactionBody);
-                                    } else {
-                                        context.runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                new AlertDialogFailure(context, context.getResources().getString(R.string.no_internet_sub_title), "OK", context.getResources().getString(R.string.no_internet_title), context.getResources().getString(R.string.no_internet_Heading)) {
-                                                    @Override
-                                                    public void onButtonClick() {
-
-                                                    }
-                                                };
-                                            }
-                                        });                                    }
-                                } catch (ApiException e) {
-                                    e.printStackTrace();
-                                }
                             }
 
                             @Override
@@ -247,6 +221,94 @@ public class StaffListAdapter extends BaseAdapter {
 
             }
         });
+    }
+
+
+    private void getdate() {
+        sharedpreferences_sessionToken = context.getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
+        String maxday = sharedpreferences_sessionToken.getString(LoginActivity.MAX_DAYS, "");
+        if(TextUtils.isEmpty(maxday)){
+            maxday="30";
+        }
+        final Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+        android.app.DatePickerDialog datePickerDialog = new android.app.DatePickerDialog(context, android.R.style.Theme_Holo_Dialog_MinWidth,
+                new android.app.DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        //date_active = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+                        if (String.valueOf(monthOfYear + 1).length() == 1 && String.valueOf(dayOfMonth).length() == 1) {
+                            String mnth = "0" + (monthOfYear + 1);
+                            String day = "0" + (dayOfMonth);
+                            date_active = year + "-" + mnth + "-" + day;
+                        } else if (String.valueOf(monthOfYear + 1).length() == 1 && String.valueOf(dayOfMonth).length() != 1) {
+                            String mnth = "0" + (monthOfYear + 1);
+                            date_active = year + "-" + mnth + "-" + dayOfMonth;
+                        } else if (String.valueOf(monthOfYear + 1).length() != 1 && String.valueOf(dayOfMonth).length() == 1) {
+                            String day = "0" + (dayOfMonth);
+                            date_active = year + "-" + (monthOfYear + 1) + "-" + day;
+                        } else {
+                            date_active = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                        }
+
+                        getDeactivate();
+                        // editText_start_dt.setText(date_active);
+                        // editText_start_dt.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + date_active + "</u>  </font>"));
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        datePickerDialog.getDatePicker().setSpinnersShown(true);
+        datePickerDialog.getDatePicker().setCalendarViewShown(false);
+        //datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+       /* c.add(Calendar.YEAR, 1);
+        c.add(Calendar.MONTH, 6);*/
+        c.add(Calendar.DAY_OF_MONTH, Integer.parseInt(maxday)-1);
+        Date dOneMonthAgo = c.getTime();
+        long oneMonthAgoMillis = dOneMonthAgo.getTime();
+        datePickerDialog.getDatePicker().setMaxDate(oneMonthAgoMillis);
+        datePickerDialog.show();
+    }
+
+    private void getDeactivate() {
+        sharedpreferences_sessionToken = context.getSharedPreferences(LoginActivity.MyPREFERENCES_SESSIONTOKEN, Context.MODE_PRIVATE);
+        AppointmentResources appointmentResources1 = new AppointmentResources();
+        appointmentResources1.setResId(appointmentResources.get(pos).getResId());
+        appointmentResources1.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        appointmentResources1.setIsActive("false");
+
+        ApptTransactionBody transactionBody = new ApptTransactionBody();
+        transactionBody.setDate(date_active);
+        transactionBody.setReqType(Constants.RESOURCE_UPDATE);
+        transactionBody.setResId(appointmentResources.get(pos).getResId());
+        transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        transactionBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
+        transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
+        transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+        transactionBody.setResource(appointmentResources1);
+
+        try {
+            boolean isConn = ConnectivityReceiver.isConnected();
+            if (isConn) {
+                intermediateAlertDialog = new IntermediateAlertDialog(context);
+                deactivateStaff(transactionBody);
+            } else {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(context, context.getResources().getString(R.string.no_internet_sub_title), "OK", context.getResources().getString(R.string.no_internet_title), context.getResources().getString(R.string.no_internet_Heading)) {
+                            @Override
+                            public void onButtonClick() {
+
+                            }
+                        };
+                    }
+                });                                    }
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
     }
 
 

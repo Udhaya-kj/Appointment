@@ -126,7 +126,6 @@ public class CreateCustomerActivity extends AppCompatActivity {
                         // TODO: handle exception
                     }
 
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -168,6 +167,7 @@ public class CreateCustomerActivity extends AppCompatActivity {
         Body.setName(cus_name);
         Body.setMail(mail);
         Body.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        Body.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
         Body.setReqType(Constants.CUSTOMER_CREATE);
         Body.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         Body.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));

@@ -187,6 +187,7 @@ public class ApptSlotDetailsActivity extends AppCompatActivity {
         transactionBody.setReqType(Constants.CANCEL_APPOINTMENT);
         transactionBody.setApptId(appt_id);
         transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        transactionBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
         transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
         try {

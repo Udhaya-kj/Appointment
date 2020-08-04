@@ -192,16 +192,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_res_continue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="80dp"
-                    android:backgroundTint="@color/app_blue"
-                    android:text="Next"
-                    android:visibility="gone"
-                    android:fontFamily="@font/lato_medium"
-                    android:textColor="@color/white" />
 
             </LinearLayout>
 

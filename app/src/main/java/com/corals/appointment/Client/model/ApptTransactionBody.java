@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * ApptTransactionBody
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-24T15:07:27.543Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-28T15:26:50.147Z")
 public class ApptTransactionBody {
   @SerializedName("mobile")
   private String mobile = null;
@@ -58,6 +58,9 @@ public class ApptTransactionBody {
 
   @SerializedName("cust_id")
   private String custId = null;
+
+  @SerializedName("outlet_id")
+  private String outletId = null;
 
   @SerializedName("start_time")
   private String startTime = null;
@@ -101,7 +104,7 @@ public class ApptTransactionBody {
    * Get mobile
    * @return mobile
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getMobile() {
     return mobile;
   }
@@ -119,7 +122,7 @@ public class ApptTransactionBody {
    * Get name
    * @return name
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getName() {
     return name;
   }
@@ -137,7 +140,7 @@ public class ApptTransactionBody {
    * Get mail
    * @return mail
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getMail() {
     return mail;
   }
@@ -155,7 +158,7 @@ public class ApptTransactionBody {
    * Get reqType
    * @return reqType
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getReqType() {
     return reqType;
   }
@@ -173,7 +176,7 @@ public class ApptTransactionBody {
    * Get sessionToken
    * @return sessionToken
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getSessionToken() {
     return sessionToken;
   }
@@ -191,7 +194,7 @@ public class ApptTransactionBody {
    * Get merId
    * @return merId
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getMerId() {
     return merId;
   }
@@ -209,7 +212,7 @@ public class ApptTransactionBody {
    * Get deviceId
    * @return deviceId
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getDeviceId() {
     return deviceId;
   }
@@ -227,7 +230,7 @@ public class ApptTransactionBody {
    * Get serId
    * @return serId
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getSerId() {
     return serId;
   }
@@ -245,7 +248,7 @@ public class ApptTransactionBody {
    * Get resId
    * @return resId
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getResId() {
     return resId;
   }
@@ -263,7 +266,7 @@ public class ApptTransactionBody {
    * Get apptId
    * @return apptId
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getApptId() {
     return apptId;
   }
@@ -281,13 +284,31 @@ public class ApptTransactionBody {
    * Get custId
    * @return custId
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getCustId() {
     return custId;
   }
 
   public void setCustId(String custId) {
     this.custId = custId;
+  }
+
+  public ApptTransactionBody outletId(String outletId) {
+    this.outletId = outletId;
+    return this;
+  }
+
+  /**
+   * Get outletId
+   * @return outletId
+   **/
+   @Schema(description = "")
+  public String getOutletId() {
+    return outletId;
+  }
+
+  public void setOutletId(String outletId) {
+    this.outletId = outletId;
   }
 
   public ApptTransactionBody startTime(String startTime) {
@@ -299,7 +320,7 @@ public class ApptTransactionBody {
    * Get startTime
    * @return startTime
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getStartTime() {
     return startTime;
   }
@@ -317,7 +338,7 @@ public class ApptTransactionBody {
    * Get endTime
    * @return endTime
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getEndTime() {
     return endTime;
   }
@@ -335,7 +356,7 @@ public class ApptTransactionBody {
    * Get startSlot
    * @return startSlot
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getStartSlot() {
     return startSlot;
   }
@@ -353,7 +374,7 @@ public class ApptTransactionBody {
    * Get endSlot
    * @return endSlot
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getEndSlot() {
     return endSlot;
   }
@@ -371,7 +392,7 @@ public class ApptTransactionBody {
    * Get isFullDay
    * @return isFullDay
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public Boolean isIsFullDay() {
     return isFullDay;
   }
@@ -389,7 +410,7 @@ public class ApptTransactionBody {
    * Get date
    * @return date
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getDate() {
     return date;
   }
@@ -407,7 +428,7 @@ public class ApptTransactionBody {
    * Get slotNo
    * @return slotNo
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getSlotNo() {
     return slotNo;
   }
@@ -425,7 +446,7 @@ public class ApptTransactionBody {
    * Get merchant
    * @return merchant
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public Merchantinfo getMerchant() {
     return merchant;
   }
@@ -443,7 +464,7 @@ public class ApptTransactionBody {
    * Get resource
    * @return resource
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public AppointmentResources getResource() {
     return resource;
   }
@@ -461,7 +482,7 @@ public class ApptTransactionBody {
    * Get service
    * @return service
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public AppointmentService getService() {
     return service;
   }
@@ -487,7 +508,7 @@ public class ApptTransactionBody {
    * Get serResUnavail
    * @return serResUnavail
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public List<ServiceResourceUnavailBody> getSerResUnavail() {
     return serResUnavail;
   }
@@ -517,6 +538,7 @@ public class ApptTransactionBody {
             Objects.equals(this.resId, apptTransactionBody.resId) &&
             Objects.equals(this.apptId, apptTransactionBody.apptId) &&
             Objects.equals(this.custId, apptTransactionBody.custId) &&
+            Objects.equals(this.outletId, apptTransactionBody.outletId) &&
             Objects.equals(this.startTime, apptTransactionBody.startTime) &&
             Objects.equals(this.endTime, apptTransactionBody.endTime) &&
             Objects.equals(this.startSlot, apptTransactionBody.startSlot) &&
@@ -532,7 +554,7 @@ public class ApptTransactionBody {
 
   @Override
   public int hashCode() {
-    return Objects.hash(mobile, name, mail, reqType, sessionToken, merId, deviceId, serId, resId, apptId, custId, startTime, endTime, startSlot, endSlot, isFullDay, date, slotNo, merchant, resource, service, serResUnavail);
+    return Objects.hash(mobile, name, mail, reqType, sessionToken, merId, deviceId, serId, resId, apptId, custId, outletId, startTime, endTime, startSlot, endSlot, isFullDay, date, slotNo, merchant, resource, service, serResUnavail);
   }
 
 
@@ -552,6 +574,7 @@ public class ApptTransactionBody {
     sb.append("    resId: ").append(toIndentedString(resId)).append("\n");
     sb.append("    apptId: ").append(toIndentedString(apptId)).append("\n");
     sb.append("    custId: ").append(toIndentedString(custId)).append("\n");
+    sb.append("    outletId: ").append(toIndentedString(outletId)).append("\n");
     sb.append("    startTime: ").append(toIndentedString(startTime)).append("\n");
     sb.append("    endTime: ").append(toIndentedString(endTime)).append("\n");
     sb.append("    startSlot: ").append(toIndentedString(startSlot)).append("\n");

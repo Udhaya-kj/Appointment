@@ -370,6 +370,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
                 transactionBody.setSerId(ser_id);
                 transactionBody.setSerResUnavail(serviceResourceUnavailBodyList);
                 transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+                transactionBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
                 transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
                 transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
 
@@ -421,6 +422,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
             transactionBody.setSerId(ser_id);
             transactionBody.setSerResUnavail(serviceResourceUnavailBodyList);
             transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+            transactionBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
             transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
             transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
 
@@ -470,6 +472,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
         transactionBody.setResId(ser_id);
         transactionBody.serResUnavail(serviceResourceUnavailBodyList);
         transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        transactionBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
         transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
 
@@ -501,6 +504,7 @@ public class SerUnavailAskTimeActivity extends AppCompatActivity implements Unav
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
         enquiryBody.setReqType(Constants.AVAILABLE_SLOTS);
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        enquiryBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
         enquiryBody.callerType("m");
         enquiryBody.setSerId(ser_id);
         enquiryBody.setDate(dt); //dt

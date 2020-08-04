@@ -105,7 +105,9 @@ public class CustomerActivity_Bottom extends AppCompatActivity implements Search
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                customersAdapter_filter.getFilter().filter(s.toString());
+                if(!TextUtils.isEmpty(s.toString())) {
+                    customersAdapter_filter.getFilter().filter(s.toString());
+                }
             }
 
             @Override
@@ -142,6 +144,7 @@ public class CustomerActivity_Bottom extends AppCompatActivity implements Search
 
     private void getRequestBody() {
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        enquiryBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
         enquiryBody.setReqType(Constants.CUSTOMER_LIST);
         enquiryBody.setCallerType("m");
         enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));

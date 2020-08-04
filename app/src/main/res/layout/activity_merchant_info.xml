@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:fillViewport="true"
         android:fitsSystemWindows="true"
+        android:layout_marginTop="20dp"
         android:focusable="true">
 
 
@@ -36,19 +37,13 @@
             android:paddingEnd="@dimen/height_30dp"
             android:paddingBottom="18dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:weightSum="1">
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
+                    android:enabled="false"
                     android:hint="Name">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -61,25 +56,6 @@
                         android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.2"
-                    android:gravity="center"
-
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_margin="10dp"
-                        android:src="@drawable/edit" />
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
@@ -87,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
+                android:enabled="false"
                 android:hint="Business Name">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -94,7 +71,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionNext"
-                    android:inputType="number"
+                    android:inputType="text"
+                    android:paddingStart="10dp"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:enabled="false"
+                android:hint="Legal Name">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/legal_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
                     android:maxLength="12"
                     android:paddingStart="10dp"
                     android:singleLine="true" />
@@ -106,13 +102,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
+                android:enabled="false"
                 android:hint="Email">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/mer_disp_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
+                    android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
                     android:paddingStart="10dp"
                     android:singleLine="true" />
@@ -125,6 +122,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
+                android:enabled="false"
                 android:hint="Mobile">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -144,14 +142,15 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
+                android:enabled="false"
                 android:hint="Register Number">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/mer_reg_no"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:inputType="textEmailAddress"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
                     android:paddingStart="10dp"
                     android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -162,6 +161,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
+                android:enabled="false"
                 android:hint="Description">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -170,9 +170,10 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="actionNext"
                     android:inputType="text"
+                    android:lines="3"
+                    android:maxLines="10"
                     android:minHeight="100dp"
-                    android:paddingStart="10dp"
-                    />
+                    android:paddingStart="10dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -181,14 +182,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
+                android:enabled="false"
                 android:hint="Max Appointment Days">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/mer_max_days"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:inputType="textEmailAddress"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="3"
                     android:paddingStart="10dp"
                     android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -199,17 +202,92 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="40dp"
+                android:enabled="false"
                 android:hint="Appointments within a slot">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/mer_max_appts_slot"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:inputType="textEmailAddress"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
                     android:paddingStart="10dp"
                     android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:enabled="false"
+                android:hint="Create Mail Description">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/c_temp_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="textMultiLine"
+                    android:maxLines="12"
+                    android:minLines="6"
+                    android:singleLine="false"
+                    android:paddingStart="10dp"
+                    android:overScrollMode="always"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:enabled="false"
+                android:hint="Cancel Mail Description">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cl_temp_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="textMultiLine"
+                    android:maxLines="12"
+                    android:minLines="6"
+                    android:singleLine="false"
+                    android:paddingStart="10dp"
+                    android:overScrollMode="always"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="50dp"
+                android:enabled="false"
+                android:hint="Reschedule Mail Description">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/r_temp_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:inputType="textMultiLine"
+                    android:maxLines="12"
+                    android:minLines="6"
+                    android:singleLine="false"
+                    android:paddingStart="10dp"
+                    android:overScrollMode="always"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"/>
             </com.google.android.material.textfield.TextInputLayout>
 
 

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -14,23 +13,20 @@
         android:elevation="0dp"
         android:textAlignment="center"
         app:elevation="0dp"
-        app:titleTextAppearance="@style/headerTextStyle1"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="Review &amp; Confirm"
+        app:titleTextAppearance="@style/headerTextStyle1"
         app:titleTextColor="@color/matt_black" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="1">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.9"
+            android:layout_height="match_parent"
             android:orientation="vertical">
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -54,24 +50,22 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:fontFamily="@font/lato_medium"
                         android:id="@+id/text_ser_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:gravity="center_vertical"
-                         />
+                        android:fontFamily="@font/lato_medium"
+                        android:gravity="center_vertical" />
 
                     <TextView
-                        android:fontFamily="@font/lato_medium"
-                        android:layout_marginTop="8dp"
                         android:id="@+id/text_res_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/lato_medium"
                         android:gravity="center_vertical"
-                        android:textSize="12sp"
-                         />
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
@@ -86,7 +80,9 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#DDD"></View>
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@color/dark_grey"></View>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -99,7 +95,7 @@
                         android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="10dp"
-                        android:src="@drawable/calendar" />
+                        android:src="@drawable/calendar_book_appt" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -109,23 +105,22 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:fontFamily="@font/lato_medium"
                             android:id="@+id/text_appt_date"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:gravity="center_vertical"
-                            />
-                        <TextView
                             android:fontFamily="@font/lato_medium"
-                            android:layout_marginTop="8dp"
-                            android:textSize="12sp"
+                            android:gravity="center_vertical" />
+
+                        <TextView
                             android:id="@+id/text_appt_time"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/lato_medium"
                             android:gravity="center_vertical"
-                             />
+                            android:textSize="12sp" />
 
                     </LinearLayout>
 
@@ -134,7 +129,9 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#DDD"></View>
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@color/dark_grey"></View>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -157,24 +154,22 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:fontFamily="@font/lato_medium"
                             android:id="@+id/tv_cus_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:gravity="center_vertical"
-                           />
+                            android:fontFamily="@font/lato_medium"
+                            android:gravity="center_vertical" />
 
                         <TextView
-                            android:fontFamily="@font/lato_medium"
-                            android:textSize="12sp"
-                            android:layout_marginTop="8dp"
                             android:id="@+id/tv_cus_mob"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/lato_medium"
                             android:gravity="center_vertical"
-                             />
+                            android:textSize="12sp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -182,22 +177,22 @@
         </LinearLayout>
 
         <LinearLayout
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="0.1"
-            android:gravity="center">
+            android:gravity="center"
+            android:visibility="gone">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_appt_done"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/button_green"
-                android:text="@string/book_appt"
                 android:fontFamily="@font/lato_medium"
-                android:textColor="@color/white"/>
+                android:text="@string/book_appt"
+                android:textColor="@color/white" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -107,7 +107,9 @@ public class CustomersMakeApptActivity extends AppCompatActivity implements Sear
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                customersAdapter_makeAppt.getFilter().filter(s.toString());
+                if(!TextUtils.isEmpty(s.toString())) {
+                    customersAdapter_makeAppt.getFilter().filter(s.toString());
+                }
                 Log.d("Search---", "onTextChanged: " + s);
             }
 
@@ -147,6 +149,7 @@ public class CustomersMakeApptActivity extends AppCompatActivity implements Sear
 
     private void getRequestBody() {
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        enquiryBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
         enquiryBody.setReqType(Constants.CUSTOMER_LIST);
         enquiryBody.setCallerType("m");
         enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));

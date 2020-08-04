@@ -145,6 +145,7 @@ public class ViewCustomerApptActivity extends AppCompatActivity {
         AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
         enquiryBody.setReqType(Constants.CUSTOMER_BOOKED_APPOINTMENT);
         enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        enquiryBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
         enquiryBody.callerType("m");
         enquiryBody.setCustId(cus_id);
         enquiryBody.setDate(date);

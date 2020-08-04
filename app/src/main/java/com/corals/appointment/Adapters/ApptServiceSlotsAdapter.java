@@ -141,6 +141,7 @@ public class ApptServiceSlotsAdapter extends RecyclerView.Adapter<ApptServiceSlo
                 AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
                 enquiryBody.setReqType(Constants.FETCH_CUSTOMER_LIST_SLOT);
                 enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+                enquiryBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
                 enquiryBody.callerType("m");
                 enquiryBody.setDate(date);
                 enquiryBody.setSerId(appointmentAvailableSlots.get(position).getSerId());

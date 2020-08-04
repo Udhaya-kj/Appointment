@@ -77,6 +77,9 @@ public class MapServiceResourceRecyclerAdapter extends RecyclerView.Adapter<MapS
         holder.checkBox.setTag(position);
 
         if (flag.equals("0")) {
+
+            holder.checkBox.setEnabled(true);
+            holder.editText_load.setEnabled(true);
             //Resource create
             if (!loadData) {
                 if (!appointmentServiceArrayList.isEmpty() && appointmentServiceArrayList != null) {
@@ -248,8 +251,14 @@ public class MapServiceResourceRecyclerAdapter extends RecyclerView.Adapter<MapS
                /* holder.checkBox.setChecked(AddStaffActivity.positionArray.get(position));
                 holder.editText_load.setText(AddStaffActivity.loadArray.get(position));*/
 
-                holder.checkBox.setChecked(update_pos_list.get(position));
-                holder.editText_load.setText(list_mng_load.get(position));
+               if(update_pos_list.get(position)) {
+                   holder.checkBox.setChecked(update_pos_list.get(position));
+                   holder.editText_load.setText(list_mng_load.get(position));
+               }
+               else {
+                   holder.checkBox.setEnabled(true);
+                   holder.editText_load.setEnabled(true);
+               }
             }
 
      /*       Log.d("positionArrayLocal--->", ""+position+","+appointmentServiceArrayList.size());
@@ -468,6 +477,9 @@ public class MapServiceResourceRecyclerAdapter extends RecyclerView.Adapter<MapS
             editText_load = (EditText) itemView.findViewById(R.id.et_max_load);
             MyTextWatcher textWatcher = new MyTextWatcher(editText_load, checkBox);
             editText_load.addTextChangedListener(textWatcher);
+
+            checkBox.setEnabled(false);
+            editText_load.setEnabled(false);
         }
     }
 

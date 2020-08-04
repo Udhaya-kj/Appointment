@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * AppointmentEnquiryBody
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-06-30T06:35:05.370Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-28T15:26:50.147Z")
 public class AppointmentEnquiryBody {
   @SerializedName("session_token")
   private String sessionToken = null;
@@ -35,6 +35,9 @@ public class AppointmentEnquiryBody {
 
   @SerializedName("cust_id")
   private String custId = null;
+
+  @SerializedName("outlet_id")
+  private String outletId = null;
 
   @SerializedName("res_id")
   private String resId = null;
@@ -69,7 +72,7 @@ public class AppointmentEnquiryBody {
    * Get sessionToken
    * @return sessionToken
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getSessionToken() {
     return sessionToken;
   }
@@ -87,7 +90,7 @@ public class AppointmentEnquiryBody {
    * Get reqType
    * @return reqType
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getReqType() {
     return reqType;
   }
@@ -105,7 +108,7 @@ public class AppointmentEnquiryBody {
    * Get serId
    * @return serId
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getSerId() {
     return serId;
   }
@@ -123,13 +126,31 @@ public class AppointmentEnquiryBody {
    * Get custId
    * @return custId
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getCustId() {
     return custId;
   }
 
   public void setCustId(String custId) {
     this.custId = custId;
+  }
+
+  public AppointmentEnquiryBody outletId(String outletId) {
+    this.outletId = outletId;
+    return this;
+  }
+
+  /**
+   * Get outletId
+   * @return outletId
+   **/
+   @Schema(description = "")
+  public String getOutletId() {
+    return outletId;
+  }
+
+  public void setOutletId(String outletId) {
+    this.outletId = outletId;
   }
 
   public AppointmentEnquiryBody resId(String resId) {
@@ -141,7 +162,7 @@ public class AppointmentEnquiryBody {
    * Get resId
    * @return resId
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getResId() {
     return resId;
   }
@@ -159,7 +180,7 @@ public class AppointmentEnquiryBody {
    * Get apptId
    * @return apptId
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getApptId() {
     return apptId;
   }
@@ -177,7 +198,7 @@ public class AppointmentEnquiryBody {
    * Get merId
    * @return merId
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getMerId() {
     return merId;
   }
@@ -195,7 +216,7 @@ public class AppointmentEnquiryBody {
    * Get date
    * @return date
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getDate() {
     return date;
   }
@@ -213,7 +234,7 @@ public class AppointmentEnquiryBody {
    * Get startTime
    * @return startTime
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getStartTime() {
     return startTime;
   }
@@ -231,7 +252,7 @@ public class AppointmentEnquiryBody {
    * Get endTime
    * @return endTime
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getEndTime() {
     return endTime;
   }
@@ -249,7 +270,7 @@ public class AppointmentEnquiryBody {
    * Get callerType
    * @return callerType
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getCallerType() {
     return callerType;
   }
@@ -267,7 +288,7 @@ public class AppointmentEnquiryBody {
    * Get deviceId
    * @return deviceId
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getDeviceId() {
     return deviceId;
   }
@@ -290,6 +311,7 @@ public class AppointmentEnquiryBody {
             Objects.equals(this.reqType, appointmentEnquiryBody.reqType) &&
             Objects.equals(this.serId, appointmentEnquiryBody.serId) &&
             Objects.equals(this.custId, appointmentEnquiryBody.custId) &&
+            Objects.equals(this.outletId, appointmentEnquiryBody.outletId) &&
             Objects.equals(this.resId, appointmentEnquiryBody.resId) &&
             Objects.equals(this.apptId, appointmentEnquiryBody.apptId) &&
             Objects.equals(this.merId, appointmentEnquiryBody.merId) &&
@@ -302,7 +324,7 @@ public class AppointmentEnquiryBody {
 
   @Override
   public int hashCode() {
-    return Objects.hash(sessionToken, reqType, serId, custId, resId, apptId, merId, date, startTime, endTime, callerType, deviceId);
+    return Objects.hash(sessionToken, reqType, serId, custId, outletId, resId, apptId, merId, date, startTime, endTime, callerType, deviceId);
   }
 
 
@@ -315,6 +337,7 @@ public class AppointmentEnquiryBody {
     sb.append("    reqType: ").append(toIndentedString(reqType)).append("\n");
     sb.append("    serId: ").append(toIndentedString(serId)).append("\n");
     sb.append("    custId: ").append(toIndentedString(custId)).append("\n");
+    sb.append("    outletId: ").append(toIndentedString(outletId)).append("\n");
     sb.append("    resId: ").append(toIndentedString(resId)).append("\n");
     sb.append("    apptId: ").append(toIndentedString(apptId)).append("\n");
     sb.append("    merId: ").append(toIndentedString(merId)).append("\n");

@@ -36,19 +36,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="30dp"
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="4dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginStart="4dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="4dp"
+                    app:cardCornerRadius="4dp"
                     app:cardElevation="3dp">
 
                     <LinearLayout
@@ -145,11 +145,11 @@
                                 android:id="@+id/cardview_custom_time"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:cardBackgroundColor="#F5F7F7"
-                                app:cardCornerRadius="5dp"
                                 android:layout_marginStart="10dp"
                                 android:layout_marginEnd="10dp"
                                 android:layout_marginBottom="20dp"
+                                app:cardBackgroundColor="#F5F7F7"
+                                app:cardCornerRadius="5dp"
                                 app:cardElevation="3dp">
 
                                 <LinearLayout
@@ -1505,141 +1505,142 @@
                 </androidx.cardview.widget.CardView>
 
 
-
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardview_mapped_services"
-                    android:visibility="visible"
-                    android:layout_marginTop="40dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
+                    android:layout_marginTop="40dp"
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="20dp"
+                    android:visibility="visible"
                     app:cardCornerRadius="4dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:clickable="true"
                     app:cardElevation="3dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:clickable="true"
                         android:orientation="vertical">
-                    <LinearLayout
-                        android:visibility="visible"
-                        android:id="@+id/layout_map_service"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:orientation="horizontal"
-                        android:weightSum="1"
-                        android:background="@color/light_grey"
-                        >
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.8"
-                            android:text="Map Service"
-                            android:paddingStart="10dp"
-                            android:paddingEnd="0dp"
-                            android:gravity="center_vertical"
-                            />
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:layout_weight="0.2">
-
-                            <ImageView
-                                android:id="@+id/image_map_icon"
-                                android:layout_width="20dp"
-                                android:layout_height="15dp"
-                                android:src="@drawable/add_map" />
-
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/layout_select_services"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="20dp"
-                        android:visibility="gone">
-
-                        <TextView
-                            android:visibility="gone"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/lato_medium"
-                            android:paddingStart="10dp"
-                            android:text="Staff working services"
-                            android:textStyle="bold" />
 
                         <LinearLayout
+                            android:id="@+id/layout_map_service"
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginEnd="5dp"
+                            android:layout_height="60dp"
+                            android:background="@color/light_grey"
                             android:orientation="horizontal"
+                            android:visibility="visible"
                             android:weightSum="1">
 
-
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="0.6"
-                                android:gravity="center|start"
-                                android:paddingStart="15dp"
+                                android:layout_weight="0.8"
+                                android:gravity="center_vertical"
+                                android:paddingStart="10dp"
                                 android:paddingEnd="0dp"
-                                android:text="Service"
-                                android:textStyle="bold"
-                                android:textSize="14sp" />
+                                android:text="Map Service" />
 
-                            <TextView
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="0.4"
-                                android:gravity="center"
-                                android:textStyle="bold"
-                                android:text="Appointments within a slot"
-                                android:textSize="14sp" />
+                                android:layout_weight="0.2"
+                                android:gravity="center">
 
-                            <TextView
-                                android:visibility="gone"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="0.25"
-                                android:gravity="center"
-                                android:textSize="12sp" />
+                                <ImageView
+                                    android:id="@+id/image_map_icon"
+                                    android:layout_width="20dp"
+                                    android:layout_height="15dp"
+                                    android:src="@drawable/add_map" />
+
+                            </LinearLayout>
+
 
                         </LinearLayout>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:background="@color/dark_grey" />
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recyclerview_select_services"
+                        <LinearLayout
+                            android:id="@+id/layout_select_services"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
-                            />
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="20dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recyclerview_select_services2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
-                            android:visibility="gone"
-                            />
-                    </LinearLayout>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/lato_medium"
+                                android:paddingStart="10dp"
+                                android:text="Staff working services"
+                                android:textStyle="bold"
+                                android:visibility="gone" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="5dp"
+                                android:orientation="horizontal"
+                                android:weightSum="1">
+
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0.6"
+                                    android:gravity="center|start"
+                                    android:paddingStart="15dp"
+                                    android:paddingEnd="0dp"
+                                    android:text="Service"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0.4"
+                                    android:gravity="center"
+                                    android:text="Appointments within a slot"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0.25"
+                                    android:gravity="center"
+                                    android:textSize="12sp"
+                                    android:visibility="gone" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:background="@color/dark_grey" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyclerview_select_services"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="5dp" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyclerview_select_services2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="5dp"
+                                android:visibility="gone" />
+                        </LinearLayout>
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>

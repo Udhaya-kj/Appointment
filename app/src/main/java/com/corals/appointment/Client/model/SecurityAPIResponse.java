@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * SecurityAPIResponse
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-10T11:08:14.822Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2020-07-28T15:26:50.147Z")
 public class SecurityAPIResponse {
   @SerializedName("status_code")
   private String statusCode = null;
@@ -35,6 +35,9 @@ public class SecurityAPIResponse {
 
   @SerializedName("user_id")
   private String userId = null;
+
+  @SerializedName("outlet_id")
+  private String outletId = null;
 
   @SerializedName("mer_cur_symbol")
   private String merCurSymbol = null;
@@ -84,7 +87,7 @@ public class SecurityAPIResponse {
    * Get statusMessage
    * @return statusMessage
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getStatusMessage() {
     return statusMessage;
   }
@@ -102,7 +105,7 @@ public class SecurityAPIResponse {
    * Get sessionToken
    * @return sessionToken
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getSessionToken() {
     return sessionToken;
   }
@@ -120,13 +123,31 @@ public class SecurityAPIResponse {
    * Get userId
    * @return userId
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getUserId() {
     return userId;
   }
 
   public void setUserId(String userId) {
     this.userId = userId;
+  }
+
+  public SecurityAPIResponse outletId(String outletId) {
+    this.outletId = outletId;
+    return this;
+  }
+
+  /**
+   * Get outletId
+   * @return outletId
+   **/
+   @Schema(description = "")
+  public String getOutletId() {
+    return outletId;
+  }
+
+  public void setOutletId(String outletId) {
+    this.outletId = outletId;
   }
 
   public SecurityAPIResponse merCurSymbol(String merCurSymbol) {
@@ -138,7 +159,7 @@ public class SecurityAPIResponse {
    * Get merCurSymbol
    * @return merCurSymbol
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getMerCurSymbol() {
     return merCurSymbol;
   }
@@ -156,7 +177,7 @@ public class SecurityAPIResponse {
    * Get countryCode
    * @return countryCode
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getCountryCode() {
     return countryCode;
   }
@@ -174,7 +195,7 @@ public class SecurityAPIResponse {
    * Get bizDisplayName
    * @return bizDisplayName
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getBizDisplayName() {
     return bizDisplayName;
   }
@@ -192,7 +213,7 @@ public class SecurityAPIResponse {
    * Get totalResCount
    * @return totalResCount
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getTotalResCount() {
     return totalResCount;
   }
@@ -210,7 +231,7 @@ public class SecurityAPIResponse {
    * Get totalSerCount
    * @return totalSerCount
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getTotalSerCount() {
     return totalSerCount;
   }
@@ -228,7 +249,7 @@ public class SecurityAPIResponse {
    * Get maxLenLoadingDays
    * @return maxLenLoadingDays
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getMaxLenLoadingDays() {
     return maxLenLoadingDays;
   }
@@ -246,7 +267,7 @@ public class SecurityAPIResponse {
    * Get maxApptAllowedForSameCust
    * @return maxApptAllowedForSameCust
    **/
-  @Schema(description = "")
+   @Schema(description = "")
   public String getMaxApptAllowedForSameCust() {
     return maxApptAllowedForSameCust;
   }
@@ -269,6 +290,7 @@ public class SecurityAPIResponse {
             Objects.equals(this.statusMessage, securityAPIResponse.statusMessage) &&
             Objects.equals(this.sessionToken, securityAPIResponse.sessionToken) &&
             Objects.equals(this.userId, securityAPIResponse.userId) &&
+            Objects.equals(this.outletId, securityAPIResponse.outletId) &&
             Objects.equals(this.merCurSymbol, securityAPIResponse.merCurSymbol) &&
             Objects.equals(this.countryCode, securityAPIResponse.countryCode) &&
             Objects.equals(this.bizDisplayName, securityAPIResponse.bizDisplayName) &&
@@ -280,7 +302,7 @@ public class SecurityAPIResponse {
 
   @Override
   public int hashCode() {
-    return Objects.hash(statusCode, statusMessage, sessionToken, userId, merCurSymbol, countryCode, bizDisplayName, totalResCount, totalSerCount, maxLenLoadingDays, maxApptAllowedForSameCust);
+    return Objects.hash(statusCode, statusMessage, sessionToken, userId, outletId, merCurSymbol, countryCode, bizDisplayName, totalResCount, totalSerCount, maxLenLoadingDays, maxApptAllowedForSameCust);
   }
 
 
@@ -293,6 +315,7 @@ public class SecurityAPIResponse {
     sb.append("    statusMessage: ").append(toIndentedString(statusMessage)).append("\n");
     sb.append("    sessionToken: ").append(toIndentedString(sessionToken)).append("\n");
     sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
+    sb.append("    outletId: ").append(toIndentedString(outletId)).append("\n");
     sb.append("    merCurSymbol: ").append(toIndentedString(merCurSymbol)).append("\n");
     sb.append("    countryCode: ").append(toIndentedString(countryCode)).append("\n");
     sb.append("    bizDisplayName: ").append(toIndentedString(bizDisplayName)).append("\n");

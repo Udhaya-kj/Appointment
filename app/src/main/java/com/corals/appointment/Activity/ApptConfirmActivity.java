@@ -120,6 +120,7 @@ public class ApptConfirmActivity extends AppCompatActivity {
                                 ApptTransactionBody transactionBody = new ApptTransactionBody();
                                 transactionBody.setReqType(Constants.BOOK_APPOINTMENT);
                                 transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+                                transactionBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
                                 transactionBody.setSerId(service_id);
                                 transactionBody.setDate(date); //date
                                 transactionBody.setSlotNo(slot_no);
@@ -382,6 +383,7 @@ public class ApptConfirmActivity extends AppCompatActivity {
                                 ApptTransactionBody transactionBody = new ApptTransactionBody();
                                 transactionBody.setReqType(Constants.BOOK_APPOINTMENT);
                                 transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+                                transactionBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
                                 transactionBody.setSerId(service_id);
                                 transactionBody.setDate(date); //date
                                 transactionBody.setSlotNo(slot_no);

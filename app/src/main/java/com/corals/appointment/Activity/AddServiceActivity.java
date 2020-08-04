@@ -1,8 +1,6 @@
 package com.corals.appointment.Activity;
 
-import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,11 +16,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -33,6 +29,8 @@ import com.corals.appointment.Client.ApiCallback;
 import com.corals.appointment.Client.ApiException;
 import com.corals.appointment.Client.OkHttpApiClient;
 import com.corals.appointment.Client.api.MerchantApisApi;
+import com.corals.appointment.Client.model.AppointmentEnquiryBody;
+import com.corals.appointment.Client.model.AppointmentEnquiryResponse;
 import com.corals.appointment.Client.model.AppointmentService;
 import com.corals.appointment.Client.model.ApptTransactionBody;
 import com.corals.appointment.Client.model.ApptTransactionResponse;
@@ -44,15 +42,13 @@ import com.corals.appointment.R;
 import com.corals.appointment.Utils.CAllLoginAPI;
 import com.corals.appointment.receiver.ConnectivityReceiver;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
 public class AddServiceActivity extends AppCompatActivity {
 
     EditText et_ser_name, et_ser_desc, et_ser_amt;
-    Button button_continue;
-    public String pageId = "";
+    public String pageId = "",ser_id;
 
     private SharedPreferences sharedpreferences_service_data;
     public static final String MyPREFERENCES_SERVICE_DATA = "MyPREFERENCES_SERVICE_DATA";
@@ -65,7 +61,6 @@ public class AddServiceActivity extends AppCompatActivity {
     int time_mins = 0;
     String showAmtCustomer = "0";
     private TextView tv_ser_duration, textView_currency;
-    String ser_id, ser_name, ser_dur, ser_amount, ser_desc, show_cust;
     private SharedPreferences sharedpreferences_sessionToken;
     private IntermediateAlertDialog intermediateAlertDialog;
 
@@ -92,7 +87,6 @@ public class AddServiceActivity extends AppCompatActivity {
         et_ser_desc = findViewById(R.id.et_service_description);
         tv_ser_duration = findViewById(R.id.tv_res_dur);
         et_ser_amt = findViewById(R.id.et_ser_amount);
-        button_continue = findViewById(R.id.button_res_continue);
         aSwitch = findViewById(R.id.switch_show_amount);
         textView_currency = findViewById(R.id.text_currency);
 
@@ -100,49 +94,12 @@ public class AddServiceActivity extends AppCompatActivity {
         tv_ser_duration.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + "00" + "</u>  </font>"));
         if (getIntent().getExtras() != null) {
             pageId = getIntent().getStringExtra("page_id");
+            ser_id = getIntent().getStringExtra("ser_id");
 
             if (pageId.equals("03")) {
-                ser_name = getIntent().getStringExtra("name");
-                ser_dur = getIntent().getStringExtra("duration");
-                ser_amount = getIntent().getStringExtra("amount");
-                ser_id = getIntent().getStringExtra("ser_id");
-                ser_desc = getIntent().getStringExtra("description");
-                show_cust = getIntent().getStringExtra("show_cust");
                 tv_ser_duration.setEnabled(false);
                 toolbar.setTitle("Update Service");
-                button_continue.setText("UPDATE SERVICE");
-                button_continue.setBackgroundColor(getResources().getColor(R.color.button_green));
-            } else if (pageId.equals("003")) {
-                ser_name = sharedpreferences_service_data.getString(SER_NAME, "");
-                ser_dur = sharedpreferences_service_data.getString(SER_DURATION, "");
-                ser_desc = sharedpreferences_service_data.getString(SER_DESCRIPTION, "");
-                ser_amount = sharedpreferences_service_data.getString(SER_AMOUNT, "");
-                show_cust = sharedpreferences_service_data.getString(SER_SHOW_AMOUNT, "");
-            }
-
-            Log.d("AddService--->", "onCreate: " + pageId + "," + ser_name + "," + ser_dur + "," + ser_amount + "," + ser_id + "," + ser_desc + "," + show_cust);
-            if (!TextUtils.isEmpty(ser_name)) {
-                et_ser_name.setText(ser_name);
-                if (!TextUtils.isEmpty(ser_name)) {
-                    et_ser_name.setSelection(ser_name.length());
-                }
-            }
-            if (!TextUtils.isEmpty(ser_dur)) {
-                tv_ser_duration.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + ser_dur + "</u>  </font>"));
-                //tv_ser_duration.setText(ser_dur);
-                time_mins = Integer.parseInt(ser_dur);
-            }
-            if (!TextUtils.isEmpty(ser_amount)) {
-                et_ser_amt.setText(ser_amount);
-            }
-            if (!TextUtils.isEmpty(ser_desc)) {
-                et_ser_desc.setText(ser_desc);
-            }
-
-            if (!TextUtils.isEmpty(show_cust) && show_cust.equals("true")) {
-                aSwitch.setChecked(true);
-            } else {
-                aSwitch.setChecked(false);
+                callFetchAPI();
             }
 
         }
@@ -168,6 +125,162 @@ public class AddServiceActivity extends AppCompatActivity {
                 } else {
                     showAmtCustomer = "0";
                 }
+            }
+        });
+
+    }
+
+    private void callFetchAPI() {
+        boolean isConn = ConnectivityReceiver.isConnected();
+        if (isConn) {
+            try {
+                AppointmentEnquiryBody enquiryBody = new AppointmentEnquiryBody();
+                enquiryBody.setReqType(Constants.SERVICE_ACTIVE_DAYS);
+                enquiryBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+                enquiryBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
+                enquiryBody.callerType("m");
+                enquiryBody.setSerId(ser_id);
+                enquiryBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
+                enquiryBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
+                fetchActiveDays(enquiryBody);
+            } catch (ApiException e) {
+                e.printStackTrace();
+            }
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialogFailure(AddServiceActivity.this, getResources().getString(R.string.no_internet_sub_title), "OK", getResources().getString(R.string.no_internet_title), getResources().getString(R.string.no_internet_Heading)) {
+                        @Override
+                        public void onButtonClick() {
+                            callFetchAPI();
+                        }
+                    };
+                }
+            });
+        }
+    }
+
+    private void fetchActiveDays(AppointmentEnquiryBody requestBody) throws ApiException {
+        intermediateAlertDialog = new IntermediateAlertDialog(AddServiceActivity.this);
+        Log.d("fetchApptSlots---", "login: " + requestBody);
+        OkHttpApiClient okHttpApiClient = new OkHttpApiClient(AddServiceActivity.this);
+        MerchantApisApi webMerchantApisApi = new MerchantApisApi();
+        webMerchantApisApi.setApiClient(okHttpApiClient.getApiClient());
+
+        webMerchantApisApi.merchantAppointmentEnquiryAsync(requestBody, new ApiCallback<AppointmentEnquiryResponse>() {
+            @Override
+            public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
+                Log.d("fetchApptSlots--->", "onFailure-" + e.getMessage());
+                if (intermediateAlertDialog != null) {
+                    intermediateAlertDialog.dismissAlertDialog();
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialogFailure(AddServiceActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                            @Override
+                            public void onButtonClick() {
+                                onBackPressed();
+                            }
+                        };
+                    }
+                });
+            }
+
+            @Override
+            public void onSuccess(final AppointmentEnquiryResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
+
+                Log.d("fetchApptSlots--->", "onSuccess-" + statusCode + "," + result);
+                if (Integer.parseInt(result.getStatusCode()) == 200) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (result.getService() != null) {
+
+                                AppointmentService appointmentService = result.getService();
+                                String ser_name = appointmentService.getSerName();
+                                String ser_dur = appointmentService.getSerDuration();
+                                String ser_desc = appointmentService.getSerDescription();
+                                String ser_amount = appointmentService.getSerPrice();
+                                boolean show_cust = appointmentService.isIsShowCust();
+
+
+                                if (!TextUtils.isEmpty(ser_name)) {
+                                    et_ser_name.setText(ser_name);
+                                    if (!TextUtils.isEmpty(ser_name)) {
+                                        et_ser_name.setSelection(ser_name.length());
+                                    }
+                                }
+                                if (!TextUtils.isEmpty(ser_dur)) {
+                                    tv_ser_duration.setText(Html.fromHtml("<font color=#3B91CD>  <u>" + ser_dur + "</u>  </font>"));
+                                    //tv_ser_duration.setText(ser_dur);
+                                    time_mins = Integer.parseInt(ser_dur);
+                                }
+                                if (!TextUtils.isEmpty(ser_amount)) {
+                                    et_ser_amt.setText(ser_amount);
+                                }
+                                if (!TextUtils.isEmpty(ser_desc)) {
+                                    et_ser_desc.setText(ser_desc);
+                                }
+
+                                if (show_cust) {
+                                    aSwitch.setChecked(true);
+                                } else {
+                                    aSwitch.setChecked(false);
+                                }
+
+
+                            }
+                        }
+                    });
+                } else if (Integer.parseInt(result.getStatusCode()) == 401) {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CAllLoginAPI() {
+                                @Override
+                                public void onButtonClick() {
+
+                                    callFetchAPI();
+                                }
+                            }.callLoginAPI(AddServiceActivity.this);
+                        }
+                    });
+
+                } else {
+                    if (intermediateAlertDialog != null) {
+                        intermediateAlertDialog.dismissAlertDialog();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertDialogFailure(AddServiceActivity.this, getResources().getString(R.string.try_again), "OK", getResources().getString(R.string.went_wrong), "Failed") {
+                                @Override
+                                public void onButtonClick() {
+                                    onBackPressed();
+                                }
+                            };
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
             }
         });
 
@@ -213,7 +326,7 @@ public class AddServiceActivity extends AppCompatActivity {
                                     new AlertDialogYesNo(AddServiceActivity.this, "Update Service?", "Are you sure, You want to update " + name + "?", "Yes", "No") {
                                         @Override
                                         public void onOKButtonClick() {
-                                           updateService();
+                                            updateService();
                                         }
 
                                         @Override
@@ -246,12 +359,12 @@ public class AddServiceActivity extends AppCompatActivity {
     }
 
 
-
     void updateService() {
 
         final String ser_name = et_ser_name.getText().toString().trim();
         final String ser_desc = et_ser_desc.getText().toString().trim();
         final String ser_amt = et_ser_amt.getText().toString().trim();
+        final String ser_dur = tv_ser_duration.getText().toString().trim();
 
         AppointmentService appointmentService = new AppointmentService();
         appointmentService.setSerId(ser_id);
@@ -270,6 +383,7 @@ public class AddServiceActivity extends AppCompatActivity {
         ApptTransactionBody transactionBody = new ApptTransactionBody();
         transactionBody.setReqType(Constants.SERVICES_UPDATE);
         transactionBody.setMerId(sharedpreferences_sessionToken.getString(LoginActivity.MERID, ""));
+        transactionBody.setOutletId(sharedpreferences_sessionToken.getString(LoginActivity.OUTLETID, ""));
         transactionBody.setDeviceId(sharedpreferences_sessionToken.getString(LoginActivity.DEVICEID, ""));
         transactionBody.setSessionToken(sharedpreferences_sessionToken.getString(LoginActivity.SESSIONTOKEN, ""));
         transactionBody.setService(appointmentService);
@@ -308,6 +422,7 @@ public class AddServiceActivity extends AppCompatActivity {
         pickStartTime.setIs24HourView(true);
         pickStartTime.setCurrentHour(00);
         pickStartTime.setCurrentMinute(00);
+
         pickStartTime.setOnTimeChangedListener(mStartTimeChangedListener);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -531,7 +646,7 @@ public class AddServiceActivity extends AppCompatActivity {
                                 @Override
                                 public void onButtonClick() {
 
-                               updateService();
+                                    updateService();
                                 }
                             }.callLoginAPI(AddServiceActivity.this);
                         }

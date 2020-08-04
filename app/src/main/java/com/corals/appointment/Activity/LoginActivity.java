@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final String MyPREFERENCES_SESSIONTOKEN = "MyPREFERENCES_SESSIONTOKEN ";
     public static final String SESSIONTOKEN = "SESSIONTOKEN ";
     public static final String MERID = "MERID ";
+    public static final String OUTLETID = "OUTLETID ";
     public static final String DEVICEID = "DEVICEID ";
     public static final String CURRENCY_SYMBOL = "CURRENCY_SYMBOL ";
     public static final String COUNTRY_CODE = "COUNTRY_CODE ";
@@ -225,7 +226,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (intermediateAlertDialog != null) {
                     intermediateAlertDialog.dismissAlertDialog();
                 }
-                Log.d("login--->", "onSuccess-" + statusCode + " , " + result + " , " + result.getUserId() + "," + result.getBizDisplayName() + " , " + result.getCountryCode() + " , " + result.getMerCurSymbol() + " , " + result.getMaxLenLoadingDays() + "," + result.getTotalSerCount() + "," + result.getTotalResCount());
+                Log.d("login--->", "onSuccess-"+ result );
 
                 if (Integer.parseInt(result.getStatusCode()) == 200) {
                     SharedPreferences.Editor editor = sharedpreferences_sessionToken.edit();
@@ -234,6 +235,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString(CURRENCY_SYMBOL, result.getMerCurSymbol());
                     editor.putString(COUNTRY_CODE, result.getCountryCode());
                     editor.putString(BIZ_NAME, result.getBizDisplayName());
+                    editor.putString(OUTLETID, result.getOutletId());
                     editor.putString(DEVICEID, requestBody.getDeviceId());
                     editor.putString(MAX_DAYS, result.getMaxLenLoadingDays());
                     editor.putString(USER_MAIL, username);
